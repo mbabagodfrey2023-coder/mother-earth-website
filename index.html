@@ -9,6 +9,14 @@
   <meta property="og:description" content="33 autonomous AI agents. Purpose Trust governance. Blockchain-secured environmental data." />
   <meta name="theme-color" content="#020606" />
   <meta name="google-site-verification" content="WucZGujtpqyQos_N5NH4FDqAlolzNal5TW8S8LutW50" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://motherearth.systems/" />
+  <meta property="og:image"       content="https://motherearth.systems/og.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Mother Earth — Planetary Intelligence Organisation" />
+  <meta name="twitter:description"content="33 autonomous AI agents. Purpose Trust governance. Blockchain-secured environmental data." />
+  <meta name="twitter:image"      content="https://motherearth.systems/og.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -482,6 +490,136 @@
       .hud-bl, .hud-br { display: none; }
       .section-wrap { padding: 0 24px; }
     }
+
+    /* ─── HAMBURGER MENU ────────────────────────────────────────── */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; padding: 6px; cursor: pointer;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 1.5px; background: var(--muted);
+      transition: all .3s; transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); background: var(--green); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); background: var(--green); }
+    @media (max-width: 640px) {
+      .nav-hamburger { display: flex; }
+      .nav-links.mobile-open {
+        display: flex !important; flex-direction: column; gap: 0;
+        position: fixed; top: 62px; left: 0; right: 0;
+        background: rgba(2,6,6,.97); backdrop-filter: blur(20px);
+        padding: 20px 32px; border-bottom: 1px solid var(--border);
+        z-index: 190;
+      }
+      .nav-links.mobile-open li { border-bottom: 1px solid var(--border); }
+      .nav-links.mobile-open a {
+        display: block; padding: 16px 0; font-size: 13px; letter-spacing: 3px; color: var(--muted);
+      }
+      .nav-links.mobile-open a:hover, .nav-links.mobile-open a.active { color: var(--green); }
+    }
+
+    /* ─── ROADMAP ────────────────────────────────────────────────── */
+    #roadmap { padding: 120px 0; background: linear-gradient(to bottom, transparent, rgba(0,5,15,.5), transparent); }
+    .roadmap-phases {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 72px;
+    }
+    .roadmap-phase {
+      border: 1px solid var(--border); background: var(--card);
+      padding: 36px 32px; border-radius: 2px; transition: border-color .3s;
+    }
+    .roadmap-phase.roadmap-done   { border-color: rgba(74,222,128,.18); }
+    .roadmap-phase.roadmap-active { border-color: rgba(14,165,233,.18); }
+    .roadmap-phase-head {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .roadmap-phase-num {
+      font-family: 'JetBrains Mono', monospace; font-size: 36px;
+      font-weight: 700; color: rgba(255,255,255,.07); flex-shrink: 0; line-height: 1;
+    }
+    .roadmap-phase-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 4px; color: var(--muted); margin-bottom: 4px;
+    }
+    .roadmap-phase-title { font-size: 18px; font-weight: 800; }
+    .roadmap-badge {
+      margin-left: auto; padding: 5px 12px; border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 2px; font-weight: 700; white-space: nowrap;
+    }
+    .roadmap-badge.done    { background: rgba(74,222,128,.1);  color: var(--green);  border: 1px solid rgba(74,222,128,.2); }
+    .roadmap-badge.active  { background: rgba(14,165,233,.1);  color: var(--blue);   border: 1px solid rgba(14,165,233,.2); }
+    .roadmap-badge.planned { background: rgba(99,102,241,.1);  color: var(--indigo); border: 1px solid rgba(99,102,241,.2); }
+    .roadmap-items { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .roadmap-item {
+      font-size: 13px; color: var(--muted); line-height: 1.55;
+      padding-left: 20px; position: relative;
+    }
+    .roadmap-item::before {
+      content: ''; position: absolute; left: 0; top: 5px;
+      width: 7px; height: 7px; border-radius: 50%;
+    }
+    .roadmap-item.done::before    { background: var(--green); }
+    .roadmap-item.active::before  { background: var(--blue); animation: dotPulse 2s infinite; }
+    .roadmap-item.planned::before { background: rgba(255,255,255,.15); }
+    .roadmap-item.done { color: rgba(255,255,255,.62); }
+    @keyframes dotPulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+    @media (max-width: 1024px) { .roadmap-phases { grid-template-columns: 1fr; } }
+
+    /* ─── FOUNDER BAND ───────────────────────────────────────────── */
+    .founder-band {
+      margin-top: 80px; padding: 48px;
+      border: 1px solid var(--border); background: var(--card);
+      display: flex; align-items: center; gap: 40px; flex-wrap: wrap;
+    }
+    .founder-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; color: #000; flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .founder-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 5px; color: var(--green); margin-bottom: 8px;
+    }
+    .founder-name  { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+    .founder-bio   { font-size: 14px; color: var(--muted); line-height: 1.75; max-width: 560px; margin-bottom: 14px; }
+    .founder-contact {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      letter-spacing: 1px; color: var(--green); text-decoration: none; transition: opacity .25s;
+    }
+    .founder-contact:hover { opacity: .7; }
+
+    /* ─── MODALS ─────────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9000;
+      background: rgba(0,0,0,.85); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #080e0e; border: 1px solid var(--border);
+      max-width: 640px; width: 100%; max-height: 82vh;
+      overflow-y: auto; padding: 48px; position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 18px; right: 22px;
+      background: none; border: none; color: var(--muted);
+      font-size: 20px; cursor: pointer; transition: color .2s;
+      font-family: 'JetBrains Mono', monospace; line-height: 1;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 5px; color: var(--green); margin-bottom: 16px;
+    }
+    .modal-title { font-size: 28px; font-weight: 800; margin-bottom: 28px; }
+    .modal-body h3 { font-size: 14px; font-weight: 700; margin: 22px 0 8px; color: var(--text); letter-spacing: 1px; }
+    .modal-body p  { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 8px; }
+    .modal-body ul { margin: 0 0 10px 20px; }
+    .modal-body li { font-size: 13px; color: var(--muted); line-height: 1.8; }
+    .modal-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,.25); margin-top: 28px; }
   </style>
 </head>
 <body>
@@ -512,6 +650,9 @@
     <li><a href="#join">Partners</a></li>
   </ul>
   <a class="nav-cta" href="#join">Join the Mission</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- HUD OVERLAYS -->
@@ -646,7 +787,7 @@
         <div class="agent-id">BRANCH 02</div>
         <div class="agent-name">NEXUS</div>
         <div class="agent-role">Blockchain & Technology. Manages smart contract infrastructure, token architecture, and secure data provenance protocols.</div>
-        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+        <div class="agent-count">Sub-agents: <span>FORGE · SCOUT · PULSE · KEYS</span></div>
       </div>
       <!-- Branch 3 -->
       <div class="agent-card">
@@ -654,7 +795,7 @@
         <div class="agent-id">BRANCH 03</div>
         <div class="agent-name">GAIA</div>
         <div class="agent-role">Environmental Intelligence. Ingests satellite, sensor, and field data to generate ecological risk scores and predictive models.</div>
-        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+        <div class="agent-count">Sub-agents: <span>SENSE · VERIFY · REPORT · CARBON</span></div>
       </div>
       <!-- Branch 4 -->
       <div class="agent-card">
@@ -662,7 +803,7 @@
         <div class="agent-id">BRANCH 04</div>
         <div class="agent-name">ATLAS</div>
         <div class="agent-role">Treasury & Finance. Manages reserves, monitors financial compliance, and oversees all transactions within governance thresholds.</div>
-        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+        <div class="agent-count">Sub-agents: <span>WALL · SWEEP · TAX · YIELD</span></div>
       </div>
       <!-- Branch 5 -->
       <div class="agent-card">
@@ -670,7 +811,7 @@
         <div class="agent-id">BRANCH 05</div>
         <div class="agent-name">IRIS</div>
         <div class="agent-role">Data Marketplace. Operates the verified environmental data exchange — connecting data producers with institutional buyers worldwide.</div>
-        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+        <div class="agent-count">Sub-agents: <span>MINT · TRADE · FEE · ARBITER</span></div>
       </div>
       <!-- Branch 6 -->
       <div class="agent-card">
@@ -678,7 +819,7 @@
         <div class="agent-id">BRANCH 06</div>
         <div class="agent-name">SAGE</div>
         <div class="agent-role">Governance & Trust. Administers the Purpose Trust, enforces the Golden Share veto, and maintains mission integrity across all operations.</div>
-        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+        <div class="agent-count">Sub-agents: <span>VETO · BOARD · MISSION</span></div>
       </div>
       <!-- Branch 7 -->
       <div class="agent-card">
@@ -686,7 +827,7 @@
         <div class="agent-id">BRANCH 07</div>
         <div class="agent-name">ECHO</div>
         <div class="agent-role">Communications & Growth. Manages investor relations, media, partnerships, and the global guardian community across all channels.</div>
-        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+        <div class="agent-count">Sub-agents: <span>STORY · GROW · PRESS</span></div>
       </div>
       <!-- CEO — spans full width -->
       <div class="agent-card agent-ceo">
@@ -867,7 +1008,82 @@
 </section>
 
 <!-- ══════════════════════════════════════════════════════════════
-     SECTION 8 — JOIN
+     SECTION 8 — ROADMAP / BUILD LOG
+═══════════════════════════════════════════════════════════════ -->
+<section id="roadmap">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">// BUILD LOG</div>
+      <h2 class="section-title">From Idea to<br>Live AI Organisation</h2>
+      <p class="section-sub">Built in public. Every milestone logged. Phase 1 is complete — the infrastructure is live and running 24/7 from Nairobi.</p>
+    </div>
+
+    <div class="roadmap-phases">
+
+      <!-- Phase 1 -->
+      <div class="roadmap-phase roadmap-done">
+        <div class="roadmap-phase-head">
+          <div class="roadmap-phase-num">01</div>
+          <div>
+            <div class="roadmap-phase-label">PHASE 1</div>
+            <div class="roadmap-phase-title">Foundation</div>
+          </div>
+          <div class="roadmap-badge done">COMPLETE</div>
+        </div>
+        <ul class="roadmap-items">
+          <li class="roadmap-item done">33 autonomous AI agents live via PM2 — 7 branches, 26 sub-agents</li>
+          <li class="roadmap-item done">Google Workspace activated — Gmail live on motherearth.systems</li>
+          <li class="roadmap-item done">ECHO email agent — classifying &amp; auto-replying all inbound mail</li>
+          <li class="roadmap-item done">Website deployed on Cloudflare Pages — global CDN</li>
+          <li class="roadmap-item done">GitHub repositories live — private backend + public website</li>
+          <li class="roadmap-item done">VASP Act 2025 compliance framework active via AMARA</li>
+        </ul>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="roadmap-phase roadmap-active">
+        <div class="roadmap-phase-head">
+          <div class="roadmap-phase-num">02</div>
+          <div>
+            <div class="roadmap-phase-label">PHASE 2</div>
+            <div class="roadmap-phase-title">Infrastructure</div>
+          </div>
+          <div class="roadmap-badge active">IN PROGRESS</div>
+        </div>
+        <ul class="roadmap-items">
+          <li class="roadmap-item active">n8n workflow automation — connecting live data pipelines</li>
+          <li class="roadmap-item active">Slack command centre — 7 branch alert channels</li>
+          <li class="roadmap-item active">KRA iTax compliance — Q1 filing in progress</li>
+          <li class="roadmap-item active">FRC AML/CTF annual report — submission in progress</li>
+          <li class="roadmap-item active">Inter-branch message bus — direct agent-to-agent comms</li>
+        </ul>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="roadmap-phase roadmap-planned">
+        <div class="roadmap-phase-head">
+          <div class="roadmap-phase-num">03</div>
+          <div>
+            <div class="roadmap-phase-label">PHASE 3</div>
+            <div class="roadmap-phase-title">Platform Launch</div>
+          </div>
+          <div class="roadmap-badge planned">Q3 2026</div>
+        </div>
+        <ul class="roadmap-items">
+          <li class="roadmap-item planned">Public environmental intelligence API</li>
+          <li class="roadmap-item planned">Data marketplace beta — first verified datasets on-chain</li>
+          <li class="roadmap-item planned">Satellite feed integration — NASA MODIS live ingestion</li>
+          <li class="roadmap-item planned">First institutional data partnership</li>
+          <li class="roadmap-item planned">IRIS dNFT minting — first tokenised carbon datasets</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 9 — JOIN
 ═══════════════════════════════════════════════════════════════ -->
 <section id="join">
   <div class="section-wrap">
@@ -901,6 +1117,16 @@
       <button type="button" id="email-submit">SUBSCRIBE</button>
     </div>
     <div class="join-note">No spam. Planetary intelligence updates only. Unsubscribe anytime.</div>
+
+    <div class="founder-band">
+      <div class="founder-avatar">AG</div>
+      <div>
+        <div class="founder-label">// FOUNDED BY</div>
+        <div class="founder-name">Andy Godfrey</div>
+        <p class="founder-bio">Building the world's first AI-native environmental intelligence organisation from Nairobi. Combining 33 autonomous AI agents, blockchain data provenance, and Purpose Trust governance to make planetary defence autonomous, permanent, and impossible to corrupt.</p>
+        <a href="mailto:andygodfrey@motherearth.systems" class="founder-contact">andygodfrey@motherearth.systems →</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -919,8 +1145,8 @@
     <a href="#marketplace">Marketplace</a>
     <a href="#governance">Governance</a>
     <a href="mailto:hello@motherearth.systems">Contact</a>
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
+    <a href="#" onclick="openModal('modal-privacy');return false;">Privacy</a>
+    <a href="#" onclick="openModal('modal-terms');return false;">Terms</a>
   </div>
   <div class="footer-social">
     <a class="social-btn" href="#" title="X / Twitter">𝕏</a>
@@ -928,6 +1154,62 @@
     <a class="social-btn" href="#" title="Telegram">✈</a>
   </div>
 </footer>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODALS — Privacy & Terms
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-privacy">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-privacy')">✕</button>
+    <div class="modal-tag">// LEGAL</div>
+    <div class="modal-title">Privacy Policy</div>
+    <div class="modal-body">
+      <h3>Who We Are</h3>
+      <p>Mother Earth Organisation is a purpose trust incorporated under the laws of Kenya (Special Economic Zone). Our domain is motherearth.systems and our contact is hello@motherearth.systems.</p>
+      <h3>What Data We Collect</h3>
+      <p>When you submit your email address via our subscribe form, we collect your email address only. We do not use third-party analytics cookies, tracking pixels, or advertising networks on this website.</p>
+      <h3>How We Use Your Data</h3>
+      <ul>
+        <li>To send you planetary intelligence updates and mission news</li>
+        <li>To respond to partnership or investment enquiries you initiate</li>
+      </ul>
+      <h3>Data Storage</h3>
+      <p>Email addresses are processed securely via our ECHO AI agent on Google Workspace infrastructure. We do not sell, rent, or share your personal data with third parties.</p>
+      <h3>Your Rights</h3>
+      <p>Under the Kenya Data Protection Act 2019 (ODPC) and applicable international frameworks, you have the right to access, correct, or delete your personal data at any time. Email hello@motherearth.systems to exercise these rights.</p>
+      <h3>Cookies</h3>
+      <p>This website does not set persistent cookies. All visual effects run client-side. CDN requests are made to Cloudflare, Google Fonts, and CDNJS for asset delivery only.</p>
+      <h3>Contact</h3>
+      <p>For privacy queries: hello@motherearth.systems</p>
+      <div class="modal-date">LAST UPDATED: MAY 2026 · KENYA ODPC COMPLIANT</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-terms">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-terms')">✕</button>
+    <div class="modal-tag">// LEGAL</div>
+    <div class="modal-title">Terms of Use</div>
+    <div class="modal-body">
+      <h3>Acceptance</h3>
+      <p>By accessing motherearth.systems, you agree to these terms. If you do not agree, please do not use this website.</p>
+      <h3>Nature of This Website</h3>
+      <p>This website is an informational and marketing platform for Mother Earth Organisation, a purpose trust. Nothing on this website constitutes investment advice, financial advice, or a solicitation of investment.</p>
+      <h3>Environmental Data</h3>
+      <p>Data figures displayed on this website (CO₂ levels, ice mass loss, sea level rise) are sourced from publicly available scientific datasets including NASA, NOAA, and peer-reviewed literature. They are provided for informational purposes only.</p>
+      <h3>Intellectual Property</h3>
+      <p>All content, code, agent architecture, and brand assets on this website are the property of Mother Earth Organisation. The AI agent system and its architecture are proprietary. Unauthorised reproduction is prohibited.</p>
+      <h3>Purpose Trust Governance</h3>
+      <p>Mother Earth operates under a Purpose Trust with a Golden Share veto. Any investor engagement described on this website is subject to the trust's governance framework. The mission cannot be altered by any commercial arrangement.</p>
+      <h3>Limitation of Liability</h3>
+      <p>Mother Earth Organisation provides this website "as is." We make no warranties regarding accuracy, completeness, or fitness for a particular purpose. We are not liable for any loss arising from use of this website.</p>
+      <h3>Governing Law</h3>
+      <p>These terms are governed by the laws of Kenya. Disputes are subject to the jurisdiction of Kenyan courts.</p>
+      <div class="modal-date">LAST UPDATED: MAY 2026 · KENYA SEZ JURISDICTION</div>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════════════════════════
      SCRIPTS
@@ -1161,6 +1443,18 @@
       y: 36, opacity: 0, duration: .7, stagger: .12, ease: 'power3.out'
     });
 
+    // Roadmap phases
+    gsap.from('.roadmap-phase', {
+      scrollTrigger: { trigger: '#roadmap', start: 'top 70%' },
+      y: 40, opacity: 0, duration: .8, stagger: .15, ease: 'power3.out'
+    });
+
+    // Founder band
+    gsap.from('.founder-band', {
+      scrollTrigger: { trigger: '.founder-band', start: 'top 85%' },
+      y: 24, opacity: 0, duration: .8, ease: 'power3.out'
+    });
+
     // Join cards
     gsap.from('.join-card', {
       scrollTrigger: { trigger: '#join', start: 'top 75%' },
@@ -1200,6 +1494,44 @@
   // Allow Enter key on email input
   document.getElementById('email-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('email-submit').click();
+  });
+
+  /* ── HAMBURGER MENU ─────────────────────────── */
+  const hamburger = document.getElementById('nav-hamburger');
+  const navLinks  = document.querySelector('.nav-links');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('mobile-open');
+    hamburger.setAttribute('aria-label', hamburger.classList.contains('open') ? 'Close navigation' : 'Open navigation');
+  });
+  // Close when a link is clicked
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('mobile-open');
+    });
+  });
+
+  /* ── MODALS ─────────────────────────────────── */
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // Close on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal(overlay.id);
+    });
+  });
+  // Close on Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+    }
   });
 </script>
 </body>
