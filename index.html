@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mother Earth — Planetary Intelligence Organisation</title>
+  <meta name="description" content="The world's first AI-powered environmental intelligence organisation. 33 autonomous agents. One planetary mission." />
+  <meta property="og:title" content="Mother Earth — Planetary Intelligence Organisation" />
+  <meta property="og:description" content="33 autonomous AI agents. Purpose Trust governance. Blockchain-secured environmental data." />
+  <meta name="theme-color" content="#020606" />
+  <meta name="google-site-verification" content="WucZGujtpqyQos_N5NH4FDqAlolzNal5TW8S8LutW50" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:   #4ade80;
+      --blue:    #0ea5e9;
+      --indigo:  #6366f1;
+      --amber:   #f59e0b;
+      --surface: #020606;
+      --card:    rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.08);
+      --text:    #f7fafc;
+      --muted:   rgba(255,255,255,0.48);
+      --glass:   rgba(255,255,255,0.05);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    button, a { font: inherit; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── LOADER ─────────────────────────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0; background: #000;
+      z-index: 9999; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 1.2s ease;
+    }
+    .loader-orb {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #4a90e2, #1a5f9e 40%, #0a2a4a 75%, #000);
+      box-shadow: 0 0 50px rgba(74,144,226,.4), inset -14px -14px 28px rgba(0,0,0,.55), inset 8px 8px 14px rgba(255,255,255,.1);
+      animation: orbPulse 2.4s ease-in-out infinite;
+    }
+    .loader-orb::before {
+      content:''; position:absolute; inset:-10px; border-radius:50%;
+      border: 1px solid rgba(74,144,226,.2); animation: spin 3.5s linear infinite;
+    }
+    @keyframes orbPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.07)} }
+    @keyframes spin     { to{transform:rotate(360deg)} }
+    .loader-label {
+      margin-top: 28px; font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 6px; color: var(--green);
+      animation: fadeIn .8s ease .5s both;
+    }
+    .loader-sub {
+      margin-top: 8px; font-family: 'JetBrains Mono', monospace;
+      font-size: 8px; letter-spacing: 3px; color: rgba(255,255,255,.35);
+      animation: fadeIn .8s ease 1s both;
+    }
+    .loader-bar  { margin-top: 22px; width: 180px; height: 1px; background: rgba(255,255,255,.1); }
+    .loader-fill { height: 100%; width: 0; background: linear-gradient(90deg,var(--green),var(--blue)); animation: barFill 3s ease forwards; }
+    @keyframes barFill { 0%{width:0} 30%{width:40%} 65%{width:75%} 100%{width:100%} }
+    @keyframes fadeIn  { to{opacity:1} }
+
+    /* ─── BACKGROUND NETWORK CANVAS ─────────────────────────────── */
+    #net-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; opacity: .4;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 18px 48px; display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(2,6,6,.92), transparent);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 800; letter-spacing: 4px; color: var(--green);
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+    }
+    .nav-logo-icon { font-size: 22px; filter: drop-shadow(0 0 10px rgba(74,222,128,.4)); }
+    .nav-links { display: flex; gap: 34px; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      transition: color .25s; position: relative;
+    }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:-5px; left:0;
+      width:0; height:1px; background:var(--green); transition:width .3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-cta {
+      padding: 9px 22px; border: 1px solid var(--green); background: transparent;
+      color: var(--green); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      border-radius: 2px; transition: all .25s; text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--green); color: #000; }
+
+    /* ─── HUD ────────────────────────────────────────────────────── */
+    .hud {
+      position: fixed; z-index: 50; pointer-events: none;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 1px; color: rgba(255,255,255,.32);
+    }
+    .hud-tl { top: 88px; left: 42px; }
+    .hud-tr { top: 88px; right: 42px; text-align: right; }
+    .hud-bl { bottom: 38px; left: 42px; }
+    .hud-br { bottom: 38px; right: 42px; text-align: right; }
+    .hud-row { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 4px; }
+    .hud-lbl { color: rgba(255,255,255,.22); }
+    .hud-val { color: var(--green); }
+
+    /* ─── HERO ───────────────────────────────────────────────────── */
+    #hero { position: relative; height: 100vh; overflow: hidden; }
+    #globe-wrap { position: absolute; inset: 0; z-index: 1; }
+    #globe-wrap canvas { width: 100% !important; height: 100% !important; }
+    .hero-body {
+      position: relative; z-index: 10; text-align: center;
+      padding-top: 32vh; pointer-events: none;
+    }
+    .hero-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 8px; color: var(--green); margin-bottom: 22px;
+      text-shadow: 0 0 20px rgba(74,222,128,.22);
+    }
+    .hero-title {
+      font-size: clamp(52px, 11vw, 148px); font-weight: 800;
+      line-height: .9; letter-spacing: -4px; margin-bottom: 24px;
+      background: linear-gradient(135deg, #fff 0%, var(--green) 30%, var(--blue) 65%, var(--indigo) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 40px rgba(74,222,128,.1));
+    }
+    .hero-sub {
+      font-size: 17px; color: rgba(255,255,255,.62); max-width: 540px;
+      margin: 0 auto 40px; line-height: 1.72;
+    }
+    .hero-actions {
+      display: flex; gap: 18px; justify-content: center; pointer-events: all;
+    }
+    .btn-primary {
+      padding: 14px 32px; background: var(--green); color: #000;
+      font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      border: none; border-radius: 2px; text-decoration: none;
+      transition: all .25s; box-shadow: 0 0 28px rgba(74,222,128,.3);
+    }
+    .btn-primary:hover { background: #86efac; box-shadow: 0 0 40px rgba(74,222,128,.5); }
+    .btn-outline {
+      padding: 14px 32px; border: 1px solid rgba(255,255,255,.22); background: transparent;
+      color: rgba(255,255,255,.72); font-size: 12px; letter-spacing: 2px;
+      text-transform: uppercase; border-radius: 2px; text-decoration: none;
+      transition: all .25s;
+    }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); }
+    .scroll-cue {
+      position: absolute; bottom: 38px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .scroll-cue span {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 3px; color: rgba(255,255,255,.32);
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--green), transparent);
+      animation: linePulse 2s infinite;
+    }
+    @keyframes linePulse { 0%,100%{opacity:.2} 50%{opacity:.85} }
+
+    /* ─── SECTION COMMONS ────────────────────────────────────────── */
+    section { position: relative; z-index: 10; }
+    .section-wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+    .section-head { text-align: center; margin-bottom: 72px; }
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 6px; color: var(--green); margin-bottom: 16px;
+    }
+    .section-title { font-size: clamp(36px, 5vw, 64px); font-weight: 800; margin-bottom: 16px; }
+    .section-sub { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+    /* ─── CRISIS ─────────────────────────────────────────────────── */
+    #crisis { min-height: 300vh; }
+    .crisis-sticky {
+      position: sticky; top: 0; height: 100vh; display: flex;
+      align-items: center; justify-content: center; overflow: hidden;
+    }
+    .crisis-stage {
+      position: absolute; opacity: 0; transform: translateY(30px);
+      text-align: center; transition: opacity .6s ease, transform .6s ease;
+      max-width: 600px; padding: 0 24px;
+    }
+    .crisis-stage.active { opacity: 1; transform: translateY(0); }
+    .stage-orb {
+      width: 180px; height: 180px; border-radius: 50%;
+      margin: 0 auto 36px; position: relative;
+      animation: orbFloat 4s ease-in-out infinite;
+    }
+    .stage-orb.ice {
+      background: radial-gradient(circle at 35% 30%, #e0f2fe, #38bdf8 40%, #0c4a6e);
+      box-shadow: 0 0 60px rgba(56,189,248,.35);
+    }
+    .stage-orb.forest {
+      background: radial-gradient(circle at 35% 30%, #bbf7d0, #16a34a 40%, #052e16);
+      box-shadow: 0 0 60px rgba(22,163,74,.35);
+    }
+    .stage-orb.ocean {
+      background: radial-gradient(circle at 35% 30%, #bfdbfe, #1d4ed8 40%, #030720);
+      box-shadow: 0 0 60px rgba(29,78,216,.35);
+    }
+    @keyframes orbFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .crisis-title { font-size: clamp(32px, 5vw, 56px); font-weight: 800; margin-bottom: 16px; }
+    .crisis-desc { font-size: 16px; color: var(--muted); line-height: 1.72; margin-bottom: 28px; }
+    .crisis-stat { font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; color: var(--green); }
+    .crisis-stat-lbl { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 4px; color: var(--muted); margin-top: 6px; }
+
+    /* ─── STATS GRID ─────────────────────────────────────────────── */
+    #stats { padding: 100px 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,.4), transparent); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 40px 28px; text-align: center; transition: border-color .3s;
+    }
+    .stat-card:hover { border-color: rgba(74,222,128,.3); }
+    .stat-icon { font-size: 32px; margin-bottom: 16px; }
+    .stat-num { font-size: 44px; font-weight: 800; color: var(--green); margin-bottom: 10px; }
+    .stat-lbl { font-size: 11px; letter-spacing: 2px; color: var(--muted); line-height: 1.6; text-transform: uppercase; margin-bottom: 18px; }
+    .stat-bar { height: 2px; background: rgba(255,255,255,.08); border-radius: 1px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--green), var(--blue)); border-radius: 1px; }
+
+    /* ─── AI INTELLIGENCE ────────────────────────────────────────── */
+    #intelligence { padding: 120px 0; }
+    .agents-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      margin-top: 72px;
+    }
+    .agent-card {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 32px 24px; position: relative; overflow: hidden;
+      transition: all .3s;
+    }
+    .agent-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      transform: scaleX(0); transform-origin: left; transition: transform .4s;
+    }
+    .agent-card:hover { border-color: rgba(74,222,128,.25); background: rgba(74,222,128,.04); }
+    .agent-card:hover::before { transform: scaleX(1); }
+    .agent-icon { font-size: 28px; margin-bottom: 16px; }
+    .agent-id {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 4px; color: var(--green); margin-bottom: 8px;
+    }
+    .agent-name { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .agent-role { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+    .agent-count {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      color: rgba(255,255,255,.28); letter-spacing: 2px;
+    }
+    .agent-count span { color: var(--blue); }
+    /* CEO card spans 4 columns on the bottom */
+    .agent-ceo {
+      grid-column: 1 / -1; display: flex; align-items: center; gap: 48px;
+      padding: 40px 48px;
+    }
+    .agent-ceo .agent-icon { font-size: 48px; margin-bottom: 0; flex-shrink: 0; }
+    .agent-ceo-text {}
+    .agent-ceo .agent-id { font-size: 10px; }
+    .agent-ceo .agent-name { font-size: 28px; }
+    .agent-ceo .agent-role { font-size: 15px; max-width: 680px; }
+    .intel-totals {
+      display: flex; gap: 48px; justify-content: center; margin-top: 60px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .intel-total { text-align: center; }
+    .intel-total-num { font-size: 48px; font-weight: 800; color: var(--green); }
+    .intel-total-lbl { font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-top: 6px; }
+
+    /* ─── PLATFORM ───────────────────────────────────────────────── */
+    #platform { padding: 120px 0; background: linear-gradient(to bottom, transparent, rgba(0,10,20,.5), transparent); }
+    .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 72px; }
+    .platform-card {
+      border: 1px solid var(--border); background: var(--card);
+      padding: 44px 36px; border-radius: 2px; transition: border-color .3s, transform .3s;
+    }
+    .platform-card:hover { border-color: rgba(14,165,233,.35); transform: translateY(-4px); }
+    .platform-num {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      letter-spacing: 4px; color: var(--blue); margin-bottom: 24px;
+    }
+    .platform-icon { font-size: 36px; margin-bottom: 20px; }
+    .platform-title { font-size: 22px; font-weight: 800; margin-bottom: 14px; }
+    .platform-desc { font-size: 14px; color: var(--muted); line-height: 1.78; }
+
+    /* ─── MARKETPLACE ────────────────────────────────────────────── */
+    #marketplace { padding: 120px 0; }
+    .market-body {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+      margin-top: 72px;
+    }
+    .market-text .market-lead {
+      font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 24px;
+    }
+    .market-text p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 18px; }
+    .market-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+    .market-tag {
+      padding: 6px 14px; border: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 2px; color: var(--muted); border-radius: 2px;
+      transition: border-color .25s, color .25s;
+    }
+    .market-tag:hover { border-color: var(--green); color: var(--green); }
+    .market-visual {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .market-card {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 24px 20px; border-radius: 2px; transition: all .3s;
+    }
+    .market-card:hover { border-color: rgba(74,222,128,.25); }
+    .market-card-icon { font-size: 24px; margin-bottom: 12px; }
+    .market-card-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .market-card-val {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: var(--green); letter-spacing: 1px;
+    }
+
+    /* ─── GOVERNANCE ─────────────────────────────────────────────── */
+    #governance { padding: 120px 0; background: linear-gradient(to bottom, transparent, rgba(0,5,15,.6), transparent); }
+    .gov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 72px; }
+    .gov-card {
+      background: var(--card); border: 1px solid var(--border); padding: 48px 36px;
+      transition: border-color .3s;
+    }
+    .gov-card:hover { border-color: rgba(99,102,241,.35); }
+    .gov-card-top {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+    }
+    .gov-icon { font-size: 32px; }
+    .gov-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 4px; color: var(--indigo); display: block; margin-bottom: 4px;
+    }
+    .gov-title { font-size: 18px; font-weight: 800; }
+    .gov-desc { font-size: 14px; color: var(--muted); line-height: 1.8; }
+    .gov-highlight {
+      margin-top: 20px; padding: 14px 18px;
+      border-left: 2px solid var(--indigo); background: rgba(99,102,241,.06);
+      font-size: 13px; color: rgba(255,255,255,.62); font-style: italic;
+    }
+    .sez-band {
+      margin-top: 60px; padding: 36px 48px;
+      border: 1px solid var(--border); background: var(--card);
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+      flex-wrap: wrap;
+    }
+    .sez-left { }
+    .sez-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 5px; color: var(--amber); margin-bottom: 10px;
+    }
+    .sez-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .sez-desc { font-size: 14px; color: var(--muted); max-width: 520px; line-height: 1.7; }
+    .sez-badges { display: flex; gap: 12px; flex-wrap: wrap; }
+    .sez-badge {
+      padding: 8px 16px; border: 1px solid rgba(245,158,11,.25);
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 2px; color: var(--amber); border-radius: 2px;
+    }
+
+    /* ─── CTA ────────────────────────────────────────────────────── */
+    #join { padding: 140px 0; text-align: center; }
+    .join-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 8px; color: var(--green); margin-bottom: 20px;
+    }
+    .join-title { font-size: clamp(36px, 6vw, 72px); font-weight: 800; line-height: 1.05; margin-bottom: 20px; }
+    .join-sub { font-size: 17px; color: var(--muted); max-width: 520px; margin: 0 auto 60px; line-height: 1.72; }
+    .join-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 60px; }
+    .join-card {
+      border: 1px solid var(--border); background: var(--card);
+      padding: 40px 32px; border-radius: 2px; text-align: left;
+      transition: all .3s; text-decoration: none; display: block;
+    }
+    .join-card:hover { border-color: rgba(74,222,128,.35); transform: translateY(-4px); }
+    .join-card-type {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 5px; color: var(--green); margin-bottom: 16px; display: block;
+    }
+    .join-card-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+    .join-card-desc { font-size: 13px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
+    .join-card-arrow {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      letter-spacing: 2px; color: var(--green);
+    }
+    .join-email-form {
+      max-width: 520px; margin: 0 auto;
+      display: flex; gap: 0; overflow: hidden;
+      border: 1px solid var(--border); border-radius: 2px;
+    }
+    .join-email-form input {
+      flex: 1; padding: 16px 20px; background: transparent; border: none;
+      color: var(--text); font-size: 14px; outline: none; font-family: 'Inter', sans-serif;
+    }
+    .join-email-form input::placeholder { color: rgba(255,255,255,.3); }
+    .join-email-form button {
+      padding: 16px 28px; background: var(--green); border: none;
+      color: #000; font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; cursor: pointer; transition: background .25s;
+    }
+    .join-email-form button:hover { background: #86efac; }
+    .join-note { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,.28); }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border); padding: 48px;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
+    }
+    .footer-brand { }
+    .footer-logo {
+      font-size: 13px; font-weight: 800; letter-spacing: 4px; color: var(--green);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .footer-copy { font-size: 11px; color: rgba(255,255,255,.28); letter-spacing: 1px; }
+    .footer-sez { font-size: 10px; color: rgba(255,255,255,.22); margin-top: 4px; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
+    .footer-links { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: 11px; color: rgba(255,255,255,.4); text-decoration: none;
+      letter-spacing: 1px; transition: color .25s;
+    }
+    .footer-links a:hover { color: var(--green); }
+    .footer-social { display: flex; gap: 16px; justify-content: flex-end; }
+    .social-btn {
+      width: 38px; height: 38px; border: 1px solid var(--border); border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; text-decoration: none; transition: all .25s;
+      color: var(--muted);
+    }
+    .social-btn:hover { border-color: var(--green); color: var(--green); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .agents-grid { grid-template-columns: repeat(2, 1fr); }
+      .agent-ceo { grid-column: 1 / -1; flex-direction: column; text-align: center; gap: 24px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .platform-grid { grid-template-columns: 1fr 1fr; }
+      .market-body { grid-template-columns: 1fr; gap: 48px; }
+      .gov-grid { grid-template-columns: 1fr; }
+      .join-cards { grid-template-columns: 1fr; }
+      footer { grid-template-columns: 1fr; text-align: center; }
+      .footer-links { justify-content: center; }
+      .footer-social { justify-content: center; }
+      nav { padding: 18px 24px; }
+      .nav-links { gap: 20px; }
+      .nav-cta { display: none; }
+    }
+    @media (max-width: 640px) {
+      .agents-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .platform-grid { grid-template-columns: 1fr; }
+      .market-visual { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hud-bl, .hud-br { display: none; }
+      .section-wrap { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-orb"></div>
+  <div class="loader-label">INITIALISING PLANETARY INTELLIGENCE</div>
+  <div class="loader-sub">33 AGENTS · PURPOSE TRUST · GLOBAL JURISDICTION</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- BACKGROUND NETWORK -->
+<canvas id="net-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">
+    <span class="nav-logo-icon">🌍</span>
+    MOTHER EARTH
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hero" class="active">Home</a></li>
+    <li><a href="#intelligence">Intelligence</a></li>
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#marketplace">Marketplace</a></li>
+    <li><a href="#governance">Governance</a></li>
+    <li><a href="#join">Partners</a></li>
+  </ul>
+  <a class="nav-cta" href="#join">Join the Mission</a>
+</nav>
+
+<!-- HUD OVERLAYS -->
+<div class="hud hud-tl">
+  <div class="hud-row"><span class="hud-lbl">SOURCE</span><span class="hud-val">NASA MODIS</span></div>
+  <div class="hud-row"><span class="hud-lbl">RESOLUTION</span><span class="hud-val">500M/PX</span></div>
+  <div class="hud-row"><span class="hud-lbl">CO₂</span><span class="hud-val" id="hud-co2">421 PPM</span></div>
+  <div class="hud-row"><span class="hud-lbl">TEMP ANOMALY</span><span class="hud-val">+1.1°C</span></div>
+</div>
+<div class="hud hud-tr">
+  <div class="hud-row"><span class="hud-lbl">AI AGENTS</span><span class="hud-val">33 ONLINE</span></div>
+  <div class="hud-row"><span class="hud-lbl">BRANCHES</span><span class="hud-val">7 ACTIVE</span></div>
+  <div class="hud-row"><span class="hud-lbl">ICE LOSS</span><span class="hud-val">-280 GT/YR</span></div>
+  <div class="hud-row"><span class="hud-lbl">SEA RISE</span><span class="hud-val">+3.4 MM/YR</span></div>
+</div>
+<div class="hud hud-bl">
+  <div class="hud-row"><span class="hud-lbl">SCROLL TO EXPLORE</span></div>
+  <div class="hud-row"><span class="hud-lbl">SECTOR: EARTH-001</span></div>
+</div>
+<div class="hud hud-br">
+  <div class="hud-row"><span class="hud-lbl">LAT</span><span class="hud-val" id="hud-lat">00.000</span></div>
+  <div class="hud-row"><span class="hud-lbl">LNG</span><span class="hud-val" id="hud-lng">00.000</span></div>
+  <div class="hud-row"><span class="hud-lbl">ALT</span><span class="hud-val">12,742 KM</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 1 — HERO
+═══════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div id="globe-wrap"></div>
+  <div class="hero-body">
+    <div class="hero-tag">// PLANETARY INTELLIGENCE SYSTEM · EST. 2026</div>
+    <h1 class="hero-title">MOTHER<br>EARTH</h1>
+    <p class="hero-sub">The world's first AI-powered environmental intelligence organisation. 33 autonomous agents. One planetary mission.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#join">Join the Mission →</a>
+      <a class="btn-outline" href="#intelligence">Explore Platform ↓</a>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>SCROLL TO EXPLORE</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 2 — THE CRISIS
+═══════════════════════════════════════════════════════════════ -->
+<section id="crisis">
+  <div class="crisis-sticky">
+    <div class="crisis-stage active" id="stage-0">
+      <div class="stage-orb ice"></div>
+      <div class="crisis-title">The Ice Melts</div>
+      <p class="crisis-desc">Arctic sea ice declines 13% per decade. Greenland loses 280 billion tonnes annually. The polar bear's hunting ground vanishes in real time.</p>
+      <div class="crisis-stat">-280 GT</div>
+      <div class="crisis-stat-lbl">ANNUAL ICE MASS LOSS</div>
+    </div>
+    <div class="crisis-stage" id="stage-1">
+      <div class="stage-orb forest"></div>
+      <div class="crisis-title">The Forests Burn</div>
+      <p class="crisis-desc">The Amazon loses 10,000 acres daily. Ancient carbon sinks become carbon sources. The lungs of our planet are collapsing faster than we can measure.</p>
+      <div class="crisis-stat">10K ACRES</div>
+      <div class="crisis-stat-lbl">LOST EVERY DAY</div>
+    </div>
+    <div class="crisis-stage" id="stage-2">
+      <div class="stage-orb ocean"></div>
+      <div class="crisis-title">The Oceans Rise</div>
+      <p class="crisis-desc">Sea levels rise 3.4mm yearly. Island nations face extinction. 800 million people will be displaced by 2050. The data is unambiguous.</p>
+      <div class="crisis-stat">+3.4 MM</div>
+      <div class="crisis-stat-lbl">PER YEAR, ACCELERATING</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 3 — STATS
+═══════════════════════════════════════════════════════════════ -->
+<section id="stats">
+  <div class="section-wrap">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🌡️</div>
+        <div class="stat-num" data-target="75" data-suffix="%">0%</div>
+        <div class="stat-lbl">Of ice-free land<br>altered by humans</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-width="75%"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💧</div>
+        <div class="stat-num" data-target="85" data-suffix="%">0%</div>
+        <div class="stat-lbl">Of wetlands lost<br>since 1700</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-width="85%"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🤖</div>
+        <div class="stat-num" data-target="33" data-suffix="">0</div>
+        <div class="stat-lbl">Autonomous AI agents<br>monitoring the planet</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-width="100%"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌊</div>
+        <div class="stat-num" data-target="800" data-suffix="M">0</div>
+        <div class="stat-lbl">People threatened<br>by sea level rise</div>
+        <div class="stat-bar"><div class="stat-bar-fill" data-width="65%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 4 — AI INTELLIGENCE
+═══════════════════════════════════════════════════════════════ -->
+<section id="intelligence">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">// THE AI ORGANISATION</div>
+      <h2 class="section-title">33 Agents. One Mission.</h2>
+      <p class="section-sub">A complete AI organisation purpose-built to defend the planet — seven specialist branches, each with autonomous sub-agents, all governed by a Purpose Trust.</p>
+    </div>
+
+    <div class="agents-grid">
+      <!-- Branch 1 -->
+      <div class="agent-card">
+        <div class="agent-icon">🏛️</div>
+        <div class="agent-id">BRANCH 01</div>
+        <div class="agent-name">AMARA</div>
+        <div class="agent-role">Legal & Compliance. Monitors VASP regulation, AML/KYC enforcement, and governance filings across jurisdictions in real time.</div>
+        <div class="agent-count">Sub-agents: <span>REX · SHIELD · DEED · CLOCK</span></div>
+      </div>
+      <!-- Branch 2 -->
+      <div class="agent-card">
+        <div class="agent-icon">⛓️</div>
+        <div class="agent-id">BRANCH 02</div>
+        <div class="agent-name">NEXUS</div>
+        <div class="agent-role">Blockchain & Technology. Manages smart contract infrastructure, token architecture, and secure data provenance protocols.</div>
+        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+      </div>
+      <!-- Branch 3 -->
+      <div class="agent-card">
+        <div class="agent-icon">🌿</div>
+        <div class="agent-id">BRANCH 03</div>
+        <div class="agent-name">GAIA</div>
+        <div class="agent-role">Environmental Intelligence. Ingests satellite, sensor, and field data to generate ecological risk scores and predictive models.</div>
+        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+      </div>
+      <!-- Branch 4 -->
+      <div class="agent-card">
+        <div class="agent-icon">💎</div>
+        <div class="agent-id">BRANCH 04</div>
+        <div class="agent-name">ATLAS</div>
+        <div class="agent-role">Treasury & Finance. Manages reserves, monitors financial compliance, and oversees all transactions within governance thresholds.</div>
+        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+      </div>
+      <!-- Branch 5 -->
+      <div class="agent-card">
+        <div class="agent-icon">📊</div>
+        <div class="agent-id">BRANCH 05</div>
+        <div class="agent-name">IRIS</div>
+        <div class="agent-role">Data Marketplace. Operates the verified environmental data exchange — connecting data producers with institutional buyers worldwide.</div>
+        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+      </div>
+      <!-- Branch 6 -->
+      <div class="agent-card">
+        <div class="agent-icon">⚖️</div>
+        <div class="agent-id">BRANCH 06</div>
+        <div class="agent-name">SAGE</div>
+        <div class="agent-role">Governance & Trust. Administers the Purpose Trust, enforces the Golden Share veto, and maintains mission integrity across all operations.</div>
+        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+      </div>
+      <!-- Branch 7 -->
+      <div class="agent-card">
+        <div class="agent-icon">📡</div>
+        <div class="agent-id">BRANCH 07</div>
+        <div class="agent-name">ECHO</div>
+        <div class="agent-role">Communications & Growth. Manages investor relations, media, partnerships, and the global guardian community across all channels.</div>
+        <div class="agent-count">Sub-agents: <span>4 ACTIVE</span></div>
+      </div>
+      <!-- CEO — spans full width -->
+      <div class="agent-card agent-ceo">
+        <div class="agent-icon">🌍</div>
+        <div class="agent-ceo-text">
+          <div class="agent-id">COMMAND CENTRE · CEO</div>
+          <div class="agent-name">Claude — Planetary CEO</div>
+          <div class="agent-role">The strategic command centre. Receives escalations from all seven branches, makes cross-branch decisions, enforces critical governance gates, and maintains absolute alignment with the Mother Earth mission. Powered by Anthropic.</div>
+          <div class="agent-count">Manages: <span>7 BRANCH HEADS · 26 SUB-AGENTS · 4 CRITICAL GATES</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="intel-totals">
+      <div class="intel-total">
+        <div class="intel-total-num">33</div>
+        <div class="intel-total-lbl">Total AI Agents</div>
+      </div>
+      <div class="intel-total">
+        <div class="intel-total-num">7</div>
+        <div class="intel-total-lbl">Specialist Branches</div>
+      </div>
+      <div class="intel-total">
+        <div class="intel-total-num">24/7</div>
+        <div class="intel-total-lbl">Always On</div>
+      </div>
+      <div class="intel-total">
+        <div class="intel-total-num">1</div>
+        <div class="intel-total-lbl">Planetary Mission</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 5 — PLATFORM
+═══════════════════════════════════════════════════════════════ -->
+<section id="platform">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">// ENVIRONMENTAL INTELLIGENCE PLATFORM</div>
+      <h2 class="section-title">See What Others Miss</h2>
+      <p class="section-sub">Our AI platform processes satellite imagery, sensor networks, and scientific datasets to generate intelligence no human team could produce alone.</p>
+    </div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-num">01 / 03</div>
+        <div class="platform-icon">🛰️</div>
+        <div class="platform-title">Real-Time Earth Monitoring</div>
+        <p class="platform-desc">Continuous ingestion of NASA MODIS, Sentinel, and private satellite feeds. Deforestation events, ice sheet changes, and pollution plumes detected within hours — not weeks.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-num">02 / 03</div>
+        <div class="platform-icon">🧠</div>
+        <div class="platform-title">Predictive Ecological Intelligence</div>
+        <p class="platform-desc">GAIA's models project ecosystem tipping points up to 18 months ahead. Governments, insurers, and conservation funds use our risk scores to act before collapse — not after.</p>
+      </div>
+      <div class="platform-card">
+        <div class="platform-num">03 / 03</div>
+        <div class="platform-icon">🔗</div>
+        <div class="platform-title">Blockchain-Secured Provenance</div>
+        <p class="platform-desc">Every data point, every model output is cryptographically anchored on-chain by NEXUS. Environmental claims are verifiable, auditable, and tamper-proof — the foundation of credible carbon markets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 6 — DATA MARKETPLACE
+═══════════════════════════════════════════════════════════════ -->
+<section id="marketplace">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">// THE DATA MARKETPLACE</div>
+      <h2 class="section-title">Environmental Data<br>as a Verified Asset</h2>
+    </div>
+    <div class="market-body">
+      <div class="market-text">
+        <div class="market-lead">The world needs trustworthy environmental data. We built the infrastructure to deliver it.</div>
+        <p>IRIS operates a VASP-compliant marketplace where verified environmental datasets are tokenised, traded, and audited on-chain. Buyers get data with provenance. Sellers get fair value. The planet gets accountability.</p>
+        <p>From carbon sequestration measurements to biodiversity indices — every dataset carries a cryptographic certificate of origin, generated by our AI and secured by NEXUS.</p>
+        <div class="market-tags">
+          <span class="market-tag">CARBON DATA</span>
+          <span class="market-tag">BIODIVERSITY INDICES</span>
+          <span class="market-tag">DEFORESTATION ALERTS</span>
+          <span class="market-tag">OCEAN TEMPERATURE</span>
+          <span class="market-tag">AIR QUALITY</span>
+          <span class="market-tag">ICE COVERAGE</span>
+          <span class="market-tag">SOIL HEALTH</span>
+          <span class="market-tag">VASP COMPLIANT</span>
+        </div>
+      </div>
+      <div class="market-visual">
+        <div class="market-card">
+          <div class="market-card-icon">🌲</div>
+          <div class="market-card-title">Forest Carbon</div>
+          <div class="market-card-val">VERIFIED ON-CHAIN</div>
+        </div>
+        <div class="market-card">
+          <div class="market-card-icon">🌊</div>
+          <div class="market-card-title">Ocean Health</div>
+          <div class="market-card-val">REAL-TIME FEED</div>
+        </div>
+        <div class="market-card">
+          <div class="market-card-icon">❄️</div>
+          <div class="market-card-title">Cryosphere</div>
+          <div class="market-card-val">NASA + SENTINEL</div>
+        </div>
+        <div class="market-card">
+          <div class="market-card-icon">🦋</div>
+          <div class="market-card-title">Biodiversity</div>
+          <div class="market-card-val">IUCN ALIGNED</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 7 — GOVERNANCE
+═══════════════════════════════════════════════════════════════ -->
+<section id="governance">
+  <div class="section-wrap">
+    <div class="section-head">
+      <div class="section-tag">// GOVERNANCE & TRUST</div>
+      <h2 class="section-title">Built So the Mission<br>Cannot Be Compromised</h2>
+      <p class="section-sub">A Purpose Trust with an immutable Golden Share veto. No investor, board, or government can redirect Mother Earth away from planetary healing.</p>
+    </div>
+    <div class="gov-grid">
+      <div class="gov-card">
+        <div class="gov-card-top">
+          <div class="gov-icon">🔒</div>
+          <div>
+            <span class="gov-label">STRUCTURE</span>
+            <div class="gov-title">Purpose Trust</div>
+          </div>
+        </div>
+        <p class="gov-desc">Incorporated under the Trustees (Perpetual Succession) Act. The trust exists for a purpose, not for shareholders. Profits serve the planet — not investors.</p>
+        <div class="gov-highlight">"The mission is the only shareholder."</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-card-top">
+          <div class="gov-icon">🗝️</div>
+          <div>
+            <span class="gov-label">PROTECTION</span>
+            <div class="gov-title">Golden Share Veto</div>
+          </div>
+        </div>
+        <p class="gov-desc">A single non-transferable Golden Share holds absolute veto power over any decision that would compromise environmental objectives. It cannot be bought, sold, or overridden.</p>
+        <div class="gov-highlight">"No acquisition can hollow out the mission."</div>
+      </div>
+      <div class="gov-card">
+        <div class="gov-card-top">
+          <div class="gov-icon">🤖</div>
+          <div>
+            <span class="gov-label">ENFORCEMENT</span>
+            <div class="gov-title">AI Governance Agent</div>
+          </div>
+        </div>
+        <p class="gov-desc">SAGE monitors every decision for mission alignment in real time. Critical gates — transactions above threshold, court-level disputes, regulatory filings — require human sign-off, always.</p>
+        <div class="gov-highlight">"Human oversight, AI speed."</div>
+      </div>
+    </div>
+    <div class="sez-band">
+      <div class="sez-left">
+        <div class="sez-tag">// JURISDICTION</div>
+        <div class="sez-title">Global by Design. Anchored in East Africa.</div>
+        <p class="sez-desc">Incorporated under the Kenya Special Economic Zone Act — one of the world's most progressive frameworks for technology and virtual asset enterprises. Operating globally from a jurisdiction built for the future.</p>
+      </div>
+      <div class="sez-badges">
+        <span class="sez-badge">KENYA SEZ ACT</span>
+        <span class="sez-badge">VASP ACT 2025</span>
+        <span class="sez-badge">FATF REC. 15</span>
+        <span class="sez-badge">ODPC COMPLIANT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SECTION 8 — JOIN
+═══════════════════════════════════════════════════════════════ -->
+<section id="join">
+  <div class="section-wrap">
+    <div class="join-tag">// JOIN THE MISSION</div>
+    <h2 class="join-title">The Planet Can't Wait.<br>Neither Should You.</h2>
+    <p class="join-sub">Whether you're a citizen, an institution, or an investor — there is a role for you in the most important organisation on Earth.</p>
+
+    <div class="join-cards">
+      <a class="join-card" href="mailto:hello@motherearth.systems?subject=Citizen Guardian — I want to join&body=Hello Mother Earth,%0D%0A%0D%0AI want to become a Guardian.%0D%0A%0D%0AName:%0D%0ACountry:%0D%0AHow I can contribute:">
+        <span class="join-card-type">// FOR CITIZENS</span>
+        <div class="join-card-title">Become a Guardian</div>
+        <p class="join-card-desc">Join a global community defending the planet. Add your voice, your skills, and your energy to the mission. Every action strengthens the network.</p>
+        <div class="join-card-arrow">BECOME A GUARDIAN →</div>
+      </a>
+      <a class="join-card" href="mailto:hello@motherearth.systems?subject=Institutional Partnership Enquiry&body=Hello Mother Earth,%0D%0A%0D%0AWe are interested in a partnership.%0D%0A%0D%0AOrganisation:%0D%0ACountry:%0D%0APartnership type:%0D%0A%0D%0ADetails:">
+        <span class="join-card-type">// FOR INSTITUTIONS</span>
+        <div class="join-card-title">Partner With Us</div>
+        <p class="join-card-desc">Governments, NGOs, research institutions, and corporations — access our environmental intelligence platform and co-create solutions at planetary scale.</p>
+        <div class="join-card-arrow">START A PARTNERSHIP →</div>
+      </a>
+      <a class="join-card" href="mailto:hello@motherearth.systems?subject=Strategic Investment Enquiry&body=Hello Mother Earth,%0D%0A%0D%0AWe are interested in investment.%0D%0A%0D%0AOrganisation:%0D%0AType (VC / Family Office / Institutional):%0D%0ATicket size:%0D%0A%0D%0AQuestions:">
+        <span class="join-card-type">// FOR INVESTORS</span>
+        <div class="join-card-title">Invest in the Mission</div>
+        <p class="join-card-desc">Purpose-aligned capital only. Investments must pass the Golden Share mission test. Returns are real — and so is the impact. Request our investment brief.</p>
+        <div class="join-card-arrow">REQUEST BRIEF →</div>
+      </a>
+    </div>
+
+    <div class="join-email-form" id="email-form">
+      <input type="email" id="email-input" placeholder="Enter your email to stay informed" autocomplete="off" />
+      <button type="button" id="email-submit">SUBSCRIBE</button>
+    </div>
+    <div class="join-note">No spam. Planetary intelligence updates only. Unsubscribe anytime.</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">🌍 MOTHER EARTH</div>
+    <div class="footer-copy">© 2026 Mother Earth Organisation</div>
+    <div class="footer-sez">Kenya Special Economic Zone · Global Jurisdiction</div>
+  </div>
+  <div class="footer-links">
+    <a href="#intelligence">Intelligence</a>
+    <a href="#platform">Platform</a>
+    <a href="#marketplace">Marketplace</a>
+    <a href="#governance">Governance</a>
+    <a href="mailto:hello@motherearth.systems">Contact</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+  <div class="footer-social">
+    <a class="social-btn" href="#" title="X / Twitter">𝕏</a>
+    <a class="social-btn" href="#" title="LinkedIn">in</a>
+    <a class="social-btn" href="#" title="Telegram">✈</a>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════════ -->
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ── LOADER ─────────────────────────────────── */
+  const loader = document.getElementById('loader');
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      loader.style.opacity = '0';
+      setTimeout(() => { loader.style.display = 'none'; initAnimations(); }, 1200);
+    }, 2800);
+  });
+
+  /* ── THREE.JS GLOBE ─────────────────────────── */
+  const scene    = new THREE.Scene();
+  const camera   = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 1000);
+  camera.position.set(0, 0, 8);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  document.getElementById('globe-wrap').appendChild(renderer.domElement);
+
+  const earthGroup = new THREE.Group();
+  earthGroup.rotation.z = 23.5 * Math.PI / 180;
+  scene.add(earthGroup);
+
+  const TEX = {
+    day:      'https://unpkg.com/three-globe@2.24.13/example/img/earth-blue-marble.jpg',
+    night:    'https://unpkg.com/three-globe@2.24.13/example/img/earth-night.jpg',
+    bump:     'https://unpkg.com/three-globe@2.24.13/example/img/earth-topology.png',
+    clouds:   'https://unpkg.com/three-globe@2.24.13/example/img/earth-clouds.png',
+    specular: 'https://unpkg.com/three-globe@2.24.13/example/img/earth-water.png'
+  };
+
+  const tl = new THREE.TextureLoader();
+  tl.setCrossOrigin('anonymous');
+  let earthMesh, cloudsMesh;
+
+  function loadTex(url) {
+    return new Promise(resolve => {
+      tl.load(url, t => { t.encoding = THREE.sRGBEncoding; resolve(t); }, undefined, () => resolve(null));
+    });
+  }
+
+  Promise.all(Object.values(TEX).map(loadTex)).then(([day, night, bump, clouds, spec]) => {
+    // Earth sphere
+    const geo = new THREE.SphereGeometry(2, 128, 128);
+    const mat = new THREE.MeshPhongMaterial({
+      map:          day,
+      bumpMap:      bump,   bumpScale:   0.05,
+      specularMap:  spec,   specular:    new THREE.Color(0x333333),
+      emissiveMap:  night,  emissive:    new THREE.Color(0xffffff),
+      emissiveIntensity: 0.45
+    });
+    // Day/night shader blend
+    mat.onBeforeCompile = shader => {
+      shader.uniforms.sunDir = { value: new THREE.Vector3(1, 0.1, 0.5).normalize() };
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', '#include <common>\nuniform vec3 sunDir;')
+        .replace('#include <emissivemap_fragment>',
+          `#include <emissivemap_fragment>
+           float dayMix = smoothstep(-0.25, 0.35, dot(normalize(vNormal), normalize(sunDir)));
+           emissiveColor.rgb *= (1.0 - dayMix) * 2.0;
+           diffuseColor.rgb   = mix(diffuseColor.rgb + vec3(0.04,0.07,0.14), diffuseColor.rgb, dayMix);`
+        );
+    };
+    earthMesh = new THREE.Mesh(geo, mat);
+    earthGroup.add(earthMesh);
+
+    // Clouds
+    if (clouds) {
+      const cMat = new THREE.MeshPhongMaterial({ map: clouds, transparent: true, opacity: 0.8, depthWrite: false });
+      cloudsMesh = new THREE.Mesh(new THREE.SphereGeometry(2.03, 64, 64), cMat);
+      earthGroup.add(cloudsMesh);
+    }
+
+    // Atmosphere glow
+    const atmMat = new THREE.ShaderMaterial({
+      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.FrontSide,
+      vertexShader:   `varying vec3 vN; void main(){ vN = normalize(normalMatrix*normal); gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+      fragmentShader: `varying vec3 vN; void main(){ float i=pow(.6-dot(vN,vec3(0,0,1)),2.2); gl_FragColor=vec4(.24,.67,.98,.35)*i; }`
+    });
+    earthGroup.add(new THREE.Mesh(new THREE.SphereGeometry(2.15, 64, 64), atmMat));
+
+    // Stars
+    const pos = new Float32Array(9000 * 3);
+    for (let i = 0; i < 9000; i++) {
+      const r = 35 + Math.random() * 55, t = Math.random() * Math.PI * 2, p = Math.acos(2 * Math.random() - 1);
+      pos[i*3]   = r * Math.sin(p) * Math.cos(t);
+      pos[i*3+1] = r * Math.sin(p) * Math.sin(t);
+      pos[i*3+2] = r * Math.cos(p);
+    }
+    const starGeo = new THREE.BufferGeometry();
+    starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 0.75 })));
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.32));
+    const sun = new THREE.DirectionalLight(0xffffff, 1.1); sun.position.set(5, 3, 5); scene.add(sun);
+    const rim = new THREE.DirectionalLight(0x99d8ff, 0.3); rim.position.set(-5, -2, -5); scene.add(rim);
+
+    animate();
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (earthMesh)  earthMesh.rotation.y  += 0.0008;
+    if (cloudsMesh) cloudsMesh.rotation.y += 0.0012;
+    earthGroup.rotation.y += 0.0003;
+    renderer.render(scene, camera);
+  }
+
+  window.addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  /* ── BACKGROUND NETWORK ─────────────────────── */
+  const netCanvas = document.getElementById('net-canvas');
+  const ctx = netCanvas.getContext('2d');
+  function resizeNet() { netCanvas.width = innerWidth; netCanvas.height = innerHeight; }
+  resizeNet();
+  window.addEventListener('resize', resizeNet);
+
+  const dots = Array.from({ length: 28 }, () => ({
+    x: Math.random() * innerWidth, y: Math.random() * innerHeight,
+    vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3,
+    r: 1 + Math.random()
+  }));
+
+  (function drawNet() {
+    ctx.clearRect(0, 0, netCanvas.width, netCanvas.height);
+    for (let i = 0; i < dots.length; i++) {
+      for (let j = i + 1; j < dots.length; j++) {
+        const d = Math.hypot(dots[i].x - dots[j].x, dots[i].y - dots[j].y);
+        if (d < 200) {
+          ctx.strokeStyle = `rgba(74,222,128,${.1 - d/200*.08})`;
+          ctx.lineWidth = .8;
+          ctx.beginPath(); ctx.moveTo(dots[i].x, dots[i].y); ctx.lineTo(dots[j].x, dots[j].y); ctx.stroke();
+        }
+      }
+      ctx.fillStyle = 'rgba(74,222,128,.55)';
+      ctx.beginPath(); ctx.arc(dots[i].x, dots[i].y, dots[i].r, 0, Math.PI*2); ctx.fill();
+      dots[i].x += dots[i].vx; dots[i].y += dots[i].vy;
+      if (dots[i].x < 0 || dots[i].x > netCanvas.width)  dots[i].vx *= -1;
+      if (dots[i].y < 0 || dots[i].y > netCanvas.height) dots[i].vy *= -1;
+    }
+    requestAnimationFrame(drawNet);
+  })();
+
+  /* ── ALL GSAP ANIMATIONS ────────────────────── */
+  function initAnimations() {
+
+    // Hero entrance
+    gsap.timeline()
+      .from('.hero-tag',     { y: 24, opacity: 0, duration: .9, ease: 'power3.out' })
+      .from('.hero-title',   { y: 36, opacity: 0, duration: 1.1, ease: 'power3.out' }, '-=.5')
+      .from('.hero-sub',     { y: 20, opacity: 0, duration: .9, ease: 'power3.out' }, '-=.6')
+      .from('.hero-actions', { y: 16, opacity: 0, duration: .8, ease: 'power3.out' }, '-=.5')
+      .from('.scroll-cue',   { opacity: 0, duration: .8, ease: 'power3.out' }, '-=.4');
+
+    // Crisis scroll stages
+    const stages = document.querySelectorAll('.crisis-stage');
+    ScrollTrigger.create({
+      trigger: '#crisis', start: 'top top', end: 'bottom bottom', scrub: true,
+      onUpdate: self => {
+        const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
+        stages.forEach((s, i) => s.classList.toggle('active', i === idx));
+        document.getElementById('hud-co2').textContent = `${421 + Math.floor(self.progress * 7)} PPM`;
+        document.getElementById('hud-lat').textContent = (Math.sin(self.progress * Math.PI) * 42).toFixed(3);
+        document.getElementById('hud-lng').textContent = (Math.cos(self.progress * Math.PI * 1.3) * 102).toFixed(3);
+      }
+    });
+
+    // Stat counters
+    document.querySelectorAll('.stat-card').forEach(card => {
+      const numEl = card.querySelector('.stat-num');
+      const fill  = card.querySelector('.stat-bar-fill');
+      const target = parseFloat(numEl.dataset.target);
+      const suffix = numEl.dataset.suffix || '';
+      ScrollTrigger.create({
+        trigger: card, start: 'top 82%', once: true,
+        onEnter: () => {
+          gsap.to(fill, { width: fill.dataset.width, duration: 1.8, ease: 'power3.out' });
+          const obj = { v: 0 };
+          gsap.to(obj, { v: target, duration: 1.6, ease: 'power3.out',
+            onUpdate() { numEl.textContent = `${Math.round(obj.v)}${suffix}`; }
+          });
+        }
+      });
+    });
+
+    // Agent cards stagger
+    gsap.from('.agent-card', {
+      scrollTrigger: { trigger: '#intelligence', start: 'top 70%' },
+      y: 40, opacity: 0, duration: .7, stagger: .08, ease: 'power3.out'
+    });
+
+    // Intel totals
+    gsap.from('.intel-total', {
+      scrollTrigger: { trigger: '.intel-totals', start: 'top 85%' },
+      y: 24, opacity: 0, duration: .7, stagger: .1, ease: 'power3.out'
+    });
+
+    // Platform cards
+    gsap.from('.platform-card', {
+      scrollTrigger: { trigger: '#platform', start: 'top 70%' },
+      y: 40, opacity: 0, duration: .7, stagger: .12, ease: 'power3.out'
+    });
+
+    // Marketplace
+    gsap.from('.market-text', {
+      scrollTrigger: { trigger: '#marketplace', start: 'top 70%' },
+      x: -40, opacity: 0, duration: .9, ease: 'power3.out'
+    });
+    gsap.from('.market-visual', {
+      scrollTrigger: { trigger: '#marketplace', start: 'top 70%' },
+      x: 40, opacity: 0, duration: .9, ease: 'power3.out'
+    });
+
+    // Gov cards
+    gsap.from('.gov-card', {
+      scrollTrigger: { trigger: '#governance', start: 'top 70%' },
+      y: 36, opacity: 0, duration: .7, stagger: .12, ease: 'power3.out'
+    });
+
+    // Join cards
+    gsap.from('.join-card', {
+      scrollTrigger: { trigger: '#join', start: 'top 75%' },
+      y: 36, opacity: 0, duration: .7, stagger: .1, ease: 'power3.out'
+    });
+
+    // Active nav link on scroll
+    const sections = ['hero', 'intelligence', 'platform', 'marketplace', 'governance', 'join'];
+    window.addEventListener('scroll', () => {
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+        if (link && rect.top <= innerHeight * .35 && rect.bottom >= innerHeight * .35) {
+          document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    }, { passive: true });
+  }
+
+  /* ── EMAIL SUBSCRIBE ────────────────────────── */
+  document.getElementById('email-submit').addEventListener('click', () => {
+    const email = document.getElementById('email-input').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('email-input').style.borderColor = 'red';
+      return;
+    }
+    // Opens native mail client with pre-filled message
+    window.location.href = `mailto:hello@motherearth.systems?subject=Subscribe — ${encodeURIComponent(email)}&body=Please add me to the Mother Earth intelligence updates.%0D%0A%0D%0AEmail: ${encodeURIComponent(email)}`;
+    document.getElementById('email-input').value = '';
+    document.getElementById('email-submit').textContent = 'SUBSCRIBED ✓';
+    setTimeout(() => { document.getElementById('email-submit').textContent = 'SUBSCRIBE'; }, 4000);
+  });
+
+  // Allow Enter key on email input
+  document.getElementById('email-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('email-submit').click();
+  });
+</script>
+</body>
+</html>
