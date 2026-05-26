@@ -1,0 +1,179 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#020606"/>
+      <stop offset="100%" stop-color="#041212"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="700" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="35%"  stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="lineGrad" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#4ade80" stop-opacity="0"/>
+      <stop offset="30%"  stop-color="#4ade80" stop-opacity="0.6"/>
+      <stop offset="70%"  stop-color="#0ea5e9" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="#4ade80" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#lineGrad)"/>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="627" width="1200" height="3" fill="url(#lineGrad)"/>
+
+  <!-- Globe orb (right side) -->
+  <circle cx="980" cy="315" r="220" fill="none" stroke="#4ade80" stroke-width="0.5" opacity="0.12"/>
+  <circle cx="980" cy="315" r="180" fill="none" stroke="#4ade80" stroke-width="0.5" opacity="0.10"/>
+  <circle cx="980" cy="315" r="140" fill="none" stroke="#4ade80" stroke-width="0.5" opacity="0.08"/>
+
+  <!-- Globe core -->
+  <circle cx="980" cy="315" r="110"
+    fill="none"
+    stroke="none"/>
+  <circle cx="980" cy="315" r="110"
+    fill="#051a1a"
+    stroke="#4ade80"
+    stroke-width="1"
+    opacity="0.35"/>
+
+  <!-- Globe latitude lines -->
+  <ellipse cx="980" cy="315" rx="110" ry="30"  fill="none" stroke="#4ade80" stroke-width="0.7" opacity="0.2"/>
+  <ellipse cx="980" cy="315" rx="110" ry="70"  fill="none" stroke="#4ade80" stroke-width="0.7" opacity="0.15"/>
+  <ellipse cx="980" cy="315" rx="110" ry="100" fill="none" stroke="#4ade80" stroke-width="0.7" opacity="0.1"/>
+  <!-- Globe longitude lines -->
+  <line x1="980" y1="205" x2="980" y2="425" stroke="#4ade80" stroke-width="0.7" opacity="0.2"/>
+  <line x1="925" y1="210" x2="1035" y2="420" stroke="#4ade80" stroke-width="0.7" opacity="0.15"/>
+  <line x1="870" y1="265" x2="1090" y2="365" stroke="#4ade80" stroke-width="0.7" opacity="0.12"/>
+
+  <!-- Glow behind globe -->
+  <circle cx="980" cy="315" r="130" fill="#4ade80" opacity="0.03" filter="url(#glow)"/>
+
+  <!-- Globe emoji center -->
+  <text x="980" y="338" text-anchor="middle" font-size="72" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif">🌍</text>
+
+  <!-- Left content column -->
+
+  <!-- Tag line -->
+  <text x="80" y="148"
+    font-family="'Courier New', Courier, monospace"
+    font-size="13"
+    letter-spacing="6"
+    fill="#4ade80"
+    opacity="0.8">// PLANETARY INTELLIGENCE SYSTEM · EST. 2026</text>
+
+  <!-- Main title -->
+  <text x="78" y="258"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="108"
+    letter-spacing="-4"
+    fill="url(#titleGrad)"
+    filter="url(#softglow)">MOTHER</text>
+  <text x="78" y="368"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="108"
+    letter-spacing="-4"
+    fill="url(#titleGrad)"
+    filter="url(#softglow)">EARTH</text>
+
+  <!-- Divider -->
+  <rect x="80" y="392" width="280" height="2" fill="url(#lineGrad)" opacity="0.7"/>
+
+  <!-- Tagline -->
+  <text x="80" y="428"
+    font-family="Arial, sans-serif"
+    font-size="18"
+    fill="#ffffff"
+    opacity="0.6">The world's first AI-powered environmental</text>
+  <text x="80" y="452"
+    font-family="Arial, sans-serif"
+    font-size="18"
+    fill="#ffffff"
+    opacity="0.6">intelligence organisation.</text>
+
+  <!-- Stats row -->
+  <!-- Stat 1 -->
+  <text x="80" y="520"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="32"
+    fill="#4ade80">33</text>
+  <text x="80" y="542"
+    font-family="'Courier New', Courier, monospace"
+    font-size="10"
+    letter-spacing="3"
+    fill="#ffffff"
+    opacity="0.4">AI AGENTS</text>
+
+  <!-- Divider dot -->
+  <circle cx="182" cy="522" r="2" fill="#4ade80" opacity="0.4"/>
+
+  <!-- Stat 2 -->
+  <text x="200" y="520"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="32"
+    fill="#0ea5e9">7</text>
+  <text x="200" y="542"
+    font-family="'Courier New', Courier, monospace"
+    font-size="10"
+    letter-spacing="3"
+    fill="#ffffff"
+    opacity="0.4">BRANCHES</text>
+
+  <!-- Divider dot -->
+  <circle cx="282" cy="522" r="2" fill="#4ade80" opacity="0.4"/>
+
+  <!-- Stat 3 -->
+  <text x="300" y="520"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="32"
+    fill="#6366f1">1</text>
+  <text x="300" y="542"
+    font-family="'Courier New', Courier, monospace"
+    font-size="10"
+    letter-spacing="3"
+    fill="#ffffff"
+    opacity="0.4">MISSION</text>
+
+  <!-- Domain -->
+  <text x="80" y="594"
+    font-family="'Courier New', Courier, monospace"
+    font-size="14"
+    letter-spacing="2"
+    fill="#4ade80"
+    opacity="0.55">motherearth.systems</text>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="1198" height="628" fill="none" stroke="#4ade80" stroke-width="1" opacity="0.08"/>
+  <rect x="6" y="6" width="1188" height="618" fill="none" stroke="#4ade80" stroke-width="0.5" opacity="0.05"/>
+</svg>

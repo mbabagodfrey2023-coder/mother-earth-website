@@ -11,11 +11,13 @@
   <meta name="google-site-verification" content="WucZGujtpqyQos_N5NH4FDqAlolzNal5TW8S8LutW50" />
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://motherearth.systems/" />
-  <meta property="og:image"       content="https://motherearth.systems/og.png" />
+  <meta property="og:image"       content="https://motherearth.systems/og.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height"content="630" />
   <meta name="twitter:card"       content="summary_large_image" />
   <meta name="twitter:title"      content="Mother Earth — Planetary Intelligence Organisation" />
   <meta name="twitter:description"content="33 autonomous AI agents. Purpose Trust governance. Blockchain-secured environmental data." />
-  <meta name="twitter:image"      content="https://motherearth.systems/og.png" />
+  <meta name="twitter:image"      content="https://motherearth.systems/og.svg" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -738,16 +740,16 @@
 
 <!-- HUD OVERLAYS -->
 <div class="hud hud-tl">
-  <div class="hud-row"><span class="hud-lbl">SOURCE</span><span class="hud-val">NASA MODIS</span></div>
-  <div class="hud-row"><span class="hud-lbl">RESOLUTION</span><span class="hud-val">500M/PX</span></div>
-  <div class="hud-row"><span class="hud-lbl">CO₂</span><span class="hud-val" id="hud-co2">421 PPM</span></div>
-  <div class="hud-row"><span class="hud-lbl">TEMP ANOMALY</span><span class="hud-val">+1.1°C</span></div>
+  <div class="hud-row"><span class="hud-lbl">SOURCE</span><span class="hud-val" id="hud-source">NOAA / NASA</span></div>
+  <div class="hud-row"><span class="hud-lbl">DATA</span><span class="hud-val" id="hud-updated">LOADING...</span></div>
+  <div class="hud-row"><span class="hud-lbl">CO₂</span><span class="hud-val" id="hud-co2">424 PPM</span></div>
+  <div class="hud-row"><span class="hud-lbl">TEMP ANOMALY</span><span class="hud-val" id="hud-temp">+1.2°C</span></div>
 </div>
 <div class="hud hud-tr">
-  <div class="hud-row"><span class="hud-lbl">AI AGENTS</span><span class="hud-val">33 ONLINE</span></div>
-  <div class="hud-row"><span class="hud-lbl">BRANCHES</span><span class="hud-val">7 ACTIVE</span></div>
-  <div class="hud-row"><span class="hud-lbl">ICE LOSS</span><span class="hud-val">-280 GT/YR</span></div>
-  <div class="hud-row"><span class="hud-lbl">SEA RISE</span><span class="hud-val">+3.4 MM/YR</span></div>
+  <div class="hud-row"><span class="hud-lbl">AI AGENTS</span><span class="hud-val" id="hud-agents">33 ONLINE</span></div>
+  <div class="hud-row"><span class="hud-lbl">BRANCHES</span><span class="hud-val" id="hud-branches">7 ACTIVE</span></div>
+  <div class="hud-row"><span class="hud-lbl">ACTIVE EVENTS</span><span class="hud-val" id="hud-events">— NASA</span></div>
+  <div class="hud-row"><span class="hud-lbl">WILDFIRES</span><span class="hud-val" id="hud-fires">— EONET</span></div>
 </div>
 <div class="hud hud-bl">
   <div class="hud-row"><span class="hud-lbl">SCROLL TO EXPLORE</span></div>
@@ -1889,6 +1891,56 @@
   document.getElementById('email-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('email-submit').click();
   });
+
+  /* ── LIVE DATA HUD ──────────────────────────── */
+  // Fetches /live-data.json (pushed by WEB agent every 15 min via GitHub API)
+  // Falls back gracefully if file is unavailable or stale
+  async function fetchLiveData() {
+    try {
+      const res  = await fetch('/live-data.json?t=' + Date.now());
+      if (!res.ok) return;
+      const data = await res.json();
+
+      const env = data.environmental || {};
+      const plt = data.platform     || {};
+
+      // CO₂ from NOAA Mauna Loa
+      if (env.co2_ppm) {
+        document.getElementById('hud-co2').textContent = `${env.co2_ppm} PPM`;
+      }
+
+      // Temperature anomaly
+      if (env.temp_anomaly_c != null) {
+        const sign = env.temp_anomaly_c >= 0 ? '+' : '';
+        document.getElementById('hud-temp').textContent = `${sign}${env.temp_anomaly_c}°C`;
+      }
+
+      // Active NASA events
+      if (env.active_nasa_events != null) {
+        document.getElementById('hud-events').textContent = `${env.active_nasa_events} ACTIVE`;
+      }
+      if (env.wildfires != null) {
+        document.getElementById('hud-fires').textContent = `${env.wildfires} DETECTED`;
+      }
+
+      // Agent / branch counts
+      if (plt.agents_online)   document.getElementById('hud-agents').textContent   = `${plt.agents_online} ONLINE`;
+      if (plt.branches_active) document.getElementById('hud-branches').textContent = `${plt.branches_active} ACTIVE`;
+
+      // Data freshness timestamp
+      if (data.updated) {
+        const age = Math.round((Date.now() - new Date(data.updated)) / 60000);
+        document.getElementById('hud-updated').textContent = age < 2 ? 'LIVE' : `${age}M AGO`;
+        document.getElementById('hud-source').textContent  = 'NOAA · NASA';
+      }
+    } catch (e) {
+      // Fail silently — HUD defaults remain visible
+    }
+  }
+
+  // Fetch immediately then every 5 minutes
+  fetchLiveData();
+  setInterval(fetchLiveData, 5 * 60 * 1000);
 
   /* ── KEYBOARD ACCESSIBILITY FOR CARDS ──────── */
   // Allow Enter/Space to "click" any card that has onclick
