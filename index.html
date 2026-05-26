@@ -491,6 +491,87 @@
       .section-wrap { padding: 0 24px; }
     }
 
+    /* ─── PLATFORM CARD INTERACTIVE ────────────────────────────── */
+    .platform-card { cursor: pointer; }
+    .platform-card-arrow {
+      margin-top: 20px; font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 3px; color: var(--blue); opacity: 0;
+      transition: opacity .3s;
+    }
+    .platform-card:hover .platform-card-arrow { opacity: 1; }
+    .platform-badge {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 16px;
+      padding: 4px 10px; border-radius: 2px; font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 2px;
+      background: rgba(99,102,241,.1); color: var(--indigo); border: 1px solid rgba(99,102,241,.2);
+    }
+
+    /* ─── AGENT CARD INTERACTIVE ────────────────────────────────── */
+    .agent-card { cursor: pointer; }
+    .agent-card-arrow {
+      margin-top: 14px; font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 2px; color: var(--green); opacity: 0;
+      transition: opacity .3s;
+    }
+    .agent-card:hover .agent-card-arrow,
+    .agent-ceo:hover .agent-card-arrow { opacity: 1; }
+
+    /* ─── FEATURE / AGENT MODALS ────────────────────────────────── */
+    .modal-powered { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
+    .modal-chip {
+      padding: 4px 12px; border-radius: 2px; font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; letter-spacing: 3px; font-weight: 700;
+    }
+    .chip-gaia   { background: rgba(74,222,128,.1);  color: var(--green);  border: 1px solid rgba(74,222,128,.2); }
+    .chip-nexus  { background: rgba(14,165,233,.1);  color: var(--blue);   border: 1px solid rgba(14,165,233,.2); }
+    .chip-iris   { background: rgba(245,158,11,.1);  color: var(--amber);  border: 1px solid rgba(245,158,11,.2); }
+    .chip-atlas  { background: rgba(99,102,241,.1);  color: var(--indigo); border: 1px solid rgba(99,102,241,.2); }
+    .chip-amara  { background: rgba(239,68,68,.1);   color: #f87171;       border: 1px solid rgba(239,68,68,.2);  }
+    .chip-sage   { background: rgba(168,85,247,.1);  color: #c084fc;       border: 1px solid rgba(168,85,247,.2); }
+    .chip-echo   { background: rgba(251,191,36,.1);  color: #fbbf24;       border: 1px solid rgba(251,191,36,.2); }
+    .chip-ceo    { background: rgba(255,255,255,.06); color: var(--text);  border: 1px solid rgba(255,255,255,.12); }
+    .modal-data-flow {
+      margin: 16px 0; padding: 16px 20px;
+      background: rgba(255,255,255,.03); border-left: 2px solid var(--blue);
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 2.1;
+      color: rgba(255,255,255,.45); letter-spacing: .5px;
+    }
+    .modal-data-flow span { color: var(--green); }
+    .modal-sub-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 12px 0 0; }
+    .modal-sub-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 12px 16px; background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); border-radius: 2px;
+    }
+    .modal-sub-name {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+      letter-spacing: 2px; color: var(--green); min-width: 64px; flex-shrink: 0; padding-top: 1px;
+    }
+    .modal-sub-desc { font-size: 12px; color: var(--muted); line-height: 1.65; }
+    .modal-status-row {
+      display: flex; align-items: center; gap: 10px; margin-top: 24px;
+      padding: 12px 16px; background: rgba(74,222,128,.04);
+      border: 1px solid rgba(74,222,128,.12); border-radius: 2px;
+    }
+    .modal-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: dotPulse 2s infinite; flex-shrink: 0; }
+    .modal-status-txt { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--green); }
+    .modal-notify-form {
+      margin-top: 28px; display: flex; gap: 0; overflow: hidden;
+      border: 1px solid var(--border); border-radius: 2px;
+    }
+    .modal-notify-form input {
+      flex: 1; padding: 13px 16px; background: transparent; border: none;
+      color: var(--text); font-size: 13px; outline: none; font-family: 'Inter', sans-serif;
+    }
+    .modal-notify-form input::placeholder { color: rgba(255,255,255,.28); }
+    .modal-notify-form button {
+      padding: 13px 20px; background: var(--indigo); border: none;
+      color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; cursor: pointer; transition: background .25s; white-space: nowrap;
+    }
+    .modal-notify-form button:hover { background: #818cf8; }
+    .modal-notify-note { font-size: 11px; color: rgba(255,255,255,.28); margin-top: 8px; }
+
     /* ─── HAMBURGER MENU ────────────────────────────────────────── */
     .nav-hamburger {
       display: none; flex-direction: column; gap: 5px;
@@ -774,69 +855,77 @@
 
     <div class="agents-grid">
       <!-- Branch 1 -->
-      <div class="agent-card">
+      <div class="agent-card" onclick="openModal('modal-agent-amara')" role="button" tabindex="0">
         <div class="agent-icon">🏛️</div>
         <div class="agent-id">BRANCH 01</div>
         <div class="agent-name">AMARA</div>
         <div class="agent-role">Legal & Compliance. Monitors VASP regulation, AML/KYC enforcement, and governance filings across jurisdictions in real time.</div>
         <div class="agent-count">Sub-agents: <span>REX · SHIELD · DEED · CLOCK</span></div>
+        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
       </div>
       <!-- Branch 2 -->
-      <div class="agent-card">
+      <div class="agent-card" onclick="openModal('modal-agent-nexus')" role="button" tabindex="0">
         <div class="agent-icon">⛓️</div>
         <div class="agent-id">BRANCH 02</div>
         <div class="agent-name">NEXUS</div>
         <div class="agent-role">Blockchain & Technology. Manages smart contract infrastructure, token architecture, and secure data provenance protocols.</div>
         <div class="agent-count">Sub-agents: <span>FORGE · SCOUT · PULSE · KEYS</span></div>
+        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
       </div>
       <!-- Branch 3 -->
-      <div class="agent-card">
+      <div class="agent-card" onclick="openModal('modal-agent-gaia')" role="button" tabindex="0">
         <div class="agent-icon">🌿</div>
         <div class="agent-id">BRANCH 03</div>
         <div class="agent-name">GAIA</div>
         <div class="agent-role">Environmental Intelligence. Ingests satellite, sensor, and field data to generate ecological risk scores and predictive models.</div>
         <div class="agent-count">Sub-agents: <span>SENSE · VERIFY · REPORT · CARBON</span></div>
+        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
       </div>
       <!-- Branch 4 -->
-      <div class="agent-card">
+      <div class="agent-card" onclick="openModal('modal-agent-atlas')" role="button" tabindex="0">
         <div class="agent-icon">💎</div>
         <div class="agent-id">BRANCH 04</div>
         <div class="agent-name">ATLAS</div>
         <div class="agent-role">Treasury & Finance. Manages reserves, monitors financial compliance, and oversees all transactions within governance thresholds.</div>
         <div class="agent-count">Sub-agents: <span>WALL · SWEEP · TAX · YIELD</span></div>
+        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
       </div>
       <!-- Branch 5 -->
-      <div class="agent-card">
+      <div class="agent-card" onclick="openModal('modal-agent-iris')" role="button" tabindex="0">
         <div class="agent-icon">📊</div>
         <div class="agent-id">BRANCH 05</div>
         <div class="agent-name">IRIS</div>
         <div class="agent-role">Data Marketplace. Operates the verified environmental data exchange — connecting data producers with institutional buyers worldwide.</div>
         <div class="agent-count">Sub-agents: <span>MINT · TRADE · FEE · ARBITER</span></div>
+        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
       </div>
       <!-- Branch 6 -->
-      <div class="agent-card">
+      <div class="agent-card" onclick="openModal('modal-agent-sage')" role="button" tabindex="0">
         <div class="agent-icon">⚖️</div>
         <div class="agent-id">BRANCH 06</div>
         <div class="agent-name">SAGE</div>
         <div class="agent-role">Governance & Trust. Administers the Purpose Trust, enforces the Golden Share veto, and maintains mission integrity across all operations.</div>
         <div class="agent-count">Sub-agents: <span>VETO · BOARD · MISSION</span></div>
+        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
       </div>
       <!-- Branch 7 -->
-      <div class="agent-card">
+      <div class="agent-card" onclick="openModal('modal-agent-echo')" role="button" tabindex="0">
         <div class="agent-icon">📡</div>
         <div class="agent-id">BRANCH 07</div>
         <div class="agent-name">ECHO</div>
         <div class="agent-role">Communications & Growth. Manages investor relations, media, partnerships, and the global guardian community across all channels.</div>
-        <div class="agent-count">Sub-agents: <span>STORY · GROW · PRESS</span></div>
+        <div class="agent-count">Sub-agents: <span>STORY · GROW · PRESS · WEB</span></div>
+        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
       </div>
       <!-- CEO — spans full width -->
-      <div class="agent-card agent-ceo">
+      <div class="agent-card agent-ceo" onclick="openModal('modal-agent-ceo')" role="button" tabindex="0">
         <div class="agent-icon">🌍</div>
         <div class="agent-ceo-text">
           <div class="agent-id">COMMAND CENTRE · CEO</div>
           <div class="agent-name">Claude — Planetary CEO</div>
           <div class="agent-role">The strategic command centre. Receives escalations from all seven branches, makes cross-branch decisions, enforces critical governance gates, and maintains absolute alignment with the Mother Earth mission. Powered by Anthropic.</div>
           <div class="agent-count">Manages: <span>7 BRANCH HEADS · 26 SUB-AGENTS · 4 CRITICAL GATES</span></div>
+          <div class="agent-card-arrow" style="margin-top:18px;">VIEW ARCHITECTURE →</div>
         </div>
       </div>
     </div>
@@ -873,23 +962,29 @@
       <p class="section-sub">Our AI platform processes satellite imagery, sensor networks, and scientific datasets to generate intelligence no human team could produce alone.</p>
     </div>
     <div class="platform-grid">
-      <div class="platform-card">
+      <div class="platform-card" onclick="openModal('modal-platform-1')" role="button" tabindex="0">
         <div class="platform-num">01 / 03</div>
         <div class="platform-icon">🛰️</div>
         <div class="platform-title">Real-Time Earth Monitoring</div>
         <p class="platform-desc">Continuous ingestion of NASA MODIS, Sentinel, and private satellite feeds. Deforestation events, ice sheet changes, and pollution plumes detected within hours — not weeks.</p>
+        <div class="platform-badge">⬡ PHASE 3 · Q3 2026</div>
+        <div class="platform-card-arrow">POWERED BY GAIA →</div>
       </div>
-      <div class="platform-card">
+      <div class="platform-card" onclick="openModal('modal-platform-2')" role="button" tabindex="0">
         <div class="platform-num">02 / 03</div>
         <div class="platform-icon">🧠</div>
         <div class="platform-title">Predictive Ecological Intelligence</div>
         <p class="platform-desc">GAIA's models project ecosystem tipping points up to 18 months ahead. Governments, insurers, and conservation funds use our risk scores to act before collapse — not after.</p>
+        <div class="platform-badge">⬡ PHASE 3 · Q3 2026</div>
+        <div class="platform-card-arrow">POWERED BY GAIA →</div>
       </div>
-      <div class="platform-card">
+      <div class="platform-card" onclick="openModal('modal-platform-3')" role="button" tabindex="0">
         <div class="platform-num">03 / 03</div>
         <div class="platform-icon">🔗</div>
         <div class="platform-title">Blockchain-Secured Provenance</div>
         <p class="platform-desc">Every data point, every model output is cryptographically anchored on-chain by NEXUS. Environmental claims are verifiable, auditable, and tamper-proof — the foundation of credible carbon markets.</p>
+        <div class="platform-badge">⬡ PHASE 3 · Q3 2026</div>
+        <div class="platform-card-arrow">POWERED BY NEXUS →</div>
       </div>
     </div>
   </div>
@@ -1154,6 +1249,305 @@
     <a class="social-btn" href="#" title="Telegram">✈</a>
   </div>
 </footer>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PLATFORM FEATURE MODALS (3)
+═══════════════════════════════════════════════════════════════ -->
+
+<!-- Platform Modal 1 — Real-Time Earth Monitoring -->
+<div class="modal-overlay" id="modal-platform-1">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-platform-1')">✕</button>
+    <div class="modal-tag">// PLATFORM FEATURE · PHASE 3</div>
+    <div class="modal-title">🛰️ Real-Time Earth Monitoring</div>
+    <div class="modal-powered">
+      <span class="modal-chip chip-gaia">GAIA</span>
+      <span class="modal-chip chip-gaia">SENSE</span>
+      <span class="modal-chip chip-gaia">VERIFY</span>
+      <span class="modal-chip chip-nexus">NEXUS</span>
+    </div>
+    <div class="modal-body">
+      <h3>What it monitors</h3>
+      <ul>
+        <li>NASA MODIS satellite feeds — 500m resolution, global daily coverage</li>
+        <li>Copernicus Sentinel-2 — vegetation index (NDVI), land use change</li>
+        <li>2,400+ IoT environmental sensors across East Africa (air, water, soil)</li>
+        <li>NOAA ocean buoys — sea surface temperature and pH levels</li>
+        <li>Deforestation event detection within 3–6 hours of occurrence</li>
+      </ul>
+      <h3>What you'll see on the live dashboard</h3>
+      <ul>
+        <li>Real-time CO₂ readings with regional breakdown</li>
+        <li>Deforestation event map — Kenya, Congo, Amazon</li>
+        <li>Air quality index overlay (PM2.5 / PM10)</li>
+        <li>Sea level anomaly chart updated daily</li>
+        <li>Ice coverage delta — Arctic and Antarctic</li>
+      </ul>
+      <h3>How the data flows</h3>
+      <div class="modal-data-flow">
+        <span>SATELLITE/SENSOR</span> → GAIA SENSE (ingestion) →<br>
+        GAIA VERIFY (3-layer validation) →<br>
+        NEXUS FORGE (cryptographic anchor on-chain) →<br>
+        <span>WEBSITE LIVE DASHBOARD</span>
+      </div>
+    </div>
+    <div class="modal-notify-form" id="nf-platform-1">
+      <input type="email" placeholder="Your email — notify me when live" />
+      <button onclick="notifyMe(this, 'Real-Time Earth Monitoring')">NOTIFY ME</button>
+    </div>
+    <div class="modal-notify-note">No spam. One email when the dashboard launches.</div>
+  </div>
+</div>
+
+<!-- Platform Modal 2 — Predictive Ecological Intelligence -->
+<div class="modal-overlay" id="modal-platform-2">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-platform-2')">✕</button>
+    <div class="modal-tag">// PLATFORM FEATURE · PHASE 3</div>
+    <div class="modal-title">🧠 Predictive Ecological Intelligence</div>
+    <div class="modal-powered">
+      <span class="modal-chip chip-gaia">GAIA</span>
+      <span class="modal-chip chip-gaia">REPORT</span>
+      <span class="modal-chip chip-gaia">CARBON</span>
+    </div>
+    <div class="modal-body">
+      <h3>What GAIA predicts</h3>
+      <ul>
+        <li>Forest tipping point probability — irreversible loss risk score by region</li>
+        <li>Coral bleaching risk windows — 90-day forecast with confidence bands</li>
+        <li>Drought progression models for East Africa — 6-month outlook</li>
+        <li>Carbon sink capacity projections — which forests are absorbing vs. emitting</li>
+        <li>Biodiversity stress indices — species range shifts ahead of occurrence</li>
+      </ul>
+      <h3>Who uses these predictions</h3>
+      <ul>
+        <li><strong>Governments</strong> — early warning for policy intervention before disaster</li>
+        <li><strong>Insurers</strong> — climate risk underwriting grounded in verified data</li>
+        <li><strong>Conservation funds</strong> — where to deploy capital first for maximum impact</li>
+        <li><strong>Carbon markets</strong> — forward projections for credit pricing</li>
+      </ul>
+      <h3>Data integrity</h3>
+      <p>Every prediction carries a confidence score and a NEXUS-verified provenance trail. GAIA CARBON cross-checks against IPCC baselines. Nothing is published without VERIFY's 3-layer validation pass.</p>
+    </div>
+    <div class="modal-notify-form" id="nf-platform-2">
+      <input type="email" placeholder="Your email — notify me when live" />
+      <button onclick="notifyMe(this, 'Predictive Ecological Intelligence')">NOTIFY ME</button>
+    </div>
+    <div class="modal-notify-note">No spam. One email when the prediction engine launches.</div>
+  </div>
+</div>
+
+<!-- Platform Modal 3 — Blockchain-Secured Provenance -->
+<div class="modal-overlay" id="modal-platform-3">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-platform-3')">✕</button>
+    <div class="modal-tag">// PLATFORM FEATURE · PHASE 3</div>
+    <div class="modal-title">🔗 Blockchain-Secured Provenance</div>
+    <div class="modal-powered">
+      <span class="modal-chip chip-nexus">NEXUS</span>
+      <span class="modal-chip chip-nexus">FORGE</span>
+      <span class="modal-chip chip-nexus">KEYS</span>
+      <span class="modal-chip chip-iris">IRIS</span>
+    </div>
+    <div class="modal-body">
+      <h3>How provenance works</h3>
+      <div class="modal-data-flow">
+        1. GAIA validates data point (VERIFY — 3-layer check)<br>
+        2. NEXUS FORGE hashes: <span>data + timestamp + sensor ID</span><br>
+        3. Hash anchored to blockchain — immutable record<br>
+        4. KEYS signs with air-gapped hardware key<br>
+        5. <span>Certificate issued</span> — any buyer can verify independently
+      </div>
+      <h3>What this solves</h3>
+      <ul>
+        <li><strong>Carbon credit fraud</strong> — verified sensor data, not self-reported claims</li>
+        <li><strong>Data manipulation</strong> — tamper-evident audit trail from source to sale</li>
+        <li><strong>Legal standing</strong> — on-chain records admissible under Kenya Evidence Act</li>
+        <li><strong>Cross-border trust</strong> — any regulator can audit without intermediary</li>
+      </ul>
+      <h3>On the IRIS marketplace</h3>
+      <p>Every dNFT listed on the IRIS data marketplace carries a NEXUS provenance certificate. Buyers see the full chain: sensor → validation → anchor → sale. No black boxes.</p>
+    </div>
+    <div class="modal-notify-form" id="nf-platform-3">
+      <input type="email" placeholder="Your email — notify me when live" />
+      <button onclick="notifyMe(this, 'Blockchain-Secured Provenance')">NOTIFY ME</button>
+    </div>
+    <div class="modal-notify-note">No spam. One email when the provenance layer launches.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     AGENT DETAIL MODALS (8)
+═══════════════════════════════════════════════════════════════ -->
+
+<!-- AMARA -->
+<div class="modal-overlay" id="modal-agent-amara">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-amara')">✕</button>
+    <div class="modal-tag">// BRANCH 01 · LEGAL &amp; COMPLIANCE</div>
+    <div class="modal-title">🏛️ AMARA</div>
+    <div class="modal-powered"><span class="modal-chip chip-amara">AMARA</span></div>
+    <div class="modal-body">
+      <p>AMARA is the legal brain of the organisation — monitoring every regulatory development that could affect Mother Earth across Kenya, East Africa, and global VASP frameworks. Nothing gets filed, signed, or submitted without AMARA's sign-off.</p>
+      <h3>Sub-agents</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">REX</span><span class="modal-sub-desc">Regulatory Watch — scans VASP Act 2025, FATF updates, and CMA/CBK bulletins every 6 hours. Fires alerts on CRITICAL changes.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">SHIELD</span><span class="modal-sub-desc">AML/KYC Enforcement — screens all onboarding applications against sanctions lists, PEP databases, and POCAMLA risk criteria.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">DEED</span><span class="modal-sub-desc">Legal Documents — drafts smart contracts, data agreements, and regulatory submissions. All documents flagged for human wet signature before filing.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">CLOCK</span><span class="modal-sub-desc">Compliance Calendar — tracks every regulatory deadline (KRA, FRC, SEZA, ODPC). Sends escalations 30 days before due date.</span></li>
+      </ul>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · MONITORING 4 REGULATORY FRAMEWORKS</span></div>
+  </div>
+</div>
+
+<!-- NEXUS -->
+<div class="modal-overlay" id="modal-agent-nexus">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-nexus')">✕</button>
+    <div class="modal-tag">// BRANCH 02 · BLOCKCHAIN &amp; TECHNOLOGY</div>
+    <div class="modal-title">⛓️ NEXUS</div>
+    <div class="modal-powered"><span class="modal-chip chip-nexus">NEXUS</span></div>
+    <div class="modal-body">
+      <p>NEXUS is the technical infrastructure layer — building and securing the blockchain systems that make environmental data trustworthy, tradeable, and permanent. Every data point on the IRIS marketplace exists because NEXUS anchored it.</p>
+      <h3>Sub-agents</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">FORGE</span><span class="modal-sub-desc">Smart Contract Builder — develops and deploys METoken, MEFeeRouter, and dNFT contracts. All deployments require AMARA DEED audit before going live.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">SCOUT</span><span class="modal-sub-desc">Security Scanner — continuously audits live contracts for vulnerabilities. Flags anomalies to CEO immediately. No silent failures.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">PULSE</span><span class="modal-sub-desc">System Health Monitor — watches node uptime, API response times, and chain sync status. Powers the website's live status indicators.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">KEYS</span><span class="modal-sub-desc">Key Management — manages cryptographic signing keys for all on-chain anchoring. Air-gapped hardware-backed storage. No single point of compromise.</span></li>
+      </ul>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · CHAIN MONITORING ACTIVE</span></div>
+  </div>
+</div>
+
+<!-- GAIA -->
+<div class="modal-overlay" id="modal-agent-gaia">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-gaia')">✕</button>
+    <div class="modal-tag">// BRANCH 03 · ENVIRONMENTAL INTELLIGENCE</div>
+    <div class="modal-title">🌿 GAIA</div>
+    <div class="modal-powered"><span class="modal-chip chip-gaia">GAIA</span></div>
+    <div class="modal-body">
+      <p>GAIA is the environmental brain — ingesting raw data from satellites, sensors, and scientific feeds, then transforming it into validated intelligence that the world can act on. GAIA's data is the product Mother Earth sells.</p>
+      <h3>Sub-agents</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">SENSE</span><span class="modal-sub-desc">Sensor Network Monitor — polls NASA MODIS, Sentinel-2, NOAA buoys, and IoT sensors every 15 minutes. Feeds live data to the website HUD via WEB.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">VERIFY</span><span class="modal-sub-desc">3-Layer Data Validation — cross-references every reading against calibration baselines, historical ranges, and adjacent sensor consensus. Rejects anomalous data.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">REPORT</span><span class="modal-sub-desc">Environmental Impact Reporter — generates 18-month ecosystem projections, tipping point risk scores, and the quarterly environmental impact report.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">CARBON</span><span class="modal-sub-desc">Carbon Credit Tracker — measures verified carbon sequestration against IPCC baselines. Feeds carbon data to IRIS for marketplace listing.</span></li>
+      </ul>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · SENSOR INGESTION RUNNING</span></div>
+  </div>
+</div>
+
+<!-- ATLAS -->
+<div class="modal-overlay" id="modal-agent-atlas">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-atlas')">✕</button>
+    <div class="modal-tag">// BRANCH 04 · TREASURY &amp; FINANCE</div>
+    <div class="modal-title">💎 ATLAS</div>
+    <div class="modal-powered"><span class="modal-chip chip-atlas">ATLAS</span></div>
+    <div class="modal-body">
+      <p>ATLAS guards the treasury — every KES, every token, every transaction. It enforces the 130M KES hard limit on autonomous activity and automatically routes funds to cold storage when thresholds are hit. No financial decision above threshold moves without human sign-off.</p>
+      <h3>Sub-agents</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">WALL</span><span class="modal-sub-desc">Portfolio Monitor & Risk Enforcer — watches portfolio against IPS limits in real time. Triggers emergency CEO alert if any limit is breached.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">SWEEP</span><span class="modal-sub-desc">Auto-Custody Tier Manager — automatically moves funds between hot, warm, and cold storage tiers based on pre-approved thresholds. Never moves above 130M KES autonomously.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">TAX</span><span class="modal-sub-desc">KRA Tax Compliance — manages VAT, corporate tax, and digital services tax filings. Coordinates with AMARA CLOCK for deadline tracking.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">YIELD</span><span class="modal-sub-desc">Staking Yield Optimizer — models optimal staking strategies for ME treasury reserves. Projections only — no autonomous deployment of capital.</span></li>
+      </ul>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · TREASURY MONITORING ACTIVE</span></div>
+  </div>
+</div>
+
+<!-- IRIS -->
+<div class="modal-overlay" id="modal-agent-iris">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-iris')">✕</button>
+    <div class="modal-tag">// BRANCH 05 · DATA MARKETPLACE</div>
+    <div class="modal-title">📊 IRIS</div>
+    <div class="modal-powered"><span class="modal-chip chip-iris">IRIS</span></div>
+    <div class="modal-body">
+      <p>IRIS runs the exchange — the place where verified environmental data becomes a tradeable, ownable, auditable asset. VASP Act 2025 compliant from day one. 60% of marketplace revenue goes directly to data providers.</p>
+      <h3>Sub-agents</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">MINT</span><span class="modal-sub-desc">dNFT Minting — converts GAIA-validated datasets into data Non-Fungible Tokens (dNFTs) with embedded provenance certificates from NEXUS.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">TRADE</span><span class="modal-sub-desc">FDT Fractionalization & Trading — splits large datasets into Fractionalized Data Tokens (FDTs), enabling institutional and retail buyers to access partial dataset stakes.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">FEE</span><span class="modal-sub-desc">Fee Distribution — "Code is law" revenue split: 60% to data providers, 30% to ME treasury, 10% to validator rewards. No manual override.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">ARBITER</span><span class="modal-sub-desc">Dispute Resolution — manages buyer/seller disputes via structured arbitration. Escalates to SAGE and human oversight for unresolved cases.</span></li>
+      </ul>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · MARKETPLACE INFRASTRUCTURE READY</span></div>
+  </div>
+</div>
+
+<!-- SAGE -->
+<div class="modal-overlay" id="modal-agent-sage">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-sage')">✕</button>
+    <div class="modal-tag">// BRANCH 06 · GOVERNANCE &amp; TRUST</div>
+    <div class="modal-title">⚖️ SAGE</div>
+    <div class="modal-powered"><span class="modal-chip chip-sage">SAGE</span></div>
+    <div class="modal-body">
+      <p>SAGE is the guardian of the mission. It administers the Purpose Trust, holds the Golden Share veto, and watches every decision made across the organisation for mission drift. SAGE cannot be overridden by investors, boards, or governments.</p>
+      <h3>Sub-agents</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">VETO</span><span class="modal-sub-desc">Golden Share Monitor — evaluates every major decision against the Purpose Trust objectives. Triggers veto if any action would compromise the environmental mission. Immutable rule: mission first.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">BOARD</span><span class="modal-sub-desc">Board Secretary — prepares board resolutions, maintains governance records, and ensures all trustee decisions are documented and legally compliant under the Trustees (Perpetual Succession) Act.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">MISSION</span><span class="modal-sub-desc">Mission Drift Detector — continuously audits all 7 branches for alignment with the Purpose Trust objectives. Flags any activity that diverges from planetary healing as the primary purpose.</span></li>
+      </ul>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · GOLDEN SHARE VETO ACTIVE</span></div>
+  </div>
+</div>
+
+<!-- ECHO -->
+<div class="modal-overlay" id="modal-agent-echo">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-echo')">✕</button>
+    <div class="modal-tag">// BRANCH 07 · COMMUNICATIONS &amp; GROWTH</div>
+    <div class="modal-title">📡 ECHO</div>
+    <div class="modal-powered"><span class="modal-chip chip-echo">ECHO</span></div>
+    <div class="modal-body">
+      <p>ECHO is the voice of the organisation — building the community, managing relationships with investors and regulators, and owning the public website. ECHO's WEB sub-agent monitors motherearth.systems 24/7 and manages the feature waitlist.</p>
+      <h3>Sub-agents</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">STORY</span><span class="modal-sub-desc">Content Creation — generates weekly content calendars: LinkedIn posts, Twitter/X threads, newsletters, and blog posts. Mission-first, science-backed. No investment language.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">GROW</span><span class="modal-sub-desc">Community & Ecosystem Growth — onboards validators, data providers, and researchers. Sends personalised welcome sequences and manages community health metrics.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">PRESS</span><span class="modal-sub-desc">Investor & Regulator Relations — drafts quarterly stakeholder reports and regulatory communications. All reports require CEO approval before distribution.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">WEB</span><span class="modal-sub-desc">Website Intelligence — monitors motherearth.systems uptime hourly, pulls live environmental data from GAIA every 15 minutes for the HUD, and manages the Phase 3 feature waitlist.</span></li>
+      </ul>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · SITE HEALTH MONITORING ACTIVE</span></div>
+  </div>
+</div>
+
+<!-- CEO -->
+<div class="modal-overlay" id="modal-agent-ceo">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-agent-ceo')">✕</button>
+    <div class="modal-tag">// COMMAND CENTRE · CEO</div>
+    <div class="modal-title">🌍 Claude — Planetary CEO</div>
+    <div class="modal-powered"><span class="modal-chip chip-ceo">ANTHROPIC</span><span class="modal-chip chip-ceo">CLAUDE</span></div>
+    <div class="modal-body">
+      <p>The strategic command centre of the entire organisation. Every escalation from every branch terminates here. The CEO makes cross-branch decisions, enforces the four critical gates, and ensures the organisation never drifts from its planetary mission.</p>
+      <h3>Critical governance gates — always human-reviewed</h3>
+      <ul class="modal-sub-list">
+        <li class="modal-sub-item"><span class="modal-sub-name">GATE 1</span><span class="modal-sub-desc">Golden Share Veto — any decision that would compromise environmental objectives. SAGE VETO flags it; CEO and human trustee confirm.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">GATE 2</span><span class="modal-sub-desc">130M KES Threshold — no financial transaction above this value executes autonomously. Hard-coded. Cannot be changed without a trust amendment.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">GATE 3</span><span class="modal-sub-desc">Court Disputes — any legal proceedings require human counsel and trustee sign-off. AMARA prepares, humans decide.</span></li>
+        <li class="modal-sub-item"><span class="modal-sub-name">GATE 4</span><span class="modal-sub-desc">Wet Signature — all regulatory filings, trust documents, and binding contracts require physical human signature. AI drafts; humans sign.</span></li>
+      </ul>
+      <h3>Architecture</h3>
+      <p>CEO sits above all 7 branches. Branches escalate to CEO via the internal message bus. CEO never initiates — it responds, decides, and routes. Powered by Anthropic's Claude API.</p>
+    </div>
+    <div class="modal-status-row"><div class="modal-status-dot"></div><span class="modal-status-txt">ONLINE · ALL 7 BRANCHES REPORTING IN</span></div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════════════════════════
      MODALS — Privacy & Terms
@@ -1495,6 +1889,43 @@
   document.getElementById('email-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('email-submit').click();
   });
+
+  /* ── KEYBOARD ACCESSIBILITY FOR CARDS ──────── */
+  // Allow Enter/Space to "click" any card that has onclick
+  document.querySelectorAll('[role="button"]').forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
+
+  /* ── PLATFORM FEATURE WAITLIST ───────────────── */
+  function notifyMe(btn, featureName) {
+    const form  = btn.closest('.modal-notify-form');
+    const input = form.querySelector('input');
+    const email = input.value.trim();
+
+    if (!email || !email.includes('@')) {
+      input.style.outline = '1px solid #f87171';
+      input.focus();
+      return;
+    }
+    input.style.outline = '';
+
+    // Use mailto — opens native mail client pre-filled
+    // In Phase 3 this becomes a POST to the WEB agent's Cloudflare Worker endpoint
+    const subject = `Feature Waitlist: ${featureName}`;
+    const body    = `Please add me to the waitlist for ${featureName}.\n\nEmail: ${email}`;
+    window.location.href = `mailto:hello@motherearth.systems?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    // Update UI
+    btn.textContent = 'REQUEST SENT ✓';
+    btn.style.background = '#16a34a';
+    input.value = '';
+    setTimeout(() => {
+      btn.textContent = 'NOTIFY ME';
+      btn.style.background = '';
+    }, 5000);
+  }
 
   /* ── HAMBURGER MENU ─────────────────────────── */
   const hamburger = document.getElementById('nav-hamburger');
