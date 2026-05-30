@@ -704,6 +704,32 @@
     .modal-body li { font-size: 13px; color: var(--muted); line-height: 1.8; }
     .modal-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,.25); margin-top: 28px; }
   </style>
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://motherearth.systems/" />
+
+  <!-- JSON-LD: Organisation structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Mother Earth Kenya",
+    "alternateName": "Mother Earth",
+    "url": "https://motherearth.systems",
+    "logo": "https://motherearth.systems/og.svg",
+    "description": "The world's first AI-powered environmental intelligence organisation. 33 autonomous agents. Purpose Trust governance. Blockchain-secured environmental data.",
+    "foundingLocation": {
+      "@type": "Place",
+      "name": "Nairobi, Kenya"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "hello@motherearth.systems",
+      "contactType": "customer service"
+    },
+    "sameAs": []
+  }
+  </script>
 </head>
 <body>
 
@@ -1242,8 +1268,8 @@
     <a href="#marketplace">Marketplace</a>
     <a href="#governance">Governance</a>
     <a href="mailto:hello@motherearth.systems">Contact</a>
-    <a href="#" onclick="openModal('modal-privacy');return false;">Privacy</a>
-    <a href="#" onclick="openModal('modal-terms');return false;">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
   </div>
   <div class="footer-social">
     <a class="social-btn" href="#" title="X / Twitter">𝕏</a>
