@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Notice — Mother Earth Kenya</title>
+  <meta name="description" content="Privacy Notice for Mother Earth Kenya Limited. Kenya Data Protection Act 2019 compliant." />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:   #4ade80;
+      --blue:    #0ea5e9;
+      --indigo:  #6366f1;
+      --surface: #020606;
+      --card:    rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.08);
+      --text:    #f7fafc;
+      --muted:   rgba(255,255,255,0.48);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(2,6,6,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav a.logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none; color: var(--text);
+      font-weight: 800; font-size: 1.05rem;
+    }
+    nav a.back {
+      font-size: 0.85rem; color: var(--muted);
+      text-decoration: none; border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem; border-radius: 6px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    nav a.back:hover { color: var(--green); border-color: var(--green); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 4rem 2rem 2rem;
+      max-width: 800px; margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero .badge {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--green); background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.25);
+      padding: 0.3rem 0.8rem; border-radius: 99px;
+      margin-bottom: 1.2rem; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800; line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .hero .meta {
+      font-size: 0.85rem; color: var(--muted);
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+    }
+
+    /* ── SUMMARY BOX ── */
+    .summary {
+      max-width: 800px; margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .summary blockquote {
+      background: rgba(74,222,128,0.06);
+      border-left: 3px solid var(--green);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem; color: var(--text);
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      max-width: 800px; margin: 0 auto;
+      padding: 1rem 2rem 5rem;
+    }
+    .content section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .content section:last-child { border-bottom: none; }
+
+    h2 {
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--green); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    h3 {
+      font-size: 0.95rem; font-weight: 600;
+      color: var(--blue); margin: 1.2rem 0 0.5rem;
+    }
+    p { font-size: 0.95rem; color: rgba(247,250,252,0.85); margin-bottom: 0.75rem; }
+
+    ul {
+      list-style: none; margin-bottom: 0.75rem;
+    }
+    ul li {
+      font-size: 0.9rem; color: rgba(247,250,252,0.8);
+      padding: 0.3rem 0 0.3rem 1.2rem; position: relative;
+    }
+    ul li::before {
+      content: "›"; position: absolute; left: 0;
+      color: var(--green); font-weight: 700;
+    }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin: 0.75rem 0; border-radius: 8px; }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.875rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+    }
+    thead tr { background: rgba(255,255,255,0.06); }
+    th {
+      text-align: left; padding: 0.75rem 1rem;
+      font-weight: 600; color: var(--muted);
+      font-size: 0.8rem; text-transform: uppercase;
+      letter-spacing: 0.06em; border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top; color: rgba(247,250,252,0.85);
+    }
+    tr:last-child td { border-bottom: none; }
+    td strong { color: var(--text); }
+
+    /* ── NOTE BOX ── */
+    .note {
+      background: rgba(14,165,233,0.07);
+      border-left: 3px solid var(--blue);
+      padding: 0.8rem 1rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.875rem; color: rgba(247,250,252,0.8);
+      margin: 0.75rem 0;
+    }
+
+    /* ── RIGHTS GRID ── */
+    .rights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.75rem; margin: 0.75rem 0;
+    }
+    .right-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.85rem 1rem;
+    }
+    .right-card .title {
+      font-weight: 700; font-size: 0.875rem;
+      color: var(--green); margin-bottom: 0.3rem;
+    }
+    .right-card p { font-size: 0.8rem; margin: 0; }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .contact-card a { color: var(--blue); text-decoration: none; }
+    .contact-card a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 2rem;
+      font-size: 0.8rem; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">🌍 Mother Earth</a>
+  <a href="/" class="back">← Back to site</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">Kenya DPA 2019 Compliant</div>
+  <h1>Privacy Notice</h1>
+  <div class="meta">
+    <span>Mother Earth Kenya Limited</span>
+    <span>Effective: Upon Company Registration</span>
+    <span>Version 1.0</span>
+    <span>ODPC Reg: Pending</span>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <blockquote>
+    <strong>Quick Summary:</strong> We collect only the data we need to provide our services. We do not sell your personal data. You have the right to access, correct, and delete your data at any time. Contact us at <strong>privacy@motherearth.systems</strong>.
+  </blockquote>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- 1. Who We Are -->
+  <section>
+    <h2>1. Who We Are</h2>
+    <p><strong>Data Controller:</strong> Mother Earth Kenya Limited</p>
+    <p><strong>Registered Office:</strong> Suite 1105, Wing A, 11th Floor, Bazaar Plaza, Moi Avenue, Nairobi, Kenya</p>
+    <p><strong>Email:</strong> privacy@motherearth.systems</p>
+    <p><strong>Website:</strong> motherearth.systems</p>
+  </section>
+
+  <!-- 2. Data We Collect -->
+  <section>
+    <h2>2. What Personal Data We Collect</h2>
+
+    <h3>A. Website Visitors</h3>
+    <ul>
+      <li>IP address, browser type, device type (server logs)</li>
+      <li>Pages visited, time on page, referral URL (analytics)</li>
+      <li>Contact form submissions: name, email, message</li>
+    </ul>
+
+    <h3>B. Email Enquiries (processed by ECHO AI)</h3>
+    <ul>
+      <li>Your name and email address</li>
+      <li>The content of your email message</li>
+      <li>Your organisation and role (if provided)</li>
+    </ul>
+    <div class="note">Emails to hello@motherearth.systems are processed by our AI system (ECHO) to generate a response and may be used to qualify business enquiries.</div>
+
+    <h3>C. Data Marketplace Subscribers (IRIS Platform)</h3>
+    <ul>
+      <li>Full name, organisation, email, phone</li>
+      <li>Billing address and payment reference (we do not store card details)</li>
+      <li>KRA PIN or company registration number</li>
+      <li>Data usage logs, API call volumes, subscription history</li>
+    </ul>
+
+    <h3>D. Guardian Community Members</h3>
+    <ul>
+      <li>Name, email, region/county</li>
+      <li>Environmental observations you submit</li>
+    </ul>
+  </section>
+
+  <!-- 3. How We Use Data -->
+  <section>
+    <h2>3. How We Use Your Data</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Purpose</th><th>Legal Basis</th></tr></thead>
+        <tbody>
+          <tr><td>Responding to enquiries</td><td>Legitimate interests</td></tr>
+          <tr><td>Providing subscription services</td><td>Performance of contract</td></tr>
+          <tr><td>Processing payments</td><td>Performance of contract</td></tr>
+          <tr><td>Marketing (opt-in only)</td><td>Consent</td></tr>
+          <tr><td>AI email processing (ECHO)</td><td>Legitimate interests</td></tr>
+          <tr><td>KRA tax compliance</td><td>Legal obligation</td></tr>
+          <tr><td>VASP regulatory compliance</td><td>Legal obligation</td></tr>
+          <tr><td>Security and fraud prevention</td><td>Legitimate interests</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. Who We Share With -->
+  <section>
+    <h2>4. Who We Share Your Data With</h2>
+    <p>We do not sell your data. We share only with trusted processors under data protection agreements:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Processor</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Anthropic (Claude API)</strong></td><td>AI-assisted responses — no training data use without consent</td></tr>
+          <tr><td><strong>Stripe</strong></td><td>Payment processing — PCI-DSS compliant</td></tr>
+          <tr><td><strong>Safaricom (M-Pesa)</strong></td><td>Mobile payments — CBK regulated</td></tr>
+          <tr><td><strong>Cloudflare</strong></td><td>Website hosting and security</td></tr>
+          <tr><td><strong>Kenya Revenue Authority</strong></td><td>Tax reporting — required by law</td></tr>
+          <tr><td><strong>Capital Markets Authority</strong></td><td>VASP regulatory reporting — required by law</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. International Transfers -->
+  <section>
+    <h2>5. International Data Transfers</h2>
+    <p>Some processors operate outside Kenya (e.g., Anthropic — USA, Cloudflare — global). We ensure appropriate safeguards are in place under Section 49 of the Data Protection Act 2019.</p>
+  </section>
+
+  <!-- 6. Retention -->
+  <section>
+    <h2>6. How Long We Keep Your Data</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Data</th><th>Retention Period</th></tr></thead>
+        <tbody>
+          <tr><td>Email enquiry records</td><td>2 years from last contact</td></tr>
+          <tr><td>Subscriber account data</td><td>Subscription term + 7 years</td></tr>
+          <tr><td>Payment records</td><td>7 years (tax law)</td></tr>
+          <tr><td>Usage logs</td><td>12 months rolling</td></tr>
+          <tr><td>KYC/AML records</td><td>5 years (VASP Act 2025)</td></tr>
+          <tr><td>Environmental sensor data</td><td>Indefinite (non-personal scientific data)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 7. Your Rights -->
+  <section>
+    <h2>7. Your Rights</h2>
+    <p>Under the Kenya Data Protection Act 2019, you have the right to:</p>
+    <div class="rights-grid">
+      <div class="right-card"><div class="title">Access</div><p>Request a copy of your personal data (we respond within 21 days)</p></div>
+      <div class="right-card"><div class="title">Rectification</div><p>Request correction of inaccurate data</p></div>
+      <div class="right-card"><div class="title">Erasure</div><p>Request deletion where we no longer have a lawful basis</p></div>
+      <div class="right-card"><div class="title">Object</div><p>Object to processing based on legitimate interests or for marketing</p></div>
+      <div class="right-card"><div class="title">Portability</div><p>Receive your data in a machine-readable format</p></div>
+      <div class="right-card"><div class="title">Restrict Processing</div><p>Request restriction while a complaint is investigated</p></div>
+      <div class="right-card"><div class="title">Withdraw Consent</div><p>At any time, without affecting prior processing</p></div>
+    </div>
+    <p>To exercise your rights, email <strong>privacy@motherearth.systems</strong> with subject <em>"Data Rights Request"</em>.</p>
+    <p>If unsatisfied, you may complain to the <strong>ODPC</strong> at <a href="https://www.odpc.go.ke" target="_blank" rel="noopener" style="color: var(--blue);">www.odpc.go.ke</a>.</p>
+  </section>
+
+  <!-- 8. AI Processing -->
+  <section>
+    <h2>8. AI and Automated Processing</h2>
+    <p>Our AI systems (ECHO, IRIS) process email and enquiry data. We do not make legally significant automated decisions without human review.</p>
+    <p>You may request human review of any automated response by emailing <strong>hello@motherearth.systems</strong> with subject <em>"Human Review Requested"</em>.</p>
+  </section>
+
+  <!-- 9. Cookies -->
+  <section>
+    <h2>9. Cookies</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Cookie Type</th><th>Duration</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Strictly Necessary</td><td>Session</td><td>Website function — cannot be disabled</td></tr>
+          <tr><td>Analytics</td><td>13 months</td><td>Anonymous traffic counting</td></tr>
+          <tr><td>Preferences</td><td>12 months</td><td>Your display settings</td></tr>
+          <tr><td>Marketing</td><td>Up to 2 years</td><td>With consent only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 10. Security -->
+  <section>
+    <h2>10. Security</h2>
+    <p>We use HTTPS encryption, access controls, and AI system audit logs to protect your data. We notify the ODPC of breaches within 72 hours where required.</p>
+  </section>
+
+  <!-- 11. Changes -->
+  <section>
+    <h2>11. Changes to This Notice</h2>
+    <p>Material changes will be notified by email and website notice at least 14 days in advance.</p>
+  </section>
+
+  <!-- 12. Contact -->
+  <section>
+    <h2>12. Contact Us</h2>
+    <div class="contact-card">
+      <div><strong>Data Protection Officer</strong></div>
+      <div>Mother Earth Kenya Limited</div>
+      <div>Suite 1105, Wing A, 11th Floor, Bazaar Plaza, Moi Avenue, Nairobi, Kenya</div>
+      <div>Email: <a href="mailto:privacy@motherearth.systems">privacy@motherearth.systems</a></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  Mother Earth Kenya Limited &nbsp;·&nbsp; Privacy Notice v1.0 &nbsp;·&nbsp; Kenya Data Protection Act 2019
+</footer>
+
+</body>
+</html>
