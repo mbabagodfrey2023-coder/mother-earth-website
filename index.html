@@ -819,8 +819,13 @@
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#governance">Governance</a></li>
     <li><a href="#join">Partners</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
-  <a class="nav-cta" href="#join">Join the Mission</a>
+  <span id="system-status" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.4);margin-right:12px;letter-spacing:0.05em;">
+    <span id="status-dot" style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;display:inline-block;"></span>
+    <span id="status-text">33 AGENTS ONLINE</span>
+  </span>
+  <a class="nav-cta" href="#contact">Get in Touch</a>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation">
     <span></span><span></span><span></span>
   </button>
@@ -855,11 +860,11 @@
 <section id="hero">
   <div id="globe-wrap"></div>
   <div class="hero-body">
-    <div class="hero-tag">// PLANETARY INTELLIGENCE SYSTEM · EST. 2026</div>
+    <div class="hero-tag">// PLANETARY INTELLIGENCE SYSTEM · EST. 2026 · <span style="color:#f59e0b;">REGISTERING · BRS FILING IN PROGRESS</span></div>
     <h1 class="hero-title">MOTHER<br>EARTH</h1>
-    <p class="hero-sub">The world's first AI-powered environmental intelligence organisation. 33 autonomous agents. One planetary mission.</p>
+    <p class="hero-sub">We turn environmental data into verified, tradeable intelligence. 33 autonomous AI agents monitor, verify, and publish planetary data — so institutions, investors, and scientists can act on it.</p>
     <div class="hero-actions">
-      <a class="btn-primary" href="#join">Join the Mission →</a>
+      <a class="btn-primary" href="#contact">Get in Touch →</a>
       <a class="btn-outline" href="#intelligence">Explore Platform ↓</a>
     </div>
   </div>
@@ -1158,7 +1163,7 @@
           <li>CSV data export</li>
           <li>Email support</li>
         </ul>
-        <a href="mailto:hello@motherearth.systems?subject=Guardian Plan — Early Access" class="pricing-cta">Get Early Access</a>
+        <a href="#contact" onclick="prefillContact('Guardian Plan — $99/mo')" class="pricing-cta">Request Access</a>
       </div>
 
       <!-- Sentinel (featured) -->
@@ -1177,7 +1182,7 @@
           <li>CSV + API export</li>
           <li>Priority email support</li>
         </ul>
-        <a href="mailto:hello@motherearth.systems?subject=Sentinel Plan — Early Access" class="pricing-cta primary">Get Early Access</a>
+        <a href="#contact" onclick="prefillContact('Sentinel Plan — $499/mo')" class="pricing-cta primary">Request Access</a>
       </div>
 
       <!-- Planetary -->
@@ -1195,7 +1200,7 @@
           <li>Dedicated environmental analyst</li>
           <li>Priority API routing + 99.9% SLA</li>
         </ul>
-        <a href="mailto:hello@motherearth.systems?subject=Planetary Plan — Early Access" class="pricing-cta">Talk to Us</a>
+        <a href="#contact" onclick="prefillContact('Planetary Plan — $1,499/mo')" class="pricing-cta">Request Access</a>
       </div>
 
     </div>
@@ -1391,6 +1396,53 @@
         <a href="mailto:andygodfrey@motherearth.systems" class="founder-contact">andygodfrey@motherearth.systems →</a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CONTACT FORM
+═══════════════════════════════════════════════════════════════ -->
+<section id="contact" style="padding:120px 0;background:linear-gradient(to bottom,transparent,rgba(0,10,20,.4),transparent);">
+  <div class="container" style="max-width:640px;">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);margin-bottom:16px;">// GET IN TOUCH</div>
+      <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:16px;">Start a Conversation</h2>
+      <p style="font-size:15px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7;">Whether you're a researcher, institution, investor, or citizen — tell us who you are and what you need. We respond within 48 hours.</p>
+    </div>
+
+    <form id="contact-form" style="display:flex;flex-direction:column;gap:16px;" onsubmit="submitContact(event)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <input id="cf-name" type="text" placeholder="Your name *" required
+          style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:14px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+        <input id="cf-org" type="text" placeholder="Organisation"
+          style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:14px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <input id="cf-email" type="email" placeholder="Email address *" required
+        style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:14px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s;"
+        onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+      <select id="cf-interest"
+        style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:14px 16px;color:var(--muted);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s;cursor:pointer;"
+        onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'">
+        <option value="" disabled selected>I am interested in… *</option>
+        <option value="Guardian Plan — $99/mo">Guardian Plan — $99/mo (Data access)</option>
+        <option value="Sentinel Plan — $499/mo">Sentinel Plan — $499/mo (API + analytics)</option>
+        <option value="Planetary Plan — $1,499/mo">Planetary Plan — $1,499/mo (Full suite)</option>
+        <option value="Institutional Partnership">Institutional Partnership</option>
+        <option value="Strategic Investment">Strategic Investment</option>
+        <option value="Research Collaboration">Research Collaboration</option>
+        <option value="General Enquiry">General Enquiry</option>
+      </select>
+      <textarea id="cf-message" rows="4" placeholder="Tell us more about what you need…"
+        style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:14px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;resize:vertical;transition:border-color .2s;"
+        onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <button type="submit" id="cf-submit"
+        style="background:var(--green);color:#000;border:none;border-radius:6px;padding:16px 32px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.05em;cursor:pointer;transition:background .2s;">
+        SEND MESSAGE →
+      </button>
+      <div id="cf-status" style="text-align:center;font-size:13px;color:var(--green);display:none;"></div>
+    </form>
   </div>
 </section>
 
@@ -1791,17 +1843,26 @@
     }, 2800);
   });
 
-  /* ── THREE.JS GLOBE ─────────────────────────── */
+  /* ── THREE.JS GLOBE (desktop only — skip on mobile to save battery/RAM) ── */
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    // Mobile: show a static gradient instead of the 3D globe
+    document.getElementById('globe-wrap').style.background =
+      'radial-gradient(ellipse at 60% 40%, rgba(74,222,128,0.15) 0%, rgba(14,165,233,0.08) 40%, transparent 70%)';
+  }
+
   const scene    = new THREE.Scene();
   const camera   = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 1000);
   camera.position.set(0, 0, 8);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.outputEncoding = THREE.sRGBEncoding;
-  document.getElementById('globe-wrap').appendChild(renderer.domElement);
+  const renderer = isMobile ? null : new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  if (renderer) {
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    document.getElementById('globe-wrap').appendChild(renderer.domElement);
+  }
 
   const earthGroup = new THREE.Group();
   earthGroup.rotation.z = 23.5 * Math.PI / 180;
@@ -1890,13 +1951,13 @@
     if (earthMesh)  earthMesh.rotation.y  += 0.0008;
     if (cloudsMesh) cloudsMesh.rotation.y += 0.0012;
     earthGroup.rotation.y += 0.0003;
-    renderer.render(scene, camera);
+    if (renderer) renderer.render(scene, camera);
   }
 
   window.addEventListener('resize', () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight);
+    if (renderer) renderer.setSize(innerWidth, innerHeight);
   });
 
   /* ── BACKGROUND NETWORK ─────────────────────── */
@@ -2163,6 +2224,43 @@
       navLinks.classList.remove('mobile-open');
     });
   });
+
+  /* ── CONTACT FORM ───────────────────────────── */
+  function prefillContact(interest) {
+    setTimeout(() => {
+      const sel = document.getElementById('cf-interest');
+      if (sel) sel.value = interest;
+    }, 100);
+  }
+
+  function submitContact(e) {
+    e.preventDefault();
+    const name     = document.getElementById('cf-name').value.trim();
+    const org      = document.getElementById('cf-org').value.trim();
+    const email    = document.getElementById('cf-email').value.trim();
+    const interest = document.getElementById('cf-interest').value;
+    const message  = document.getElementById('cf-message').value.trim();
+    const status   = document.getElementById('cf-status');
+    const btn      = document.getElementById('cf-submit');
+
+    if (!name || !email || !interest) return;
+
+    btn.textContent = 'SENDING…';
+    btn.style.opacity = '0.7';
+
+    // Compose mailto with all fields pre-filled
+    const subject = encodeURIComponent(`[${interest}] Enquiry from ${name}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nOrganisation: ${org || 'N/A'}\nEmail: ${email}\nInterest: ${interest}\n\n${message}`
+    );
+    window.location.href = `mailto:hello@motherearth.systems?subject=${subject}&body=${body}`;
+
+    btn.textContent = 'SEND MESSAGE →';
+    btn.style.opacity = '1';
+    status.textContent = '✓ Opening your email client…';
+    status.style.display = 'block';
+    setTimeout(() => { status.style.display = 'none'; }, 4000);
+  }
 
   /* ── MODALS ─────────────────────────────────── */
   function openModal(id) {
