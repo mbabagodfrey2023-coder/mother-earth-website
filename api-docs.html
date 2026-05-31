@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IRIS API Documentation — Mother Earth Kenya</title>
+<meta name="description" content="IRIS Data Marketplace API documentation. Authenticate, query environmental data feeds, set alerts and export data."/>
+<link rel="icon" type="image/svg+xml" href="logo-final.svg"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #1A4A2E; --gold: #C4A000; --bg: #0A0F0A;
+  --surface: #111811; --border: rgba(255,255,255,.1);
+  --text: #F0F5F0; --muted: rgba(255,255,255,.5);
+  --code-bg: #0D1A0D; --green-light: #4ade80;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+nav.sidebar {
+  width: 260px; min-width: 260px; background: var(--surface);
+  border-right: 1px solid var(--border); padding: 0; position: sticky;
+  top: 0; height: 100vh; overflow-y: auto;
+}
+main { flex: 1; padding: 48px 64px; max-width: 900px; }
+@media (max-width: 768px) { nav.sidebar { display: none; } main { padding: 24px; } }
+
+/* Sidebar */
+.sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.sidebar-logo img { width: 36px; height: 36px; }
+.sidebar-logo span { font-size: 13px; font-weight: 700; color: var(--green-light); letter-spacing: 1px; }
+.sidebar-section { padding: 16px 20px 4px; font-size: 10px; font-weight: 700; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+.sidebar a { display: block; padding: 8px 20px; font-size: 13px; color: var(--muted); text-decoration: none; transition: all .2s; border-left: 2px solid transparent; }
+.sidebar a:hover, .sidebar a.active { color: var(--green-light); border-left-color: var(--green-light); background: rgba(74,222,128,.05); }
+
+/* Content */
+h1 { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+h1 span { color: var(--green-light); }
+h2 { font-size: 22px; font-weight: 700; margin: 48px 0 16px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--text); }
+h3 { font-size: 16px; font-weight: 700; margin: 24px 0 8px; color: var(--green-light); }
+p  { margin-bottom: 16px; color: rgba(255,255,255,.8); font-size: 15px; }
+a  { color: var(--green-light); }
+
+/* Code blocks */
+pre {
+  background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: 4px; padding: 20px; margin: 16px 0;
+  overflow-x: auto; font-family: 'Courier New', monospace; font-size: 13px;
+}
+code { font-family: 'Courier New', monospace; font-size: 13px; color: var(--green-light); background: rgba(74,222,128,.08); padding: 2px 6px; border-radius: 2px; }
+pre code { background: none; padding: 0; color: #a8d8a8; }
+.comment { color: rgba(255,255,255,.35); }
+.key     { color: #fbbf24; }
+.string  { color: #86efac; }
+.number  { color: #a5b4fc; }
+
+/* Method badges */
+.method { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-right: 8px; }
+.get  { background: rgba(74,222,128,.15); color: var(--green-light); border: 1px solid rgba(74,222,128,.3); }
+.post { background: rgba(251,191,36,.15); color: #fbbf24; border: 1px solid rgba(251,191,36,.3); }
+
+/* Endpoint row */
+.endpoint { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 20px; margin: 16px 0; }
+.endpoint .path { font-family: 'Courier New', monospace; font-size: 15px; font-weight: 700; }
+.endpoint p { margin: 8px 0 0; font-size: 14px; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+th { background: var(--surface); padding: 10px 14px; text-align: left; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
+td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+td:first-child { font-family: monospace; color: var(--green-light); }
+
+/* Plan badge */
+.plan { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+.guardian  { background: rgba(74,222,128,.1); color: var(--green-light); }
+.sentinel  { background: rgba(251,191,36,.1); color: #fbbf24; }
+.planetary { background: rgba(165,180,252,.1); color: #a5b4fc; }
+
+/* Alert */
+.alert { padding: 14px 18px; border-radius: 4px; margin: 16px 0; font-size: 14px; }
+.alert.info    { background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.2); }
+.alert.warning { background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.2); color: #fbbf24; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <img src="logo-final.svg" alt="IRIS"/>
+    <span>IRIS API DOCS</span>
+  </div>
+
+  <div class="sidebar-section">Getting Started</div>
+  <a href="#overview">Overview</a>
+  <a href="#authentication">Authentication</a>
+  <a href="#base-url">Base URL</a>
+  <a href="#errors">Error Codes</a>
+
+  <div class="sidebar-section">Data Feeds</div>
+  <a href="#feeds-list">List Feeds</a>
+  <a href="#feeds-query">Query Feed</a>
+  <a href="#feeds-latest">Latest Reading</a>
+
+  <div class="sidebar-section">Environmental Data</div>
+  <a href="#air">Air Quality</a>
+  <a href="#carbon">Carbon</a>
+  <a href="#water">Water Quality</a>
+  <a href="#biodiversity">Biodiversity</a>
+  <a href="#deforestation">Deforestation</a>
+
+  <div class="sidebar-section">Alerts</div>
+  <a href="#alerts-create">Create Alert</a>
+  <a href="#alerts-list">List Alerts</a>
+
+  <div class="sidebar-section">Reports</div>
+  <a href="#reports-request">Request Report</a>
+  <a href="#reports-status">Report Status</a>
+
+  <div class="sidebar-section">Account</div>
+  <a href="#account">Account Info</a>
+  <a href="#usage">API Usage</a>
+  <a href="#plans">Plan Details</a>
+</nav>
+
+<!-- Main content -->
+<main>
+
+  <!-- OVERVIEW -->
+  <h1><span>IRIS</span> API Documentation</h1>
+  <p style="font-size:17px;color:var(--muted)">Environmental intelligence for East Africa and beyond. Version 1.0</p>
+
+  <div class="alert info">
+    <strong>Early Access:</strong> IRIS API is currently onboarding its first cohort of subscribers.
+    To get your API key, email <a href="mailto:hello@motherearth.systems">hello@motherearth.systems</a>
+    or subscribe at <a href="motherearth.systems/#pricing">motherearth.systems</a>.
+  </div>
+
+  <h2 id="overview">Overview</h2>
+  <p>The IRIS API gives you programmatic access to Mother Earth Kenya's environmental data feeds — air quality, carbon sequestration, water quality, soil health, biodiversity indices, and deforestation alerts across East Africa.</p>
+  <p>Every data point is validated by GAIA, our environmental intelligence AI, and carries a cryptographic certificate of origin secured by NEXUS on-chain. What you receive is what was measured — unmodified.</p>
+
+  <table>
+    <tr><th>Feature</th><th>Details</th></tr>
+    <tr><td>Base URL</td><td><code>https://api.motherearth.systems/v1</code></td></tr>
+    <tr><td>Format</td><td>JSON</td></tr>
+    <tr><td>Authentication</td><td>Bearer token in Authorization header</td></tr>
+    <tr><td>Rate limits</td><td>Starter: 1,000/mo · Builder: 50,000/mo · Scale: 500,000/mo</td></tr>
+    <tr><td>Data latency</td><td>Near real-time (5–15 min satellite refresh cycle)</td></tr>
+    <tr><td>Coverage</td><td>Kenya, Tanzania, Uganda, Ethiopia, Rwanda — expanding monthly</td></tr>
+  </table>
+
+  <!-- AUTHENTICATION -->
+  <h2 id="authentication">Authentication</h2>
+  <p>All API requests require your IRIS API key in the <code>Authorization</code> header.</p>
+
+  <pre><code><span class="comment"># Every request must include this header</span>
+Authorization: Bearer iris_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+
+  <div class="alert warning">Never expose your API key in frontend JavaScript or public repositories. Store it server-side only.</div>
+
+  <h3>Example — cURL</h3>
+  <pre><code>curl https://api.motherearth.systems/v1/feeds \
+  -H <span class="string">"Authorization: Bearer iris_live_your_key_here"</span></code></pre>
+
+  <h3>Example — Node.js</h3>
+  <pre><code><span class="key">const</span> axios = require(<span class="string">'axios'</span>);
+
+<span class="key">const</span> iris = axios.create({
+  baseURL: <span class="string">'https://api.motherearth.systems/v1'</span>,
+  headers: { Authorization: <span class="string">`Bearer ${process.env.IRIS_API_KEY}`</span> }
+});
+
+<span class="key">const</span> feeds = <span class="key">await</span> iris.get(<span class="string">'/feeds'</span>);
+console.log(feeds.data);</code></pre>
+
+  <h3>Example — Python</h3>
+  <pre><code>import requests, os
+
+headers = {<span class="string">"Authorization"</span>: f<span class="string">"Bearer {os.environ['IRIS_API_KEY']}"</span>}
+resp = requests.get(<span class="string">"https://api.motherearth.systems/v1/feeds"</span>, headers=headers)
+print(resp.json())</code></pre>
+
+  <!-- BASE URL -->
+  <h2 id="base-url">Base URL</h2>
+  <pre><code>https://api.motherearth.systems/v1</code></pre>
+  <p>All endpoints are relative to this base URL. HTTPS only — HTTP requests are rejected.</p>
+
+  <!-- ERRORS -->
+  <h2 id="errors">Error Codes</h2>
+  <table>
+    <tr><th>Code</th><th>Meaning</th><th>Action</th></tr>
+    <tr><td>200</td><td>Success</td><td>—</td></tr>
+    <tr><td>400</td><td>Bad request</td><td>Check your request parameters</td></tr>
+    <tr><td>401</td><td>Unauthorised</td><td>Check your API key is correct and included</td></tr>
+    <tr><td>403</td><td>Forbidden</td><td>This endpoint requires a higher plan</td></tr>
+    <tr><td>429</td><td>Rate limit exceeded</td><td>Wait until next billing cycle or upgrade plan</td></tr>
+    <tr><td>500</td><td>Server error</td><td>Retry after 60s — contact support if persists</td></tr>
+  </table>
+
+  <h3>Error response format</h3>
+  <pre><code>{
+  <span class="key">"error"</span>: {
+    <span class="key">"code"</span>:    <span class="string">"RATE_LIMIT_EXCEEDED"</span>,
+    <span class="key">"message"</span>: <span class="string">"Monthly API call limit reached"</span>,
+    <span class="key">"limit"</span>:   <span class="number">1000</span>,
+    <span class="key">"reset"</span>:   <span class="string">"2026-07-01T00:00:00Z"</span>
+  }
+}</code></pre>
+
+  <!-- DATA FEEDS -->
+  <h2 id="feeds-list">List Available Feeds</h2>
+  <div class="endpoint">
+    <span class="method get">GET</span><span class="path">/feeds</span>
+    <p>Returns all data feeds available on your subscription plan.</p>
+  </div>
+  <pre><code><span class="comment"># Response</span>
+{
+  <span class="key">"feeds"</span>: [
+    {
+      <span class="key">"id"</span>:          <span class="string">"air_quality_nairobi"</span>,
+      <span class="key">"name"</span>:        <span class="string">"Nairobi Air Quality"</span>,
+      <span class="key">"type"</span>:        <span class="string">"air_quality"</span>,
+      <span class="key">"location"</span>:    <span class="string">"Nairobi, Kenya"</span>,
+      <span class="key">"lat"</span>:         <span class="number">-1.2921</span>,
+      <span class="key">"lon"</span>:         <span class="number">36.8219</span>,
+      <span class="key">"frequency"</span>:   <span class="string">"15min"</span>,
+      <span class="key">"last_updated"</span>:<span class="string">"2026-05-31T14:00:00Z"</span>,
+      <span class="key">"plan_required"</span>:<span class="string">"guardian"</span>
+    }
+  ],
+  <span class="key">"total"</span>: <span class="number">47</span>,
+  <span class="key">"plan"</span>:  <span class="string">"sentinel"</span>
+}</code></pre>
+
+  <h2 id="feeds-query">Query a Feed</h2>
+  <div class="endpoint">
+    <span class="method get">GET</span><span class="path">/feeds/{feed_id}</span>
+    <p>Returns time-series data for a specific feed. Supports date range filtering.</p>
+  </div>
+
+  <table>
+    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+    <tr><td>from</td><td>ISO 8601</td><td>No</td><td>Start date. Default: 24h ago</td></tr>
+    <tr><td>to</td><td>ISO 8601</td><td>No</td><td>End date. Default: now</td></tr>
+    <tr><td>interval</td><td>string</td><td>No</td><td><code>15min</code> · <code>1h</code> · <code>1d</code></td></tr>
+  </table>
+
+  <pre><code>curl "https://api.motherearth.systems/v1/feeds/air_quality_nairobi\
+?from=2026-05-01&to=2026-05-31&interval=1h" \
+  -H "Authorization: Bearer iris_live_..."
+
+<span class="comment"># Response</span>
+{
+  <span class="key">"feed_id"</span>: <span class="string">"air_quality_nairobi"</span>,
+  <span class="key">"readings"</span>: [
+    {
+      <span class="key">"timestamp"</span>: <span class="string">"2026-05-31T14:00:00Z"</span>,
+      <span class="key">"pm25"</span>:      <span class="number">18.4</span>,
+      <span class="key">"pm10"</span>:      <span class="number">32.1</span>,
+      <span class="key">"co2_ppm"</span>:   <span class="number">428.7</span>,
+      <span class="key">"aqi"</span>:       <span class="number">62</span>,
+      <span class="key">"aqi_label"</span>: <span class="string">"Moderate"</span>,
+      <span class="key">"verified"</span>:  <span class="key">true</span>,
+      <span class="key">"cert_hash"</span>: <span class="string">"0xabc123..."</span>
+    }
+  ],
+  <span class="key">"count"</span>: <span class="number">744</span>
+}</code></pre>
+
+  <h2 id="feeds-latest">Latest Reading</h2>
+  <div class="endpoint">
+    <span class="method get">GET</span><span class="path">/feeds/{feed_id}/latest</span>
+    <p>Returns the single most recent reading. Fastest endpoint — use for dashboards.</p>
+  </div>
+
+  <!-- AIR QUALITY -->
+  <h2 id="air">Air Quality</h2>
+  <div class="endpoint">
+    <span class="method get">GET</span><span class="path">/air-quality</span>
+    <p>All active air quality monitoring stations. Returns current AQI, PM2.5, PM10, CO₂.</p>
+  </div>
+  <table>
+    <tr><th>Field</th><th>Unit</th><th>Description</th></tr>
+    <tr><td>pm25</td><td>µg/m³</td><td>Fine particulate matter (WHO limit: 15 µg/m³ annual)</td></tr>
+    <tr><td>pm10</td><td>µg/m³</td><td>Coarse particulate matter</td></tr>
+    <tr><td>co2_ppm</td><td>ppm</td><td>Atmospheric CO₂ concentration</td></tr>
+    <tr><td>aqi</td><td>0–500</td><td>Air Quality Index (US EPA standard)</td></tr>
+    <tr><td>temp_c</td><td>°C</td><td>Ambient temperature</td></tr>
+    <tr><td>humidity_pct</td><td>%</td><td>Relative humidity</td></tr>
+  </table>
+
+  <!-- CARBON -->
+  <h2 id="carbon">Carbon Sequestration</h2>
+  <div class="endpoint">
+    <span class="method get">GET</span><span class="path">/carbon</span>
+    <p>Carbon sequestration estimates for monitored forest and ecosystem areas. Each reading is AI-verified and blockchain-anchored.</p>
+  </div>
+  <pre><code>{
+  <span class="key">"area_id"</span>:           <span class="string">"mau_forest_complex"</span>,
+  <span class="key">"sequestration_tco2"</span>: <span class="number">142850.3</span>,
+  <span class="key">"area_ha"</span>:           <span class="number">273000</span>,
+  <span class="key">"period"</span>:            <span class="string">"2026-05"</span>,
+  <span class="key">"verified"</span>:          <span class="key">true</span>,
+  <span class="key">"blockchain_cert"</span>: {
+    <span class="key">"tx_hash"</span>: <span class="string">"0x..."</span>,
+    <span class="key">"chain"</span>:   <span class="string">"polygon"</span>,
+    <span class="key">"issued"</span>:  <span class="string">"2026-05-31T00:00:00Z"</span>
+  }
+}</code></pre>
+
+  <!-- ALERTS -->
+  <h2 id="alerts-create">Create an Alert</h2>
+  <span class="plan sentinel">Sentinel +</span>
+  <div class="endpoint">
+    <span class="method post">POST</span><span class="path">/alerts</span>
+    <p>Receive a webhook or email when a threshold is crossed.</p>
+  </div>
+  <pre><code><span class="comment"># Example: alert when PM2.5 > 35 µg/m³ in Nairobi</span>
+curl -X POST https://api.motherearth.systems/v1/alerts \
+  -H "Authorization: Bearer iris_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    <span class="key">"feed_id"</span>:    <span class="string">"air_quality_nairobi"</span>,
+    <span class="key">"metric"</span>:     <span class="string">"pm25"</span>,
+    <span class="key">"condition"</span>:  <span class="string">"gt"</span>,
+    <span class="key">"threshold"</span>:  <span class="number">35</span>,
+    <span class="key">"notify"</span>: {
+      <span class="key">"webhook_url"</span>: <span class="string">"https://your-server.com/iris-alert"</span>,
+      <span class="key">"email"</span>:       <span class="string">"alerts@yourorg.com"</span>
+    }
+  }'</code></pre>
+
+  <!-- REPORTS -->
+  <h2 id="reports-request">Request a Report</h2>
+  <div class="endpoint">
+    <span class="method post">POST</span><span class="path">/reports</span>
+    <p>Request a bespoke Impact Intelligence Report. Delivered within 5 business days.</p>
+  </div>
+  <table>
+    <tr><th>Report Type</th><th>Price</th><th>Deliverable</th></tr>
+    <tr><td><code>ecosystem_assessment</code></td><td>$2,500</td><td>20–30 page regional ecosystem risk analysis</td></tr>
+    <tr><td><code>carbon_audit</code></td><td>$5,000</td><td>Carbon claim verification + blockchain certificate</td></tr>
+    <tr><td><code>planetary_briefing</code></td><td>$12,500</td><td>Executive intelligence brief for board or government</td></tr>
+  </table>
+
+  <!-- ACCOUNT -->
+  <h2 id="account">Account Info</h2>
+  <div class="endpoint">
+    <span class="method get">GET</span><span class="path">/account</span>
+    <p>Returns your subscription details, plan, and trial status.</p>
+  </div>
+
+  <h2 id="usage">API Usage</h2>
+  <div class="endpoint">
+    <span class="method get">GET</span><span class="path">/account/usage</span>
+    <p>Returns API calls used this billing period.</p>
+  </div>
+
+  <!-- PLANS -->
+  <h2 id="plans">Plan Limits</h2>
+  <table>
+    <tr><th>Plan</th><th>Monthly calls</th><th>Feeds</th><th>Alerts</th><th>History</th></tr>
+    <tr><td><span class="plan guardian">Guardian</span> $99/mo</td><td>5,000</td><td>5</td><td>—</td><td>30 days</td></tr>
+    <tr><td><span class="plan sentinel">Sentinel</span> $499/mo</td><td>50,000</td><td>Unlimited</td><td>20</td><td>1 year</td></tr>
+    <tr><td><span class="plan planetary">Planetary</span> $1,499/mo</td><td>500,000</td><td>Unlimited</td><td>Unlimited</td><td>Full history</td></tr>
+  </table>
+
+  <div style="margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);">
+    <p>IRIS Data Marketplace · Mother Earth Kenya Limited · <a href="mailto:hello@motherearth.systems">hello@motherearth.systems</a></p>
+    <p style="margin-top:4px;">Governed by the Mother Earth Environmental Purpose Trust · VASP Act 2025 (Kenya)</p>
+  </div>
+
+</main>
+</div>
+</body>
+</html>
