@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mother Earth Kenya — Logo</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .logo-wrap {
+    width: min(90vw, 90vh);
+    height: min(90vw, 90vh);
+    position: relative;
+  }
+
+  /* ── HERO: full reveal then gentle loop ── */
+  .logo-wrap svg {
+    width: 100%;
+    height: 100%;
+
+    /* Start state */
+    opacity: 0;
+    transform: scale(0.82);
+    filter: blur(6px);
+
+    /* Entrance */
+    animation:
+      heroReveal 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards,
+      heroGlow   4s ease-in-out 2.2s infinite;
+  }
+
+  @keyframes heroReveal {
+    to {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0px);
+    }
+  }
+
+  @keyframes heroGlow {
+    0%,100% { filter: drop-shadow(0 0  0px rgba(196,163,58,0));    }
+    50%     { filter: drop-shadow(0 0 18px rgba(196,163,58,0.35));  }
+  }
+
+  /* Gold paths pulse after reveal */
+  .logo-wrap svg path[fill="rgb(179,135,30)"],
+  .logo-wrap svg path[fill="rgb(172,139,71)"],
+  .logo-wrap svg path[fill="rgb(75,60,4)"] {
+    animation: goldPulse 3s ease-in-out 2.2s infinite;
+  }
+
+  @keyframes goldPulse {
+    0%,100% { opacity: 1;    }
+    50%     { opacity: 0.55; }
+  }
+</style>
+</head>
+<body>
+<div class="logo-wrap">
+  <!-- Actual Recraft badge circular SVG embedded inline -->
+  <object type="image/svg+xml"
+          data="logo-final.svg"
+          style="width:100%;height:100%;"
+          aria-label="Mother Earth Kenya logo">
+  </object>
+</div>
+</body>
+</html>
