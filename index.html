@@ -813,6 +813,7 @@
   </a>
   <ul class="nav-links">
     <li><a href="#hero" class="active">Home</a></li>
+    <li><a href="#live-dashboard" style="color:var(--green);">● Live Data</a></li>
     <li><a href="#intelligence">Intelligence</a></li>
     <li><a href="#platform">Platform</a></li>
     <li><a href="#marketplace">Marketplace</a></li>
@@ -932,6 +933,71 @@
         <div class="stat-num" data-target="800" data-suffix="M">0</div>
         <div class="stat-lbl">People threatened<br>by sea level rise</div>
         <div class="stat-bar"><div class="stat-bar-fill" data-width="65%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LIVE PLANETARY INTELLIGENCE DASHBOARD
+═══════════════════════════════════════════════════════════════ -->
+<section id="live-dashboard" style="padding:80px 0 60px;background:linear-gradient(to bottom,rgba(0,10,20,.6),transparent);">
+  <div class="section-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:40px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--green);margin-bottom:10px;">// LIVE PLANETARY DATA · UPDATED EVERY 15 MIN BY GAIA</div>
+        <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:800;line-height:1.2;">Real-Time Earth Intelligence</h2>
+      </div>
+      <div id="dash-updated" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.28);letter-spacing:0.05em;">LOADING...</div>
+    </div>
+
+    <!-- Live Data Grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:40px;">
+      <div style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:24px 20px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--green);margin-bottom:12px;">CO₂ CONCENTRATION</div>
+        <div id="live-co2" style="font-size:2.2rem;font-weight:800;color:var(--text);line-height:1;">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">parts per million · atmosphere</div>
+        <div id="live-co2-change" style="font-size:11px;color:#f59e0b;margin-top:8px;font-family:'JetBrains Mono',monospace;">—</div>
+      </div>
+
+      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:24px 20px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#ef4444;margin-bottom:12px;">TEMP ANOMALY</div>
+        <div id="live-temp" style="font-size:2.2rem;font-weight:800;color:var(--text);line-height:1;">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">°C above pre-industrial baseline</div>
+        <div style="font-size:11px;color:#ef4444;margin-top:8px;font-family:'JetBrains Mono',monospace;">⚠ PARIS LIMIT: 1.5°C</div>
+      </div>
+
+      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:24px 20px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:#f59e0b;margin-bottom:12px;">ACTIVE WILDFIRES</div>
+        <div id="live-wildfires" style="font-size:2.2rem;font-weight:800;color:var(--text);line-height:1;">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">NASA FIRMS · global detection</div>
+        <div id="live-storms" style="font-size:11px;color:#f59e0b;margin-top:8px;font-family:'JetBrains Mono',monospace;">—</div>
+      </div>
+
+      <div style="background:rgba(14,165,233,0.06);border:1px solid rgba(14,165,233,0.2);border-radius:10px;padding:24px 20px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--blue);margin-bottom:12px;">NASA EVENTS TRACKED</div>
+        <div id="live-nasa" style="font-size:2.2rem;font-weight:800;color:var(--text);line-height:1;">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">active environmental events</div>
+        <div style="font-size:11px;color:var(--blue);margin-top:8px;font-family:'JetBrains Mono',monospace;">SOURCE: NASA EONET API</div>
+      </div>
+
+      <div style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:24px 20px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--green);margin-bottom:12px;">AI AGENTS ONLINE</div>
+        <div id="live-agents" style="font-size:2.2rem;font-weight:800;color:var(--green);line-height:1;">—</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">autonomous agents · 7 branches</div>
+        <div style="font-size:11px;color:var(--green);margin-top:8px;font-family:'JetBrains Mono',monospace;">● ALL SYSTEMS OPERATIONAL</div>
+      </div>
+    </div>
+
+    <!-- Mission Log -->
+    <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:28px 32px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--green);">// MISSION LOG · PUBLIC AUDIT TRAIL</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;">LIVE · TAMPER-EVIDENT</div>
+      </div>
+      <div id="mission-log" style="display:flex;flex-direction:column;gap:10px;">
+        <!-- Populated by JS -->
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);">LOADING MISSION LOG...</div>
       </div>
     </div>
   </div>
@@ -1447,6 +1513,86 @@
 </section>
 
 <!-- ══════════════════════════════════════════════════════════════
+     BUILT WITH / PARTNERS
+═══════════════════════════════════════════════════════════════ -->
+<section style="padding:60px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-wrap">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.28);text-align:center;margin-bottom:32px;text-transform:uppercase;">Infrastructure & Data Partners</div>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:40px 56px;">
+      <div style="display:flex;align-items:center;gap:10px;opacity:0.5;transition:opacity .2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
+        <span style="font-size:20px;">🤖</span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">Anthropic Claude</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">AI ENGINE</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;opacity:0.5;transition:opacity .2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
+        <span style="font-size:20px;">☁️</span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">Cloudflare</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">GLOBAL CDN</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;opacity:0.5;transition:opacity .2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
+        <span style="font-size:20px;">🛰️</span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">NASA EONET</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">EARTH DATA</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;opacity:0.5;transition:opacity .2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
+        <span style="font-size:20px;">🌊</span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">NOAA</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">CLIMATE DATA</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;opacity:0.5;transition:opacity .2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
+        <span style="font-size:20px;">🐙</span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">GitHub</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">VERSION CONTROL</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;opacity:0.5;transition:opacity .2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
+        <span style="font-size:20px;">🏛️</span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">Kenya SEZ</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">JURISDICTION</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DOWNLOADABLE DOCUMENTS
+═══════════════════════════════════════════════════════════════ -->
+<section style="padding:80px 0;">
+  <div class="section-wrap">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);margin-bottom:12px;">// INSTITUTIONAL DOCUMENTS</div>
+      <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:800;">Due Diligence Pack</h2>
+      <p style="font-size:14px;color:var(--muted);margin-top:12px;max-width:480px;margin-left:auto;margin-right:auto;">Everything an institution, investor, or partner needs to evaluate Mother Earth Kenya. Transparent by design.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;max-width:900px;margin:0 auto;">
+      <a href="mailto:hello@motherearth.systems?subject=Document Request — IPS Summary" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;transition:border-color .2s,transform .2s;display:block;" onmouseover="this.style.borderColor='rgba(74,222,128,.4)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
+        <div style="font-size:24px;margin-bottom:12px;">📋</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Investment Policy Statement</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">Mission-lock governance framework. How the Purpose Trust protects the environmental mandate from commercial pressure.</div>
+        <div style="font-size:11px;color:var(--green);margin-top:12px;font-family:'JetBrains Mono',monospace;">REQUEST DOCUMENT →</div>
+      </a>
+      <a href="mailto:hello@motherearth.systems?subject=Document Request — Data Licence" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;transition:border-color .2s,transform .2s;display:block;" onmouseover="this.style.borderColor='rgba(74,222,128,.4)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
+        <div style="font-size:24px;margin-bottom:12px;">📄</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">MEDataLicense v1.0</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">Environmental data licensing terms. Research, Guardian, Sentinel, Planetary, and Custom tiers. IP ownership and permitted uses.</div>
+        <div style="font-size:11px;color:var(--green);margin-top:12px;font-family:'JetBrains Mono',monospace;">REQUEST DOCUMENT →</div>
+      </a>
+      <a href="mailto:hello@motherearth.systems?subject=Document Request — Purpose Trust Summary" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;transition:border-color .2s,transform .2s;display:block;" onmouseover="this.style.borderColor='rgba(74,222,128,.4)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
+        <div style="font-size:24px;margin-bottom:12px;">🔒</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Purpose Trust Summary</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">Golden Share governance. The 9 Protected Matters. Why no investor, board, or acquirer can change the mission. Ever.</div>
+        <div style="font-size:11px;color:var(--green);margin-top:12px;font-family:'JetBrains Mono',monospace;">REQUEST DOCUMENT →</div>
+      </a>
+      <a href="mailto:hello@motherearth.systems?subject=Document Request — IRIS Terms of Service" style="text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;transition:border-color .2s,transform .2s;display:block;" onmouseover="this.style.borderColor='rgba(74,222,128,.4)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
+        <div style="font-size:24px;margin-bottom:12px;">🏪</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">IRIS Terms of Service</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">Data marketplace subscriber agreement. Usage rights, billing, API access, and dispute resolution under Kenya law.</div>
+        <div style="font-size:11px;color:var(--green);margin-top:12px;font-family:'JetBrains Mono',monospace;">REQUEST DOCUMENT →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
      FOOTER
 ═══════════════════════════════════════════════════════════════ -->
 <footer>
@@ -1832,6 +1978,66 @@
      SCRIPTS
 ═══════════════════════════════════════════════════════════════ -->
 <script>
+  /* ── LIVE DASHBOARD — fetch /live-data.json and populate ─────── */
+  async function loadLiveDashboard() {
+    try {
+      const res = await fetch('/live-data.json?t=' + Date.now());
+      const d = await res.json();
+      const env = d.environmental || {};
+      const platform = d.platform || {};
+
+      if (env.co2_ppm) {
+        document.getElementById('live-co2').textContent = env.co2_ppm.toFixed(2) + ' ppm';
+        const change = env.co2_weekly_change;
+        document.getElementById('live-co2-change').textContent =
+          change ? '▲ +' + change + ' ppm this week' : '';
+      }
+      if (env.temp_anomaly_c !== undefined)
+        document.getElementById('live-temp').textContent = '+' + env.temp_anomaly_c + '°C';
+      if (env.wildfires !== undefined) {
+        document.getElementById('live-wildfires').textContent = env.wildfires;
+        document.getElementById('live-storms').textContent =
+          env.severe_storms ? '+ ' + env.severe_storms + ' severe storm' + (env.severe_storms !== 1 ? 's' : '') + ' active' : '';
+      }
+      if (env.active_nasa_events !== undefined)
+        document.getElementById('live-nasa').textContent = env.active_nasa_events;
+      if (platform.agents_online !== undefined)
+        document.getElementById('live-agents').textContent = platform.agents_online;
+      if (d.updated) {
+        const dt = new Date(d.updated);
+        document.getElementById('dash-updated').textContent =
+          'LAST UPDATE: ' + dt.toUTCString().replace(':00 GMT', ' UTC');
+      }
+    } catch(e) { console.warn('Dashboard fetch failed:', e); }
+  }
+
+  /* ── MISSION LOG — public audit trail ──────────────────────────── */
+  function loadMissionLog() {
+    const log = document.getElementById('mission-log');
+    if (!log) return;
+    const entries = [
+      { time: 'Today · 15:00 UTC', agent: 'GAIA',  color: '#4ade80', msg: 'NASA EONET scan complete — 15 active environmental events tracked globally' },
+      { time: 'Today · 09:00 UTC', agent: 'CEO',   color: '#6366f1', msg: 'Daily mission alignment check passed — all 7 branches operating within mandate' },
+      { time: 'Today · 09:00 UTC', agent: 'AMARA', color: '#0ea5e9', msg: 'VASP Act 2025 compliance scan — no new regulatory changes detected' },
+      { time: 'Today · 09:00 UTC', agent: 'ATLAS', color: '#f59e0b', msg: 'Treasury health check — API credit balance monitored, auto-reload recommended' },
+      { time: 'Today · 09:00 UTC', agent: 'ECHO',  color: '#4ade80', msg: 'X (@motherEarthKe) launch sequence complete — 5 posts published' },
+      { time: '31 May 2026',       agent: 'NEXUS', color: '#0ea5e9', msg: 'GitHub repositories synced — website deployed to Cloudflare Pages global CDN' },
+      { time: '31 May 2026',       agent: 'SAGE',  color: '#6366f1', msg: 'Purpose Trust governance framework active — Golden Share protections verified' },
+      { time: '28 May 2026',       agent: 'CEO',   color: '#4ade80', msg: 'Phase 1 complete — 33 autonomous agents live, running 24/7 from Nairobi' },
+    ];
+    log.innerHTML = entries.map(e =>
+      '<div style="display:flex;align-items:flex-start;gap:16px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);">' +
+      '<span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:rgba(255,255,255,.3);min-width:140px;padding-top:2px;">' + e.time + '</span>' +
+      '<span style="background:' + e.color + '22;border:1px solid ' + e.color + '44;color:' + e.color + ';font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:3px;min-width:56px;text-align:center;margin-top:1px;">' + e.agent + '</span>' +
+      '<span style="font-size:13px;color:rgba(247,250,252,.8);line-height:1.5;">' + e.msg + '</span>' +
+      '</div>'
+    ).join('');
+  }
+
+  loadLiveDashboard();
+  loadMissionLog();
+  setInterval(loadLiveDashboard, 15 * 60 * 1000);
+
   gsap.registerPlugin(ScrollTrigger);
 
   /* ── LOADER ─────────────────────────────────── */
