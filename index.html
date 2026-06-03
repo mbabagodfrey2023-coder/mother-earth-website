@@ -2070,6 +2070,32 @@
     document.getElementById('globe-wrap').appendChild(renderer.domElement);
   }
 
+  // ── Drag-to-rotate controls + hotspot state (outer scope for animate closure) ──
+  let controls, hotspotMeshes = [], pulseT = 0, hoveredHotspot = null;
+
+  const globeTooltip = document.createElement('div');
+  globeTooltip.style.cssText = [
+    'position:fixed', 'pointer-events:none', 'z-index:9999',
+    'background:rgba(5,12,6,.92)', 'border:1px solid rgba(212,175,55,.55)',
+    'padding:8px 16px', 'border-radius:6px', 'display:none',
+    'font-family:"JetBrains Mono",monospace', 'font-size:10px',
+    'letter-spacing:1.5px', 'color:#D4AF37', 'white-space:nowrap',
+    'transform:translate(-50%,-145%)', 'box-shadow:0 4px 28px rgba(212,175,55,.18)'
+  ].join(';');
+  document.body.appendChild(globeTooltip);
+
+  if (renderer) {
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping  = true;
+    controls.dampingFactor  = 0.06;
+    controls.enableZoom     = false;
+    controls.enablePan      = false;
+    controls.rotateSpeed    = 0.38;
+    controls.minPolarAngle  = Math.PI * 0.12;
+    controls.maxPolarAngle  = Math.PI * 0.88;
+    renderer.domElement.style.cursor = 'grab';
+  }
+
   const earthGroup = new THREE.Group();
   earthGroup.rotation.z = 23.5 * Math.PI / 180;
   scene.add(earthGroup);
@@ -2149,14 +2175,107 @@
     const sun = new THREE.DirectionalLight(0xffffff, 1.1); sun.position.set(5, 3, 5); scene.add(sun);
     const rim = new THREE.DirectionalLight(0x99d8ff, 0.3); rim.position.set(-5, -2, -5); scene.add(rim);
 
+    // ── EARTH HOTSPOTS ── lat/lon → 3D position ──────────────────────────────
+    function latLonTo3D(lat, lon, r) {
+      const phi = (90 - lat) * Math.PI / 180, theta = (lon + 180) * Math.PI / 180;
+      return new THREE.Vector3(
+        -r * Math.sin(phi) * Math.cos(theta),
+         r * Math.cos(phi),
+         r * Math.sin(phi) * Math.sin(theta)
+      );
+    }
+
+    const HOTSPOT_DEFS = [
+      { lat: -1.28,  lon:  36.82,  color: '#D4AF37', label: '📍 KENYA · Mother Earth HQ',              modal: 'modal-agent-gaia' },
+      { lat: -3.47,  lon: -62.21,  color: '#ef4444', label: '🔥 AMAZON · Active deforestation zone',   modal: null },
+      { lat:  75.0,  lon: -42.5,   color: '#60a5fa', label: '🧊 ARCTIC · Sea ice loss −280 GT/yr',     modal: null },
+      { lat: -18.29, lon: 147.70,  color: '#f97316', label: '🪸 GREAT BARRIER REEF · Bleach alert',    modal: null },
+    ];
+
+    HOTSPOT_DEFS.forEach(hs => {
+      const pos = latLonTo3D(hs.lat, hs.lon, 2.02);
+      // Outer pulse ring
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(0.048, 0.095, 32),
+        new THREE.MeshBasicMaterial({ color: hs.color, side: THREE.DoubleSide, transparent: true, opacity: 0.65 })
+      );
+      ring.position.copy(pos);
+      ring.lookAt(new THREE.Vector3(0, 0, 0));
+      ring.rotateY(Math.PI);
+      ring.userData = { ...hs, isHotspot: true, isRing: true };
+      earthGroup.add(ring);
+      hotspotMeshes.push(ring);
+      // Core dot
+      const dot = new THREE.Mesh(
+        new THREE.SphereGeometry(0.042, 16, 16),
+        new THREE.MeshBasicMaterial({ color: hs.color })
+      );
+      dot.position.copy(pos);
+      dot.userData = { ...hs, isHotspot: true };
+      earthGroup.add(dot);
+      hotspotMeshes.push(dot);
+    });
+
+    // Raycaster — hover tooltip + click to open modal
+    if (renderer) {
+      const raycaster = new THREE.Raycaster();
+      const mouse2    = new THREE.Vector2();
+
+      renderer.domElement.addEventListener('mousemove', e => {
+        const rc = renderer.domElement.getBoundingClientRect();
+        mouse2.x =  ((e.clientX - rc.left) / rc.width)  * 2 - 1;
+        mouse2.y = -((e.clientY - rc.top)  / rc.height) * 2 + 1;
+        raycaster.setFromCamera(mouse2, camera);
+        const hits = raycaster.intersectObjects(hotspotMeshes);
+        if (hits.length && hits[0].object.userData.isHotspot) {
+          hoveredHotspot = hits[0].object.userData;
+          globeTooltip.textContent  = hoveredHotspot.label;
+          globeTooltip.style.display = 'block';
+          globeTooltip.style.left   = e.clientX + 'px';
+          globeTooltip.style.top    = e.clientY + 'px';
+          renderer.domElement.style.cursor = 'pointer';
+        } else {
+          hoveredHotspot = null;
+          globeTooltip.style.display = 'none';
+          renderer.domElement.style.cursor = controls?.active ? 'grabbing' : 'grab';
+        }
+      });
+
+      renderer.domElement.addEventListener('click', () => {
+        if (!hoveredHotspot) return;
+        if (hoveredHotspot.modal) openModal(hoveredHotspot.modal);
+        else document.getElementById('live-dashboard')?.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      renderer.domElement.addEventListener('mousedown', () => {
+        renderer.domElement.style.cursor = 'grabbing';
+      });
+      renderer.domElement.addEventListener('mouseup', () => {
+        renderer.domElement.style.cursor = hoveredHotspot ? 'pointer' : 'grab';
+      });
+    }
+
     animate();
   });
 
   function animate() {
     requestAnimationFrame(animate);
-    if (earthMesh)  earthMesh.rotation.y  += 0.0008;
-    if (cloudsMesh) cloudsMesh.rotation.y += 0.0012;
-    earthGroup.rotation.y += 0.0003;
+    // Auto-rotate only when user isn't dragging
+    if (!controls || !controls.active) {
+      if (earthMesh)  earthMesh.rotation.y  += 0.0008;
+      if (cloudsMesh) cloudsMesh.rotation.y += 0.0012;
+      earthGroup.rotation.y += 0.0003;
+    }
+    // Pulse hotspot rings
+    pulseT += 0.035;
+    hotspotMeshes.forEach((m, i) => {
+      if (m.userData.isRing) {
+        m.material.opacity = 0.22 + 0.5 * Math.abs(Math.sin(pulseT + i * 1.4));
+        const s = 1 + 0.18 * Math.sin(pulseT * 1.3 + i);
+        m.scale.set(s, s, s);
+      }
+    });
+    if (controls) controls.update();
     if (renderer) renderer.render(scene, camera);
   }
 
@@ -2489,6 +2608,122 @@
       document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
     }
   });
+
+  // ── LIVE DATA → MODAL INJECTION ────────────────────────────────────────────
+  // Pulls live-data.json on page load and injects real metrics into agent modals.
+  // Falls back gracefully if the fetch fails (e.g. during local dev).
+  (async function injectLiveData() {
+    let env, plat;
+    try {
+      const d = await fetch('/live-data.json?t=' + Date.now()).then(r => r.json());
+      env  = d.environmental;
+      plat = d.platform;
+    } catch (_) { return; }   // static content already shown — no crash
+
+    // Helper: one metric row
+    function metricRow(label, value, accent) {
+      return `<div style="display:flex;justify-content:space-between;align-items:center;
+        padding:9px 13px;background:rgba(255,255,255,.035);border-radius:7px;
+        border-left:2px solid ${accent};margin:3px 0">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;
+          letter-spacing:1.5px;color:rgba(255,255,255,.4)">${label}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;
+          font-weight:700;color:${accent}">${value}</span>
+      </div>`;
+    }
+
+    // Helper: insert stat block before the status row of a modal
+    function inject(modalId, title, rows) {
+      const statusRow = document.querySelector(`#${modalId} .modal-status-row`);
+      if (!statusRow) return;
+      const block = document.createElement('div');
+      block.style.cssText = 'margin:18px 0 6px';
+      block.innerHTML = `<div style="font-family:'JetBrains Mono',monospace;font-size:9px;
+        letter-spacing:2.5px;color:rgba(255,255,255,.28);margin-bottom:6px">// ${title}</div>
+        ${rows.join('')}`;
+      statusRow.parentNode.insertBefore(block, statusRow);
+    }
+
+    const GREEN  = '#4ade80';
+    const YELLOW = '#facc15';
+    const RED    = '#f87171';
+    const BLUE   = '#60a5fa';
+    const GOLD   = '#D4AF37';
+
+    // GAIA — environmental intelligence
+    inject('modal-agent-gaia', 'LIVE SENSOR READINGS', [
+      metricRow('CO₂ CONCENTRATION',  env.co2_ppm + ' ppm',                          env.co2_ppm > 420 ? YELLOW : GREEN),
+      metricRow('WEEKLY CO₂ DELTA',   '+' + env.co2_weekly_change + ' ppm this week', YELLOW),
+      metricRow('TEMP ANOMALY',        '+' + env.temp_anomaly_c + '°C vs 1850 baseline', env.temp_anomaly_c >= 1.4 ? RED : YELLOW),
+      metricRow('PARIS LIMIT',         '1.5°C — ' + (1.5 - env.temp_anomaly_c).toFixed(2) + '°C remaining', env.temp_anomaly_c >= 1.4 ? RED : YELLOW),
+      metricRow('ACTIVE NASA EVENTS',  env.active_nasa_events + ' tracked globally',  env.active_nasa_events > 5 ? RED : GREEN),
+      metricRow('WILDFIRES DETECTED',  env.wildfires + ' active fires',               env.wildfires > 0 ? RED : GREEN),
+    ]);
+
+    // CEO — organisation health dashboard
+    inject('modal-agent-ceo', 'ORGANISATION STATUS', [
+      metricRow('AGENTS ONLINE',       plat.agents_online + ' / 33 autonomous agents', plat.agents_online >= 30 ? GREEN : RED),
+      metricRow('BRANCHES ACTIVE',     plat.branches_active + ' / 7 operational',      plat.branches_active === 7 ? GREEN : YELLOW),
+      metricRow('SITE STATUS',         plat.site_up ? '✓ OPERATIONAL' : '✗ DEGRADED', plat.site_up ? GREEN : RED),
+      metricRow('GLOBAL CO₂ RISK',     env.co2_ppm + ' ppm — ' + (env.co2_ppm > 420 ? 'ELEVATED' : 'NOMINAL'), env.co2_ppm > 420 ? YELLOW : GREEN),
+      metricRow('CLIMATE URGENCY',     'Paris target: ' + (1.5 - env.temp_anomaly_c).toFixed(2) + '°C headroom', RED),
+    ]);
+
+    // NEXUS — blockchain & tech
+    inject('modal-agent-nexus', 'SYSTEM HEALTH', [
+      metricRow('CHAIN MONITOR',       'STELLAR · POLYGON · CELO',  GREEN),
+      metricRow('SMART CONTRACTS',     'PENDING MAINNET DEPLOY',    YELLOW),
+      metricRow('KEY MANAGEMENT',      '2-OF-3 MULTI-SIG ACTIVE',  GREEN),
+      metricRow('SECURITY SCANS',      'CONTINUOUS — NO CRITICAL',  GREEN),
+      metricRow('dNFT REGISTRY',       'PHASE 2 READY',             BLUE),
+    ]);
+
+    // ATLAS — treasury
+    inject('modal-agent-atlas', 'TREASURY STATUS', [
+      metricRow('PAYMENT RAIL',        'M-PESA READY · BRS PENDING', YELLOW),
+      metricRow('STRIPE INTEGRATION',  'PENDING REGISTRATION',       YELLOW),
+      metricRow('MULTI-SIG VAULT',     '2 OF 3 · HARDWARE BACKED',   GREEN),
+      metricRow('TAX COMPLIANCE',      'KRA REGISTRATION PENDING',   YELLOW),
+      metricRow('SWEEP POLICY',        '≤KES 50K AUTONOMOUS · AUTO', GREEN),
+    ]);
+
+    // IRIS — data marketplace
+    inject('modal-agent-iris', 'MARKETPLACE STATUS', [
+      metricRow('LEAD PIPELINE',       '0 QUALIFIED · PIPELINE OPEN', BLUE),
+      metricRow('GUARDIAN TIER',       '$99/mo — SIGNUP OPEN',        GREEN),
+      metricRow('SENTINEL TIER',       '$499/mo — SIGNUP OPEN',       GREEN),
+      metricRow('PLANETARY TIER',      '$1,499/mo — INVITE ONLY',     GOLD),
+      metricRow('DATA STREAM',         'GAIA + NASA EONET · LIVE',    GREEN),
+    ]);
+
+    // AMARA — legal
+    inject('modal-agent-amara', 'COMPLIANCE WATCH', [
+      metricRow('VASP ACT 2025',       'MONITORING · NO NEW CHANGES', GREEN),
+      metricRow('FATF UPDATES',        'R.15 COMPLIANT — VERIFIED',   GREEN),
+      metricRow('BRS REGISTRATION',    'PENDING — CEO ACTION REQ\'D', YELLOW),
+      metricRow('ODPC REGISTRATION',   'PENDING POST-BRS',            YELLOW),
+      metricRow('KYC/AML POLICY',      'DRAFT COMPLETE · REVIEW DUE', YELLOW),
+    ]);
+
+    // SAGE — governance
+    inject('modal-agent-sage', 'GOVERNANCE STATUS', [
+      metricRow('GOLDEN SHARE',        'HELD BY ANDY · TRUST PENDING', GOLD),
+      metricRow('PURPOSE TRUST',       'DEED COMPLETE · FILING READY', GREEN),
+      metricRow('BOARD RESOLUTIONS',   '15 RESOLUTIONS DRAFTED',       GREEN),
+      metricRow('VETO POWER',          'ACTIVE — PROTECTED MATTERS: 9', GOLD),
+      metricRow('MISSION ALIGNMENT',   'ALL 7 BRANCHES CONFIRMED',     GREEN),
+    ]);
+
+    // ECHO — comms & growth
+    inject('modal-agent-echo', 'COMMS STATUS', [
+      metricRow('X (@motherEarthKe)',  '5 LAUNCH POSTS PUBLISHED',    GREEN),
+      metricRow('LINKEDIN',           'COMPANY PAGE LIVE',            GREEN),
+      metricRow('EMAIL (IMAP)',        'INBOX MONITORING · 5 MIN',    GREEN),
+      metricRow('SLACK',              '8/8 CHANNELS FIRING',          GREEN),
+      metricRow('WEBSITE',            plat.site_up ? 'motherearth.systems · LIVE' : 'CHECK STATUS', plat.site_up ? GREEN : RED),
+    ]);
+
+  })();
 </script>
 
 <!-- ══════════════════════════════════════════════════════════════
