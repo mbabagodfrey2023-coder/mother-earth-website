@@ -25,6 +25,7 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -55,6 +56,113 @@
 
     button, a { font: inherit; cursor: pointer; }
     img { display: block; max-width: 100%; }
+
+    /* ── HIDE DEFAULT CURSOR (desktop only) ────────────────────────────── */
+    @media (hover: hover) and (pointer: fine) {
+      *, *::before, *::after { cursor: none !important; }
+    }
+
+    /* ── PRELOADER ──────────────────────────────────────────────────────── */
+    #preloader {
+      position: fixed; inset: 0; z-index: 999999;
+      background: #020606;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #pre-content { text-align: center; padding: 0 24px; }
+    #pre-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(36px, 8vw, 88px);
+      font-weight: 800; letter-spacing: 0.18em;
+      color: #F2F0EB; line-height: 1; margin-bottom: 12px;
+    }
+    .pre-char {
+      display: inline-block;
+      opacity: 0; transform: translateY(28px);
+      animation: preCharIn 0.55s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes preCharIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #pre-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(10px, 1.6vw, 14px);
+      font-weight: 300; letter-spacing: 0.55em;
+      color: #D4763A; margin-bottom: 52px;
+      opacity: 0; animation: preFadeIn 0.5s 0.85s ease forwards;
+    }
+    #pre-bar-wrap {
+      width: clamp(220px, 38vw, 420px); height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 0 auto 18px; overflow: hidden; border-radius: 1px;
+    }
+    #pre-bar-fill { height: 100%; width: 0; background: #4ade80; border-radius: 1px; }
+    #pre-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      width: clamp(220px, 38vw, 420px); margin: 0 auto;
+      opacity: 0; animation: preFadeIn 0.4s 0.9s ease forwards;
+    }
+    #pre-pct {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 2px; color: rgba(74,222,128,0.7);
+    }
+    #pre-status {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 1.5px; color: rgba(255,255,255,0.28);
+    }
+    @keyframes preFadeIn { to { opacity: 1; } }
+
+    /* ── CUSTOM CURSOR ──────────────────────────────────────────────────── */
+    #cur-dot {
+      position: fixed; width: 7px; height: 7px;
+      background: #4ade80; border-radius: 50%;
+      pointer-events: none; z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, background .2s, opacity .3s;
+      mix-blend-mode: normal; will-change: left, top;
+    }
+    #cur-ring {
+      position: fixed; width: 38px; height: 38px;
+      border: 1.5px solid rgba(74,222,128,0.50);
+      border-radius: 50%; pointer-events: none; z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: width .4s cubic-bezier(.25,.46,.45,.94),
+                  height .4s cubic-bezier(.25,.46,.45,.94),
+                  border-color .3s, opacity .3s;
+      will-change: left, top;
+    }
+    body.cur-hover #cur-dot { width: 10px; height: 10px; background: #D4AF37; }
+    body.cur-hover #cur-ring {
+      width: 58px; height: 58px;
+      border-color: rgba(212,175,55,0.65);
+    }
+    body.cur-click #cur-dot { transform: translate(-50%,-50%) scale(0.6); }
+    body.cur-click #cur-ring { transform: translate(-50%,-50%) scale(1.3); }
+    @media (hover: none) {
+      #cur-dot, #cur-ring { display: none; }
+    }
+
+    /* ── FILM GRAIN ─────────────────────────────────────────────────────── */
+    #grain {
+      position: fixed; inset: -50%; width: 200%; height: 200%;
+      pointer-events: none; z-index: 99990;
+      opacity: 0.038; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 220px 220px;
+      animation: grainShift 0.45s steps(2) infinite;
+    }
+    @keyframes grainShift {
+      0%   { transform: translate(0,0); }
+      20%  { transform: translate(-3px,-2px); }
+      40%  { transform: translate(2px, 3px); }
+      60%  { transform: translate(-2px, 1px); }
+      80%  { transform: translate(3px,-3px); }
+      100% { transform: translate(-1px, 2px); }
+    }
+
+    /* ── SCROLL REVEAL BASE STATES ──────────────────────────────────────── */
+    .sr-up   { opacity: 0; transform: translateY(40px); }
+    .sr-left { opacity: 0; transform: translateX(-30px); }
+    .sr-scale { opacity: 0; transform: translateY(30px) scale(0.95); }
 
     /* ─── LOADER ─────────────────────────────────────────────────── */
     #loader {
@@ -793,6 +901,28 @@
   </script>
 </head>
 <body>
+
+<!-- ══ PRELOADER ══════════════════════════════════════════════════════════════ -->
+<div id="preloader">
+  <div id="pre-content">
+    <div id="pre-logo">
+      <span class="pre-char" style="animation-delay:.30s">M</span><span class="pre-char" style="animation-delay:.34s">O</span><span class="pre-char" style="animation-delay:.38s">T</span><span class="pre-char" style="animation-delay:.42s">H</span><span class="pre-char" style="animation-delay:.46s">E</span><span class="pre-char" style="animation-delay:.50s">R</span><span class="pre-char pre-space" style="animation-delay:.54s">&nbsp;</span><span class="pre-char" style="animation-delay:.58s">E</span><span class="pre-char" style="animation-delay:.62s">A</span><span class="pre-char" style="animation-delay:.66s">R</span><span class="pre-char" style="animation-delay:.70s">T</span><span class="pre-char" style="animation-delay:.74s">H</span>
+    </div>
+    <div id="pre-sub">K &nbsp; E &nbsp; N &nbsp; Y &nbsp; A</div>
+    <div id="pre-bar-wrap"><div id="pre-bar-fill"></div></div>
+    <div id="pre-bottom">
+      <span id="pre-pct">0%</span>
+      <span id="pre-status">INITIALISING PLANETARY INTELLIGENCE…</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CUSTOM CURSOR ══════════════════════════════════════════════════════════ -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ══ FILM GRAIN ════════════════════════════════════════════════════════════ -->
+<div id="grain" aria-hidden="true"></div>
 
 <!-- LOADER -->
 <div id="loader">
@@ -3072,6 +3202,304 @@
       this.style.height = Math.min(this.scrollHeight, 80) + 'px';
     });
   });
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     AWARD-WINNING LAYER
+     1. Preloader  2. Lenis Smooth Scroll  3. Custom Cursor
+     4. Film Grain (CSS-only above)  5. GSAP Scroll Reveals  6. Magnetic Buttons
+════════════════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── 1. PRELOADER ────────────────────────────────────────────────────────── */
+  function runPreloader() {
+    const pre    = document.getElementById('preloader');
+    const fill   = document.getElementById('pre-bar-fill');
+    const pct    = document.getElementById('pre-pct');
+    const status = document.getElementById('pre-status');
+    if (!pre) return;
+
+    document.body.style.overflow = 'hidden';
+
+    let progress = 0;
+    // Simulate realistic loading — fast bursts then slow near 100
+    const interval = setInterval(() => {
+      const inc = progress < 60  ? (Math.random() * 5 + 2)
+                : progress < 88  ? (Math.random() * 2 + 0.5)
+                :                  (Math.random() * 0.8);
+      progress = Math.min(98, progress + inc);
+      fill.style.width  = progress + '%';
+      pct.textContent   = Math.floor(progress) + '%';
+    }, 55);
+
+    // Complete at 2.6s
+    setTimeout(() => {
+      clearInterval(interval);
+      fill.style.transition = 'width 0.4s ease';
+      fill.style.width  = '100%';
+      pct.textContent   = '100%';
+      status.textContent = '✓  ALL SYSTEMS OPERATIONAL';
+      status.style.color  = 'rgba(74,222,128,0.85)';
+      pct.style.color     = '#4ade80';
+
+      setTimeout(() => {
+        // Slide preloader upward
+        gsap.to(pre, {
+          yPercent: -100,
+          duration: 1.1,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            pre.remove();
+            document.body.style.overflow = '';
+            initScrollAnimations();
+            initHeroEntrance();
+          }
+        });
+      }, 650);
+    }, 2600);
+  }
+
+  /* ── 2. LENIS SMOOTH SCROLL ─────────────────────────────────────────────── */
+  function initLenis() {
+    if (typeof Lenis === 'undefined') return;
+    const lenis = new Lenis({
+      duration:     1.25,
+      easing:       t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel:  true,
+      wheelMultiplier: 1.0,
+    });
+    // Wire Lenis into GSAP ticker so ScrollTrigger stays in sync
+    if (typeof gsap !== 'undefined' && gsap.ticker) {
+      lenis.on('scroll', () => {
+        if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.update();
+      });
+      gsap.ticker.add(time => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
+    }
+  }
+
+  /* ── 3. CUSTOM CURSOR ───────────────────────────────────────────────────── */
+  function initCursor() {
+    const dot  = document.getElementById('cur-dot');
+    const ring = document.getElementById('cur-ring');
+    if (!dot || !ring) return;
+
+    // Desktop only
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      dot.style.display = ring.style.display = 'none'; return;
+    }
+
+    let mx = -200, my = -200, rx = -200, ry = -200;
+    const LERP = 0.10;
+
+    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
+    document.addEventListener('mousedown', () => document.body.classList.add('cur-click'));
+    document.addEventListener('mouseup',   () => document.body.classList.remove('cur-click'));
+
+    // Hover state for interactive elements
+    const HOVER_SEL = 'a, button, [role="button"], .agent-card, .platform-card, .pricing-card, .nav-cta, .btn-primary, .btn-outline';
+    document.querySelectorAll(HOVER_SEL).forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cur-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cur-hover'));
+    });
+
+    // Ring follows with lag via lerp
+    function cursorLoop() {
+      rx += (mx - rx) * LERP;
+      ry += (my - ry) * LERP;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(cursorLoop);
+    }
+    cursorLoop();
+  }
+
+  /* ── 4. HERO ENTRANCE (fires after preloader exits) ─────────────────────── */
+  function initHeroEntrance() {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from('.hero-tag',     { opacity: 0, y: 20, duration: 0.7 }, 0.1)
+      .from('.hero-title',   { opacity: 0, y: 60, duration: 0.9 }, 0.25)
+      .from('.hero-sub',     { opacity: 0, y: 30, duration: 0.8 }, 0.50)
+      .from('.hero-actions a', { opacity: 0, y: 24, duration: 0.6, stagger: 0.14 }, 0.65)
+      .from('.hud-row',      { opacity: 0, x: -20, duration: 0.5, stagger: 0.08 }, 0.70);
+  }
+
+  /* ── 5. SCROLL REVEALS (GSAP ScrollTrigger) ─────────────────────────────── */
+  function initScrollAnimations() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const EASE_OUT  = 'power3.out';
+    const EASE_BACK = 'back.out(1.3)';
+
+    // Helper: simple up reveal for any element(s)
+    function revealUp(targets, opts = {}) {
+      gsap.from(targets, {
+        opacity: 0, y: opts.y || 50,
+        duration: opts.dur || 0.8,
+        ease: opts.ease || EASE_OUT,
+        stagger: opts.stagger || 0,
+        scrollTrigger: {
+          trigger: opts.trigger || targets,
+          start: 'top 88%',
+          once: true,
+        }
+      });
+    }
+
+    // Section tags — clip-reveal slide right
+    document.querySelectorAll('.section-tag, .section-head').forEach(el => {
+      gsap.from(el, {
+        opacity: 0, x: -28, duration: 0.65, ease: EASE_OUT,
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+      });
+    });
+
+    // Section titles — bold stagger up
+    document.querySelectorAll('h2.section-title').forEach(el => {
+      gsap.from(el, {
+        opacity: 0, y: 45, duration: 0.85, ease: EASE_OUT,
+        scrollTrigger: { trigger: el, start: 'top 86%', once: true }
+      });
+    });
+
+    // Section subs — fade after title
+    document.querySelectorAll('.section-sub').forEach(el => {
+      gsap.from(el, {
+        opacity: 0, y: 25, duration: 0.7, delay: 0.15, ease: EASE_OUT,
+        scrollTrigger: { trigger: el, start: 'top 86%', once: true }
+      });
+    });
+
+    // Agent cards — staggered scale+fade
+    ScrollTrigger.batch('.agent-card', {
+      start: 'top 90%', once: true,
+      onEnter: batch => gsap.from(batch, {
+        opacity: 0, y: 48, scale: 0.94,
+        duration: 0.7, ease: EASE_BACK,
+        stagger: { each: 0.08, from: 'start' }
+      })
+    });
+
+    // Platform cards
+    ScrollTrigger.batch('.platform-card', {
+      start: 'top 88%', once: true,
+      onEnter: batch => gsap.from(batch, {
+        opacity: 0, y: 50, scale: 0.93,
+        duration: 0.75, ease: EASE_BACK,
+        stagger: { each: 0.12 }
+      })
+    });
+
+    // Pricing cards
+    ScrollTrigger.batch('.pricing-card', {
+      start: 'top 88%', once: true,
+      onEnter: batch => gsap.from(batch, {
+        opacity: 0, y: 55, scale: 0.92,
+        duration: 0.80, ease: EASE_BACK,
+        stagger: { each: 0.10 }
+      })
+    });
+
+    // Stat cards — counter animation
+    document.querySelectorAll('.stat-card').forEach(card => {
+      const numEl  = card.querySelector('.stat-num');
+      const barEl  = card.querySelector('.stat-bar-fill');
+      if (!numEl) return;
+      const target = parseFloat(numEl.dataset.target || 0);
+      const suffix = numEl.dataset.suffix || '';
+
+      ScrollTrigger.create({
+        trigger: card, start: 'top 88%', once: true,
+        onEnter: () => {
+          gsap.from(card, { opacity: 0, y: 35, scale: 0.95, duration: 0.7, ease: EASE_BACK });
+          gsap.fromTo(numEl,
+            { textContent: 0 },
+            { textContent: target, duration: 1.8, ease: 'power2.out', snap: { textContent: target > 10 ? 1 : 0.1 },
+              onUpdate: function() { numEl.textContent = (Math.round(this.targets()[0].textContent * 10) / 10) + suffix; }
+            }
+          );
+          if (barEl) gsap.from(barEl, { scaleX: 0, transformOrigin: 'left', duration: 1.6, ease: 'power2.out', delay: 0.2 });
+        }
+      });
+    });
+
+    // Crisis stats — dramatic scale reveal
+    ScrollTrigger.batch('.crisis-stat', {
+      start: 'top 88%', once: true,
+      onEnter: batch => gsap.from(batch, {
+        opacity: 0, scale: 0.7, duration: 0.9, ease: 'back.out(2)',
+        stagger: { each: 0.15 }
+      })
+    });
+
+    // Notes / anatomy items
+    ScrollTrigger.batch('.note, .anatomy-mark', {
+      start: 'top 88%', once: true,
+      onEnter: batch => gsap.from(batch, {
+        opacity: 0, x: -35, duration: 0.65, ease: EASE_OUT,
+        stagger: { each: 0.1 }
+      })
+    });
+
+    // Governance cards
+    ScrollTrigger.batch('.gov-card, .gov-pillar', {
+      start: 'top 88%', once: true,
+      onEnter: batch => gsap.from(batch, {
+        opacity: 0, y: 45, duration: 0.7, ease: EASE_OUT,
+        stagger: { each: 0.12 }
+      })
+    });
+
+    // Live dashboard section fade
+    gsap.from('#live-dashboard .section-wrap > *', {
+      opacity: 0, y: 30, duration: 0.7, stagger: 0.1, ease: EASE_OUT,
+      scrollTrigger: { trigger: '#live-dashboard', start: 'top 82%', once: true }
+    });
+  }
+
+  /* ── 6. MAGNETIC BUTTONS ─────────────────────────────────────────────────── */
+  function initMagneticButtons() {
+    if (typeof gsap === 'undefined') return;
+
+    const MAGNETIC_SEL = '.btn-primary, .btn-outline, .nav-cta';
+    document.querySelectorAll(MAGNETIC_SEL).forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width  / 2;
+        const y = e.clientY - r.top  - r.height / 2;
+        gsap.to(btn, { x: x * 0.32, y: y * 0.32, duration: 0.35, ease: 'power2.out' });
+      });
+      btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { x: 0, y: 0, duration: 0.65, ease: 'elastic.out(1, 0.45)' });
+      });
+    });
+  }
+
+  /* ── BOOT ────────────────────────────────────────────────────────────────── */
+  // Cursor and Lenis start immediately (no waiting for preloader)
+  initCursor();
+  initLenis();
+
+  // Magnetic buttons init on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMagneticButtons);
+  } else {
+    initMagneticButtons();
+  }
+
+  // Preloader runs → on exit calls initScrollAnimations + initHeroEntrance
+  window.addEventListener('load', runPreloader);
+
+})();
 </script>
 </body>
 </html>
