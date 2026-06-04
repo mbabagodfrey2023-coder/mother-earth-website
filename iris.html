@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IRIS Data Marketplace — Mother Earth Kenya</title>
+  <meta name="description" content="Verified environmental intelligence for researchers, universities, and conservation organisations. Real-time data from East Africa and beyond."/>
+  <meta property="og:title" content="IRIS Data Marketplace — Mother Earth Kenya"/>
+  <meta property="og:description" content="Environmental data feeds, AI intelligence reports, and a verified provenance chain — built for serious research."/>
+  <meta property="og:image" content="https://motherearth.systems/og.svg"/>
+  <link rel="icon" type="image/svg+xml" href="logo-final.svg"/>
+  <link rel="canonical" href="https://motherearth.systems/iris"/>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    :root {
+      --bg:     #020606;
+      --green:  #4ade80;
+      --dark-g: #1a4332;
+      --gold:   #D4AF37;
+      --terra:  #D4763A;
+      --text:   #F2F0EB;
+      --muted:  rgba(242,240,235,.45);
+      --border: rgba(255,255,255,.07);
+      --card:   rgba(255,255,255,.03);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 16px;
+      line-height: 1.6; overflow-x: hidden;
+    }
+    @media (hover: hover) and (pointer: fine) { *, *::before, *::after { cursor: none !important; } }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── CURSOR ── */
+    #cd { position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s; }
+    #cr { position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s; }
+    body.ch #cd { width:10px;height:10px;background:var(--gold); }
+    body.ch #cr { width:56px;height:56px;border-color:rgba(212,175,55,.65); }
+    @media(hover:none){#cd,#cr{display:none}}
+
+    /* ── GRAIN ── */
+    #grain { position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite; }
+    @keyframes grainShift { 0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)} }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 40px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(2,6,6,.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.05em; }
+    .nav-logo img { width:36px;height:36px; }
+    .nav-links { display:flex;gap:32px;list-style:none; }
+    .nav-links a { font-size:13px;letter-spacing:.08em;color:var(--muted);transition:color .2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); }
+    .nav-cta {
+      background:var(--green);color:#000;border:none;border-radius:6px;
+      padding:10px 22px;font-size:13px;font-weight:700;letter-spacing:.06em;
+      transition:background .2s,transform .15s;
+    }
+    .nav-cta:hover { background:#86efac; }
+    @media(max-width:768px) { .nav-links{display:none} nav{padding:0 20px} }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; display:flex;align-items:center;justify-content:center;
+      padding: 120px 40px 80px; text-align:center;
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(74,222,128,.06) 0%, transparent 70%);
+    }
+    .hero-inner { max-width: 800px; }
+    .hero-tag {
+      font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;
+      color:var(--green);opacity:.7;margin-bottom:24px;
+    }
+    h1 {
+      font-size: clamp(42px, 7vw, 88px);
+      font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:28px;
+    }
+    h1 span { color:var(--green); }
+    .hero-sub {
+      font-size:clamp(16px,2vw,20px);color:var(--muted);line-height:1.7;
+      max-width:620px;margin:0 auto 44px;
+    }
+    .hero-actions { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+    .btn-primary {
+      background:var(--green);color:#000;border-radius:8px;
+      padding:15px 32px;font-size:15px;font-weight:700;letter-spacing:.04em;
+      transition:background .2s;display:inline-block;
+    }
+    .btn-primary:hover { background:#86efac; }
+    .btn-outline {
+      border:1.5px solid rgba(255,255,255,.18);color:var(--text);border-radius:8px;
+      padding:15px 32px;font-size:15px;font-weight:600;
+      transition:border-color .2s;display:inline-block;
+    }
+    .btn-outline:hover { border-color:var(--green); }
+
+    /* ── LIVE STRIP ── */
+    #live-strip {
+      background:rgba(74,222,128,.04);border-top:1px solid rgba(74,222,128,.1);
+      border-bottom:1px solid rgba(74,222,128,.1);
+      padding:20px 40px;overflow:hidden;
+    }
+    .strip-inner {
+      max-width:1100px;margin:0 auto;
+      display:flex;gap:48px;align-items:center;flex-wrap:wrap;justify-content:center;
+    }
+    .strip-item { text-align:center; }
+    .strip-val { font-size:26px;font-weight:800;color:var(--green);line-height:1; }
+    .strip-lbl { font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:4px; }
+
+    /* ── SECTION BASE ── */
+    section { padding:100px 40px; }
+    .wrap { max-width:1100px;margin:0 auto; }
+    .section-tag { font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--green);opacity:.65;margin-bottom:16px; }
+    h2 { font-size:clamp(32px,5vw,58px);font-weight:800;line-height:1.1;margin-bottom:20px; }
+    .section-sub { font-size:17px;color:var(--muted);line-height:1.75;max-width:580px;margin-bottom:60px; }
+
+    /* ── DATA CATALOG ── */
+    .catalog-grid {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;
+    }
+    .catalog-card {
+      background:var(--card);border:1px solid var(--border);border-radius:12px;
+      padding:28px;transition:border-color .25s,transform .25s;
+    }
+    .catalog-card:hover { border-color:rgba(74,222,128,.3);transform:translateY(-3px); }
+    .catalog-icon { font-size:28px;margin-bottom:14px; }
+    .catalog-name { font-weight:700;font-size:15px;margin-bottom:8px; }
+    .catalog-desc { font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px; }
+    .catalog-tags { display:flex;flex-wrap:wrap;gap:6px; }
+    .catalog-tag {
+      font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;
+      padding:4px 10px;border-radius:20px;
+      background:rgba(74,222,128,.08);color:var(--green);border:1px solid rgba(74,222,128,.15);
+    }
+
+    /* ── RESEARCH OFFER ── */
+    #offer { background:linear-gradient(135deg,rgba(26,67,50,.35) 0%,rgba(2,6,6,0) 60%); }
+    .offer-box {
+      border:1px solid rgba(212,175,55,.25);border-radius:16px;
+      background:rgba(212,175,55,.04);padding:56px;
+      display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+    }
+    .offer-badge {
+      display:inline-block;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);
+      color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;
+      padding:5px 14px;border-radius:20px;margin-bottom:20px;
+    }
+    .offer-box h2 { font-size:clamp(26px,3.5vw,44px);margin-bottom:16px; }
+    .offer-box p { font-size:16px;color:var(--muted);line-height:1.75;max-width:500px; }
+    .offer-list { margin-top:24px;display:flex;flex-direction:column;gap:10px; }
+    .offer-list li { display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);list-style:none; }
+    .offer-list li::before { content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px; }
+    .offer-cta-box { text-align:center;min-width:220px; }
+    .offer-price { font-size:48px;font-weight:800;color:var(--green);line-height:1; }
+    .offer-price span { font-size:16px;font-weight:400;color:var(--muted); }
+    .offer-note { font-size:12px;color:var(--muted);margin:8px 0 24px; }
+    @media(max-width:768px) { .offer-box{grid-template-columns:1fr;padding:32px} .offer-cta-box{text-align:left} }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0; }
+    .step { padding:40px 32px;position:relative; }
+    .step:not(:last-child)::after {
+      content:'';position:absolute;top:52px;right:0;width:1px;height:60%;
+      background:linear-gradient(to bottom,transparent,var(--border),transparent);
+    }
+    .step-num {
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;
+      color:var(--green);opacity:.5;margin-bottom:12px;
+    }
+    .step-title { font-size:18px;font-weight:700;margin-bottom:10px; }
+    .step-desc { font-size:14px;color:var(--muted);line-height:1.7; }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;
+    }
+    .p-card {
+      background:var(--card);border:1px solid var(--border);border-radius:14px;
+      padding:36px;position:relative;transition:border-color .25s,transform .25s;
+    }
+    .p-card:hover { border-color:rgba(74,222,128,.3);transform:translateY(-4px); }
+    .p-card.featured {
+      border-color:rgba(74,222,128,.45);
+      background:rgba(74,222,128,.05);
+    }
+    .p-badge {
+      position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+      background:var(--green);color:#000;font-family:'JetBrains Mono',monospace;
+      font-size:9px;letter-spacing:2px;padding:5px 14px;border-radius:20px;font-weight:700;
+    }
+    .p-tier { font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:12px; }
+    .p-price { font-size:44px;font-weight:800;line-height:1;margin-bottom:4px; }
+    .p-price span { font-size:16px;font-weight:400;color:var(--muted); }
+    .p-annual { font-size:12px;color:var(--muted);margin-bottom:6px; }
+    .p-desc { font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border); }
+    .p-features { list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px; }
+    .p-features li { font-size:13px;display:flex;align-items:flex-start;gap:8px; }
+    .p-features li::before { content:'○';color:var(--green);font-size:10px;margin-top:3px;flex-shrink:0; }
+    .p-features li strong { color:var(--text);font-weight:600; }
+    .p-cta {
+      display:block;text-align:center;padding:13px;border-radius:8px;
+      font-size:13px;font-weight:700;letter-spacing:.06em;
+      border:1.5px solid rgba(255,255,255,.15);transition:border-color .2s,background .2s;
+    }
+    .p-cta:hover { border-color:var(--green);background:rgba(74,222,128,.06); }
+    .p-cta.primary { background:var(--green);color:#000;border-color:var(--green); }
+    .p-cta.primary:hover { background:#86efac; }
+
+    /* ── APPLICATION FORM ── */
+    #apply { background:rgba(74,222,128,.02); }
+    .form-grid {
+      display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;
+    }
+    .form-group { display:flex;flex-direction:column;gap:6px; }
+    .form-group label { font-size:11px;letter-spacing:1.5px;color:var(--muted);font-family:'JetBrains Mono',monospace; }
+    .form-group input, .form-group select, .form-group textarea {
+      background:rgba(255,255,255,.04);border:1px solid var(--border);
+      border-radius:8px;padding:13px 16px;color:var(--text);font:inherit;font-size:14px;
+      outline:none;transition:border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:rgba(74,222,128,.4); }
+    .form-group textarea { resize:vertical;min-height:100px; }
+    .form-group select option { background:#0d2b1c; }
+    .form-full { grid-column:1/-1; }
+    .form-note { font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6; }
+    .submit-btn {
+      margin-top:8px;background:var(--green);color:#000;border:none;border-radius:8px;
+      padding:16px 36px;font:inherit;font-size:15px;font-weight:700;letter-spacing:.04em;
+      transition:background .2s;width:100%;
+    }
+    .submit-btn:hover { background:#86efac; }
+    @media(max-width:640px) { .form-grid{grid-template-columns:1fr} }
+
+    /* ── FOOTER ── */
+    footer {
+      padding:48px 40px;border-top:1px solid var(--border);
+      display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;
+    }
+    .footer-logo { font-weight:800;letter-spacing:.05em; }
+    .footer-links { display:flex;gap:24px; }
+    .footer-links a { font-size:13px;color:var(--muted);transition:color .2s; }
+    .footer-links a:hover { color:var(--text); }
+    .footer-copy { font-size:12px;color:var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR + GRAIN -->
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo-icon-final.svg" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/#intelligence">Platform</a></li>
+    <li><a href="/iris.html" class="active">IRIS Data</a></li>
+    <li><a href="/#pricing">Pricing</a></li>
+    <li><a href="/#governance">Governance</a></li>
+  </ul>
+  <a class="nav-cta" href="#apply">Apply Now →</a>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">// IRIS DATA MARKETPLACE · RESEARCH ACCESS PROGRAMME · EST. 2026</div>
+    <h1>Environmental Data<br>Your Research <span>Deserves</span></h1>
+    <p class="hero-sub">
+      Verified, AI-processed environmental intelligence from East Africa and beyond.
+      Real-time feeds, provenance-certified on-chain, delivered to researchers who need
+      data they can actually cite.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#apply">Apply for Research Access →</a>
+      <a class="btn-outline" href="#catalog">See Data Catalogue ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LIVE STRIP ════════════════════════════════════════════════════════════ -->
+<div id="live-strip">
+  <div class="strip-inner">
+    <div class="strip-item">
+      <div class="strip-val" id="ls-co2">—</div>
+      <div class="strip-lbl">CO₂ CONCENTRATION (PPM)</div>
+    </div>
+    <div class="strip-item">
+      <div class="strip-val" id="ls-temp">—</div>
+      <div class="strip-lbl">TEMP ANOMALY VS 1850 BASELINE</div>
+    </div>
+    <div class="strip-item">
+      <div class="strip-val" id="ls-events">—</div>
+      <div class="strip-lbl">ACTIVE NASA EVENTS TRACKED</div>
+    </div>
+    <div class="strip-item">
+      <div class="strip-val" id="ls-agents">33</div>
+      <div class="strip-lbl">AUTONOMOUS AGENTS ONLINE</div>
+    </div>
+    <div class="strip-item">
+      <div class="strip-val" style="color:var(--terra)">LIVE</div>
+      <div class="strip-lbl">DATA STATUS</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DATA CATALOGUE ════════════════════════════════════════════════════════ -->
+<section id="catalog">
+  <div class="wrap">
+    <div class="section-tag">// IRIS DATA CATALOGUE</div>
+    <h2>What You Get Access To</h2>
+    <p class="section-sub">
+      Six primary data streams, updated continuously by GAIA and her sub-agents. Every data point
+      triple-verified, cryptographically anchored by NEXUS, and ready to cite in peer-reviewed work.
+    </p>
+    <div class="catalog-grid">
+      <div class="catalog-card">
+        <div class="catalog-icon">🌫️</div>
+        <div class="catalog-name">Kenya Air Quality Network</div>
+        <div class="catalog-desc">PM2.5, PM10, CO, NO₂, and O₃ across Nairobi, Mombasa, Kisumu, Nakuru, and Western Kenya. 15-minute resolution.</div>
+        <div class="catalog-tags">
+          <span class="catalog-tag">AQI</span><span class="catalog-tag">PM2.5</span>
+          <span class="catalog-tag">HOURLY</span><span class="catalog-tag">API</span>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <div class="catalog-icon">🌊</div>
+        <div class="catalog-name">Lake Victoria Basin</div>
+        <div class="catalog-desc">Water temperature, dissolved oxygen, turbidity, and algae bloom indicators at Kisumu Lakeshore station and 4 buoy sensors.</div>
+        <div class="catalog-tags">
+          <span class="catalog-tag">WATER QUALITY</span><span class="catalog-tag">BIODIVERSITY</span>
+          <span class="catalog-tag">DAILY</span>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <div class="catalog-icon">🌱</div>
+        <div class="catalog-name">Rift Valley Ecosystem</div>
+        <div class="catalog-desc">Soil moisture, NDVI vegetation health index, land-use change detection, and carbon flux estimates across the Great Rift Valley corridor.</div>
+        <div class="catalog-tags">
+          <span class="catalog-tag">NDVI</span><span class="catalog-tag">SOIL</span>
+          <span class="catalog-tag">CARBON</span><span class="catalog-tag">SENTINEL-2</span>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <div class="catalog-icon">⚡</div>
+        <div class="catalog-name">Cross-Border Stress Indicators</div>
+        <div class="catalog-desc">Environmental stress indices across Kenya, Uganda, Tanzania, and Ethiopia borders — directly relevant to climate-conflict research and displacement modelling.</div>
+        <div class="catalog-tags">
+          <span class="catalog-tag">CONFLICT</span><span class="catalog-tag">DISPLACEMENT</span>
+          <span class="catalog-tag">REGIONAL</span>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <div class="catalog-icon">🛰️</div>
+        <div class="catalog-name">NASA EONET Live Events</div>
+        <div class="catalog-desc">Real-time ingestion of NASA Earth Observatory events — wildfires, floods, severe storms, sea ice changes — global coverage, updated every 15 minutes.</div>
+        <div class="catalog-tags">
+          <span class="catalog-tag">NASA</span><span class="catalog-tag">WILDFIRE</span>
+          <span class="catalog-tag">FLOODS</span><span class="catalog-tag">GLOBAL</span>
+        </div>
+      </div>
+      <div class="catalog-card">
+        <div class="catalog-icon">🌡️</div>
+        <div class="catalog-name">Climate Baseline Series</div>
+        <div class="catalog-desc">CO₂ concentration, temperature anomaly, and sea level trend data updated weekly, cited against IPCC and NOAA pre-industrial baselines. Paris compliance dashboard included.</div>
+        <div class="catalog-tags">
+          <span class="catalog-tag">CO₂</span><span class="catalog-tag">IPCC</span>
+          <span class="catalog-tag">PARIS</span><span class="catalog-tag">WEEKLY</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RESEARCH OFFER ════════════════════════════════════════════════════════ -->
+<section id="offer">
+  <div class="wrap">
+    <div class="offer-box">
+      <div>
+        <div class="offer-badge">// RESEARCH ACCESS PROGRAMME</div>
+        <h2>Six Months Free.<br>No Conditions. Just Research.</h2>
+        <p>
+          Qualifying universities, research institutes, and registered NGOs receive six months
+          of complimentary Guardian access — the full data subscription, no credit card required.
+          We ask only one thing: if your findings cite IRIS data, share the citation with us
+          so we can improve coverage for the scientific community.
+        </p>
+        <ul class="offer-list">
+          <li>No payment required — academic email + institution name is enough to qualify</li>
+          <li>Full Guardian tier: 5 data feeds, weekly AI digest, CSV export, email support</li>
+          <li>Citation-ready data provenance — every data point blockchain-anchored</li>
+          <li>Upgrade to Sentinel at any time, discounted 30% for research institutions</li>
+          <li>Data sharing: share findings back, help improve East African environmental coverage</li>
+        </ul>
+      </div>
+      <div class="offer-cta-box">
+        <div class="offer-price">$0<span>/6 mo</span></div>
+        <div class="offer-note">Then $99/mo — cancel anytime</div>
+        <a class="btn-primary" href="#apply" style="display:block;text-align:center">Apply Now →</a>
+        <div style="font-size:11px;color:var(--muted);margin-top:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;">GUARDIAN PLAN · RESEARCH TIER</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══════════════════════════════════════════════════════════ -->
+<section id="how">
+  <div class="wrap">
+    <div class="section-tag">// HOW IT WORKS</div>
+    <h2>From Application to Data in 48 Hours</h2>
+    <p class="section-sub">No lengthy procurement. No committee. Fill out the form, verify your institution, get your credentials.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01 / APPLY</div>
+        <div class="step-title">Submit your research profile</div>
+        <div class="step-desc">Tell us your institution, research focus, and which datasets are relevant. Takes under 3 minutes.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02 / VERIFY</div>
+        <div class="step-title">We verify in 24–48 hours</div>
+        <div class="step-desc">AMARA's KYC agent confirms your institution. We contact you at your institutional email address.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03 / ACCESS</div>
+        <div class="step-title">Credentials delivered</div>
+        <div class="step-desc">Your API key and dashboard access arrive. Data starts flowing immediately. Your Guardian subscription begins.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04 / CITE</div>
+        <div class="step-title">Use it. Cite it. Share it.</div>
+        <div class="step-desc">Every data point has a blockchain provenance certificate — DOI-ready for peer-reviewed publication.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ═══════════════════════════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-tag">// PLANS</div>
+    <h2>Choose Your Scale</h2>
+    <p class="section-sub">Every plan funds planetary monitoring operations directly. Research institutions get 30% off Sentinel and Planetary tiers.</p>
+    <div class="pricing-grid">
+
+      <!-- GUARDIAN -->
+      <div class="p-card">
+        <div class="p-tier">GUARDIAN</div>
+        <div class="p-price">$99<span> / mo</span></div>
+        <div class="p-annual">$990 / year · 2 months free</div>
+        <div class="p-desc">For NGOs, researchers, and journalists who need trusted environmental data to inform their work.</div>
+        <ul class="p-features">
+          <li><strong>5 environmental data feeds</strong></li>
+          <li>Weekly AI-generated digest report</li>
+          <li>CO₂ and temperature alerts</li>
+          <li>CSV data export</li>
+          <li>Blockchain provenance certificate</li>
+          <li>Email support</li>
+        </ul>
+        <a href="#apply" class="p-cta" onclick="setTier('Guardian — $99/mo')">Apply for Free Trial →</a>
+      </div>
+
+      <!-- SENTINEL -->
+      <div class="p-card featured">
+        <div class="p-badge">RESEARCH FAVOURITE</div>
+        <div class="p-tier">SENTINEL</div>
+        <div class="p-price">$499<span> / mo</span></div>
+        <div class="p-annual">$4,990 / year · institutions: $3,493 (30% off)</div>
+        <div class="p-desc">For universities, conservation funds, and media organisations requiring real-time feeds and full API access.</div>
+        <ul class="p-features">
+          <li><strong>Unlimited data feeds</strong></li>
+          <li>Real-time dashboard access</li>
+          <li>Full REST API + webhooks</li>
+          <li>Custom alert thresholds</li>
+          <li>CSV + JSON + API export</li>
+          <li>On-chain provenance for every record</li>
+          <li>Priority email support</li>
+        </ul>
+        <a href="#apply" class="p-cta primary" onclick="setTier('Sentinel — $499/mo (research 30% off)')">Apply for Research Rate →</a>
+      </div>
+
+      <!-- PLANETARY -->
+      <div class="p-card">
+        <div class="p-tier">PLANETARY</div>
+        <div class="p-price">$1,499<span> / mo</span></div>
+        <div class="p-annual">$14,990 / year · institutions: $10,493 (30% off)</div>
+        <div class="p-desc">For governments, multilateral institutions, and funding bodies requiring bespoke intelligence and a dedicated analyst.</div>
+        <ul class="p-features">
+          <li><strong>Unlimited feeds + predictive models</strong></li>
+          <li>Custom intelligence reports on demand</li>
+          <li>White-label data option</li>
+          <li>All export formats</li>
+          <li>Dedicated environmental analyst</li>
+          <li>Priority API routing + 99.9% SLA</li>
+          <li>Joint publication option</li>
+        </ul>
+        <a href="#apply" class="p-cta" onclick="setTier('Planetary — $1,499/mo (research 30% off)')">Contact for Institutional Rate →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ APPLICATION FORM ══════════════════════════════════════════════════════ -->
+<section id="apply">
+  <div class="wrap" style="max-width:700px">
+    <div class="section-tag">// RESEARCH ACCESS APPLICATION</div>
+    <h2>Apply for Data Access</h2>
+    <p class="section-sub" style="margin-bottom:40px">Qualifying institutions receive 6 months free Guardian access. We respond within 48 hours.</p>
+
+    <form id="iris-form" onsubmit="submitIrisForm(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>YOUR NAME *</label>
+          <input type="text" id="f-name" required placeholder="Dr. Jane Kamau"/>
+        </div>
+        <div class="form-group">
+          <label>INSTITUTIONAL EMAIL *</label>
+          <input type="email" id="f-email" required placeholder="j.kamau@uonbi.ac.ke"/>
+        </div>
+        <div class="form-group">
+          <label>INSTITUTION / ORGANISATION *</label>
+          <input type="text" id="f-org" required placeholder="University of Nairobi — WMI"/>
+        </div>
+        <div class="form-group">
+          <label>INSTITUTION TYPE *</label>
+          <select id="f-type" required>
+            <option value="">Select...</option>
+            <option>University / Research Institute</option>
+            <option>Conservation NGO</option>
+            <option>Government / Policy Body</option>
+            <option>Multilateral Organisation (UN, World Bank, etc.)</option>
+            <option>Media / Journalism</option>
+            <option>Corporate ESG Team</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>PLAN INTERESTED IN</label>
+          <select id="f-plan">
+            <option>Guardian — $99/mo (6 months free for research)</option>
+            <option>Sentinel — $499/mo (30% research discount)</option>
+            <option>Planetary — $1,499/mo (institutional pricing)</option>
+            <option>Not sure — advise me</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>RESEARCH FOCUS / HOW WILL YOU USE THIS DATA? *</label>
+          <textarea id="f-use" required placeholder="e.g. We study climate-conflict dynamics in the Horn of Africa. We need cross-border environmental stress indicators and air quality data for Kenya, Uganda, and Ethiopia..."></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>DATASETS MOST RELEVANT TO YOU</label>
+          <input type="text" id="f-data" placeholder="e.g. Air quality, Lake Victoria, cross-border stress indicators"/>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn" id="f-submit">Submit Research Access Application →</button>
+      <div id="f-status" style="display:none;margin-top:16px;padding:14px;border-radius:8px;font-size:14px;"></div>
+      <p class="form-note">
+        By submitting you agree to our <a href="/terms.html" style="color:var(--green)">Terms of Service</a> and
+        <a href="/privacy.html" style="color:var(--green)">Privacy Policy</a>.
+        We will only contact you about your application and IRIS updates.
+        Data is processed in compliance with the Kenya Data Protection Act 2019.
+      </p>
+    </form>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-logo">MOTHER EARTH KENYA</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+    <a href="mailto:hello@motherearth.systems">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Mother Earth Kenya Limited · Nairobi SEZ · hello@motherearth.systems</div>
+</footer>
+
+<script>
+/* ── LIVE DATA ── */
+fetch('/live-data.json?t=' + Date.now()).then(r=>r.json()).then(d=>{
+  const e=d.environmental,p=d.platform;
+  document.getElementById('ls-co2').textContent   = e.co2_ppm + ' ppm';
+  document.getElementById('ls-temp').textContent  = '+' + e.temp_anomaly_c + '°C';
+  document.getElementById('ls-events').textContent = e.active_nasa_events;
+  document.getElementById('ls-agents').textContent = p.agents_online;
+}).catch(()=>{});
+
+/* ── PLAN PRE-SELECT ── */
+function setTier(val) {
+  const el = document.getElementById('f-plan');
+  if (!el) return;
+  for (let o of el.options) { if (o.text.includes(val.split('—')[0].trim())) { el.value = o.value; break; } }
+  setTimeout(() => document.getElementById('apply').scrollIntoView({behavior:'smooth'}), 50);
+}
+
+/* ── FORM SUBMIT → EMAIL ── */
+function submitIrisForm(e) {
+  e.preventDefault();
+  const btn    = document.getElementById('f-submit');
+  const status = document.getElementById('f-status');
+  const name   = document.getElementById('f-name').value;
+  const email  = document.getElementById('f-email').value;
+  const org    = document.getElementById('f-org').value;
+  const type   = document.getElementById('f-type').value;
+  const plan   = document.getElementById('f-plan').value;
+  const use    = document.getElementById('f-use').value;
+  const data   = document.getElementById('f-data').value;
+
+  const subject = encodeURIComponent(`IRIS Research Access Application — ${org}`);
+  const body    = encodeURIComponent(
+`IRIS RESEARCH ACCESS APPLICATION
+=================================
+Name:        ${name}
+Email:       ${email}
+Institution: ${org}
+Type:        ${type}
+Plan:        ${plan}
+
+Research Focus / Use Case:
+${use}
+
+Datasets of Interest:
+${data}
+
+Submitted: ${new Date().toISOString()}
+`);
+
+  btn.textContent = 'Opening email client…';
+  btn.style.opacity = '0.7';
+
+  window.location.href = `mailto:hello@motherearth.systems?subject=${subject}&body=${body}`;
+
+  setTimeout(() => {
+    status.style.display = 'block';
+    status.style.background = 'rgba(74,222,128,.08)';
+    status.style.border = '1px solid rgba(74,222,128,.25)';
+    status.style.color = '#4ade80';
+    status.textContent = '✓ Your email client opened with the application pre-filled. Send it and we\'ll respond within 48 hours.';
+    btn.textContent = 'Application Sent →';
+    btn.style.opacity = '1';
+  }, 1200);
+}
+
+/* ── LENIS SMOOTH SCROLL ── */
+if (typeof Lenis !== 'undefined') {
+  const lenis = new Lenis({ duration:0.55, smoothWheel:true, wheelMultiplier:2.0 });
+  if (typeof gsap !== 'undefined') {
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+}
+
+/* ── CUSTOM CURSOR ── */
+(function(){
+  const dot=document.getElementById('cd'), ring=document.getElementById('cr');
+  if(!dot||!ring||!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  let mx=-200,my=-200,rx=-200,ry=-200;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  document.querySelectorAll('a,button,.catalog-card,.p-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+  });
+  (function loop(){
+    rx+=(mx-rx)*.28; ry+=(my-ry)*.28;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* ── GSAP SCROLL REVEALS ── */
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  const ease = 'power3.out';
+
+  document.querySelectorAll('.section-tag').forEach(el =>
+    gsap.from(el, { opacity:0, x:-24, duration:0.6, ease, scrollTrigger:{trigger:el, start:'top 88%', once:true} }));
+
+  document.querySelectorAll('h2').forEach(el =>
+    gsap.from(el, { opacity:0, y:40, duration:0.8, ease, scrollTrigger:{trigger:el, start:'top 86%', once:true} }));
+
+  document.querySelectorAll('.section-sub').forEach(el =>
+    gsap.from(el, { opacity:0, y:24, duration:0.7, delay:0.12, ease, scrollTrigger:{trigger:el, start:'top 86%', once:true} }));
+
+  ScrollTrigger.batch('.catalog-card', { start:'top 90%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:44, scale:0.95, duration:0.65, ease:'back.out(1.3)', stagger:{ each:0.09 } }) });
+
+  ScrollTrigger.batch('.p-card', { start:'top 88%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:50, scale:0.93, duration:0.75, ease:'back.out(1.3)', stagger:{ each:0.11 } }) });
+
+  gsap.from('.step', { opacity:0, y:35, duration:0.65, ease, stagger:0.1,
+    scrollTrigger:{ trigger:'.steps', start:'top 88%', once:true } });
+
+  gsap.from('.offer-box', { opacity:0, y:40, duration:0.85, ease,
+    scrollTrigger:{ trigger:'.offer-box', start:'top 85%', once:true } });
+
+  gsap.from('.strip-item', { opacity:0, y:20, duration:0.55, ease, stagger:0.08,
+    scrollTrigger:{ trigger:'#live-strip', start:'top 90%', once:true } });
+
+  // Hero entrance
+  gsap.timeline({ delay:0.2, defaults:{ease} })
+    .from('.hero-tag',     { opacity:0, y:16, duration:0.6 })
+    .from('h1',            { opacity:0, y:48, duration:0.85 }, 0.2)
+    .from('.hero-sub',     { opacity:0, y:28, duration:0.7  }, 0.42)
+    .from('.hero-actions a',{ opacity:0, y:20, duration:0.55, stagger:0.12 }, 0.58);
+
+  // Magnetic buttons
+  document.querySelectorAll('.btn-primary,.btn-outline,.nav-cta,.p-cta,.submit-btn').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r=btn.getBoundingClientRect();
+      gsap.to(btn,{ x:(e.clientX-r.left-r.width/2)*.3, y:(e.clientY-r.top-r.height/2)*.3, duration:0.3, ease:'power2.out' });
+    });
+    btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:0.6,ease:'elastic.out(1,0.45)'}));
+  });
+}
+</script>
+</body>
+</html>
