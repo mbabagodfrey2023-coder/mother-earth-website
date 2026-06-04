@@ -3265,10 +3265,11 @@
   function initLenis() {
     if (typeof Lenis === 'undefined') return;
     const lenis = new Lenis({
-      duration:     1.25,
-      easing:       t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel:  true,
-      wheelMultiplier: 1.0,
+      duration:        0.85,
+      easing:          t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel:     true,
+      wheelMultiplier: 1.4,
+      touchMultiplier: 2.0,
     });
     // Wire Lenis into GSAP ticker so ScrollTrigger stays in sync
     if (typeof gsap !== 'undefined' && gsap.ticker) {
@@ -3294,7 +3295,7 @@
     }
 
     let mx = -200, my = -200, rx = -200, ry = -200;
-    const LERP = 0.10;
+    const LERP = 0.18;  // higher = snappier ring follow
 
     window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
     document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
