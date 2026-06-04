@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!--
+    Mother Earth Kenya — Globe Icon Mark
+    Square: favicon / app icon / emboss / stamp
+    r=50 — bold mass at all sizes down to 16px
+  -->
+  <defs>
+    <clipPath id="gc"><circle cx="60" cy="60" r="50"/></clipPath>
+    <filter id="kglow" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="4.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Globe body -->
+  <circle cx="60" cy="60" r="50" fill="#0C1A0E"/>
+
+  <g clip-path="url(#gc)">
+    <!-- Back Tropic of Cancer -->
+    <path d="M 14,41 A 46,14 0 0,0 106,41"
+          fill="none" stroke="#2D6A4F" stroke-width="0.8"
+          stroke-dasharray="2,5" stroke-opacity="0.3"/>
+
+    <!-- Back equatorial arc -->
+    <path d="M 10,60 A 50,15 0 0,0 110,60"
+          fill="none" stroke="#2D6A4F" stroke-width="1"
+          stroke-dasharray="2,4" stroke-opacity="0.45"/>
+
+    <!-- Back ~20°S latitude -->
+    <path d="M 13,77 A 47,14 0 0,0 107,77"
+          fill="none" stroke="#2D6A4F" stroke-width="0.8"
+          stroke-dasharray="2,5" stroke-opacity="0.3"/>
+
+    <!-- Prime meridian -->
+    <line x1="60" y1="10" x2="60" y2="110"
+          stroke="#52B788" stroke-width="1.8" stroke-linecap="round"/>
+
+    <!-- Front equatorial arc -->
+    <path d="M 10,60 A 50,15 0 0,1 110,60"
+          fill="none" stroke="#52B788" stroke-width="1.8"/>
+
+    <!-- Front Tropic of Cancer -->
+    <path d="M 14,41 A 46,14 0 0,1 106,41"
+          fill="none" stroke="#2D6A4F" stroke-width="0.8"
+          stroke-dasharray="2,5" stroke-opacity="0.3"/>
+
+    <!-- Front ~20°S latitude -->
+    <path d="M 13,77 A 47,14 0 0,1 107,77"
+          fill="none" stroke="#2D6A4F" stroke-width="0.8"
+          stroke-dasharray="2,5" stroke-opacity="0.3"/>
+
+    <!-- ── ACACIA TREE — Kenya position ── -->
+    <!-- Kenya root signal -->
+    <circle cx="90" cy="72" r="4.5" fill="#E07035" filter="url(#kglow)"/>
+    <circle cx="90" cy="72" r="2.2" fill="#F5A66A"/>
+    <!-- Trunk -->
+    <path d="M 87,72 Q 87,67 88.5,60 L 91.5,60 Q 93,67 93,72 Z" fill="#7A4A1E"/>
+    <!-- Branch left-low -->
+    <path d="M 88,67 Q 83,65 78,62" fill="none" stroke="#7A4A1E" stroke-width="1.8" stroke-linecap="round"/>
+    <!-- Branch right-low -->
+    <path d="M 92,67 Q 97,65 102,62" fill="none" stroke="#7A4A1E" stroke-width="1.8" stroke-linecap="round"/>
+    <!-- Branch left-high -->
+    <path d="M 89,63 Q 84,59 80,54" fill="none" stroke="#7A4A1E" stroke-width="1.4" stroke-linecap="round"/>
+    <!-- Branch right-high -->
+    <path d="M 91,63 Q 96,59 100,54" fill="none" stroke="#7A4A1E" stroke-width="1.4" stroke-linecap="round"/>
+    <!-- Branch top -->
+    <line x1="90" y1="61" x2="90" y2="50" stroke="#7A4A1E" stroke-width="1.4" stroke-linecap="round"/>
+    <!-- Leaf clusters — shadow -->
+    <ellipse cx="76" cy="61" rx="6" ry="4" transform="rotate(-30 76 61)" fill="#2D6A4F"/>
+    <ellipse cx="104" cy="61" rx="6" ry="4" transform="rotate(30 104 61)" fill="#2D6A4F"/>
+    <ellipse cx="79" cy="53" rx="5.5" ry="3.5" transform="rotate(-20 79 53)" fill="#2D6A4F"/>
+    <ellipse cx="101" cy="53" rx="5.5" ry="3.5" transform="rotate(20 101 53)" fill="#2D6A4F"/>
+    <ellipse cx="90" cy="48" rx="5.5" ry="3.5" fill="#2D6A4F"/>
+    <!-- Leaf clusters — bright -->
+    <ellipse cx="76" cy="60" rx="4.5" ry="3" transform="rotate(-30 76 60)" fill="#52B788"/>
+    <ellipse cx="104" cy="60" rx="4.5" ry="3" transform="rotate(30 104 60)" fill="#52B788"/>
+    <ellipse cx="79" cy="52" rx="4" ry="2.8" transform="rotate(-20 79 52)" fill="#52B788"/>
+    <ellipse cx="101" cy="52" rx="4" ry="2.8" transform="rotate(20 101 52)" fill="#52B788"/>
+    <ellipse cx="90" cy="47" rx="4" ry="2.8" fill="#52B788"/>
+  </g>
+
+  <!-- Globe ring — gold -->
+  <circle cx="60" cy="60" r="50"
+          fill="none" stroke="#D4AF37" stroke-width="2.6"/>
+
+  <!-- Accent ring — gold halo -->
+  <circle cx="60" cy="60" r="53"
+          fill="none" stroke="#D4AF37" stroke-width="0.8" stroke-opacity="0.5"/>
+
+</svg>

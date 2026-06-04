@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mother Earth Kenya — Brand Kit</title>
+  <style>
+    /* ═══════════════════════════════════════
+       BRAND TOKENS
+       ═══════════════════════════════════════ */
+    :root {
+      /* Primary palette */
+      --green-deep:    #0B1A0E;
+      --green-forest:  #1B4332;
+      --green-mid:     #2D6A4F;
+      --green-bright:  #00C896;
+      --green-light:   #52B788;
+
+      /* Earth palette */
+      --earth-dark:    #4A2C1A;
+      --earth-mid:     #D4763A;
+      --earth-light:   #F0C060;
+
+      /* Neutral */
+      --white-warm:    #E8EDE8;
+      --white-pure:    #FFFFFF;
+      --black-deep:    #060B09;
+
+      /* Typography */
+      --font-display:  'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      --font-body:     -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono:     'Courier New', Courier, monospace;
+
+      /* Spacing scale */
+      --s1: 4px; --s2: 8px; --s3: 16px; --s4: 24px;
+      --s5: 32px; --s6: 48px; --s7: 64px; --s8: 96px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--green-deep);
+      color: var(--white-warm);
+      font-family: var(--font-body);
+      line-height: 1.6;
+    }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: var(--s6) var(--s5); }
+    section { margin-bottom: var(--s8); }
+    h2 {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--earth-mid);
+      margin-bottom: var(--s5);
+      padding-bottom: var(--s2);
+      border-bottom: 1px solid #1B4332;
+    }
+    h3 {
+      font-family: var(--font-display);
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: var(--green-light);
+      margin-bottom: var(--s2);
+    }
+    p { color: #9ab8a0; font-size: 14px; max-width: 640px; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: var(--s8) 0 var(--s7);
+      border-bottom: 1px solid #1B4332;
+      margin-bottom: var(--s8);
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 240px; height: 4px;
+      background: var(--earth-mid);
+      border-radius: 0 0 4px 4px;
+    }
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--earth-mid);
+      margin-bottom: var(--s4);
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, #00C896 50%, #52B788 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--s3);
+    }
+    .hero-sub {
+      font-family: var(--font-display);
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: var(--earth-mid);
+      margin-bottom: var(--s6);
+    }
+    .hero-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--green-mid);
+      letter-spacing: 2px;
+    }
+
+    /* ── LOGO GRID ── */
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--s4);
+    }
+    .logo-card {
+      border-radius: 12px;
+      padding: var(--s5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s3);
+    }
+    .logo-card.dark  { background: #0B1A0E; border: 1px solid #1B4332; }
+    .logo-card.mid   { background: #1B4332; border: 1px solid #2D6A4F; }
+    .logo-card.light { background: var(--white-warm); border: 1px solid #ccd5cc; }
+    .logo-card.earth { background: #1e0e06; border: 1px solid #4A2C1A; }
+    .logo-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--green-mid);
+    }
+    .logo-card.light .logo-label { color: #4A7A5A; }
+
+    /* ── COLOR SYSTEM ── */
+    .color-row { display: flex; gap: var(--s2); flex-wrap: wrap; margin-bottom: var(--s4); }
+    .swatch {
+      flex: 1;
+      min-width: 120px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .swatch-color { height: 80px; }
+    .swatch-info {
+      padding: var(--s2) var(--s3);
+      background: #0f1f12;
+    }
+    .swatch-name {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--white-warm);
+      display: block;
+    }
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--green-mid);
+    }
+    .swatch-use {
+      font-size: 11px;
+      color: #6a8870;
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .type-sample {
+      background: #0f1f12;
+      border: 1px solid #1B4332;
+      border-radius: 12px;
+      padding: var(--s5);
+      margin-bottom: var(--s3);
+    }
+    .type-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--earth-mid);
+      letter-spacing: 2px;
+      margin-bottom: var(--s3);
+    }
+    .t-display  { font-family: var(--font-display); font-size: 48px; font-weight: 700; letter-spacing: -1px; color: var(--white-warm); line-height: 1.1; }
+    .t-heading  { font-family: var(--font-display); font-size: 28px; font-weight: 600; color: var(--white-warm); }
+    .t-sub      { font-family: var(--font-display); font-size: 14px; letter-spacing: 3px; color: var(--earth-mid); }
+    .t-body     { font-size: 16px; color: #9ab8a0; line-height: 1.7; }
+    .t-small    { font-size: 13px; color: #6a8870; }
+    .t-mono     { font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; color: var(--green-bright); }
+
+    /* ── UI COMPONENTS ── */
+    .comp-row { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: flex-start; margin-bottom: var(--s4); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: var(--s2);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary   { background: var(--green-bright); color: var(--green-deep); }
+    .btn-secondary { background: transparent; color: var(--green-bright); border: 1.5px solid var(--green-bright); }
+    .btn-earth     { background: var(--earth-mid); color: #fff; }
+    .btn-ghost     { background: rgba(0,200,150,0.08); color: var(--green-light); border: 1px solid rgba(0,200,150,0.2); }
+    .btn-sm { padding: 8px 16px; font-size: 12px; }
+    .btn-lg { padding: 16px 32px; font-size: 16px; }
+
+    /* Badges */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .badge-green  { background: rgba(0,200,150,0.12); color: var(--green-bright); border: 1px solid rgba(0,200,150,0.25); }
+    .badge-earth  { background: rgba(212,118,58,0.12); color: var(--earth-mid); border: 1px solid rgba(212,118,58,0.25); }
+    .badge-white  { background: rgba(232,237,232,0.08); color: var(--white-warm); border: 1px solid rgba(232,237,232,0.15); }
+
+    /* Cards */
+    .brand-card {
+      background: #0f1f12;
+      border: 1px solid #1B4332;
+      border-radius: 14px;
+      padding: var(--s4);
+      flex: 1;
+      min-width: 200px;
+    }
+    .brand-card .card-icon {
+      width: 40px; height: 40px;
+      background: rgba(0,200,150,0.1);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: var(--s3);
+    }
+    .brand-card h4 {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white-warm);
+      margin-bottom: var(--s1);
+    }
+    .brand-card p { font-size: 13px; color: #6a8870; max-width: none; }
+
+    /* Input */
+    .brand-input {
+      width: 100%;
+      background: #0f1f12;
+      border: 1.5px solid #2D6A4F;
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--white-warm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      max-width: 360px;
+    }
+    .brand-input:focus { border-color: var(--green-bright); }
+    .brand-input::placeholder { color: #3d5c44; }
+
+    /* Tag */
+    .tags { display: flex; flex-wrap: wrap; gap: var(--s2); }
+    .tag {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: var(--font-display);
+      letter-spacing: 0.5px;
+    }
+    .tag-outline { border: 1px solid #2D6A4F; color: var(--green-light); }
+    .tag-filled  { background: #1B4332; color: var(--green-light); }
+
+    /* Stat card */
+    .stat-row { display: flex; gap: var(--s3); flex-wrap: wrap; }
+    .stat-card {
+      flex: 1; min-width: 140px;
+      background: #0f1f12;
+      border: 1px solid #1B4332;
+      border-radius: 12px;
+      padding: var(--s4);
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--green-bright);
+      line-height: 1;
+      margin-bottom: var(--s1);
+    }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--green-mid);
+      text-transform: uppercase;
+    }
+    .stat-card.earth .stat-num { color: var(--earth-mid); }
+
+    /* Alert */
+    .alert {
+      display: flex; gap: var(--s3);
+      padding: var(--s3) var(--s4);
+      border-radius: 10px;
+      border-left: 3px solid;
+      margin-bottom: var(--s2);
+      font-size: 13px;
+    }
+    .alert-green { background: rgba(0,200,150,0.07); border-color: var(--green-bright); color: #9ab8a0; }
+    .alert-earth { background: rgba(212,118,58,0.07); border-color: var(--earth-mid);   color: #c4a090; }
+
+    /* ── SPACING ── */
+    .spacing-row { display: flex; align-items: flex-end; gap: var(--s4); flex-wrap: wrap; }
+    .spacing-block {
+      display: flex; flex-direction: column; align-items: center; gap: var(--s2);
+    }
+    .spacing-visual {
+      background: rgba(0,200,150,0.15);
+      border: 1px solid rgba(0,200,150,0.3);
+      width: 40px;
+    }
+    .spacing-val {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--green-bright);
+    }
+    .spacing-name {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--green-mid);
+    }
+
+    /* ── VOICE ── */
+    .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); }
+    .voice-card {
+      border-radius: 10px;
+      padding: var(--s4);
+    }
+    .voice-card.do    { background: rgba(0,200,150,0.07); border: 1px solid rgba(0,200,150,0.2); }
+    .voice-card.dont  { background: rgba(212,118,58,0.07); border: 1px solid rgba(212,118,58,0.2); }
+    .voice-heading {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      margin-bottom: var(--s3);
+    }
+    .voice-card.do   .voice-heading { color: var(--green-bright); }
+    .voice-card.dont .voice-heading { color: var(--earth-mid); }
+    .voice-card ul { padding-left: var(--s3); }
+    .voice-card li { font-size: 13px; color: #9ab8a0; margin-bottom: var(--s1); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #1B4332, transparent);
+      margin: var(--s6) 0;
+    }
+
+    /* ── FOOTER ── */
+    .kit-footer {
+      text-align: center;
+      padding: var(--s6) 0;
+      border-top: 1px solid #1B4332;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--green-mid);
+    }
+
+    /* ── ANIMATED LOGO EMBED ── */
+    .logo-preview-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s5);
+    }
+
+    /* ── ICON SYSTEM ── */
+    .icon-grid { display: flex; flex-wrap: wrap; gap: var(--s3); }
+    .icon-item {
+      display: flex; flex-direction: column; align-items: center; gap: var(--s2);
+      width: 72px;
+    }
+    .icon-box {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: #0f1f12;
+      border: 1px solid #1B4332;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .icon-name { font-family: var(--font-mono); font-size: 9px; color: var(--green-mid); text-align: center; letter-spacing: 1px; }
+
+    /* ── SOCIAL TEMPLATES ── */
+    .social-grid { display: flex; gap: var(--s4); flex-wrap: wrap; }
+    .social-preview {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #1B4332;
+    }
+
+    /* Profile circle */
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--green-forest);
+      border: 3px solid var(--green-bright);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Gradients used across layout */
+    .grad-text {
+      background: linear-gradient(135deg, #fff 0%, #00C896 60%, #D4763A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @media (max-width: 600px) {
+      .voice-grid { grid-template-columns: 1fr; }
+      .logo-grid  { grid-template-columns: 1fr; }
+      .hero-title { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════════
+       HERO
+       ══════════════════════════ -->
+  <div class="hero">
+    <div class="hero-label">// Brand Identity System · v1.0 · 2026</div>
+    <div class="hero-title">Mother Earth Kenya</div>
+    <div class="hero-sub">Planetary Intelligence System</div>
+    <div class="hero-meta">motherearth.systems &nbsp;·&nbsp; Nairobi, Kenya SEZ &nbsp;·&nbsp; VASP Act 2025</div>
+  </div>
+
+  <!-- ══════════════════════════
+       1. LOGO SYSTEM
+       ══════════════════════════ -->
+  <section>
+    <h2>01 — Logo System</h2>
+    <p style="margin-bottom: var(--s5)">The mark is a 7-node radial network with Mount Kenya's triple peak (Batian, Nelion, Point Lenana) at the centre. Use the dark version by default. Never stretch, recolour, or add effects.</p>
+
+    <div class="logo-grid">
+
+      <!-- Primary dark -->
+      <div class="logo-card dark">
+        <div class="logo-preview-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 310" width="140">
+            <defs>
+              <radialGradient id="cg1" cx="42%" cy="35%" r="70%">
+                <stop offset="0%" stop-color="#163824"/><stop offset="100%" stop-color="#050E08"/>
+              </radialGradient>
+              <clipPath id="cc1"><circle cx="120" cy="115" r="42"/></clipPath>
+              <linearGradient id="tg1" x1="30" y1="0" x2="210" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#fff"/><stop offset="45%" stop-color="#00C896"/><stop offset="100%" stop-color="#52B788"/>
+              </linearGradient>
+            </defs>
+            <rect width="240" height="310" fill="#0B1A0E" rx="14"/>
+            <circle cx="120" cy="115" r="80" fill="none" stroke="#2D6A4F" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="3,7"/>
+            <g stroke="#2D6A4F" stroke-width="1.6" stroke-linecap="round">
+              <line x1="120" y1="73" x2="120" y2="38"/><line x1="153" y1="89" x2="179" y2="67"/>
+              <line x1="161" y1="124" x2="196" y2="133"/><line x1="138" y1="153" x2="153" y2="185"/>
+              <line x1="102" y1="153" x2="87" y2="185"/><line x1="79" y1="124" x2="44" y2="133"/>
+              <line x1="87" y1="89" x2="60" y2="67"/>
+            </g>
+            <circle cx="120" cy="35"  r="5" fill="#D4763A"/>
+            <circle cx="179" cy="65"  r="5" fill="#00C896"/>
+            <circle cx="196" cy="133" r="5" fill="#00C896"/>
+            <circle cx="153" cy="185" r="5" fill="#00C896"/>
+            <circle cx="87"  cy="185" r="5" fill="#00C896"/>
+            <circle cx="44"  cy="133" r="5" fill="#00C896"/>
+            <circle cx="60"  cy="65"  r="5" fill="#00C896"/>
+            <circle cx="120" cy="115" r="42" fill="url(#cg1)"/>
+            <rect x="78" y="73" width="84" height="65" fill="#071209" clip-path="url(#cc1)" opacity="0.7"/>
+            <path d="M88,135 L103,91 L112,104 L121,83 L131,101 L140,90 L152,135 Z" fill="#4A2C1A" clip-path="url(#cc1)"/>
+            <g clip-path="url(#cc1)" fill="#EDE8DC">
+              <polygon points="116,96 121,83 127,96"/>
+              <polygon points="100,98 103,91 107,98"/>
+              <polygon points="136,97 140,90 144,97"/>
+            </g>
+            <circle cx="134" cy="116" r="4.5" fill="#D4763A" clip-path="url(#cc1)"/>
+            <circle cx="120" cy="115" r="42" fill="none" stroke="#00C896" stroke-width="2"/>
+            <circle cx="120" cy="115" r="44.5" fill="none" stroke="#D4763A" stroke-width="0.7" stroke-opacity="0.5"/>
+            <line x1="50" y1="228" x2="190" y2="228" stroke="#2D6A4F" stroke-opacity="0.4" stroke-width="0.8"/>
+            <text x="120" y="251" font-family="'Gill Sans','Gill Sans MT',Calibri,sans-serif" font-size="18" font-weight="600" letter-spacing="0.5" text-anchor="middle" fill="url(#tg1)">Mother Earth Kenya</text>
+            <text x="120" y="271" font-family="'Gill Sans','Gill Sans MT',Calibri,sans-serif" font-size="8.5" font-weight="300" letter-spacing="2.5" text-anchor="middle" fill="#D4763A">Planetary Intelligence System</text>
+            <text x="120" y="291" font-family="'Courier New',monospace" font-size="7" letter-spacing="1.5" text-anchor="middle" fill="#00C896" fill-opacity="0.6">motherearth.systems</text>
+          </svg>
+        </div>
+        <div class="logo-label">Primary · Dark Background</div>
+      </div>
+
+      <!-- Forest mid -->
+      <div class="logo-card mid">
+        <div class="logo-preview-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100">
+            <defs>
+              <clipPath id="cc2"><circle cx="60" cy="60" r="21"/></clipPath>
+              <radialGradient id="cg2" cx="42%" cy="35%" r="70%">
+                <stop offset="0%" stop-color="#0E2617"/><stop offset="100%" stop-color="#040A06"/>
+              </radialGradient>
+            </defs>
+            <circle cx="60" cy="60" r="39" fill="none" stroke="#52B788" stroke-width="0.7" stroke-opacity="0.4" stroke-dasharray="2,4"/>
+            <g stroke="#52B788" stroke-width="1.2" stroke-linecap="round">
+              <line x1="60" y1="39" x2="60" y2="22"/><line x1="76" y1="47" x2="89" y2="36"/>
+              <line x1="80" y1="62" x2="97" y2="66"/><line x1="69" y1="77" x2="76" y2="92"/>
+              <line x1="51" y1="77" x2="44" y2="92"/><line x1="40" y1="62" x2="23" y2="66"/>
+              <line x1="44" y1="47" x2="31" y2="36"/>
+            </g>
+            <circle cx="60" cy="20" r="3" fill="#D4763A"/>
+            <circle cx="90" cy="35" r="3" fill="#52B788"/><circle cx="98" cy="66" r="3" fill="#52B788"/>
+            <circle cx="77" cy="93" r="3" fill="#52B788"/><circle cx="43" cy="93" r="3" fill="#52B788"/>
+            <circle cx="22" cy="66" r="3" fill="#52B788"/><circle cx="30" cy="35" r="3" fill="#52B788"/>
+            <circle cx="60" cy="60" r="21" fill="url(#cg2)"/>
+            <rect x="39" y="39" width="42" height="22" fill="#071209" clip-path="url(#cc2)" opacity="0.7"/>
+            <path d="M44,68 L52,46 L56,52 L60,42 L65,51 L70,45 L76,68 Z" fill="#4A2C1A" clip-path="url(#cc2)"/>
+            <g fill="#EDE8DC" clip-path="url(#cc2)">
+              <polygon points="57,49 60,42 63,49"/>
+              <polygon points="50,49 52,46 54,49"/>
+              <polygon points="68,49 70,45 72,49"/>
+            </g>
+            <circle cx="67" cy="58" r="2.5" fill="#D4763A" clip-path="url(#cc2)"/>
+            <circle cx="60" cy="60" r="21" fill="none" stroke="#00C896" stroke-width="1.5"/>
+            <circle cx="60" cy="60" r="22.5" fill="none" stroke="#D4763A" stroke-width="0.6" stroke-opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="logo-label" style="color:#52B788">Icon Only · Forest Background</div>
+      </div>
+
+      <!-- Light / print -->
+      <div class="logo-card light">
+        <div class="logo-preview-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100">
+            <defs>
+              <clipPath id="cc3"><circle cx="60" cy="60" r="21"/></clipPath>
+            </defs>
+            <circle cx="60" cy="60" r="39" fill="none" stroke="#2D6A4F" stroke-width="0.7" stroke-opacity="0.35" stroke-dasharray="2,4"/>
+            <g stroke="#2D6A4F" stroke-width="1.2" stroke-linecap="round">
+              <line x1="60" y1="39" x2="60" y2="22"/><line x1="76" y1="47" x2="89" y2="36"/>
+              <line x1="80" y1="62" x2="97" y2="66"/><line x1="69" y1="77" x2="76" y2="92"/>
+              <line x1="51" y1="77" x2="44" y2="92"/><line x1="40" y1="62" x2="23" y2="66"/>
+              <line x1="44" y1="47" x2="31" y2="36"/>
+            </g>
+            <circle cx="60" cy="20" r="3" fill="#D4763A"/>
+            <circle cx="90" cy="35" r="3" fill="#2D6A4F"/><circle cx="98" cy="66" r="3" fill="#2D6A4F"/>
+            <circle cx="77" cy="93" r="3" fill="#2D6A4F"/><circle cx="43" cy="93" r="3" fill="#2D6A4F"/>
+            <circle cx="22" cy="66" r="3" fill="#2D6A4F"/><circle cx="30" cy="35" r="3" fill="#2D6A4F"/>
+            <circle cx="60" cy="60" r="21" fill="#1B4332"/>
+            <path d="M44,68 L52,46 L56,52 L60,42 L65,51 L70,45 L76,68 Z" fill="#4A2C1A" clip-path="url(#cc3)"/>
+            <g fill="#EDE8DC" clip-path="url(#cc3)">
+              <polygon points="57,49 60,42 63,49"/>
+              <polygon points="50,49 52,46 54,49"/>
+              <polygon points="68,49 70,45 72,49"/>
+            </g>
+            <circle cx="67" cy="58" r="2.5" fill="#D4763A" clip-path="url(#cc3)"/>
+            <circle cx="60" cy="60" r="21" fill="none" stroke="#1B4332" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="logo-label" style="color:#2D6A4F">Icon Only · Light / Print</div>
+      </div>
+
+      <!-- Monochrome -->
+      <div class="logo-card earth">
+        <div class="logo-preview-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100">
+            <defs><clipPath id="cc4"><circle cx="60" cy="60" r="21"/></clipPath></defs>
+            <circle cx="60" cy="60" r="39" fill="none" stroke="#4A2C1A" stroke-width="0.7" stroke-opacity="0.5" stroke-dasharray="2,4"/>
+            <g stroke="#4A2C1A" stroke-width="1.2" stroke-linecap="round">
+              <line x1="60" y1="39" x2="60" y2="22"/><line x1="76" y1="47" x2="89" y2="36"/>
+              <line x1="80" y1="62" x2="97" y2="66"/><line x1="69" y1="77" x2="76" y2="92"/>
+              <line x1="51" y1="77" x2="44" y2="92"/><line x1="40" y1="62" x2="23" y2="66"/>
+              <line x1="44" y1="47" x2="31" y2="36"/>
+            </g>
+            <circle cx="60" cy="20" r="3" fill="#D4763A"/>
+            <circle cx="90" cy="35" r="3" fill="#D4763A"/><circle cx="98" cy="66" r="3" fill="#D4763A"/>
+            <circle cx="77" cy="93" r="3" fill="#D4763A"/><circle cx="43" cy="93" r="3" fill="#D4763A"/>
+            <circle cx="22" cy="66" r="3" fill="#D4763A"/><circle cx="30" cy="35" r="3" fill="#D4763A"/>
+            <circle cx="60" cy="60" r="21" fill="#2A1208"/>
+            <path d="M44,68 L52,46 L56,52 L60,42 L65,51 L70,45 L76,68 Z" fill="#D4763A" clip-path="url(#cc4)"/>
+            <g fill="#F0E8D8" clip-path="url(#cc4)">
+              <polygon points="57,49 60,42 63,49"/>
+              <polygon points="50,49 52,46 54,49"/>
+              <polygon points="68,49 70,45 72,49"/>
+            </g>
+            <circle cx="60" cy="60" r="21" fill="none" stroke="#D4763A" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="logo-label" style="color:#D4763A">Earth Variant · Dark</div>
+      </div>
+
+    </div><!-- /logo-grid -->
+  </section>
+
+  <!-- ══════════════════════════
+       2. COLOR SYSTEM
+       ══════════════════════════ -->
+  <section>
+    <h2>02 — Color System</h2>
+    <p style="margin-bottom:var(--s5)">Two families: Forest (primary) and Earth (accent). All digital and print work uses these exact values. Never approximate.</p>
+
+    <h3>Forest — Primary</h3>
+    <div class="color-row">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#060B09"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Deep Night</span>
+          <span class="swatch-hex">#060B09</span>
+          <span class="swatch-use">Page background</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0B1A0E"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Forest Dark</span>
+          <span class="swatch-hex">#0B1A0E</span>
+          <span class="swatch-use">Card backgrounds</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1B4332"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Forest</span>
+          <span class="swatch-hex">#1B4332</span>
+          <span class="swatch-use">Borders, fills</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#2D6A4F"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Forest Mid</span>
+          <span class="swatch-hex">#2D6A4F</span>
+          <span class="swatch-use">Secondary text</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#52B788"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Forest Light</span>
+          <span class="swatch-hex">#52B788</span>
+          <span class="swatch-use">Resting nodes</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#00C896"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Electric</span>
+          <span class="swatch-hex">#00C896</span>
+          <span class="swatch-use">CTA, active states</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Earth — Accent</h3>
+    <div class="color-row">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#4A2C1A"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Soil Deep</span>
+          <span class="swatch-hex">#4A2C1A</span>
+          <span class="swatch-use">Mountain fill</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#D4763A"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Kenyan Soil</span>
+          <span class="swatch-hex">#D4763A</span>
+          <span class="swatch-use">Kenya dot, accents</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F0C060"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Amber</span>
+          <span class="swatch-hex">#F0C060</span>
+          <span class="swatch-use">Data packets, glow</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#EDE8DC"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Parchment</span>
+          <span class="swatch-hex">#EDE8DC</span>
+          <span class="swatch-use">Snow caps, body text</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════
+       3. TYPOGRAPHY
+       ══════════════════════════ -->
+  <section>
+    <h2>03 — Typography</h2>
+
+    <div class="type-sample">
+      <div class="type-meta">DISPLAY · GILL SANS · WEIGHT 700</div>
+      <div class="t-display">Mother Earth Kenya</div>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta">HEADING · GILL SANS · WEIGHT 600</div>
+      <div class="t-heading">Planetary Intelligence System</div>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta">LABEL / SUBHEADING · GILL SANS · WEIGHT 300 · TRACKED</div>
+      <div class="t-sub">Kenya &nbsp;·&nbsp; Nairobi &nbsp;·&nbsp; VASP 2025</div>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta">BODY · SYSTEM SANS · WEIGHT 400</div>
+      <div class="t-body">Mother Earth Kenya operates the world's first AI-powered environmental intelligence ecosystem — 33 agents across 7 branches, monitoring the planet in real time from Nairobi, Kenya.</div>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta">CAPTION · SYSTEM SANS · WEIGHT 400</div>
+      <div class="t-small">All data is collected under the Kenya Data Protection Act 2019. Governed by a Purpose Trust.</div>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta">MONO · COURIER NEW · ALL USES: CODE, DOMAINS, TAGS</div>
+      <div class="t-mono">// PLANETARY INTELLIGENCE SYSTEM · motherearth.systems</div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════
+       4. UI COMPONENTS
+       ══════════════════════════ -->
+  <section>
+    <h2>04 — UI Components</h2>
+
+    <h3>Buttons</h3>
+    <div class="comp-row" style="margin-bottom:var(--s4)">
+      <button class="btn btn-primary">Get Started</button>
+      <button class="btn btn-secondary">Learn More</button>
+      <button class="btn btn-earth">Access Data</button>
+      <button class="btn btn-ghost">View Report</button>
+    </div>
+    <div class="comp-row" style="margin-bottom:var(--s5)">
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-primary">Default</button>
+      <button class="btn btn-primary btn-lg">Large</button>
+    </div>
+
+    <h3>Badges</h3>
+    <div class="comp-row" style="margin-bottom:var(--s5)">
+      <span class="badge badge-green">Live</span>
+      <span class="badge badge-green">VASP Licensed</span>
+      <span class="badge badge-earth">Kenya SEZ</span>
+      <span class="badge badge-earth">Purpose Trust</span>
+      <span class="badge badge-white">33 Agents</span>
+      <span class="badge badge-white">7 Branches</span>
+    </div>
+
+    <h3>Cards</h3>
+    <div class="comp-row" style="margin-bottom:var(--s5)">
+      <div class="brand-card">
+        <div class="card-icon">🌍</div>
+        <h4>GAIA — Environmental Intel</h4>
+        <p>Real-time planetary monitoring via sensor networks and satellite data streams.</p>
+      </div>
+      <div class="brand-card">
+        <div class="card-icon">⚖️</div>
+        <h4>AMARA — Legal & Compliance</h4>
+        <p>VASP licence tracking, Golden Share governance, and regulatory filings.</p>
+      </div>
+      <div class="brand-card">
+        <div class="card-icon">📊</div>
+        <h4>IRIS — Data Marketplace</h4>
+        <p>Environmental datasets for researchers, ESG funds, and governments.</p>
+      </div>
+    </div>
+
+    <h3>Stats</h3>
+    <div class="stat-row" style="margin-bottom:var(--s5)">
+      <div class="stat-card"><div class="stat-num">33</div><div class="stat-label">AI Agents</div></div>
+      <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Branches</div></div>
+      <div class="stat-card earth"><div class="stat-num">24/7</div><div class="stat-label">Operations</div></div>
+      <div class="stat-card earth"><div class="stat-num">$1.2M</div><div class="stat-label">Year 2 Target</div></div>
+    </div>
+
+    <h3>Form Elements</h3>
+    <div class="comp-row" style="margin-bottom:var(--s5)">
+      <input class="brand-input" type="text" placeholder="Enter your organisation name"/>
+    </div>
+
+    <h3>Tags</h3>
+    <div class="tags" style="margin-bottom:var(--s5)">
+      <span class="tag tag-outline">Environmental AI</span>
+      <span class="tag tag-outline">VASP 2025</span>
+      <span class="tag tag-filled">Kenya SEZ</span>
+      <span class="tag tag-filled">Purpose Trust</span>
+      <span class="tag tag-outline">Blockchain</span>
+      <span class="tag tag-filled">Open Data</span>
+    </div>
+
+    <h3>Alerts</h3>
+    <div class="alert alert-green">✅ &nbsp;All 33 agents online — last heartbeat 2 seconds ago.</div>
+    <div class="alert alert-earth">⚠️ &nbsp;Company registration pending. Complete BRS filing at ecitizen.go.ke before VASP application.</div>
+  </section>
+
+  <!-- ══════════════════════════
+       5. SPACING SCALE
+       ══════════════════════════ -->
+  <section>
+    <h2>05 — Spacing Scale</h2>
+    <div class="spacing-row">
+      <div class="spacing-block"><div class="spacing-visual" style="height:4px"></div><div class="spacing-val">4px</div><div class="spacing-name">--s1</div></div>
+      <div class="spacing-block"><div class="spacing-visual" style="height:8px"></div><div class="spacing-val">8px</div><div class="spacing-name">--s2</div></div>
+      <div class="spacing-block"><div class="spacing-visual" style="height:16px"></div><div class="spacing-val">16px</div><div class="spacing-name">--s3</div></div>
+      <div class="spacing-block"><div class="spacing-visual" style="height:24px"></div><div class="spacing-val">24px</div><div class="spacing-name">--s4</div></div>
+      <div class="spacing-block"><div class="spacing-visual" style="height:32px"></div><div class="spacing-val">32px</div><div class="spacing-name">--s5</div></div>
+      <div class="spacing-block"><div class="spacing-visual" style="height:48px"></div><div class="spacing-val">48px</div><div class="spacing-name">--s6</div></div>
+      <div class="spacing-block"><div class="spacing-visual" style="height:64px"></div><div class="spacing-val">64px</div><div class="spacing-name">--s7</div></div>
+      <div class="spacing-block"><div class="spacing-visual" style="height:96px"></div><div class="spacing-val">96px</div><div class="spacing-name">--s8</div></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════
+       6. BRAND VOICE
+       ══════════════════════════ -->
+  <section>
+    <h2>06 — Brand Voice</h2>
+    <p style="margin-bottom:var(--s5)">Mother Earth Kenya speaks with the confidence of a regulated institution and the clarity of an engineer. Never preach. Never hype. State facts that command respect.</p>
+    <div class="voice-grid">
+      <div class="voice-card do">
+        <div class="voice-heading">✓ DO</div>
+        <ul>
+          <li>Rooted in Kenya. Monitoring the planet.</li>
+          <li>33 agents. One mission.</li>
+          <li>Environmental intelligence, governed by trust.</li>
+          <li>Precision over poetry.</li>
+          <li>State the fact, then the implication.</li>
+        </ul>
+      </div>
+      <div class="voice-card dont">
+        <div class="voice-heading">✗ DON'T</div>
+        <ul>
+          <li>Saving the planet one algorithm at a time! 🌱</li>
+          <li>We're passionate about sustainability.</li>
+          <li>Leveraging cutting-edge AI synergies.</li>
+          <li>Game-changing disruptive innovation.</li>
+          <li>Exclamation marks in professional copy.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════
+       7. ICON SYSTEM
+       ══════════════════════════ -->
+  <section>
+    <h2>07 — Icon System</h2>
+    <p style="margin-bottom:var(--s4)">Use standard emoji or a consistent line-icon library (Lucide, Phosphor). Each of the 7 branches has a fixed icon.</p>
+    <div class="icon-grid">
+      <div class="icon-item"><div class="icon-box">⚖️</div><div class="icon-name">AMARA</div></div>
+      <div class="icon-item"><div class="icon-box">⛓️</div><div class="icon-name">NEXUS</div></div>
+      <div class="icon-item"><div class="icon-box">🌍</div><div class="icon-name">GAIA</div></div>
+      <div class="icon-item"><div class="icon-box">🏦</div><div class="icon-name">ATLAS</div></div>
+      <div class="icon-item"><div class="icon-box">📊</div><div class="icon-name">IRIS</div></div>
+      <div class="icon-item"><div class="icon-box">🏛️</div><div class="icon-name">SAGE</div></div>
+      <div class="icon-item"><div class="icon-box">📡</div><div class="icon-name">ECHO</div></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════
+       8. USAGE RULES
+       ══════════════════════════ -->
+  <section>
+    <h2>08 — Usage Rules</h2>
+    <div class="comp-row">
+      <div class="brand-card">
+        <h4>Clear Space</h4>
+        <p>Maintain a minimum clear space equal to the height of the "M" in Mother Earth Kenya on all sides of the logo.</p>
+      </div>
+      <div class="brand-card">
+        <h4>Minimum Size</h4>
+        <p>Icon only: 16×16px minimum. Full lockup: 180px wide minimum. Never use below these sizes.</p>
+      </div>
+      <div class="brand-card">
+        <h4>Never Do This</h4>
+        <p>Do not stretch, rotate, recolour, add drop shadows, place on busy photography, or use unauthorised font substitutes.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="kit-footer">
+    Mother Earth Kenya — Brand Kit v1.0 · 30 May 2026 · motherearth.systems · Confidential
+  </div>
+
+</div>
+</body>
+</html>

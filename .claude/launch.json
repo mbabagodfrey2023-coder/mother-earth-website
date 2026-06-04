@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mother-earth-showcase",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "7433"],
+      "port": 7433
+    }
+  ]
+}

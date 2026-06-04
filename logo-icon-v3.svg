@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!--
+    Mother Earth Kenya — Icon v3 (favicon / app icon / emboss)
+    CEO Council spec: Mount Kenya triple-peak · No gradients · 16px safe
+  -->
+  <defs>
+    <clipPath id="cc"><circle cx="60" cy="60" r="21"/></clipPath>
+    <filter id="sg" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="0.8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Orbital ring -->
+  <circle cx="60" cy="60" r="39"
+          fill="none" stroke="#2D6A4F" stroke-width="0.7"
+          stroke-opacity="0.4" stroke-dasharray="2,4"/>
+
+  <!-- Branch lines -->
+  <g stroke="#2D6A4F" stroke-width="1.2" stroke-linecap="round">
+    <line x1="60" y1="39" x2="60" y2="22"/>
+    <line x1="76" y1="47" x2="89" y2="36"/>
+    <line x1="80" y1="62" x2="97" y2="66"/>
+    <line x1="69" y1="77" x2="76" y2="92"/>
+    <line x1="51" y1="77" x2="44" y2="92"/>
+    <line x1="40" y1="62" x2="23" y2="66"/>
+    <line x1="44" y1="47" x2="31" y2="36"/>
+  </g>
+
+  <!-- Terminal nodes -->
+  <circle cx="60" cy="20"  r="3" fill="#A65D38" filter="url(#sg)"/>
+  <circle cx="90" cy="35"  r="3" fill="#52B788"/>
+  <circle cx="98" cy="66"  r="3" fill="#52B788"/>
+  <circle cx="77" cy="93"  r="3" fill="#52B788"/>
+  <circle cx="43" cy="93"  r="3" fill="#52B788"/>
+  <circle cx="22" cy="66"  r="3" fill="#52B788"/>
+  <circle cx="30" cy="35"  r="3" fill="#52B788"/>
+
+  <!-- Circle fill -->
+  <circle cx="60" cy="60" r="21" fill="#1B4332"/>
+
+  <!-- Sky tint inside circle -->
+  <rect x="39" y="39" width="42" height="22" fill="#0D2818" clip-path="url(#cc)"/>
+
+  <!-- Mount Kenya silhouette -->
+  <path d="M44,68 L52,46 L56,52 L60,42 L65,51 L70,45 L76,68 Z"
+        fill="#A65D38" clip-path="url(#cc)"/>
+
+  <!-- Snow caps -->
+  <g fill="#E8DFD0" clip-path="url(#cc)">
+    <polygon points="57,49  60,42  63,49"/>
+    <polygon points="50,49  52,46  54,49"/>
+    <polygon points="68,49  70,45  72,49"/>
+  </g>
+
+  <!-- Circle stroke -->
+  <circle cx="60" cy="60" r="21" fill="none" stroke="#2D6A4F" stroke-width="1.5"/>
+  <circle cx="60" cy="60" r="22.5" fill="none" stroke="#A65D38" stroke-width="0.6" stroke-opacity="0.5"/>
+</svg>

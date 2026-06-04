@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 500 500">
+<defs>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;1,400&amp;display=swap');
+
+    .ring-outer { fill: none; stroke: #1A4A2E; stroke-width: 2.5; }
+    .ring-inner { fill: none; stroke: #1A4A2E; stroke-width: 1.2; }
+    .tree  { fill: #1A4A2E; }
+    .root  { fill: none; stroke: #1A4A2E; stroke-width: 2.2; stroke-linecap: round; }
+    .node  { fill: #C4A35A; }
+    .gold  { fill: #C4A35A; }
+    .co-name {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 13.5px;
+      fill: #1A4A2E;
+      letter-spacing: 3.5px;
+    }
+    .tagline {
+      font-family: 'Montserrat', Georgia, serif;
+      font-style: italic;
+      font-size: 11.5px;
+      fill: #C4A35A;
+      letter-spacing: 1px;
+    }
+
+    /* ── Subtle infinite header animations ── */
+    #canopy {
+      transform-origin: 250px 185px;
+      animation: breathe 5s ease-in-out infinite;
+    }
+    #n1 { animation: glow 2.8s ease-in-out 0.0s infinite; }
+    #n2 { animation: glow 2.8s ease-in-out 0.7s infinite; }
+    #n3 { animation: glow 2.8s ease-in-out 1.4s infinite; }
+    #n4 { animation: glow 2.8s ease-in-out 2.1s infinite; }
+
+    @keyframes breathe {
+      0%,100% { transform: scale(1);     opacity: 1;    }
+      50%     { transform: scale(1.04);  opacity: 0.88; }
+    }
+    @keyframes glow {
+      0%,100% { opacity: 1;    }
+      50%     { opacity: 0.2;  }
+    }
+  </style>
+
+  <!-- Bottom arc — text reads left-to-right outside the ring -->
+  <path id="nameArc" d="M 54,250 A 196,196 0 0,0 446,250" fill="none"/>
+</defs>
+
+<!-- Background -->
+<rect width="500" height="500" fill="white"/>
+
+<!-- Double ring -->
+<circle class="ring-outer" cx="250" cy="250" r="220"/>
+<circle class="ring-inner" cx="250" cy="250" r="212"/>
+
+<!-- Cardinal gold dots -->
+<circle class="gold" cx="250" cy="30"  r="3.5"/>
+<circle class="gold" cx="250" cy="470" r="3.5"/>
+<circle class="gold" cx="30"  cy="250" r="3.5"/>
+<circle class="gold" cx="470" cy="250" r="3.5"/>
+
+<!-- Tagline — straight, centered, upper inside area -->
+<text class="tagline" x="250" y="88" text-anchor="middle">
+  Planetary Intelligence. Kenyan Roots.
+</text>
+
+<!-- Gold separator below tagline -->
+<rect class="gold" x="178" y="100" width="144" height="1.2" rx="0.6"/>
+
+<!-- ── Baobab Tree ── -->
+<circle id="canopy" class="tree" cx="250" cy="185" r="52"/>
+<rect class="tree" x="244" y="237" width="12" height="32" rx="3"/>
+<rect class="tree" x="207" y="269" width="86" height="2.5" rx="1.25"/>
+
+<!-- Roots -->
+<path class="root" d="M 244,269 Q 220,283 202,306"/>
+<path class="root" d="M 246,269 Q 228,286 220,310"/>
+<path class="root" d="M 254,269 Q 272,286 280,310"/>
+<path class="root" d="M 256,269 Q 280,283 298,306"/>
+
+<!-- Data nodes -->
+<circle id="n1" class="node" cx="202" cy="306" r="6.5"/>
+<circle id="n2" class="node" cx="220" cy="310" r="6.5"/>
+<circle id="n3" class="node" cx="280" cy="310" r="6.5"/>
+<circle id="n4" class="node" cx="298" cy="306" r="6.5"/>
+
+<!-- Gold separator above company name arc -->
+<rect class="gold" x="178" y="382" width="144" height="1.2" rx="0.6"/>
+
+<!-- Company name — bottom arc, reads left-to-right -->
+<text class="co-name">
+  <textPath href="#nameArc" xlink:href="#nameArc"
+            startOffset="50%" text-anchor="middle">
+    MOTHER EARTH KENYA
+  </textPath>
+</text>
+
+</svg>

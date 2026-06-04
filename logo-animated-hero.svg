@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 500 500">
+<defs>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;1,400&amp;display=swap');
+
+    .ring-outer { fill: none; stroke: #1A4A2E; stroke-width: 2.5; }
+    .ring-inner { fill: none; stroke: #1A4A2E; stroke-width: 1.2; }
+    .tree  { fill: #1A4A2E; }
+    .root  { fill: none; stroke: #1A4A2E; stroke-width: 2.2; stroke-linecap: round; }
+    .node  { fill: #C4A35A; }
+    .gold  { fill: #C4A35A; }
+    .co-name {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 13.5px;
+      fill: #1A4A2E;
+      letter-spacing: 3.5px;
+    }
+    .tagline {
+      font-family: 'Montserrat', Georgia, serif;
+      font-style: italic;
+      font-size: 11.5px;
+      fill: #C4A35A;
+      letter-spacing: 1px;
+    }
+
+    /* ── HERO: dramatic reveal → gentle loop ── */
+
+    /* Rings draw themselves */
+    #ring-outer {
+      stroke-dasharray: 1383;
+      stroke-dashoffset: 1383;
+      animation: drawRing 1.8s cubic-bezier(.4,0,.2,1) forwards 0s;
+    }
+    #ring-inner {
+      stroke-dasharray: 1333;
+      stroke-dashoffset: 1333;
+      animation: drawRing 1.8s cubic-bezier(.4,0,.2,1) forwards 0.2s;
+    }
+    @keyframes drawRing { to { stroke-dashoffset: 0; } }
+
+    /* Cardinal dots */
+    .cardinal { opacity: 0; animation: fadeUp 0.5s ease forwards 1.6s; }
+
+    /* Tagline */
+    #tagline-text { opacity: 0; animation: fadeUp 0.7s ease forwards 1.8s; }
+    #tagline-line  { opacity: 0; animation: fadeUp 0.5s ease forwards 2.0s; }
+
+    /* Tree group */
+    #tree-group {
+      opacity: 0;
+      transform-origin: 250px 185px;
+      animation: treeIn 0.9s cubic-bezier(.34,1.56,.64,1) forwards 2.0s;
+    }
+    @keyframes treeIn {
+      from { opacity: 0; transform: scale(0.75); }
+      to   { opacity: 1; transform: scale(1);    }
+    }
+
+    /* Baobab breathe — starts after reveal */
+    #canopy {
+      transform-origin: 250px 185px;
+      animation: treeIn 0.9s cubic-bezier(.34,1.56,.64,1) forwards 2.0s,
+                 breathe 5s ease-in-out 3s infinite;
+    }
+    @keyframes breathe {
+      0%,100% { transform: scale(1);    opacity: 1;    }
+      50%     { transform: scale(1.04); opacity: 0.88; }
+    }
+
+    /* Nodes: appear then pulse */
+    #n1 { opacity:0; animation: nodeIn .4s ease forwards 2.6s, glow 2.8s ease-in-out 3.0s  infinite; }
+    #n2 { opacity:0; animation: nodeIn .4s ease forwards 2.9s, glow 2.8s ease-in-out 3.3s  infinite; }
+    #n3 { opacity:0; animation: nodeIn .4s ease forwards 3.2s, glow 2.8s ease-in-out 3.6s  infinite; }
+    #n4 { opacity:0; animation: nodeIn .4s ease forwards 3.5s, glow 2.8s ease-in-out 3.9s  infinite; }
+    @keyframes nodeIn {
+      from { opacity:0; transform:scale(0.3); }
+      to   { opacity:1; transform:scale(1);   }
+    }
+    @keyframes glow {
+      0%,100% { opacity:1;   }
+      50%     { opacity:0.2; }
+    }
+
+    /* Bottom separator + company name */
+    #sep-line  { opacity:0; animation: fadeUp .5s ease forwards 3.2s; }
+    #co-name   { opacity:0; animation: fadeUp .8s ease forwards 3.4s; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(6px); }
+      to   { opacity:1; transform:translateY(0);   }
+    }
+  </style>
+
+  <path id="nameArc" d="M 54,250 A 196,196 0 0,0 446,250" fill="none"/>
+</defs>
+
+<!-- Background -->
+<rect width="500" height="500" fill="white"/>
+
+<!-- Double ring (draw-on animation) -->
+<circle id="ring-outer" class="ring-outer" cx="250" cy="250" r="220"/>
+<circle id="ring-inner" class="ring-inner" cx="250" cy="250" r="212"/>
+
+<!-- Cardinal dots -->
+<circle class="gold cardinal" cx="250" cy="30"  r="3.5"/>
+<circle class="gold cardinal" cx="250" cy="470" r="3.5"/>
+<circle class="gold cardinal" cx="30"  cy="250" r="3.5"/>
+<circle class="gold cardinal" cx="470" cy="250" r="3.5"/>
+
+<!-- Tagline -->
+<text id="tagline-text" class="tagline" x="250" y="88" text-anchor="middle">
+  Planetary Intelligence. Kenyan Roots.
+</text>
+<rect id="tagline-line" class="gold" x="178" y="100" width="144" height="1.2" rx="0.6"/>
+
+<!-- ── Baobab Tree (scale-in group) ── -->
+<g id="tree-group">
+  <rect class="tree" x="244" y="237" width="12" height="32" rx="3"/>
+  <rect class="tree" x="207" y="269" width="86" height="2.5" rx="1.25"/>
+  <path class="root" d="M 244,269 Q 220,283 202,306"/>
+  <path class="root" d="M 246,269 Q 228,286 220,310"/>
+  <path class="root" d="M 254,269 Q 272,286 280,310"/>
+  <path class="root" d="M 256,269 Q 280,283 298,306"/>
+</g>
+
+<!-- Canopy animated separately for breathe -->
+<circle id="canopy" class="tree" cx="250" cy="185" r="52"/>
+
+<!-- Data nodes (appear sequentially) -->
+<circle id="n1" class="node" cx="202" cy="306" r="6.5"/>
+<circle id="n2" class="node" cx="220" cy="310" r="6.5"/>
+<circle id="n3" class="node" cx="280" cy="310" r="6.5"/>
+<circle id="n4" class="node" cx="298" cy="306" r="6.5"/>
+
+<!-- Bottom separator -->
+<rect id="sep-line" class="gold" x="178" y="382" width="144" height="1.2" rx="0.6"/>
+
+<!-- Company name arc -->
+<text id="co-name" class="co-name">
+  <textPath href="#nameArc" xlink:href="#nameArc"
+            startOffset="50%" text-anchor="middle">
+    MOTHER EARTH KENYA
+  </textPath>
+</text>
+
+</svg>
