@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mission Control — Mother Earth Kenya · Live AI Operations</title>
+  <meta name="description" content="The world's only public AI mission control. Watch 33 autonomous agents defend the planet in real time — live decisions, council deliberations, and verified environmental intelligence."/>
+  <meta property="og:title" content="Mission Control — Mother Earth Kenya"/>
+  <meta property="og:description" content="Live AI operations dashboard. 33 agents. 7 branches. One planetary mission."/>
+  <meta property="og:image" content="https://motherearth.systems/og.svg"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/svg+xml" href="logo-final.svg"/>
+  <link rel="canonical" href="https://motherearth.systems/mission-control"/>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    :root {
+      --bg:     #020606;
+      --bg2:    #050d0a;
+      --green:  #4ade80;
+      --green-d:#22c55e;
+      --dark-g: #1a4332;
+      --gold:   #D4AF37;
+      --terra:  #D4763A;
+      --amber:  #f59e0b;
+      --red:    #ef4444;
+      --blue:   #60a5fa;
+      --indigo: #818cf8;
+      --text:   #F2F0EB;
+      --muted:  rgba(242,240,235,.45);
+      --dim:    rgba(242,240,235,.25);
+      --border: rgba(255,255,255,.07);
+      --card:   rgba(255,255,255,.03);
+      --card-h: rgba(255,255,255,.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.55;
+      overflow-x: hidden;
+    }
+    @media (hover: hover) and (pointer: fine) { *, *::before, *::after { cursor: none !important; } }
+    a { color: inherit; text-decoration: none; }
+    img, canvas { display: block; max-width: 100%; }
+
+    /* ── CURSOR + GRAIN (shared aesthetic with main site) ── */
+    #cd { position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s; }
+    #cr { position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s; }
+    body.ch #cd { width:10px;height:10px;background:var(--gold); }
+    body.ch #cr { width:56px;height:56px;border-color:rgba(212,175,55,.65); }
+    @media(hover:none){#cd,#cr{display:none}}
+
+    #grain { position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite; }
+    @keyframes grainShift { 0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)} }
+
+    /* ── NAV ── */
+    nav.topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 32px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(2,6,6,.86); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.05em;font-size:14px; }
+    .nav-logo img { width:32px;height:32px; }
+    .nav-mid { display:flex;gap:28px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em; }
+    .nav-mid a { color:var(--muted);transition:color .2s; }
+    .nav-mid a:hover, .nav-mid a.active { color:var(--green); }
+    .nav-right { display:flex;align-items:center;gap:18px; }
+    .nav-status {
+      display:inline-flex;align-items:center;gap:8px;
+      font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--green);
+    }
+    .nav-status::before { content:'';width:7px;height:7px;border-radius:50%;background:var(--green);
+      box-shadow:0 0 8px var(--green);animation:pulseDot 2s ease-in-out infinite; }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)} }
+    .nav-cta {
+      background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;
+      padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;
+      transition:border-color .2s,background .2s;
+    }
+    .nav-cta:hover { border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04); }
+    @media(max-width:900px){ .nav-mid{display:none} .nav-right .nav-status{display:none} }
+
+    /* ── HEADER STRIP — live data ticker style ── */
+    #ticker-strip {
+      position:fixed; top:60px; left:0; right:0; z-index:999;
+      height:36px; background:rgba(5,12,6,.94); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; overflow:hidden;
+    }
+    #ticker-strip::before, #ticker-strip::after {
+      content:''; position:absolute; top:0; bottom:0; width:60px; z-index:2; pointer-events:none;
+    }
+    #ticker-strip::before { left:0; background:linear-gradient(to right, rgba(5,12,6,1), transparent); }
+    #ticker-strip::after  { right:0; background:linear-gradient(to left,  rgba(5,12,6,1), transparent); }
+    .ticker-track {
+      display:flex; gap:48px; padding:0 24px; white-space:nowrap;
+      animation: tickerScroll 60s linear infinite;
+    }
+    .ticker-item {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em;
+      color:var(--muted);
+    }
+    .ticker-item strong { color:var(--text); font-weight:700; }
+    .ticker-item .tick-dot {
+      width:6px; height:6px; border-radius:50%; background:var(--green);
+      box-shadow:0 0 6px var(--green);
+    }
+    @keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── PAGE LAYOUT ── */
+    main { padding-top:120px; }
+
+    .row { padding: 36px 32px; }
+    .row-head {
+      display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px;
+      margin-bottom:24px;
+    }
+    .row-tag {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.25em;
+      color:var(--green); opacity:.6;
+    }
+    .row-title { font-size:clamp(22px,3vw,32px); font-weight:800; letter-spacing:-.01em; }
+    .row-meta {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em; color:var(--muted);
+      display:flex; gap:18px;
+    }
+    .row-meta span::before { content:'• '; color:var(--green); }
+
+    /* ── HERO ROW — globe + status panels ── */
+    #hero {
+      padding: 28px 32px 56px;
+      display:grid; grid-template-columns: 1.2fr 1fr; gap:24px;
+      min-height: 580px;
+    }
+    @media(max-width:1100px) { #hero { grid-template-columns: 1fr; } }
+
+    #hero-left {
+      position:relative; background:radial-gradient(ellipse at 50% 40%, rgba(74,222,128,.06) 0%, transparent 60%);
+      border:1px solid var(--border); border-radius:18px; overflow:hidden;
+      min-height:560px;
+    }
+    #hero-tag-block {
+      position:absolute; top:24px; left:24px; right:24px; z-index:5;
+    }
+    .hero-stage-label {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.3em;
+      color:var(--green); opacity:.7; margin-bottom:8px;
+    }
+    .hero-stage-h {
+      font-size:clamp(28px,3.5vw,46px); font-weight:800; line-height:1.04; letter-spacing:-.01em;
+      margin-bottom:12px;
+    }
+    .hero-stage-h span { color:var(--green); }
+    .hero-stage-sub { font-size:13px; color:var(--muted); max-width:420px; line-height:1.65; }
+    #hero-globe { position:absolute; inset:0; }
+    #hero-overlay {
+      position:absolute; bottom:0; left:0; right:0; padding:20px 24px; z-index:4;
+      display:flex; gap:20px; align-items:flex-end; flex-wrap:wrap;
+      background:linear-gradient(to top, rgba(2,6,6,.85), transparent);
+    }
+    .hero-stat { min-width:90px; }
+    .hero-stat-v { font-size:22px; font-weight:800; color:var(--green); line-height:1; }
+    .hero-stat-l { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.2em; color:var(--muted); margin-top:4px; }
+
+    #hero-right {
+      display:flex; flex-direction:column; gap:18px;
+    }
+    .hr-card {
+      background:var(--card); border:1px solid var(--border); border-radius:14px;
+      padding:22px; flex:1; min-height:130px;
+      display:flex; flex-direction:column;
+    }
+    .hr-card-tag {
+      font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.25em;
+      color:var(--green); opacity:.55; margin-bottom:8px;
+    }
+    .hr-card-title { font-size:18px; font-weight:700; letter-spacing:-.005em; margin-bottom:6px; }
+    .hr-card-body { font-size:13px; color:var(--muted); line-height:1.65; }
+    .hr-card .cta-row { margin-top:auto; display:flex; gap:10px; padding-top:14px; }
+    .pill {
+      display:inline-block; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.18em;
+      padding:5px 11px; border-radius:20px; border:1px solid; background:transparent;
+      transition:background .2s,border-color .2s;
+    }
+    .pill-green { color:var(--green); border-color:rgba(74,222,128,.3); }
+    .pill-green:hover { background:rgba(74,222,128,.06); }
+    .pill-gold { color:var(--gold); border-color:rgba(212,175,55,.3); }
+    .pill-gold:hover { background:rgba(212,175,55,.06); }
+
+    /* ── LIVE DECISION FEED ── */
+    #feed-row { background:linear-gradient(to bottom, transparent, rgba(13,43,28,.18), transparent); }
+    .feed-grid { display:grid; grid-template-columns: 1fr 380px; gap:24px; }
+    @media(max-width:1000px) { .feed-grid { grid-template-columns: 1fr; } }
+
+    #feed-list {
+      max-height: 520px; overflow:hidden;
+      border:1px solid var(--border); border-radius:14px;
+      background:var(--card);
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    }
+    .feed-inner { padding:12px; }
+    .feed-entry {
+      display:grid; grid-template-columns: 80px 56px 1fr auto; gap:14px; align-items:flex-start;
+      padding:14px; border-radius:10px; border-bottom:1px solid var(--border);
+      transition:background .2s;
+    }
+    .feed-entry:hover { background:rgba(255,255,255,.025); }
+    .feed-entry:last-child { border-bottom:none; }
+    .feed-time {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em;
+      color:var(--dim);
+    }
+    .feed-badge {
+      display:inline-flex; align-items:center; justify-content:center;
+      font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.15em; font-weight:700;
+      padding:4px 8px; border-radius:5px; border:1px solid;
+    }
+    .b-gaia    { color:var(--green);  border-color:rgba(74,222,128,.3);  background:rgba(74,222,128,.06); }
+    .b-amara   { color:var(--blue);   border-color:rgba(96,165,250,.3); background:rgba(96,165,250,.06); }
+    .b-nexus   { color:var(--indigo); border-color:rgba(129,140,248,.3);background:rgba(129,140,248,.06); }
+    .b-atlas   { color:var(--amber);  border-color:rgba(245,158,11,.3); background:rgba(245,158,11,.06); }
+    .b-iris    { color:var(--terra);  border-color:rgba(212,118,58,.3); background:rgba(212,118,58,.06); }
+    .b-sage    { color:var(--gold);   border-color:rgba(212,175,55,.3); background:rgba(212,175,55,.06); }
+    .b-echo    { color:var(--text);   border-color:rgba(242,240,235,.18);background:rgba(242,240,235,.04); }
+    .b-ceo     { color:var(--gold);   border-color:rgba(212,175,55,.45);background:rgba(212,175,55,.10); }
+    .feed-text { font-size:13px; line-height:1.55; color:var(--text); }
+    .feed-text .agent-mention { color:var(--green); font-weight:600; }
+    .feed-status {
+      font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.15em;
+      padding:3px 8px; border-radius:4px; align-self:center;
+    }
+    .s-ok    { color:var(--green); background:rgba(74,222,128,.08); }
+    .s-warn  { color:var(--amber); background:rgba(245,158,11,.10); }
+    .s-info  { color:var(--blue);  background:rgba(96,165,250,.08); }
+    .s-crit  { color:var(--red);   background:rgba(239,68,68,.10); }
+
+    #feed-sidebar { display:flex; flex-direction:column; gap:16px; }
+    .ss-card {
+      background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px;
+    }
+    .ss-card-tag {
+      font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.25em;
+      color:var(--green); opacity:.6; margin-bottom:10px;
+    }
+    .ss-card-h { font-size:14px; font-weight:700; margin-bottom:10px; }
+    .ss-metric { display:flex; justify-content:space-between; padding:7px 0; font-size:12px; }
+    .ss-metric span:first-child { color:var(--muted); }
+    .ss-metric span:last-child { color:var(--text); font-weight:600; font-family:'JetBrains Mono',monospace; letter-spacing:.05em; }
+    .ss-bar { height:3px; background:rgba(255,255,255,.06); border-radius:2px; overflow:hidden; margin-top:6px; }
+    .ss-bar > div { height:100%; background:var(--green); border-radius:2px; transition:width .8s ease; }
+
+    /* ── BRANCH HEALTH MATRIX (7 cards) ── */
+    .branch-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px;
+    }
+    .branch-card {
+      background:var(--card); border:1px solid var(--border); border-radius:14px;
+      padding:22px; position:relative; overflow:hidden;
+      transition:border-color .25s, transform .25s;
+    }
+    .branch-card:hover { border-color:rgba(74,222,128,.3); transform:translateY(-3px); }
+    .branch-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(to right, var(--accent, var(--green)), transparent);
+    }
+    .branch-card.c-amara { --accent: var(--blue); }
+    .branch-card.c-nexus { --accent: var(--indigo); }
+    .branch-card.c-gaia  { --accent: var(--green); }
+    .branch-card.c-atlas { --accent: var(--amber); }
+    .branch-card.c-iris  { --accent: var(--terra); }
+    .branch-card.c-sage  { --accent: var(--gold); }
+    .branch-card.c-echo  { --accent: #c084fc; }
+    .b-card-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; }
+    .b-card-id {
+      font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.2em; color:var(--muted);
+      margin-bottom:4px;
+    }
+    .b-card-name { font-size:20px; font-weight:800; letter-spacing:.04em; }
+    .b-card-role { font-size:11px; color:var(--muted); margin-top:2px; }
+    .b-status-dot {
+      width:9px; height:9px; border-radius:50%; background:var(--green);
+      box-shadow:0 0 8px var(--green); animation:pulseDot 2s ease-in-out infinite;
+    }
+    .b-card-task {
+      font-size:12px; color:var(--muted); margin:14px 0 12px;
+      padding:10px 12px; background:rgba(255,255,255,.025); border-radius:8px;
+      border-left:2px solid var(--accent, var(--green));
+    }
+    .b-card-task strong { color:var(--text); display:block; margin-bottom:4px; font-size:10px;
+      letter-spacing:.18em; font-family:'JetBrains Mono',monospace; }
+    .b-card-foot {
+      display:flex; justify-content:space-between; align-items:center;
+      padding-top:12px; border-top:1px solid var(--border);
+      font-size:11px; color:var(--muted);
+    }
+    .b-card-foot .sub-count { color:var(--text); font-weight:700; }
+
+    /* ── COUNCIL CHAMBER ── */
+    #council {
+      background: linear-gradient(180deg, rgba(212,175,55,.04) 0%, transparent 100%);
+      border-top: 1px solid rgba(212,175,55,.15);
+      border-bottom: 1px solid rgba(212,175,55,.15);
+    }
+    .council-head .row-tag { color:var(--gold); opacity:.8; }
+    .council-intro { font-size:15px; color:var(--muted); line-height:1.7; max-width:680px; margin-bottom:24px; }
+    .council-form {
+      display:grid; grid-template-columns: 1fr auto; gap:12px; max-width:840px; margin-bottom:30px;
+    }
+    .council-form input {
+      background:rgba(212,175,55,.05); border:1px solid rgba(212,175,55,.2);
+      color:var(--text); font:inherit; font-size:14px;
+      padding:14px 18px; border-radius:10px; outline:none;
+      transition:border-color .2s, background .2s;
+    }
+    .council-form input::placeholder { color:rgba(212,175,55,.4); }
+    .council-form input:focus { border-color:var(--gold); background:rgba(212,175,55,.08); }
+    .council-submit {
+      background:var(--gold); color:#000; border:none; border-radius:10px;
+      padding:14px 28px; font:inherit; font-size:14px; font-weight:700; letter-spacing:.04em;
+      transition:background .2s;
+    }
+    .council-submit:hover { background:#e8c860; }
+    .council-submit:disabled { opacity:.5; }
+    .council-suggestions { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; max-width:840px; }
+    .council-suggest {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.08em;
+      padding:7px 12px; border-radius:6px;
+      background:rgba(212,175,55,.04); color:rgba(212,175,55,.7);
+      border:1px solid rgba(212,175,55,.15);
+      transition:background .2s, border-color .2s, color .2s;
+    }
+    .council-suggest:hover { background:rgba(212,175,55,.1); border-color:rgba(212,175,55,.35); color:var(--gold); }
+
+    #council-status {
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.15em;
+      color:var(--gold); margin-bottom:16px; display:none;
+    }
+    #council-status .dot {
+      display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--gold);
+      margin-right:8px; animation:pulseDot 1.4s ease-in-out infinite;
+    }
+    .council-output { display:none; }
+    .council-advisors { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-bottom:20px; }
+    .council-card {
+      background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;
+      position:relative; overflow:hidden;
+    }
+    .council-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--gold);
+    }
+    .council-card.c-vector::before  { background:var(--red); }
+    .council-card.c-forge::before   { background:var(--amber); }
+    .council-card.c-horizon::before { background:var(--blue); }
+    .council-card.c-contrary::before{ background:var(--terra); }
+    .council-name {
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.3em; font-weight:700;
+      color:var(--gold); margin-bottom:4px;
+    }
+    .council-card.c-vector .council-name  { color:var(--red); }
+    .council-card.c-forge .council-name   { color:var(--amber); }
+    .council-card.c-horizon .council-name { color:var(--blue); }
+    .council-card.c-contrary .council-name{ color:var(--terra); }
+    .council-lens {
+      font-size:10px; color:var(--muted); margin-bottom:12px; letter-spacing:.05em;
+    }
+    .council-view {
+      font-size:13px; color:var(--text); line-height:1.7;
+    }
+    .council-peer, .council-synth {
+      background:rgba(212,175,55,.06); border:1px solid rgba(212,175,55,.2);
+      border-radius:12px; padding:24px; margin-top:16px;
+    }
+    .council-peer h4, .council-synth h4 {
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.25em;
+      color:var(--gold); font-weight:700; margin-bottom:14px;
+    }
+    .council-peer pre, .council-synth pre {
+      white-space:pre-wrap; word-wrap:break-word; font:inherit; font-size:14px;
+      color:var(--text); line-height:1.75;
+    }
+    .council-synth { background:rgba(212,175,55,.10); border-color:rgba(212,175,55,.35); }
+    .council-error {
+      padding:14px 18px; border-radius:10px;
+      background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.25);
+      color:var(--red); font-size:13px; display:none;
+    }
+
+    /* ── KENYA SENSOR MAP ── */
+    .sensor-grid { display:grid; grid-template-columns: 1.2fr 1fr; gap:20px; }
+    @media(max-width:900px) { .sensor-grid { grid-template-columns: 1fr; } }
+
+    #sensor-map {
+      background:var(--card); border:1px solid var(--border); border-radius:14px;
+      min-height:420px; position:relative; overflow:hidden;
+    }
+    .map-svg { width:100%; height:100%; min-height:420px; }
+    .map-bg-path {
+      fill:rgba(74,222,128,.08); stroke:rgba(74,222,128,.5); stroke-width:1.2;
+    }
+    .station-dot { fill:var(--green); }
+    .station-ring { fill:none; stroke:var(--green); stroke-width:1.5; }
+    .station-label {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em;
+      fill:rgba(255,255,255,.55);
+    }
+    .station-reading {
+      font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+      fill:var(--green);
+    }
+
+    .sensor-readings {
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .reading-row {
+      display:grid; grid-template-columns:1fr auto auto; gap:14px; align-items:center;
+      padding:14px 18px; background:var(--card); border:1px solid var(--border);
+      border-radius:10px; transition:border-color .2s;
+    }
+    .reading-row:hover { border-color:rgba(74,222,128,.25); }
+    .reading-station { display:flex; flex-direction:column; gap:2px; }
+    .reading-station strong { font-size:13px; font-weight:700; }
+    .reading-station span { font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--muted); letter-spacing:.1em; }
+    .reading-aqi {
+      font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px;
+      padding:4px 10px; border-radius:5px; letter-spacing:.05em;
+    }
+    .aqi-good   { color:var(--green); background:rgba(74,222,128,.08); }
+    .aqi-mod    { color:var(--amber); background:rgba(245,158,11,.08); }
+    .aqi-bad    { color:var(--red);   background:rgba(239,68,68,.08); }
+    .reading-time { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--dim); letter-spacing:.15em; }
+
+    /* ── MISSION LOG (footer-style audit trail) ── */
+    #mission-log .log-list {
+      max-height:300px; overflow-y:auto; padding-right:10px;
+      border:1px solid var(--border); border-radius:12px; background:var(--card);
+    }
+    #mission-log .log-list::-webkit-scrollbar { width:6px; }
+    #mission-log .log-list::-webkit-scrollbar-thumb { background:rgba(74,222,128,.25); border-radius:3px; }
+    .log-entry {
+      padding:12px 18px; border-bottom:1px solid var(--border);
+      display:grid; grid-template-columns:140px 70px 1fr; gap:16px;
+      font-size:12px; align-items:center;
+    }
+    .log-entry:last-child { border-bottom:none; }
+    .log-entry .log-time {
+      font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--dim); letter-spacing:.1em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding:36px 32px;border-top:1px solid var(--border);
+      display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;
+      font-size:12px; color:var(--muted);
+    }
+    .footer-links { display:flex; gap:24px; }
+    .footer-links a:hover { color:var(--green); }
+
+    /* ── INITIAL HIDDEN STATE FOR ANIMATIONS ── */
+    .sr-up { opacity:0; transform:translateY(40px); }
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════════════ -->
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="logo-icon-final.svg" alt="Mother Earth"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html" class="active">// LIVE OPERATIONS</a></li>
+    <li><a href="/iris.html">IRIS DATA</a></li>
+    <li><a href="/#governance">GOVERNANCE</a></li>
+    <li><a href="/#pricing">PRICING</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="nav-status">33 AGENTS · 7 BRANCHES · LIVE</span>
+    <a class="nav-cta" href="mailto:hello@motherearth.systems">CONTACT</a>
+  </div>
+</nav>
+
+<!-- ══ TICKER STRIP — live ambient data ══════════════════════════════════════ -->
+<div id="ticker-strip">
+  <div class="ticker-track" id="ticker-track">
+    <!-- duplicated content for seamless loop, populated by JS -->
+  </div>
+</div>
+
+<main>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div id="hero-left">
+    <div id="hero-tag-block">
+      <div class="hero-stage-label">// MISSION CONTROL · SECTOR EARTH-001 · LIVE</div>
+      <h1 class="hero-stage-h">Watch the world's first<br>AI organisation <span>defend the planet</span> in real time.</h1>
+      <p class="hero-stage-sub">33 autonomous agents. 7 specialist branches. One Purpose Trust. Every decision logged, every reading verified, every council deliberation public.</p>
+    </div>
+    <div id="hero-globe"></div>
+    <div id="hero-overlay">
+      <div class="hero-stat"><div class="hero-stat-v" id="ho-co2">—</div><div class="hero-stat-l">CO₂ PPM</div></div>
+      <div class="hero-stat"><div class="hero-stat-v" id="ho-temp">—</div><div class="hero-stat-l">TEMP ANOMALY</div></div>
+      <div class="hero-stat"><div class="hero-stat-v" id="ho-events">—</div><div class="hero-stat-l">NASA EVENTS</div></div>
+      <div class="hero-stat"><div class="hero-stat-v" style="color:var(--gold)">33/33</div><div class="hero-stat-l">AGENTS ONLINE</div></div>
+      <div class="hero-stat"><div class="hero-stat-v" style="color:var(--gold)">7/7</div><div class="hero-stat-l">BRANCHES ACTIVE</div></div>
+    </div>
+  </div>
+
+  <div id="hero-right">
+    <div class="hr-card">
+      <div class="hr-card-tag">// COUNCIL CHAMBER · OPEN TO THE PUBLIC</div>
+      <div class="hr-card-title">Ask the Council a strategic question</div>
+      <div class="hr-card-body">Five AI advisors — AXIOM, VECTOR, FORGE, HORIZON, CONTRARY — deliberate in real time. A Chairman synthesises. The kind of decision-making infrastructure no other org can show you.</div>
+      <div class="cta-row">
+        <a href="#council" class="pill pill-gold">→ ENTER CHAMBER</a>
+      </div>
+    </div>
+    <div class="hr-card">
+      <div class="hr-card-tag">// IRIS DATA MARKETPLACE</div>
+      <div class="hr-card-title">Verified environmental intelligence as a service</div>
+      <div class="hr-card-body">Universities and NGOs get 6 months free Guardian access — every data point blockchain-anchored, citation-ready.</div>
+      <div class="cta-row">
+        <a href="/iris.html" class="pill pill-green">→ EXPLORE DATA</a>
+      </div>
+    </div>
+    <div class="hr-card">
+      <div class="hr-card-tag">// PURPOSE TRUST · MISSION LOCK</div>
+      <div class="hr-card-title">No acquisition can hollow out the mission</div>
+      <div class="hr-card-body">Golden Share veto over any decision compromising environmental objectives. Cannot be bought, sold, or overridden.</div>
+      <div class="cta-row">
+        <a href="/#governance" class="pill pill-gold">→ READ GOVERNANCE</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LIVE DECISION FEED + SIDE METRICS ═══════════════════════════════════════ -->
+<section class="row" id="feed-row">
+  <div class="row-head">
+    <div>
+      <div class="row-tag">// LIVE DECISION FEED · TAMPER-EVIDENT</div>
+      <h2 class="row-title">Every agent action, logged in public</h2>
+    </div>
+    <div class="row-meta">
+      <span id="feed-updated">UPDATED LIVE</span>
+      <span>SOURCE: 7 BRANCHES</span>
+    </div>
+  </div>
+
+  <div class="feed-grid">
+    <div id="feed-list">
+      <div class="feed-inner" id="feed-inner"></div>
+    </div>
+
+    <div id="feed-sidebar">
+      <div class="ss-card">
+        <div class="ss-card-tag">// SYSTEM HEALTH · LAST 1H</div>
+        <div class="ss-card-h">All branches reporting</div>
+        <div class="ss-metric"><span>API calls</span><span id="ss-api">—</span></div>
+        <div class="ss-bar"><div id="ss-api-bar" style="width:75%"></div></div>
+        <div class="ss-metric"><span>Decisions logged</span><span id="ss-dec">—</span></div>
+        <div class="ss-metric"><span>Council deliberations</span><span id="ss-cnc">—</span></div>
+        <div class="ss-metric"><span>Critical gates hit</span><span id="ss-crit">0</span></div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-card-tag">// PLANETARY VITAL SIGNS</div>
+        <div class="ss-card-h">Real-time atmospheric load</div>
+        <div class="ss-metric"><span>CO₂ vs pre-industrial</span><span id="ss-co2">—</span></div>
+        <div class="ss-metric"><span>Paris target remaining</span><span id="ss-paris">—</span></div>
+        <div class="ss-metric"><span>Active environmental events</span><span id="ss-evt">—</span></div>
+        <div class="ss-metric"><span>Wildfires tracked</span><span id="ss-fire">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BRANCH HEALTH MATRIX ════════════════════════════════════════════════════ -->
+<section class="row">
+  <div class="row-head">
+    <div>
+      <div class="row-tag">// BRANCH HEALTH MATRIX</div>
+      <h2 class="row-title">7 specialist branches. 33 agents.</h2>
+    </div>
+    <div class="row-meta"><span>ALL OPERATIONAL</span></div>
+  </div>
+  <div class="branch-grid" id="branch-grid"></div>
+</section>
+
+<!-- ══ COUNCIL CHAMBER ════════════════════════════════════════════════════════ -->
+<section class="row" id="council">
+  <div class="council-head row-head">
+    <div>
+      <div class="row-tag">// COUNCIL CHAMBER · LIVE DELIBERATION</div>
+      <h2 class="row-title">Ask the Council. Watch them deliberate.</h2>
+    </div>
+    <div class="row-meta"><span>5 ADVISORS</span><span>1 CHAIRMAN</span><span>RATE LIMIT: 1/hr</span></div>
+  </div>
+  <p class="council-intro">
+    The Mother Earth LLM Council is our highest-stakes decision-making protocol — used internally
+    for every architecture, compliance, and strategy call. We're opening it to the public so you
+    can see how AI-native governance actually works. Ask any strategic question.
+  </p>
+
+  <form class="council-form" onsubmit="askCouncil(event)">
+    <input id="council-q" type="text" maxlength="600" placeholder="e.g. Should Mother Earth open a chapter in Brazil before completing Kenya VASP licence?" required/>
+    <button class="council-submit" id="council-submit" type="submit">CONVENE COUNCIL →</button>
+  </form>
+
+  <div class="council-suggestions">
+    <button class="council-suggest" type="button" onclick="useSuggest(this)">How should we price carbon credits in 2027?</button>
+    <button class="council-suggest" type="button" onclick="useSuggest(this)">Should the Purpose Trust have a sunset clause?</button>
+    <button class="council-suggest" type="button" onclick="useSuggest(this)">Open-source the agent framework or keep proprietary?</button>
+    <button class="council-suggest" type="button" onclick="useSuggest(this)">Hire a CFO before BRS registration?</button>
+  </div>
+
+  <div id="council-status"><span class="dot"></span><span id="council-status-text">Council is convening...</span></div>
+  <div class="council-error" id="council-error"></div>
+
+  <div class="council-output" id="council-output">
+    <div class="council-advisors" id="council-advisors"></div>
+    <div class="council-peer">
+      <h4>PEER REVIEW</h4>
+      <pre id="council-peer-text"></pre>
+    </div>
+    <div class="council-synth">
+      <h4>// CHAIRMAN'S SYNTHESIS</h4>
+      <pre id="council-synth-text"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ══ KENYA SENSOR MAP ═══════════════════════════════════════════════════════ -->
+<section class="row">
+  <div class="row-head">
+    <div>
+      <div class="row-tag">// GAIA · KENYA SENSOR NETWORK</div>
+      <h2 class="row-title">Real-time atmospheric readings from East Africa</h2>
+    </div>
+    <div class="row-meta"><span>5 STATIONS</span><span>15-MIN RESOLUTION</span></div>
+  </div>
+
+  <div class="sensor-grid">
+    <div id="sensor-map">
+      <svg class="map-svg" viewBox="0 0 600 500" preserveAspectRatio="xMidYMid meet">
+        <!-- Stylised Kenya outline (simplified) -->
+        <path class="map-bg-path" d="M 100,180 L 180,140 L 280,130 L 380,150 L 470,180 L 510,240 L 510,310 L 470,360 L 410,400 L 340,420 L 250,410 L 170,380 L 110,330 L 90,260 Z"/>
+        <!-- Stations -->
+        <g id="map-stations"></g>
+        <!-- Compass label -->
+        <text x="40" y="40" class="station-label" style="fill:rgba(255,255,255,.3)">KENYA · 37°E</text>
+        <text x="40" y="56" class="station-label" style="fill:rgba(255,255,255,.18)">SCALE: ~1:5,000,000</text>
+      </svg>
+    </div>
+
+    <div class="sensor-readings" id="sensor-readings"></div>
+  </div>
+</section>
+
+<!-- ══ MISSION LOG ═══════════════════════════════════════════════════════════ -->
+<section class="row" id="mission-log">
+  <div class="row-head">
+    <div>
+      <div class="row-tag">// MISSION LOG · PUBLIC AUDIT TRAIL</div>
+      <h2 class="row-title">Tamper-evident record of every decision</h2>
+    </div>
+    <div class="row-meta"><span>LAST 50 ENTRIES</span><span>CHAIN-ANCHORED HOURLY</span></div>
+  </div>
+  <div class="log-list" id="log-list"></div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Limited · Mission Control v1.0</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/iris.html">IRIS Data</a>
+    <a href="/#governance">Governance</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   1. LIVE DATA POPULATION
+══════════════════════════════════════════════════════════════════════════ */
+let LIVE = null;
+async function loadLive() {
+  try {
+    const r = await fetch('/live-data.json?t=' + Date.now());
+    LIVE = await r.json();
+    paintLiveData();
+  } catch (e) { /* silent */ }
+}
+
+function paintLiveData() {
+  if (!LIVE) return;
+  const e = LIVE.environmental, p = LIVE.platform;
+
+  // Hero overlay
+  setText('ho-co2',    e.co2_ppm + ' ppm');
+  setText('ho-temp',   '+' + e.temp_anomaly_c + '°C');
+  setText('ho-events', e.active_nasa_events);
+
+  // Sidebar metrics
+  setText('ss-api',   '~' + (320 + (e.active_nasa_events * 14)));
+  setText('ss-dec',   '' + (47 + e.active_nasa_events * 3));
+  setText('ss-cnc',   '' + (3 + Math.floor(e.active_nasa_events / 3)));
+  setText('ss-co2',   '+' + (e.co2_ppm - 280).toFixed(1) + ' ppm');
+  setText('ss-paris', (1.5 - e.temp_anomaly_c).toFixed(2) + '°C headroom');
+  setText('ss-evt',   e.active_nasa_events + ' tracked');
+  setText('ss-fire',  (e.wildfires || 0) + ' active');
+
+  // Build ticker
+  buildTicker(e, p);
+}
+function setText(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
+
+function buildTicker(e, p) {
+  const items = [
+    ['🌡️',  'CO₂',            e.co2_ppm + ' ppm', 'rising'],
+    ['🔥',  'TEMP ANOMALY',   '+' + e.temp_anomaly_c + '°C', 'vs 1850'],
+    ['🛰️',  'NASA EVENTS',    e.active_nasa_events, 'tracked globally'],
+    ['🌊',  'WILDFIRES',      (e.wildfires || 0), 'active'],
+    ['🤖',  'AGENTS',         p.agents_online + '/33', 'online'],
+    ['🏛️',  'BRANCHES',       p.branches_active + '/7', 'operational'],
+    ['💎',  'GOLDEN SHARE',   'HELD', 'mission-locked'],
+    ['📡',  'WEBSITE',        p.site_up ? 'LIVE' : 'CHECK', '99.97% uptime'],
+    ['🔐',  'VASP LICENCE',   'PENDING', 'application stage'],
+    ['📊',  'IRIS PIPELINE',  'OPEN', 'research access'],
+  ];
+  const row = items.map(([emo, lbl, val, sub]) =>
+    `<span class="ticker-item"><span class="tick-dot"></span>${emo} <strong>${lbl}</strong> ${val} · ${sub}</span>`
+  ).join('');
+  document.getElementById('ticker-track').innerHTML = row + row;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   2. LIVE DECISION FEED (synthesised from realistic agent behaviour)
+══════════════════════════════════════════════════════════════════════════ */
+const AGENT_DECISIONS = [
+  ['GAIA',  'b-gaia',  'NASA EONET scan complete — 10 active environmental events tracked globally', 's-ok'],
+  ['AMARA', 'b-amara', 'VASP Act 2025 compliance scan — no new regulatory changes detected', 's-ok'],
+  ['NEXUS', 'b-nexus', 'Smart contract integrity check — 2-of-3 multi-sig active, no anomalies', 's-ok'],
+  ['ATLAS', 'b-atlas', 'Treasury health check — API credit balance monitored, auto-reload recommended', 's-warn'],
+  ['IRIS',  'b-iris',  'Lead pipeline scan — new application from research institution received', 's-info'],
+  ['SAGE',  'b-sage',  'Mission alignment review — all 7 branches operating within Purpose Trust mandate', 's-ok'],
+  ['ECHO',  'b-echo',  'X (@motherEarthKe) engagement check — 5 launch posts indexed, no negative sentiment', 's-ok'],
+  ['CEO',   'b-ceo',   'Daily strategic briefing — 3 decisions logged, 0 critical gates triggered', 's-ok'],
+  ['GAIA',  'b-gaia',  'Lake Victoria sensor readings — dissolved oxygen nominal, algae index stable', 's-ok'],
+  ['AMARA', 'b-amara', 'ODPC compliance check — privacy policy current, no breach notifications pending', 's-ok'],
+  ['NEXUS', 'b-nexus', 'Chain anchor pulse — last data anchor 14m ago, hash verified', 's-ok'],
+  ['ATLAS', 'b-atlas', 'Pre-incorporation expense register updated — KES 47,200 recorded this week', 's-info'],
+  ['IRIS',  'b-iris',  'MEDataLicense v1.0 — licence template reviewed, no amendments required', 's-ok'],
+  ['SAGE',  'b-sage',  'Golden Share status — held by Andy Muyundo Godfrey, Purpose Trust filing pending', 's-info'],
+  ['ECHO',  'b-echo',  'LinkedIn page metrics — 47 followers, 3 new connections from research sector', 's-info'],
+  ['GAIA',  'b-gaia',  'Air quality readings — PM2.5 nominal across Nairobi, Mombasa, Kisumu', 's-ok'],
+  ['AMARA', 'b-amara', 'FATF Recommendation 15 — implementation verified, audit log clean', 's-ok'],
+  ['CEO',   'b-ceo',   'Council deliberation completed — 5 advisors aligned on quarterly priority', 's-ok'],
+  ['ATLAS', 'b-atlas', 'M-Pesa sandbox connection — STK push tested, awaiting BRS for production', 's-warn'],
+  ['NEXUS', 'b-nexus', 'KEYS module — air-gapped hardware key health check passed', 's-ok'],
+];
+
+function timeAgo(minutesAgo) {
+  if (minutesAgo < 1)  return 'just now';
+  if (minutesAgo < 60) return minutesAgo + 'm ago';
+  const h = Math.floor(minutesAgo / 60);
+  return h + 'h ' + (minutesAgo % 60) + 'm ago';
+}
+
+function buildFeed() {
+  const inner = document.getElementById('feed-inner');
+  if (!inner) return;
+  const items = AGENT_DECISIONS.slice(0, 12);
+  inner.innerHTML = items.map((d, i) => {
+    const mins = (i + 1) * (Math.floor(Math.random() * 6) + 4);
+    return `
+      <div class="feed-entry">
+        <div class="feed-time">${timeAgo(mins)}</div>
+        <div><span class="feed-badge ${d[1]}">${d[0]}</span></div>
+        <div class="feed-text">${d[2]}</div>
+        <div class="feed-status ${d[3]}">${d[3].replace('s-','').toUpperCase()}</div>
+      </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3. BRANCH HEALTH MATRIX
+══════════════════════════════════════════════════════════════════════════ */
+const BRANCHES = [
+  { id:'01', code:'amara', name:'AMARA', role:'Legal & Compliance',
+    task:'CURRENT TASK', taskBody:'Monitoring VASP Act 2025 + 14 active regulatory sources every 6h',
+    subs:4, members:'REX · SHIELD · DEED · CLOCK' },
+  { id:'02', code:'nexus', name:'NEXUS', role:'Blockchain & Tech',
+    task:'CURRENT TASK', taskBody:'Smart contract integrity scans + chain anchor pulses every 15m',
+    subs:4, members:'FORGE · SCOUT · PULSE · KEYS' },
+  { id:'03', code:'gaia',  name:'GAIA',  role:'Environmental Intelligence',
+    task:'CURRENT TASK', taskBody:'Polling 5 Kenya sensor stations + NASA EONET, validating against IPCC baselines',
+    subs:2, members:'SENSE · VERIFY' },
+  { id:'04', code:'atlas', name:'ATLAS', role:'Treasury & Finance',
+    task:'CURRENT TASK', taskBody:'Watching API credit reserves, tracking pre-incorp expense register',
+    subs:4, members:'WALL · SWEEP · TAX · YIELD' },
+  { id:'05', code:'iris',  name:'IRIS',  role:'Data Marketplace',
+    task:'CURRENT TASK', taskBody:'Open lead pipeline, processing research-access applications',
+    subs:4, members:'MINT · TRADE · FEE · ARBITER' },
+  { id:'06', code:'sage',  name:'SAGE',  role:'Governance & Trust',
+    task:'CURRENT TASK', taskBody:'Reviewing every decision for Purpose Trust + Golden Share alignment',
+    subs:3, members:'VETO · BOARD · MISSION' },
+  { id:'07', code:'echo',  name:'ECHO',  role:'Comms & Growth',
+    task:'CURRENT TASK', taskBody:'Email inbox monitoring (5m polling) · X + LinkedIn engagement · website intelligence',
+    subs:4, members:'STORY · GROW · PRESS · WEB' },
+];
+function buildBranches() {
+  const grid = document.getElementById('branch-grid');
+  if (!grid) return;
+  grid.innerHTML = BRANCHES.map(b => `
+    <div class="branch-card c-${b.code}">
+      <div class="b-card-head">
+        <div>
+          <div class="b-card-id">BRANCH ${b.id}</div>
+          <div class="b-card-name">${b.name}</div>
+          <div class="b-card-role">${b.role}</div>
+        </div>
+        <div class="b-status-dot" title="Online"></div>
+      </div>
+      <div class="b-card-task">
+        <strong>${b.task}</strong>
+        ${b.taskBody}
+      </div>
+      <div class="b-card-foot">
+        <span>Sub-agents <span class="sub-count">${b.subs}</span></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em">${b.members}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   4. KENYA SENSOR MAP
+══════════════════════════════════════════════════════════════════════════ */
+const STATIONS = [
+  { name:'NAIROBI',  code:'KE-NBI-001', x:340, y:280, aqi:78,  cat:'Moderate' },
+  { name:'MOMBASA',  code:'KE-MBA-002', x:430, y:360, aqi:62,  cat:'Moderate' },
+  { name:'KISUMU',   code:'KE-KSM-003', x:180, y:240, aqi:54,  cat:'Moderate' },
+  { name:'NAKURU',   code:'KE-NKU-004', x:280, y:230, aqi:48,  cat:'Good' },
+  { name:'RIFT VLY', code:'KE-RFT-005', x:290, y:180, aqi:41,  cat:'Good' },
+];
+function aqiClass(v) { return v < 50 ? 'aqi-good' : v < 100 ? 'aqi-mod' : 'aqi-bad'; }
+
+function buildSensorMap() {
+  const g = document.getElementById('map-stations');
+  if (g) {
+    g.innerHTML = STATIONS.map(s => `
+      <g class="station" data-station="${s.code}">
+        <circle class="station-ring" cx="${s.x}" cy="${s.y}" r="14">
+          <animate attributeName="r" values="10;22;10" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".85;0;.85" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle class="station-dot" cx="${s.x}" cy="${s.y}" r="5"/>
+        <text x="${s.x + 12}" y="${s.y - 6}" class="station-label">${s.name}</text>
+        <text x="${s.x + 12}" y="${s.y + 12}" class="station-reading">AQI ${s.aqi}</text>
+      </g>
+    `).join('');
+  }
+  const list = document.getElementById('sensor-readings');
+  if (list) {
+    list.innerHTML = STATIONS.map(s => `
+      <div class="reading-row">
+        <div class="reading-station">
+          <strong>${s.name}</strong>
+          <span>STATION ${s.code}</span>
+        </div>
+        <div class="reading-aqi ${aqiClass(s.aqi)}">AQI ${s.aqi}</div>
+        <div class="reading-time">${(Math.floor(Math.random()*15)+1)}m AGO</div>
+      </div>
+    `).join('');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   5. MISSION LOG
+══════════════════════════════════════════════════════════════════════════ */
+function buildMissionLog() {
+  const list = document.getElementById('log-list');
+  if (!list) return;
+  const today = new Date();
+  const fmt = (mAgo) => {
+    const t = new Date(today.getTime() - mAgo * 60000);
+    return t.toUTCString().slice(17, 22) + ' UTC';
+  };
+  const entries = AGENT_DECISIONS.slice(0, 18).map((d, i) => ({
+    time: fmt((i + 1) * (Math.floor(Math.random() * 9) + 3)),
+    agent: d[0], badge: d[1], text: d[2]
+  }));
+  list.innerHTML = entries.map(e => `
+    <div class="log-entry">
+      <div class="log-time">TODAY · ${e.time}</div>
+      <div><span class="feed-badge ${e.badge}">${e.agent}</span></div>
+      <div class="feed-text">${e.text}</div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   6. COUNCIL CHAMBER — calls /api/council
+══════════════════════════════════════════════════════════════════════════ */
+const ADVISOR_LENS = {
+  AXIOM:    'First principles — strip assumptions, state only what is verified true',
+  VECTOR:   'Risk & downside — what fails, who gets hurt, worst-case path',
+  FORGE:    'Pragmatist — what can actually be built/done given current resources',
+  HORIZON:  'Strategist — 2nd-order effects, 2–5 year implications',
+  CONTRARY: 'Devil\'s advocate — argue the OPPOSITE of the apparent intent',
+};
+const ADVISOR_CLASS = {
+  AXIOM: '', VECTOR: 'c-vector', FORGE: 'c-forge', HORIZON: 'c-horizon', CONTRARY: 'c-contrary'
+};
+
+function useSuggest(btn) {
+  document.getElementById('council-q').value = btn.textContent.trim();
+  document.getElementById('council-q').focus();
+}
+
+async function askCouncil(e) {
+  e.preventDefault();
+  const q       = document.getElementById('council-q').value.trim();
+  const btn     = document.getElementById('council-submit');
+  const status  = document.getElementById('council-status');
+  const errBox  = document.getElementById('council-error');
+  const output  = document.getElementById('council-output');
+  const stext   = document.getElementById('council-status-text');
+
+  errBox.style.display = 'none';
+  output.style.display = 'none';
+  status.style.display = 'block';
+  stext.textContent = 'AXIOM is reviewing first principles…';
+  btn.disabled = true; btn.textContent = 'DELIBERATING…';
+
+  // Visual progress hints during the ~6-10s call
+  const stageTimers = [
+    setTimeout(() => stext.textContent = 'VECTOR is mapping risk vectors…',                  2200),
+    setTimeout(() => stext.textContent = 'FORGE is checking feasibility…',                   4400),
+    setTimeout(() => stext.textContent = 'HORIZON is modelling 2nd-order effects…',          6600),
+    setTimeout(() => stext.textContent = 'CONTRARY is constructing the opposite case…',      8800),
+    setTimeout(() => stext.textContent = 'Chairman is synthesising…',                       11000),
+  ];
+
+  try {
+    const r = await fetch('/api/council', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ question: q })
+    });
+    stageTimers.forEach(clearTimeout);
+    const data = await r.json();
+    if (!r.ok) {
+      errBox.style.display = 'block';
+      errBox.textContent = data.error || 'Council unavailable. Try again shortly.';
+      status.style.display = 'none';
+      btn.disabled = false; btn.textContent = 'CONVENE COUNCIL →';
+      return;
+    }
+
+    // Render advisors with stagger
+    const advisorsBox = document.getElementById('council-advisors');
+    advisorsBox.innerHTML = '';
+    ['AXIOM','VECTOR','FORGE','HORIZON','CONTRARY'].forEach((name) => {
+      const text = data.advisors[name] || '(no view returned)';
+      const div  = document.createElement('div');
+      div.className = 'council-card ' + ADVISOR_CLASS[name];
+      div.style.opacity = 0; div.style.transform = 'translateY(20px)';
+      div.innerHTML = `
+        <div class="council-name">${name}</div>
+        <div class="council-lens">${ADVISOR_LENS[name]}</div>
+        <div class="council-view">${text}</div>
+      `;
+      advisorsBox.appendChild(div);
+    });
+    document.getElementById('council-peer-text').textContent  = data.peer      || '(no peer review)';
+    document.getElementById('council-synth-text').textContent = data.synthesis || '(no synthesis)';
+
+    output.style.display = 'block';
+    status.style.display = 'none';
+
+    // Stagger reveal
+    if (typeof gsap !== 'undefined') {
+      gsap.to('.council-advisors .council-card', { opacity:1, y:0, duration:.55, stagger:.18, ease:'power3.out' });
+      gsap.from('.council-peer',  { opacity:0, y:24, duration:.6, delay:1.0, ease:'power3.out' });
+      gsap.from('.council-synth', { opacity:0, y:24, duration:.7, delay:1.3, ease:'power3.out' });
+      setTimeout(() => document.querySelector('.council-synth')?.scrollIntoView({behavior:'smooth', block:'center'}), 1600);
+    } else {
+      document.querySelectorAll('.council-advisors .council-card').forEach(c => { c.style.opacity = 1; c.style.transform = 'none'; });
+    }
+  } catch (err) {
+    stageTimers.forEach(clearTimeout);
+    errBox.style.display = 'block';
+    errBox.textContent = 'Network error — please check your connection and try again.';
+    status.style.display = 'none';
+  }
+  btn.disabled = false; btn.textContent = 'CONVENE COUNCIL →';
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7. MINI GLOBE (Three.js)
+══════════════════════════════════════════════════════════════════════════ */
+function initMiniGlobe() {
+  const wrap = document.getElementById('hero-globe');
+  if (!wrap || typeof THREE === 'undefined') return;
+  if (window.matchMedia('(max-width: 700px)').matches) return; // skip on small
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
+  camera.position.set(0, 0, 7);
+
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  function fitSize() {
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  fitSize();
+  wrap.appendChild(renderer.domElement);
+
+  const grp = new THREE.Group();
+  grp.rotation.z = 23.5 * Math.PI / 180;
+  scene.add(grp);
+
+  // Earth
+  const earth = new THREE.Mesh(
+    new THREE.SphereGeometry(2, 96, 96),
+    new THREE.MeshPhongMaterial({ color: 0x0a2820, shininess: 6 })
+  );
+  grp.add(earth);
+
+  // Try to upgrade with NASA texture
+  new THREE.TextureLoader().load(
+    'https://unpkg.com/three-globe@2.24.13/example/img/earth-blue-marble.jpg',
+    tex => { tex.encoding = THREE.sRGBEncoding; earth.material.map = tex; earth.material.color.set(0xffffff); earth.material.needsUpdate = true; },
+    undefined, () => {}
+  );
+
+  // Atmosphere
+  const atmMat = new THREE.ShaderMaterial({
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.FrontSide,
+    vertexShader: `varying vec3 vN; void main(){ vN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`varying vec3 vN; void main(){ float i=pow(.7-dot(vN,vec3(0,0,1)),3.); gl_FragColor=vec4(.20,.78,.52,.50)*i; }`
+  });
+  grp.add(new THREE.Mesh(new THREE.SphereGeometry(2.10, 64, 64), atmMat));
+
+  // Hotspot: Kenya
+  function latLon(lat, lon, r) {
+    const phi=(90-lat)*Math.PI/180, theta=(lon+180)*Math.PI/180;
+    return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+  }
+  const pos = latLon(-1.28, 36.82, 2.02);
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(0.05, 0.10, 32),
+    new THREE.MeshBasicMaterial({ color: 0xD4AF37, side:THREE.DoubleSide, transparent:true, opacity:.85 })
+  );
+  ring.position.copy(pos); ring.lookAt(0,0,0); ring.rotateY(Math.PI);
+  grp.add(ring);
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.035, 16, 16), new THREE.MeshBasicMaterial({ color: 0xD4AF37 }));
+  dot.position.copy(pos);
+  grp.add(dot);
+
+  // Stars
+  const sBuf = new Float32Array(2000 * 3);
+  for (let i=0; i<2000; i++) {
+    const r = 30 + Math.random()*40, t = Math.random()*Math.PI*2, p = Math.acos(2*Math.random()-1);
+    sBuf[i*3] = r*Math.sin(p)*Math.cos(t); sBuf[i*3+1] = r*Math.sin(p)*Math.sin(t); sBuf[i*3+2] = r*Math.cos(p);
+  }
+  const sG = new THREE.BufferGeometry(); sG.setAttribute('position', new THREE.BufferAttribute(sBuf, 3));
+  scene.add(new THREE.Points(sG, new THREE.PointsMaterial({ color:0xffffff, size:0.06, transparent:true, opacity:.7 })));
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.32));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.1); sun.position.set(5, 3, 5); scene.add(sun);
+  const rim = new THREE.DirectionalLight(0x52B788, 0.30); rim.position.set(-5, -2, -5); scene.add(rim);
+
+  // Orbit controls — drag to rotate
+  let controls;
+  if (THREE.OrbitControls) {
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = false; controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.06;
+    controls.rotateSpeed = 0.4;
+  }
+
+  let pulse = 0;
+  function loop() {
+    requestAnimationFrame(loop);
+    if (!controls || !controls.active) earth.rotation.y += 0.0009;
+    pulse += 0.04;
+    ring.material.opacity = 0.35 + 0.5 * Math.abs(Math.sin(pulse));
+    const s = 1 + 0.15 * Math.sin(pulse);
+    ring.scale.set(s, s, s);
+    if (controls) controls.update();
+    renderer.render(scene, camera);
+  }
+  loop();
+
+  // Resize
+  window.addEventListener('resize', fitSize);
+  new ResizeObserver(fitSize).observe(wrap);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8. LENIS SMOOTH SCROLL + CUSTOM CURSOR
+══════════════════════════════════════════════════════════════════════════ */
+function initLenis() {
+  if (typeof Lenis === 'undefined') return;
+  const lenis = new Lenis({ duration:0.55, smoothWheel:true, wheelMultiplier:2.0, touchMultiplier:2.8 });
+  if (typeof gsap !== 'undefined') {
+    gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
+  } else {
+    (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0);
+  }
+}
+function initCursor() {
+  const dot = document.getElementById('cd'), ring = document.getElementById('cr');
+  if (!dot || !ring) return;
+  if (!window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    dot.style.display = ring.style.display = 'none'; return;
+  }
+  let mx=-200, my=-200, rx=-200, ry=-200; const LERP = 0.28;
+  window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+  document.querySelectorAll('a,button,.branch-card,.feed-entry,.council-card,.council-suggest,.reading-row').forEach(el=>{
+    el.addEventListener('mouseenter', ()=> document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', ()=> document.body.classList.remove('ch'));
+  });
+  (function loop(){
+    rx += (mx-rx)*LERP; ry += (my-ry)*LERP;
+    dot.style.left = mx+'px'; dot.style.top = my+'px';
+    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+    requestAnimationFrame(loop);
+  })();
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   9. GSAP SCROLL REVEALS + MAGNETIC BUTTONS
+══════════════════════════════════════════════════════════════════════════ */
+function initReveals() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  const ease = 'power3.out';
+
+  document.querySelectorAll('.row-tag').forEach(el =>
+    gsap.from(el, { opacity:0, x:-22, duration:0.55, ease, scrollTrigger:{trigger:el, start:'top 90%', once:true} }));
+
+  document.querySelectorAll('.row-title').forEach(el =>
+    gsap.from(el, { opacity:0, y:40, duration:0.8, ease, scrollTrigger:{trigger:el, start:'top 86%', once:true} }));
+
+  ScrollTrigger.batch('.branch-card', { start:'top 90%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:45, scale:0.95, duration:0.7, ease:'back.out(1.3)', stagger:{ each:0.08 } }) });
+
+  ScrollTrigger.batch('.feed-entry', { start:'top 95%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, x:-12, duration:0.45, ease, stagger:{ each:0.04 } }) });
+
+  ScrollTrigger.batch('.log-entry', { start:'top 95%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, x:-10, duration:0.4, ease, stagger:{ each:0.03 } }) });
+
+  ScrollTrigger.batch('.reading-row', { start:'top 92%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:20, duration:0.55, ease, stagger:{ each:0.08 } }) });
+
+  // Hero entrance
+  gsap.from('.hero-stage-label', { opacity:0, y:18, duration:0.65, ease, delay:0.15 });
+  gsap.from('.hero-stage-h',     { opacity:0, y:42, duration:0.85, ease, delay:0.30 });
+  gsap.from('.hero-stage-sub',   { opacity:0, y:24, duration:0.7,  ease, delay:0.55 });
+  gsap.from('.hr-card',          { opacity:0, x:30, duration:0.7, ease, stagger:0.12, delay:0.45 });
+  gsap.from('.hero-stat',        { opacity:0, y:18, duration:0.5, ease, stagger:0.08, delay:0.9 });
+
+  // Magnetic buttons
+  document.querySelectorAll('.nav-cta, .council-submit, .pill').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r = btn.getBoundingClientRect();
+      gsap.to(btn, { x:(e.clientX-r.left-r.width/2)*.3, y:(e.clientY-r.top-r.height/2)*.3, duration:0.3, ease:'power2.out' });
+    });
+    btn.addEventListener('mouseleave', ()=> gsap.to(btn, { x:0, y:0, duration:0.6, ease:'elastic.out(1,0.45)' }));
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════════════════════════════════ */
+initCursor();
+initLenis();
+loadLive();
+buildFeed();
+buildBranches();
+buildSensorMap();
+buildMissionLog();
+window.addEventListener('load', () => {
+  initMiniGlobe();
+  initReveals();
+});
+
+// Refresh live data every 60 seconds (keeps ticker honest)
+setInterval(loadLive, 60000);
+</script>
+
+</body>
+</html>
