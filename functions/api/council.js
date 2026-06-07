@@ -199,10 +199,11 @@ export async function onRequestPost(context) {
 }
 
 /**
- * GET /api/council — returns the public archive index
- * Each entry: { id, question, ts, preview }
- * Capped at 200 most-recent entries (managed by POST handler).
- * Query params: ?limit=N (1..200, default 50)
+ * GET /api/council            — returns the public archive index
+ * GET /api/council?id=xxx     — returns a single deliberation record
+ *
+ * Single endpoint to avoid Cloudflare Pages Functions sub-route routing issues.
+ * The frontend at /council-archive uses ?id= for permalinks.
  */
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -213,12 +214,40 @@ export async function onRequestGet(context) {
   };
 
   try {
+    const url = new URL(request.url);
+    const id  = (url.searchParams.get('id') || '').replace(/[^a-z0-9]/gi, '');
+
     if (!env.COUNCIL_ARCHIVE) {
-      return new Response(JSON.stringify({ entries: [], error: 'Archive not yet bound. Council deliberations will appear here once Cloudflare KV is wired up.' }),
+      if (id) {
+        return new Response(JSON.stringify({ error: 'Archive not yet bound. Cloudflare KV namespace COUNCIL_ARCHIVE is not yet wired to this Pages project.' }),
+          { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      return new Response(JSON.stringify({ entries: [], notBound: true, message: 'Archive not yet bound. Council deliberations will appear here once Cloudflare KV is wired up via the Pages dashboard.' }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const url = new URL(request.url);
+    // ── Single record lookup: ?id=xxx ────────────────────────────────────
+    if (id) {
+      if (id.length < 6 || id.length > 32) {
+        return new Response(JSON.stringify({ error: 'Invalid deliberation ID.' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      const record = await env.COUNCIL_ARCHIVE.get(`council:${id}`, 'json');
+      if (!record) {
+        return new Response(JSON.stringify({ error: 'Deliberation not found.' }),
+          { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      return new Response(JSON.stringify(record), {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+          'Cache-Control': 'public, max-age=3600, immutable',
+        },
+      });
+    }
+
+    // ── Index list ───────────────────────────────────────────────────────
     let limit = parseInt(url.searchParams.get('limit') || '50', 10);
     if (isNaN(limit) || limit < 1) limit = 50;
     if (limit > 200) limit = 200;
@@ -235,8 +264,8 @@ export async function onRequestGet(context) {
       },
     });
   } catch (err) {
-    console.error('Council archive index error:', err);
-    return new Response(JSON.stringify({ entries: [], error: 'Failed to load archive.' }),
+    console.error('Council archive GET error:', err);
+    return new Response(JSON.stringify({ error: 'Failed to load archive.' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 }

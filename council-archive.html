@@ -363,7 +363,7 @@ async function loadSingle(id) {
   document.getElementById('single-view').style.display = 'block';
 
   try {
-    const r = await fetch(`/api/council/${encodeURIComponent(id)}`);
+    const r = await fetch(`/api/council?id=${encodeURIComponent(id)}`);
     const data = await r.json();
     if (!r.ok || data.error) {
       document.getElementById('s-tag').textContent = '// DELIBERATION NOT FOUND';
