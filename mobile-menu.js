@@ -23,8 +23,9 @@
     { label: 'Governance',  href: '/governance.html',        path: '/governance' },
     { label: 'About',       href: '/about.html',             path: '/about' },
     { label: 'Roadmap',     href: '/roadmap.html',           path: '/roadmap' },
-    { label: 'Press',       href: '/press.html',             path: '/press' },
-    { label: 'Finances',    href: '/finances.html',          path: '/finances' },
+    { label: 'Press',           href: '/press.html',             path: '/press' },
+    { label: 'Finances',        href: '/finances.html',          path: '/finances' },
+    { label: 'Council Archive', href: '/council-archive.html',   path: '/council-archive' },
   ];
 
   // Detect active page

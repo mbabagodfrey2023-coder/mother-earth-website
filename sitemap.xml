@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://motherearth.systems/council-archive</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://motherearth.systems/brand-kit</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>

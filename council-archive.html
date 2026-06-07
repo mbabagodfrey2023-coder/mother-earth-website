@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Council Archive — Mother Earth Kenya · Public AI Deliberations</title>
+  <meta name="description" content="Every Council deliberation, archived and permalinked. Watch the 5-advisor protocol applied to real strategic questions, with the Chairman's Synthesis on each."/>
+  <meta property="og:title" content="Council Archive — Mother Earth Kenya"/>
+  <meta property="og:description" content="Every Council deliberation, public and permalinked. Five advisors, one Chairman, no black boxes."/>
+  <meta property="og:image" content="https://motherearth.systems/og.svg"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+  <link rel="canonical" href="https://motherearth.systems/council-archive"/>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="/echo-widget.js" defer></script>
+  <script src="/mobile-menu.js" defer></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg:#020606; --bg2:#050d0a;
+      --green:#4ade80; --gold:#D4AF37; --terra:#D4763A;
+      --amber:#f59e0b; --blue:#60a5fa; --indigo:#818cf8; --red:#ef4444;
+      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
+      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+    @media(hover:hover) and (pointer:fine){*,*::before,*::after{cursor:none !important}}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    body.ch #cd{width:10px;height:10px;background:var(--gold)}
+    body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
+    @media(hover:none){#cd,#cr{display:none}}
+    #grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite}
+    @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
+
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
+    .nav-logo img{width:48px;height:48px;object-fit:contain}
+    .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
+    .nav-mid a{color:var(--muted);transition:color .2s}
+    .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
+    .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    @media(max-width:1050px){.nav-mid{display:none}}
+
+    main{padding-top:72px}
+
+    /* HERO */
+    #hero{padding:80px 32px 40px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 30%, rgba(212,175,55,.05) 0%, transparent 70%)}
+    .hero-inner{max-width:900px;margin:0 auto}
+    .hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--gold);opacity:.7;margin-bottom:18px}
+    .hero-h{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,62px);font-weight:400;line-height:1.05;letter-spacing:-.01em;margin-bottom:20px}
+    .hero-h em{font-style:italic;color:var(--gold)}
+    .hero-sub{font-size:clamp(15px,1.7vw,18px);color:var(--muted);line-height:1.7;max-width:680px;margin:0 auto 24px}
+    .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+    .btn-primary{background:var(--gold);color:#000;border-radius:8px;padding:13px 26px;font-size:13px;font-weight:700;letter-spacing:.04em;transition:background .2s;display:inline-block}
+    .btn-primary:hover{background:#e8c860}
+    .btn-outline{border:1.5px solid var(--border);color:var(--text);border-radius:8px;padding:13px 26px;font-size:13px;font-weight:600;display:inline-block;transition:border-color .2s,color .2s}
+    .btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+    /* ROW BASE */
+    .row{padding:60px 32px}
+    .wrap{max-width:1100px;margin:0 auto}
+    .row-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;color:var(--green);opacity:.6;margin-bottom:14px}
+    .row-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:400;line-height:1.1;letter-spacing:-.01em;margin-bottom:16px}
+    .row-title em{color:var(--gold);font-style:italic}
+
+    /* LIST VIEW */
+    #archive-list{display:flex;flex-direction:column;gap:14px;margin-top:30px}
+    .arc-entry{
+      background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 26px;
+      transition:border-color .25s,transform .25s,background .25s;display:block;
+    }
+    .arc-entry:hover{border-color:rgba(212,175,55,.3);transform:translateY(-2px);background:rgba(212,175,55,.03)}
+    .arc-meta{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+    .arc-ts{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--muted)}
+    .arc-id{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--gold);opacity:.65}
+    .arc-q{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.2vw,22px);font-weight:600;line-height:1.4;color:var(--text);margin-bottom:10px}
+    .arc-preview{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+    .arc-cta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--green);font-weight:700}
+    .arc-cta::after{content:' →';opacity:.7}
+
+    /* EMPTY STATE */
+    .empty-state{
+      text-align:center;padding:80px 24px;
+      background:var(--card);border:1px solid var(--border);border-radius:16px;
+    }
+    .empty-icon{font-size:42px;margin-bottom:16px;opacity:.5}
+    .empty-h{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:10px;color:var(--gold)}
+    .empty-body{font-size:14px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7}
+    .empty-body code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);background:rgba(74,222,128,.06);padding:1px 6px;border-radius:4px}
+
+    /* LOADING */
+    .loading{text-align:center;padding:60px 24px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em}
+    .loading::after{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:8px;animation:dotpulse 1s ease-in-out infinite}
+    @keyframes dotpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
+
+    /* SINGLE VIEW */
+    #single-view{display:none;padding-top:20px}
+    .single-back{
+      display:inline-flex;align-items:center;gap:8px;
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--green);
+      padding:8px 14px;border-radius:6px;border:1px solid rgba(74,222,128,.25);
+      transition:background .2s;margin-bottom:32px;
+    }
+    .single-back:hover{background:rgba(74,222,128,.06)}
+    .single-q-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;color:var(--gold);opacity:.7;margin-bottom:12px}
+    .single-q{
+      font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:400;font-style:italic;
+      line-height:1.3;color:var(--text);margin-bottom:14px;letter-spacing:-.005em;
+    }
+    .single-meta{display:flex;gap:16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--muted);margin-bottom:32px;flex-wrap:wrap}
+    .single-meta span::before{content:'• ';color:var(--green)}
+
+    .advisor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:24px}
+    .adv-card{
+      background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;
+      position:relative;overflow:hidden;
+    }
+    .adv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold)}
+    .adv-card.c-vector::before{background:var(--red)}
+    .adv-card.c-forge::before{background:var(--amber)}
+    .adv-card.c-horizon::before{background:var(--blue)}
+    .adv-card.c-contrary::before{background:var(--terra)}
+    .adv-name{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;font-weight:700;color:var(--gold);margin-bottom:4px}
+    .adv-card.c-vector .adv-name{color:var(--red)}
+    .adv-card.c-forge .adv-name{color:var(--amber)}
+    .adv-card.c-horizon .adv-name{color:var(--blue)}
+    .adv-card.c-contrary .adv-name{color:var(--terra)}
+    .adv-lens{font-size:10px;color:var(--muted);margin-bottom:12px;letter-spacing:.05em}
+    .adv-view{font-size:13px;color:var(--text);line-height:1.7}
+
+    .peer-block,.synth-block{
+      background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.2);
+      border-radius:12px;padding:24px 28px;margin-top:16px;
+    }
+    .peer-block h4,.synth-block h4{
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;
+      color:var(--gold);font-weight:700;margin-bottom:14px;
+    }
+    .peer-block pre,.synth-block pre{
+      white-space:pre-wrap;word-wrap:break-word;font:inherit;font-size:14px;
+      color:var(--text);line-height:1.75;font-family:'Inter',sans-serif;
+    }
+    .synth-block{background:rgba(212,175,55,.10);border-color:rgba(212,175,55,.35)}
+
+    .share-row{
+      display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:32px 0 16px;
+      padding:20px;background:var(--card);border:1px solid var(--border);border-radius:12px;
+    }
+    .share-btn{
+      padding:10px 18px;border-radius:6px;border:1px solid var(--border);
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;
+      color:var(--muted);transition:border-color .2s,color .2s,background .2s;
+      background:none;cursor:pointer;font-weight:700;
+    }
+    .share-btn:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+      background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);
+      color:var(--green);padding:10px 20px;border-radius:8px;
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;
+      opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9500}
+    #toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+    footer{padding:36px 32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted)}
+    .footer-links{display:flex;gap:24px;flex-wrap:wrap}
+    .footer-links a:hover{color:var(--green)}
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+<div id="toast">PERMALINK COPIED ✓</div>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html">// LIVE OPS</a></li>
+    <li><a href="/iris.html">IRIS</a></li>
+    <li><a href="/chapters.html">CHAPTERS</a></li>
+    <li><a href="/governance.html">GOVERNANCE</a></li>
+    <li><a href="/about.html">ABOUT</a></li>
+    <li><a href="/roadmap.html">ROADMAP</a></li>
+    <li><a href="/press.html">PRESS</a></li>
+  </ul>
+  <a class="nav-cta" href="/mission-control.html#council">CONVENE COUNCIL →</a>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner" id="hero-content">
+    <div class="hero-tag">// COUNCIL ARCHIVE · PUBLIC AI DELIBERATIONS</div>
+    <h1 class="hero-h" id="hero-h">Every Council deliberation,<br/><em>permalinked</em>.</h1>
+    <p class="hero-sub" id="hero-sub">When a visitor convenes the Council on Mission Control, the 5 advisors and Chairman are archived here forever. No mystery, no black box — every strategic deliberation is public.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="/mission-control.html#council">Convene the Council →</a>
+      <a class="btn-outline" href="/governance.html">How It Works ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- LIST VIEW (default mode) -->
+<section class="row" id="list-view">
+  <div class="wrap">
+    <div class="row-tag">// RECENT DELIBERATIONS · NEWEST FIRST</div>
+    <h2 class="row-title">The <em>public archive</em>.</h2>
+
+    <div id="archive-list">
+      <div class="loading" id="loading">LOADING ARCHIVE</div>
+    </div>
+  </div>
+</section>
+
+<!-- SINGLE-DELIBERATION VIEW (when ?id=xxx in URL) -->
+<section class="row" id="single-view">
+  <div class="wrap">
+    <a href="/council-archive.html" class="single-back">← BACK TO ARCHIVE</a>
+    <div class="single-q-tag" id="s-tag">// DELIBERATION · LOADING…</div>
+    <h1 class="single-q" id="s-question">…</h1>
+    <div class="single-meta">
+      <span id="s-ts">—</span>
+      <span id="s-id">—</span>
+      <span>5 ADVISORS · 1 CHAIRMAN</span>
+    </div>
+
+    <div class="advisor-grid" id="s-advisors"></div>
+
+    <div class="peer-block" id="s-peer-block">
+      <h4>PEER REVIEW</h4>
+      <pre id="s-peer"></pre>
+    </div>
+
+    <div class="synth-block" id="s-synth-block">
+      <h4>// CHAIRMAN'S SYNTHESIS</h4>
+      <pre id="s-synth"></pre>
+    </div>
+
+    <div class="share-row">
+      <button class="share-btn" id="share-copy">COPY PERMALINK</button>
+      <a class="share-btn" id="share-x" target="_blank" rel="noopener">SHARE ON 𝕏</a>
+      <a class="share-btn" id="share-linkedin" target="_blank" rel="noopener">SHARE ON LINKEDIN</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Limited · Council Archive · v1.0</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/mission-control.html">Mission Control</a>
+    <a href="/governance.html">Governance</a>
+    <a href="/about.html">About</a>
+    <a href="/finances.html">Finances</a>
+  </div>
+</footer>
+
+<script>
+/* ── ADVISOR LENS REFERENCES ── */
+const ADVISOR_LENS = {
+  AXIOM:    'First principles — strip assumptions, state only what is verified true',
+  VECTOR:   'Risk & downside — what fails, who gets hurt, worst-case path',
+  FORGE:    "Pragmatist — what can actually be built/done given current resources",
+  HORIZON:  '2nd-order effects, 2–5 year implications',
+  CONTRARY: "Devil's advocate — argue the OPPOSITE of the apparent intent",
+};
+const ADVISOR_CLASS = { AXIOM:'', VECTOR:'c-vector', FORGE:'c-forge', HORIZON:'c-horizon', CONTRARY:'c-contrary' };
+
+/* ── ROUTING — list view or single view ── */
+const urlParams = new URLSearchParams(location.search);
+const targetId  = urlParams.get('id');
+
+function fmtTs(iso) {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso);
+    return d.toUTCString().replace(' GMT','') + ' UTC';
+  } catch { return iso; }
+}
+
+/* ── LIST MODE ── */
+async function loadList() {
+  try {
+    const r = await fetch('/api/council?limit=100');
+    const data = await r.json();
+    const list = document.getElementById('archive-list');
+    list.innerHTML = '';
+
+    if (data.error || !Array.isArray(data.entries) || data.entries.length === 0) {
+      const reason = data.error
+        ? `${data.error}`
+        : 'No deliberations yet. Convene the Council on Mission Control to add the first public deliberation.';
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🏛️</div>
+          <div class="empty-h">Archive is empty</div>
+          <div class="empty-body">${reason}<br/><br/>
+            <a class="btn-primary" href="/mission-control.html#council" style="margin-top:14px;">Convene the Council →</a>
+          </div>
+        </div>`;
+      return;
+    }
+
+    data.entries.forEach((e, i) => {
+      const a = document.createElement('a');
+      a.className = 'arc-entry';
+      a.href = `/council-archive.html?id=${encodeURIComponent(e.id)}`;
+      a.innerHTML = `
+        <div class="arc-meta">
+          <span class="arc-ts">${fmtTs(e.ts)}</span>
+          <span class="arc-id">ID · ${e.id}</span>
+        </div>
+        <div class="arc-q">${escapeHtml(e.question)}</div>
+        <div class="arc-preview">${escapeHtml(e.preview || '')}</div>
+        <div class="arc-cta">READ FULL DELIBERATION</div>`;
+      list.appendChild(a);
+    });
+
+    // Animate the entries in
+    if (typeof gsap !== 'undefined') {
+      gsap.from('.arc-entry', { opacity:0, y:18, duration:.5, ease:'power3.out', stagger:0.05 });
+    }
+  } catch (err) {
+    document.getElementById('archive-list').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-h">Archive temporarily unavailable</div>
+        <div class="empty-body">Could not reach the archive endpoint. Try again in a moment.</div>
+      </div>`;
+  }
+}
+
+/* ── SINGLE MODE ── */
+async function loadSingle(id) {
+  // Switch view
+  document.getElementById('hero-content').innerHTML = `
+    <div class="hero-tag">// COUNCIL ARCHIVE · DELIBERATION DETAIL</div>
+    <h1 class="hero-h" style="font-size:clamp(24px,3.5vw,38px);"><em>One question</em>, five views, one synthesis.</h1>`;
+  document.getElementById('list-view').style.display = 'none';
+  document.getElementById('single-view').style.display = 'block';
+
+  try {
+    const r = await fetch(`/api/council/${encodeURIComponent(id)}`);
+    const data = await r.json();
+    if (!r.ok || data.error) {
+      document.getElementById('s-tag').textContent = '// DELIBERATION NOT FOUND';
+      document.getElementById('s-question').textContent = data.error || 'This deliberation could not be loaded.';
+      document.getElementById('s-peer-block').style.display = 'none';
+      document.getElementById('s-synth-block').style.display = 'none';
+      document.querySelector('.share-row').style.display = 'none';
+      return;
+    }
+
+    // Render
+    document.getElementById('s-tag').textContent = '// DELIBERATION · ARCHIVED';
+    document.getElementById('s-question').textContent = data.question;
+    document.getElementById('s-ts').textContent = fmtTs(data.timestamp);
+    document.getElementById('s-id').textContent = `ID · ${data.id}`;
+
+    const advBox = document.getElementById('s-advisors');
+    advBox.innerHTML = '';
+    ['AXIOM','VECTOR','FORGE','HORIZON','CONTRARY'].forEach(name => {
+      const text = (data.advisors && data.advisors[name]) || '(no view recorded)';
+      const div = document.createElement('div');
+      div.className = 'adv-card ' + ADVISOR_CLASS[name];
+      div.innerHTML = `
+        <div class="adv-name">${name}</div>
+        <div class="adv-lens">${ADVISOR_LENS[name]}</div>
+        <div class="adv-view">${escapeHtml(text)}</div>`;
+      advBox.appendChild(div);
+    });
+
+    document.getElementById('s-peer').textContent  = data.peer      || '(no peer review)';
+    document.getElementById('s-synth').textContent = data.synthesis || '(no synthesis)';
+
+    // Share buttons
+    const url = location.origin + `/council-archive.html?id=${encodeURIComponent(id)}`;
+    const text = `Mother Earth AI Council deliberated: "${data.question}"`;
+    document.getElementById('share-x').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    document.getElementById('share-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(url).then(() => {
+        const t = document.getElementById('toast');
+        t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1400);
+      });
+    });
+
+    if (typeof gsap !== 'undefined') {
+      gsap.from('.adv-card', { opacity:0, y:22, duration:.55, stagger:0.1, ease:'power3.out' });
+      gsap.from('.peer-block, .synth-block', { opacity:0, y:18, duration:.6, stagger:0.15, delay:0.7, ease:'power3.out' });
+    }
+  } catch (err) {
+    document.getElementById('s-tag').textContent = '// LOAD ERROR';
+    document.getElementById('s-question').textContent = 'Could not load this deliberation.';
+  }
+}
+
+function escapeHtml(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ── UX LAYER ── */
+function initLenis(){if(typeof Lenis==='undefined')return;const l=new Lenis({duration:.55,smoothWheel:true,wheelMultiplier:2.0});if(typeof gsap!=='undefined'){gsap.ticker.add(t=>l.raf(t*1000));gsap.ticker.lagSmoothing(0)}else{(function r(t){l.raf(t);requestAnimationFrame(r)})(0)}}
+function initCursor(){const d=document.getElementById('cd'),r=document.getElementById('cr');if(!d||!r)return;if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches){d.style.display=r.style.display='none';return}let mx=-200,my=-200,rx=-200,ry=-200;const L=.28;window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'))});(function lp(){rx+=(mx-rx)*L;ry+=(my-ry)*L;d.style.left=mx+'px';d.style.top=my+'px';r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(lp)})()}
+
+/* BOOT */
+initCursor();
+initLenis();
+if (targetId) {
+  loadSingle(targetId);
+} else {
+  loadList();
+}
+
+// Hero entrance
+if (typeof gsap !== 'undefined') {
+  window.addEventListener('load', () => {
+    gsap.from('.hero-tag',{opacity:0,y:14,duration:.6,ease:'power3.out',delay:.1});
+    gsap.from('#hero-h, .hero-sub, .hero-actions',{opacity:0,y:22,duration:.7,ease:'power3.out',stagger:.12,delay:.25});
+  });
+}
+</script>
+
+</body>
+</html>

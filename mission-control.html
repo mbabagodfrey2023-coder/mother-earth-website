@@ -583,6 +583,7 @@
       <div class="hr-card-body">Five AI advisors — AXIOM, VECTOR, FORGE, HORIZON, CONTRARY — deliberate in real time. A Chairman synthesises. The kind of decision-making infrastructure no other org can show you.</div>
       <div class="cta-row">
         <a href="#council" class="pill pill-gold">→ ENTER CHAMBER</a>
+        <a href="/council-archive.html" class="pill pill-green">→ ARCHIVE</a>
       </div>
     </div>
     <div class="hr-card">
@@ -708,6 +709,18 @@
       <h4>// CHAIRMAN'S SYNTHESIS</h4>
       <pre id="council-synth-text"></pre>
     </div>
+
+    <!-- Permalink + share row, populated after successful deliberation -->
+    <div id="council-permalink-row" style="display:none;margin-top:18px;padding:18px 22px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:space-between;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--muted);">
+        <span style="color:var(--gold);font-weight:700">✓ ARCHIVED</span> ·
+        <a id="council-permalink-url" href="#" style="color:var(--green);" target="_blank">/council-archive?id=…</a>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button id="council-copy-link" type="button" style="padding:8px 14px;border-radius:6px;border:1px solid rgba(74,222,128,.3);background:none;color:var(--green);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;font-weight:700;">COPY LINK</button>
+        <a id="council-view-archive" href="/council-archive.html" style="padding:8px 14px;border-radius:6px;border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;font-weight:700;text-decoration:none;">VIEW ARCHIVE →</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -759,6 +772,7 @@
     <a href="/iris.html">IRIS Data</a>
     <a href="/governance.html">Governance</a>
     <a href="/finances.html">Finances</a>
+    <a href="/council-archive.html">Council Archive</a>
     <a href="/privacy.html">Privacy</a>
     <a href="/terms.html">Terms</a>
   </div>
@@ -1077,6 +1091,23 @@ async function askCouncil(e) {
     });
     document.getElementById('council-peer-text').textContent  = data.peer      || '(no peer review)';
     document.getElementById('council-synth-text').textContent = data.synthesis || '(no synthesis)';
+
+    // Permalink + share row (if KV archive returned an ID)
+    const permRow  = document.getElementById('council-permalink-row');
+    const permLink = document.getElementById('council-permalink-url');
+    if (data.id && permRow && permLink) {
+      const fullUrl = location.origin + '/council-archive.html?id=' + encodeURIComponent(data.id);
+      permLink.href = fullUrl;
+      permLink.textContent = '/council-archive?id=' + data.id;
+      permRow.style.display = 'flex';
+      const copyBtn = document.getElementById('council-copy-link');
+      if (copyBtn) copyBtn.onclick = () => {
+        navigator.clipboard.writeText(fullUrl).then(() => {
+          copyBtn.textContent = 'COPIED ✓';
+          setTimeout(() => { copyBtn.textContent = 'COPY LINK'; }, 1500);
+        });
+      };
+    }
 
     output.style.display = 'block';
     status.style.display = 'none';
