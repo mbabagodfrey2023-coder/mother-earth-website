@@ -24,6 +24,7 @@
     { label: 'About',       href: '/about.html',             path: '/about' },
     { label: 'Roadmap',     href: '/roadmap.html',           path: '/roadmap' },
     { label: 'Press',       href: '/press.html',             path: '/press' },
+    { label: 'Finances',    href: '/finances.html',          path: '/finances' },
   ];
 
   // Detect active page

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finances — Mother Earth Kenya · Open Books, Open Treasury</title>
+  <meta name="description" content="Pre-incorporation expense register, treasury policy summary, funding sources, and runway transparency for Mother Earth Kenya. Public accountability before profit."/>
+  <meta property="og:title" content="Finances — Mother Earth Kenya"/>
+  <meta property="og:description" content="Open books. Pre-incorporation expense register, treasury policy, funding sources, runway."/>
+  <meta property="og:image" content="https://motherearth.systems/og.svg"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+  <link rel="canonical" href="https://motherearth.systems/finances"/>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "url": "https://motherearth.systems/finances",
+    "name": "Finances — Mother Earth Kenya",
+    "description": "Public transparency on pre-incorporation expenses, treasury policy, funding sources, and runway.",
+    "isPartOf": { "@type": "WebSite", "url": "https://motherearth.systems", "name": "Mother Earth Kenya" },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",     "item": "https://motherearth.systems/" },
+        { "@type": "ListItem", "position": 2, "name": "Finances", "item": "https://motherearth.systems/finances" }
+      ]
+    }
+  }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="/echo-widget.js" defer></script>
+  <script src="/mobile-menu.js" defer></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg:#020606; --bg2:#050d0a;
+      --green:#4ade80; --gold:#D4AF37; --terra:#D4763A;
+      --amber:#f59e0b; --blue:#60a5fa; --red:#ef4444;
+      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
+      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+    @media(hover:hover) and (pointer:fine){*,*::before,*::after{cursor:none !important}}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    body.ch #cd{width:10px;height:10px;background:var(--gold)}
+    body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
+    @media(hover:none){#cd,#cr{display:none}}
+
+    #grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite}
+    @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
+
+    /* NAV */
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
+    .nav-logo img{width:48px;height:48px;object-fit:contain}
+    .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
+    .nav-mid a{color:var(--muted);transition:color .2s}
+    .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
+    .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    @media(max-width:1050px){.nav-mid{display:none}}
+
+    main{padding-top:72px}
+
+    /* HERO */
+    #hero{padding:90px 32px 50px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 30%, rgba(212,175,55,.05) 0%, transparent 70%)}
+    .hero-inner{max-width:900px;margin:0 auto}
+    .hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--gold);opacity:.7;margin-bottom:22px}
+    .hero-h{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,6vw,76px);font-weight:400;line-height:1.05;letter-spacing:-.01em;margin-bottom:24px}
+    .hero-h em{font-style:italic;color:var(--gold)}
+    .hero-sub{font-size:clamp(15px,1.8vw,19px);color:var(--muted);line-height:1.7;max-width:680px;margin:0 auto 30px}
+    .hero-meta{display:inline-flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--muted);padding:10px 18px;border:1px solid var(--border);border-radius:24px}
+    .hero-meta .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:dotpulse 2s ease-in-out infinite}
+    @keyframes dotpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
+
+    /* STATE BANNER */
+    #state{padding:32px;background:linear-gradient(180deg, transparent, rgba(212,175,55,.04), transparent);border-top:1px solid rgba(212,175,55,.12);border-bottom:1px solid rgba(212,175,55,.12)}
+    .state-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;max-width:1100px;margin:0 auto}
+    .s-stat{text-align:center}
+    .s-v{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.2vw,38px);font-weight:600;line-height:1;color:var(--gold);margin-bottom:6px}
+    .s-l{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--muted)}
+    .s-state{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 8px;border-radius:4px;color:var(--amber);background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);margin-left:6px;font-weight:700}
+
+    /* ROW */
+    .row{padding:80px 32px}
+    .wrap{max-width:1100px;margin:0 auto}
+    .row-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;color:var(--green);opacity:.6;margin-bottom:14px}
+    .row-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4.5vw,50px);font-weight:400;line-height:1.1;letter-spacing:-.01em;margin-bottom:18px}
+    .row-title em{color:var(--gold);font-style:italic}
+    .row-sub{font-size:16px;color:var(--muted);max-width:680px;line-height:1.7;margin-bottom:32px}
+
+    /* EXPENSE TABLE */
+    .expenses{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+    .e-row{display:grid;grid-template-columns:110px 1fr 130px 110px;gap:18px;padding:16px 22px;border-bottom:1px solid var(--border);align-items:center;transition:background .2s}
+    .e-row:last-child{border-bottom:none}
+    .e-row:hover{background:rgba(255,255,255,.015)}
+    .e-row.header{background:rgba(212,175,55,.05);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--gold);opacity:.85}
+    .e-row.totals{background:rgba(212,175,55,.08);font-weight:700}
+    .e-row.totals .e-amt{color:var(--gold);font-size:15px}
+    @media(max-width:720px){.e-row{grid-template-columns:1fr;gap:6px} .e-row.header{display:none} .e-amt{font-size:14px !important;color:var(--gold) !important}}
+    .e-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.05em}
+    .e-desc{font-size:13px;color:var(--text);line-height:1.5}
+    .e-desc small{display:block;color:var(--muted);font-size:11px;margin-top:2px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+    .e-cat{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 9px;border-radius:4px;text-align:center;font-weight:700}
+    .cat-tech{color:var(--indigo, #818cf8);background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2)}
+    .cat-legal{color:var(--blue);background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2)}
+    .cat-comp{color:var(--gold);background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2)}
+    .cat-marketing{color:var(--terra);background:rgba(212,118,58,.08);border:1px solid rgba(212,118,58,.2)}
+    .cat-ops{color:var(--green);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2)}
+    .e-amt{font-family:'JetBrains Mono',monospace;font-size:13px;text-align:right;font-weight:700;color:var(--text);letter-spacing:.02em}
+
+    /* POLICY CARDS */
+    .policies{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+    .policy{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .25s,transform .25s}
+    .policy:hover{border-color:rgba(74,222,128,.3);transform:translateY(-3px)}
+    .policy-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--gold);opacity:.7;margin-bottom:10px}
+    .policy-h{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:12px;letter-spacing:-.005em;color:var(--text)}
+    .policy-body{font-size:13px;color:var(--muted);line-height:1.7}
+    .policy-body strong{color:var(--text)}
+    .policy-meta{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--green);font-weight:700}
+
+    /* FUNDING SOURCES */
+    .sources{display:grid;gap:14px}
+    .source{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 26px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;transition:border-color .25s}
+    .source:hover{border-color:rgba(74,222,128,.3)}
+    @media(max-width:700px){.source{grid-template-columns:1fr;gap:10px}}
+    .src-icon{font-size:26px;line-height:1}
+    .src-content h3{font-size:16px;font-weight:700;margin-bottom:4px}
+    .src-content p{font-size:13px;color:var(--muted);line-height:1.6}
+    .src-state{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;padding:5px 11px;border-radius:5px;font-weight:700;white-space:nowrap}
+    .state-active{color:var(--green);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25)}
+    .state-pending{color:var(--amber);background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25)}
+    .state-future{color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--border)}
+
+    /* COMMITMENT BAND */
+    #commitment{background:linear-gradient(180deg, transparent, rgba(212,175,55,.05), transparent);border-top:1px solid rgba(212,175,55,.12);border-bottom:1px solid rgba(212,175,55,.12);padding:60px 32px;text-align:center}
+    .commit-h{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,32px);font-weight:400;font-style:italic;color:var(--gold);line-height:1.5;max-width:780px;margin:0 auto;letter-spacing:-.005em}
+
+    /* CTA */
+    #cta{text-align:center;padding:90px 32px;background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(74,222,128,.05) 0%, transparent 70%)}
+    .cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-weight:400;margin-bottom:18px}
+    .cta-h em{color:var(--gold);font-style:italic}
+    .cta-sub{font-size:15px;color:var(--muted);max-width:560px;margin:0 auto 30px;line-height:1.7}
+    .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{background:var(--gold);color:#000;border-radius:8px;padding:14px 28px;font-size:14px;font-weight:700;letter-spacing:.04em;transition:background .2s;display:inline-block}
+    .btn-primary:hover{background:#e8c860}
+    .btn-outline{border:1.5px solid var(--border);color:var(--text);border-radius:8px;padding:14px 28px;font-size:14px;font-weight:600;display:inline-block;transition:border-color .2s,color .2s}
+    .btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+    footer{padding:36px 32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted)}
+    .footer-links{display:flex;gap:24px;flex-wrap:wrap}
+    .footer-links a:hover{color:var(--green)}
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html">// LIVE OPS</a></li>
+    <li><a href="/iris.html">IRIS</a></li>
+    <li><a href="/chapters.html">CHAPTERS</a></li>
+    <li><a href="/governance.html">GOVERNANCE</a></li>
+    <li><a href="/about.html">ABOUT</a></li>
+    <li><a href="/roadmap.html">ROADMAP</a></li>
+    <li><a href="/press.html">PRESS</a></li>
+  </ul>
+  <a class="nav-cta" href="mailto:hello@motherearth.systems">GET IN TOUCH</a>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">// FINANCES · OPEN BOOKS · PRE-INCORPORATION</div>
+    <h1 class="hero-h">If you can't see <em>the books</em>,<br/>you can't <em>trust the mission</em>.</h1>
+    <p class="hero-sub">Mother Earth Kenya commits to public transparency on operating expenses, treasury policy, and funding sources. This page is updated whenever anything material changes — and audited annually under the Trust's reporting obligations once incorporated.</p>
+    <div class="hero-meta">
+      <span class="dot"></span>
+      <span>STATE: PRE-INCORPORATION · BRS REGISTRATION IN PROGRESS</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATE BANNER -->
+<section id="state">
+  <div class="state-grid">
+    <div class="s-stat"><div class="s-v">100%</div><div class="s-l">SELF-FUNDED · TO DATE</div></div>
+    <div class="s-stat"><div class="s-v">$0</div><div class="s-l">EXTERNAL EQUITY RAISED</div></div>
+    <div class="s-stat"><div class="s-v">$0</div><div class="s-l">DEBT OUTSTANDING</div></div>
+    <div class="s-stat"><div class="s-v">~KES 47K</div><div class="s-l">PRE-INCORP EXPENSE · TO DATE</div></div>
+    <div class="s-stat"><div class="s-v">Y1 EOY</div><div class="s-l">FIRST AUDITED REPORT <span class="s-state">PLANNED</span></div></div>
+  </div>
+</section>
+
+<!-- PRE-INCORPORATION EXPENSES -->
+<section class="row">
+  <div class="wrap">
+    <div class="row-tag">// PRE-INCORPORATION EXPENSE REGISTER</div>
+    <h2 class="row-title">Every <em>shilling</em>, accounted for.</h2>
+    <p class="row-sub">Personal expenditures by the founder on behalf of Mother Earth Kenya Limited prior to incorporation. Will be formally adopted as company expenses by Written Board Resolution on registration day (Resolution #16) and reimbursed once a corporate bank account is opened.</p>
+
+    <div class="expenses">
+      <div class="e-row header">
+        <div>DATE</div><div>DESCRIPTION</div><div>CATEGORY</div><div>AMOUNT</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-06</div>
+        <div class="e-desc">Anthropic API credits · 33 agents continuous operation
+          <small>OPERATIONAL · MONTHLY</small></div>
+        <div><span class="e-cat cat-tech">TECH</span></div>
+        <div class="e-amt">KES 12,800</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-06</div>
+        <div class="e-desc">Cloudflare Pages hosting + DNS · motherearth.systems
+          <small>OPERATIONAL · ANNUAL PRORATA</small></div>
+        <div><span class="e-cat cat-tech">TECH</span></div>
+        <div class="e-amt">KES 1,400</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-06</div>
+        <div class="e-desc">Domain renewal · motherearth.systems (.systems TLD)
+          <small>OPERATIONAL · ANNUAL</small></div>
+        <div><span class="e-cat cat-tech">TECH</span></div>
+        <div class="e-amt">KES 5,200</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-05</div>
+        <div class="e-desc">Recraft v3 logo generation · brand assets
+          <small>ONE-TIME · BRAND</small></div>
+        <div><span class="e-cat cat-marketing">BRAND</span></div>
+        <div class="e-amt">KES 3,400</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-05</div>
+        <div class="e-desc">X / Twitter Basic API tier · ECHO posting
+          <small>OPERATIONAL · MONTHLY</small></div>
+        <div><span class="e-cat cat-marketing">BRAND</span></div>
+        <div class="e-amt">KES 13,000</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-05</div>
+        <div class="e-desc">LinkedIn company page setup · admin verification
+          <small>ONE-TIME · BRAND</small></div>
+        <div><span class="e-cat cat-marketing">BRAND</span></div>
+        <div class="e-amt">KES 0</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-05</div>
+        <div class="e-desc">eCitizen BRS preparation fees · pre-filing scoping
+          <small>ONE-TIME · LEGAL</small></div>
+        <div><span class="e-cat cat-comp">COMPLIANCE</span></div>
+        <div class="e-amt">KES 2,500</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-05</div>
+        <div class="e-desc">Office co-working day-passes · meetings + admin
+          <small>OPERATIONAL · AD HOC</small></div>
+        <div><span class="e-cat cat-ops">OPS</span></div>
+        <div class="e-amt">KES 4,800</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-05</div>
+        <div class="e-desc">KIPI trademark application preparation
+          <small>ONE-TIME · LEGAL</small></div>
+        <div><span class="e-cat cat-legal">LEGAL</span></div>
+        <div class="e-amt">KES 2,800</div>
+      </div>
+
+      <div class="e-row">
+        <div class="e-date">2026-04</div>
+        <div class="e-desc">Document prep · MoA/AoA legal templates research
+          <small>ONE-TIME · LEGAL</small></div>
+        <div><span class="e-cat cat-legal">LEGAL</span></div>
+        <div class="e-amt">KES 1,500</div>
+      </div>
+
+      <div class="e-row totals">
+        <div></div>
+        <div class="e-desc">Pre-incorporation total · subject to formal Board adoption</div>
+        <div></div>
+        <div class="e-amt">~KES 47,400</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TREASURY POLICIES -->
+<section class="row" style="background:linear-gradient(180deg, transparent, rgba(13,43,28,.18), transparent)">
+  <div class="wrap">
+    <div class="row-tag">// TREASURY POLICY · ATLAS DOMAIN</div>
+    <h2 class="row-title">How the books will be <em>kept</em>.</h2>
+    <p class="row-sub">Adopted from the Financial Controls Policy v1.0 + Investment Policy Statement (IPS). Activates automatically the day Mother Earth Kenya Limited receives its certificate of incorporation.</p>
+
+    <div class="policies">
+      <div class="policy">
+        <div class="policy-tag">// AUTHORITY GATES</div>
+        <div class="policy-h">Single-signature ceiling</div>
+        <div class="policy-body">Treasury operations up to <strong>KES 50,000</strong> may be executed autonomously by ATLAS SWEEP. Above that threshold, multi-signature workflow activates (CEO + ATLAS WALL co-signature). <strong>Any transaction ≥ KES 130 million triggers Golden Share Critical Gate review</strong> — human approval mandatory regardless of context.</div>
+        <div class="policy-meta">ENFORCED BY: ATLAS · CEO CRITICAL_GATES</div>
+      </div>
+
+      <div class="policy">
+        <div class="policy-tag">// CUSTODY</div>
+        <div class="policy-h">Hot / cold split + multi-sig</div>
+        <div class="policy-body">Operating wallet (hot) holds <strong>≤ 90 days runway</strong> for day-to-day liabilities. Reserve wallet (cold) holds remainder under <strong>2-of-3 hardware-backed multi-sig</strong>. KEYS module (NEXUS) air-gapped signing. SWEEP rebalances daily from hot to cold if hot exceeds threshold.</div>
+        <div class="policy-meta">ENFORCED BY: NEXUS KEYS · ATLAS SWEEP</div>
+      </div>
+
+      <div class="policy">
+        <div class="policy-tag">// EXPOSURE LIMITS</div>
+        <div class="policy-h">No single asset > 60%</div>
+        <div class="policy-body">Cash / stablecoin baseline. No single counterparty exposure exceeds <strong>30% of treasury</strong>. No single asset class exceeds <strong>60%</strong>. WALL agent monitors IPS breach in real time and auto-freezes outflows on violation pending CEO review.</div>
+        <div class="policy-meta">ENFORCED BY: ATLAS WALL</div>
+      </div>
+
+      <div class="policy">
+        <div class="policy-tag">// FX</div>
+        <div class="policy-h">KES / USD / stablecoin</div>
+        <div class="policy-body">Operating cash held primarily in <strong>KES</strong> (Kenyan Shillings) post-BRS via M-Pesa / commercial bank. International customer revenue settled in <strong>USD</strong>. Reserve held in regulated stablecoin once VASP licence active. <strong>No exotic currency exposure</strong>; no derivatives.</div>
+        <div class="policy-meta">ENFORCED BY: ATLAS WALL · TAX</div>
+      </div>
+
+      <div class="policy">
+        <div class="policy-tag">// COMPLIANCE</div>
+        <div class="policy-h">Kenya Revenue Authority alignment</div>
+        <div class="policy-body">TAX agent maintains parallel ledger ready for KRA filing. VAT registration on certificate of incorporation. Withholding tax on cross-border supplier payments. <strong>Quarterly tax provisioning</strong> ring-fenced from operating cash. Annual external audit from Y1 close.</div>
+        <div class="policy-meta">ENFORCED BY: ATLAS TAX · AMARA CLOCK</div>
+      </div>
+
+      <div class="policy">
+        <div class="policy-tag">// REPORTING CADENCE</div>
+        <div class="policy-h">Monthly + quarterly + annual</div>
+        <div class="policy-body">Internal monthly close (ATLAS YIELD). Quarterly Trustee briefing once Trust registered. <strong>Annual audited financial statements published publicly</strong> on this page from Y1 close (December 2026). All Sentinel + Planetary customer flows reconciled per cycle.</div>
+        <div class="policy-meta">ENFORCED BY: ATLAS YIELD · SAGE BOARD</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNDING SOURCES -->
+<section class="row">
+  <div class="wrap">
+    <div class="row-tag">// FUNDING SOURCES · WHERE THE MONEY COMES FROM</div>
+    <h2 class="row-title">No equity. No debt. <em>Yet</em>.</h2>
+    <p class="row-sub">Mother Earth Kenya does not raise equity capital. The Purpose Trust structure means there are no shareholders to return capital to. Funding comes from the four sources below, in order of priority.</p>
+
+    <div class="sources">
+      <div class="source">
+        <div class="src-icon">🌱</div>
+        <div class="src-content">
+          <h3>Founder Loan (pre-incorporation)</h3>
+          <p>Andy advances personal funds at <strong>0% interest</strong> to cover pre-incorporation operating expenses. Codified in the Consultancy Agreement (Clause 4B). Repayable at the Consultant's discretion subject to a KES 200,000 minimum cash reserve. Recorded as a liability on Day 1 of the company books.</p>
+        </div>
+        <div class="src-state state-active">ACTIVE · ~KES 47K</div>
+      </div>
+
+      <div class="source">
+        <div class="src-icon">💎</div>
+        <div class="src-content">
+          <h3>IRIS Marketplace Revenue</h3>
+          <p>Subscription tiers — Guardian ($99/mo), Sentinel ($499/mo), Planetary ($1,499/mo) — plus Research tier (free for accredited institutions). <strong>Primary long-term revenue source</strong>. Activated post-BRS once Stripe + M-Pesa rails go live (Q3 2026).</p>
+        </div>
+        <div class="src-state state-pending">UNBLOCKS POST-BRS</div>
+      </div>
+
+      <div class="source">
+        <div class="src-icon">🤝</div>
+        <div class="src-content">
+          <h3>Mission-aligned grant capital</h3>
+          <p>Targeted grant applications for specific environmental monitoring infrastructure (e.g. additional GAIA sensor stations, regional chapter launches). <strong>No general-operating grants</strong> — grant capital is restricted-purpose only, with public reporting on disbursement.</p>
+        </div>
+        <div class="src-state state-future">PLANNED · 2027</div>
+      </div>
+
+      <div class="source">
+        <div class="src-icon">🌍</div>
+        <div class="src-content">
+          <h3>Chapter network contribution</h3>
+          <p>Voluntary contributions from international chapters to shared planetary infrastructure (federated SAGE, NEXUS chain anchoring, shared agent maintenance). <strong>Not a franchise fee</strong> — each chapter sets its own contribution level, with transparency on use of pooled funds.</p>
+        </div>
+        <div class="src-state state-future">PLANNED · 2027+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMITMENT -->
+<section id="commitment">
+  <p class="commit-h">"Transparency is the cheapest insurance an institution can buy. We pay the premium upfront."</p>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <h2 class="cta-h">Looking for the <em>full Trust Deed</em> or <em>audit-ready ledger</em>?</h2>
+  <p class="cta-sub">Available on request for serious enquiries from investors, journalists, regulators, partners, or potential chapter leads.</p>
+  <div class="cta-row">
+    <a class="btn-primary" href="mailto:hello@motherearth.systems?subject=Financial%20documents%20request">Request Documents →</a>
+    <a class="btn-outline" href="/governance.html">Read Governance ↗</a>
+    <a class="btn-outline" href="/roadmap.html">View Roadmap ↗</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Limited · Finances v1.0 · Updated 7 Jun 2026</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/mission-control.html">Mission Control</a>
+    <a href="/iris.html">IRIS</a>
+    <a href="/chapters.html">Chapters</a>
+    <a href="/governance.html">Governance</a>
+    <a href="/about.html">About</a>
+    <a href="/roadmap.html">Roadmap</a>
+    <a href="/press.html">Press</a>
+  </div>
+</footer>
+
+<script>
+function initLenis(){if(typeof Lenis==='undefined')return;const l=new Lenis({duration:.55,smoothWheel:true,wheelMultiplier:2.0});if(typeof gsap!=='undefined'){gsap.ticker.add(t=>l.raf(t*1000));gsap.ticker.lagSmoothing(0)}else{(function r(t){l.raf(t);requestAnimationFrame(r)})(0)}}
+function initCursor(){const d=document.getElementById('cd'),r=document.getElementById('cr');if(!d||!r)return;if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches){d.style.display=r.style.display='none';return}let mx=-200,my=-200,rx=-200,ry=-200;const L=.28;window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});document.querySelectorAll('a,button,.policy,.source,.e-row,.s-stat').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'))});(function lp(){rx+=(mx-rx)*L;ry+=(my-ry)*L;d.style.left=mx+'px';d.style.top=my+'px';r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(lp)})()}
+function initReveals(){if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined')return;gsap.registerPlugin(ScrollTrigger);const e='power3.out';
+  gsap.from('.hero-tag',{opacity:0,y:14,duration:.6,ease:e,delay:.1});
+  gsap.from('.hero-h',{opacity:0,y:42,duration:.95,ease:e,delay:.25});
+  gsap.from('.hero-sub',{opacity:0,y:24,duration:.7,ease:e,delay:.55});
+  gsap.from('.hero-meta',{opacity:0,y:14,duration:.55,ease:e,delay:.85});
+  ScrollTrigger.batch('.s-stat',{start:'top 92%',once:true,onEnter:b=>gsap.from(b,{opacity:0,y:25,duration:.6,ease:'back.out(1.3)',stagger:{each:.08}})});
+  document.querySelectorAll('.row-tag').forEach(el=>gsap.from(el,{opacity:0,x:-22,duration:.55,ease:e,scrollTrigger:{trigger:el,start:'top 90%',once:true}}));
+  document.querySelectorAll('.row-title').forEach(el=>gsap.from(el,{opacity:0,y:38,duration:.85,ease:e,scrollTrigger:{trigger:el,start:'top 86%',once:true}}));
+  document.querySelectorAll('.row-sub').forEach(el=>gsap.from(el,{opacity:0,y:22,duration:.65,delay:.1,ease:e,scrollTrigger:{trigger:el,start:'top 86%',once:true}}));
+  ScrollTrigger.batch('.e-row',{start:'top 94%',once:true,onEnter:b=>gsap.from(b,{opacity:0,y:12,duration:.4,ease:e,stagger:{each:.04}})});
+  ScrollTrigger.batch('.policy',{start:'top 90%',once:true,onEnter:b=>gsap.from(b,{opacity:0,y:30,scale:.96,duration:.65,ease:'back.out(1.3)',stagger:{each:.08}})});
+  ScrollTrigger.batch('.source',{start:'top 92%',once:true,onEnter:b=>gsap.from(b,{opacity:0,x:-18,duration:.6,ease:e,stagger:{each:.08}})});
+  gsap.from('.commit-h',{opacity:0,y:24,duration:.85,ease:e,scrollTrigger:{trigger:'#commitment',start:'top 80%',once:true}});
+  gsap.from('.cta-h, .cta-sub, .cta-row',{opacity:0,y:26,duration:.7,ease:e,stagger:.14,scrollTrigger:{trigger:'#cta',start:'top 80%',once:true}});
+  document.querySelectorAll('.nav-cta,.btn-primary,.btn-outline').forEach(btn=>{
+    btn.addEventListener('mousemove',ev=>{const r=btn.getBoundingClientRect();gsap.to(btn,{x:(ev.clientX-r.left-r.width/2)*.3,y:(ev.clientY-r.top-r.height/2)*.3,duration:.3,ease:'power2.out'})});
+    btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:.55,ease:'elastic.out(1,0.45)'}));
+  });
+}
+initCursor();
+initLenis();
+window.addEventListener('load',initReveals);
+</script>
+</body>
+</html>
