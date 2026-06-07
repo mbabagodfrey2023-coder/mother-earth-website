@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Global Chapters — Mother Earth Kenya · Every Country Welcome</title>
+  <meta name="description" content="Mother Earth is a planetary intelligence network. Kenya is the founding chapter. Every country is welcome to start its own. Apply to lead Mother Earth in your nation."/>
+  <meta property="og:title" content="Global Chapters — Mother Earth"/>
+  <meta property="og:description" content="One mission. Many chapters. Apply to lead Mother Earth in your country."/>
+  <meta property="og:image" content="https://motherearth.systems/logo-official-512.png"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+  <link rel="canonical" href="https://motherearth.systems/chapters"/>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+    :root {
+      --bg:     #020606;
+      --bg2:    #050d0a;
+      --green:  #4ade80;
+      --gold:   #D4AF37;
+      --terra:  #D4763A;
+      --amber:  #f59e0b;
+      --blue:   #60a5fa;
+      --text:   #F2F0EB;
+      --muted:  rgba(242,240,235,.45);
+      --dim:    rgba(242,240,235,.25);
+      --border: rgba(255,255,255,.07);
+      --card:   rgba(255,255,255,.03);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.55;
+      overflow-x: hidden;
+    }
+    @media (hover: hover) and (pointer: fine) { *, *::before, *::after { cursor: none !important; } }
+    a { color: inherit; text-decoration: none; }
+    img, canvas { display: block; max-width: 100%; }
+
+    #cd { position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s; }
+    #cr { position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s; }
+    body.ch #cd { width:10px;height:10px;background:var(--gold); }
+    body.ch #cr { width:56px;height:56px;border-color:rgba(212,175,55,.65); }
+    @media(hover:none){#cd,#cr{display:none}}
+
+    #grain { position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite; }
+    @keyframes grainShift { 0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)} }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)} }
+
+    /* ── NAV ── */
+    nav.topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(2,6,6,.86); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px; }
+    .nav-logo img { width:48px;height:48px;object-fit:contain; }
+    .nav-mid { display:flex;gap:28px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em; }
+    .nav-mid a { color:var(--muted);transition:color .2s; }
+    .nav-mid a:hover, .nav-mid a.active { color:var(--green); }
+    .nav-cta {
+      background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;
+      padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;
+      transition:border-color .2s,background .2s;
+    }
+    .nav-cta:hover { border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04); }
+    @media(max-width:900px){ .nav-mid{display:none} }
+
+    /* ── HERO ── */
+    main { padding-top: 72px; }
+    #hero {
+      padding: 80px 32px 60px;
+      display:grid; grid-template-columns: 1fr 1.1fr; gap:32px;
+      min-height: 600px; align-items:center;
+    }
+    @media(max-width:1100px) { #hero { grid-template-columns: 1fr; padding-top: 40px; } }
+
+    .hero-left { padding: 0 12px; }
+    .hero-tag {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.3em;
+      color:var(--green); opacity:.7; margin-bottom:18px;
+    }
+    .hero-h {
+      font-size:clamp(36px,5.5vw,72px); font-weight:800; line-height:1.04; letter-spacing:-.02em;
+      margin-bottom:20px;
+    }
+    .hero-h span { color:var(--gold); }
+    .hero-sub {
+      font-size:clamp(15px,1.7vw,18px); color:var(--muted); line-height:1.7;
+      max-width:560px; margin-bottom:34px;
+    }
+    .hero-stats {
+      display:grid; grid-template-columns:repeat(3,auto); gap:36px;
+      padding:24px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      margin-bottom:32px;
+    }
+    .hero-stat { }
+    .hero-stat-v { font-size:32px; font-weight:800; color:var(--gold); line-height:1; }
+    .hero-stat-l { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em; color:var(--muted); margin-top:6px; }
+    @media(max-width:600px){ .hero-stats{grid-template-columns:1fr 1fr;gap:20px} }
+
+    .hero-cta-row { display:flex; gap:12px; flex-wrap:wrap; }
+    .btn-primary {
+      background:var(--green); color:#000; border-radius:8px;
+      padding:14px 28px; font-size:14px; font-weight:700; letter-spacing:.04em;
+      transition:background .2s; display:inline-block;
+    }
+    .btn-primary:hover { background:#86efac; }
+    .btn-outline {
+      border:1.5px solid var(--border); color:var(--text); border-radius:8px;
+      padding:14px 28px; font-size:14px; font-weight:600; display:inline-block;
+      transition:border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color:var(--green); color:var(--green); }
+
+    /* ── GLOBE PANEL ── */
+    .hero-right {
+      position:relative; min-height:560px;
+      background:radial-gradient(ellipse at 50% 50%, rgba(74,222,128,.04) 0%, transparent 60%);
+      border:1px solid var(--border); border-radius:18px; overflow:hidden;
+    }
+    #globe-canvas { position:absolute; inset:0; }
+    .globe-legend {
+      position:absolute; bottom:18px; left:18px; right:18px; z-index:5;
+      display:flex; gap:18px; flex-wrap:wrap; justify-content:center;
+      padding:14px 20px; border-radius:12px;
+      background:rgba(2,6,6,.7); backdrop-filter:blur(14px); border:1px solid var(--border);
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em;
+    }
+    .legend-item { display:inline-flex; align-items:center; gap:8px; color:var(--muted); }
+    .legend-dot { width:9px; height:9px; border-radius:50%; box-shadow:0 0 8px currentColor; animation:pulseDot 2s ease-in-out infinite; }
+    .legend-dot.active     { background:var(--gold);  color:var(--gold);  }
+    .legend-dot.exploring  { background:var(--amber); color:var(--amber); }
+    .legend-dot.available  { background:var(--green); color:var(--green); }
+
+    /* ── ROW BASE ── */
+    .row { padding: 64px 32px; }
+    .wrap { max-width:1200px; margin:0 auto; }
+    .row-head {
+      display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:14px;
+      margin-bottom:32px;
+    }
+    .row-tag { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.25em; color:var(--green); opacity:.6; }
+    .row-title { font-size:clamp(28px,4vw,48px); font-weight:800; letter-spacing:-.01em; }
+    .row-sub { font-size:16px; color:var(--muted); max-width:680px; line-height:1.7; margin-top:8px; }
+
+    /* ── HOW CHAPTERS WORK ── */
+    .pillars { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:18px; }
+    .pillar {
+      background:var(--card); border:1px solid var(--border); border-radius:14px; padding:28px;
+      transition:border-color .25s, transform .25s;
+    }
+    .pillar:hover { border-color:rgba(74,222,128,.3); transform:translateY(-3px); }
+    .pillar-num {
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.25em;
+      color:var(--gold); opacity:.7; margin-bottom:12px;
+    }
+    .pillar-title { font-size:20px; font-weight:700; margin-bottom:10px; letter-spacing:-.005em; }
+    .pillar-body { font-size:14px; color:var(--muted); line-height:1.7; }
+
+    /* ── CHAPTER STATUS GRID ── */
+    #chapters-row { background:linear-gradient(180deg, transparent, rgba(13,43,28,.18) 50%, transparent); }
+    .country-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:14px;
+    }
+    .country-card {
+      background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;
+      position:relative; overflow:hidden; transition:border-color .25s, transform .25s;
+    }
+    .country-card:hover { border-color:rgba(74,222,128,.25); transform:translateY(-2px); }
+    .country-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(to right, var(--accent, var(--green)), transparent);
+    }
+    .country-card.s-active    { --accent: var(--gold); }
+    .country-card.s-exploring { --accent: var(--amber); }
+    .country-card.s-available { --accent: var(--green); }
+    .country-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+    .country-flag {
+      font-size:32px; line-height:1; filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));
+    }
+    .country-status {
+      font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.2em;
+      padding:4px 10px; border-radius:20px; background:rgba(255,255,255,.04); border:1px solid;
+    }
+    .country-card.s-active    .country-status { color:var(--gold);  border-color:rgba(212,175,55,.4); }
+    .country-card.s-exploring .country-status { color:var(--amber); border-color:rgba(245,158,11,.4); }
+    .country-card.s-available .country-status { color:var(--green); border-color:rgba(74,222,128,.4); }
+    .country-name { font-size:20px; font-weight:800; letter-spacing:-.005em; margin-bottom:6px; }
+    .country-region { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.15em; color:var(--muted); margin-bottom:14px; }
+    .country-detail {
+      padding:10px 12px; background:rgba(255,255,255,.025); border-radius:8px;
+      font-size:12px; color:var(--muted); line-height:1.65; min-height:60px;
+      border-left:2px solid var(--accent, var(--green));
+    }
+    .country-detail strong { color:var(--text); display:block; font-size:11px; letter-spacing:.15em;
+      font-family:'JetBrains Mono',monospace; margin-bottom:4px; }
+    .country-foot {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-top:14px; padding-top:14px; border-top:1px solid var(--border);
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.15em;
+      color:var(--muted);
+    }
+    .country-cta {
+      color:var(--green); font-weight:700; transition:color .2s;
+    }
+    .country-cta:hover { color:#86efac; }
+
+    /* ── APPLICATION SECTION ── */
+    #apply { background:linear-gradient(180deg, transparent, rgba(212,175,55,.04) 100%); border-top:1px solid rgba(212,175,55,.15); }
+    .apply-grid { display:grid; grid-template-columns: 1fr 1fr; gap:48px; align-items:start; }
+    @media(max-width:900px){ .apply-grid{grid-template-columns:1fr;gap:32px} }
+    .apply-left h2 { font-size:clamp(28px,4vw,46px); font-weight:800; letter-spacing:-.01em; margin-bottom:18px; }
+    .apply-left h2 span { color:var(--gold); }
+    .apply-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:24px; }
+    .apply-list li { display:flex; align-items:flex-start; gap:12px; font-size:14px; color:var(--muted); line-height:1.65; }
+    .apply-list li::before { content:'✓'; color:var(--gold); font-weight:700; flex-shrink:0; margin-top:1px; font-size:16px; }
+    .apply-list strong { color:var(--text); font-weight:600; }
+    .apply-quote {
+      margin-top:30px; padding:20px 24px; border-left:2px solid var(--gold);
+      background:rgba(212,175,55,.04); border-radius:0 12px 12px 0;
+      font-size:14px; color:var(--text); font-style:italic; line-height:1.7;
+    }
+    .apply-quote-attrib {
+      display:block; margin-top:10px; font-style:normal;
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em;
+      color:var(--muted);
+    }
+
+    .apply-form {
+      background:var(--card); border:1px solid var(--border); border-radius:14px; padding:32px;
+    }
+    .apply-form-tag {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.25em;
+      color:var(--gold); opacity:.7; margin-bottom:10px;
+    }
+    .apply-form-h { font-size:22px; font-weight:700; margin-bottom:22px; }
+    .form-group { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+    .form-group label {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em;
+      color:var(--muted);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      background:rgba(255,255,255,.04); border:1px solid var(--border);
+      border-radius:8px; padding:12px 14px; color:var(--text); font:inherit; font-size:14px;
+      outline:none; transition:border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--gold); }
+    .form-group textarea { resize:vertical; min-height:90px; }
+    .form-group select option { background:#0d2b1c; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:520px) { .form-row { grid-template-columns:1fr; } }
+    .submit-btn {
+      width:100%; background:var(--gold); color:#000; border:none; border-radius:8px;
+      padding:16px; font:inherit; font-size:14px; font-weight:700; letter-spacing:.06em;
+      transition:background .2s; margin-top:6px;
+    }
+    .submit-btn:hover { background:#e8c860; }
+    .form-note {
+      font-size:11px; color:var(--muted); margin-top:12px; line-height:1.6;
+    }
+    .form-status {
+      display:none; margin-top:12px; padding:12px 14px; border-radius:8px; font-size:13px;
+      background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.25); color:var(--green);
+    }
+
+    /* ── MISSION LOCK BAND ── */
+    #lockband { background:rgba(212,175,55,.03); border-top:1px solid rgba(212,175,55,.15); border-bottom:1px solid rgba(212,175,55,.15); }
+    .lockband-inner { display:grid; grid-template-columns: auto 1fr auto; gap:32px; align-items:center; }
+    @media(max-width:900px){ .lockband-inner{grid-template-columns:1fr;text-align:center} }
+    .lockband-icon { font-size:42px; line-height:1; }
+    .lockband-text h3 { font-size:20px; font-weight:700; margin-bottom:6px; letter-spacing:-.005em; }
+    .lockband-text p { font-size:14px; color:var(--muted); line-height:1.6; max-width:600px; }
+    .lockband-cta {
+      display:inline-block; padding:12px 22px; border:1px solid rgba(212,175,55,.4);
+      color:var(--gold); border-radius:8px; font-family:'JetBrains Mono',monospace;
+      font-size:11px; letter-spacing:.15em; font-weight:700;
+      transition:background .2s, border-color .2s;
+    }
+    .lockband-cta:hover { background:rgba(212,175,55,.08); border-color:var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding:36px 32px; border-top:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+      font-size:12px; color:var(--muted);
+    }
+    .footer-links { display:flex; gap:24px; }
+    .footer-links a:hover { color:var(--green); }
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════════════ -->
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html">// LIVE OPS</a></li>
+    <li><a href="/iris.html">IRIS DATA</a></li>
+    <li><a href="/chapters.html" class="active">CHAPTERS</a></li>
+    <li><a href="/#governance">GOVERNANCE</a></li>
+    <li><a href="/#pricing">PRICING</a></li>
+  </ul>
+  <a class="nav-cta" href="#apply">APPLY TO LEAD →</a>
+</nav>
+
+<main>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">// GLOBAL CHAPTERS · A PLANETARY NETWORK</div>
+    <h1 class="hero-h">One mission.<br><span>Every nation</span> welcome.</h1>
+    <p class="hero-sub">
+      Mother Earth Kenya is the founding chapter — a 33-agent AI organisation defending the planet
+      from Nairobi. The model is built to scale. Every country can launch its own Mother Earth chapter,
+      governed by its own Purpose Trust, run by local leadership, operating on the same shared mission.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-v">1</div>
+        <div class="hero-stat-l">FOUNDING CHAPTER</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-v">9</div>
+        <div class="hero-stat-l">IN EARLY DIALOGUE</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-v">~190</div>
+        <div class="hero-stat-l">COUNTRIES AVAILABLE</div>
+      </div>
+    </div>
+    <div class="hero-cta-row">
+      <a class="btn-primary" href="#apply">Apply to Lead Your Country →</a>
+      <a class="btn-outline" href="#how">How Chapters Work ↓</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div id="globe-canvas"></div>
+    <div class="globe-legend">
+      <span class="legend-item"><span class="legend-dot active"></span>ACTIVE CHAPTER</span>
+      <span class="legend-item"><span class="legend-dot exploring"></span>IN DIALOGUE</span>
+      <span class="legend-item"><span class="legend-dot available"></span>AVAILABLE</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW CHAPTERS WORK ══════════════════════════════════════════════════════ -->
+<section class="row" id="how">
+  <div class="wrap">
+    <div class="row-head">
+      <div>
+        <div class="row-tag">// HOW IT WORKS</div>
+        <h2 class="row-title">Local sovereignty.<br>Shared mission.</h2>
+        <p class="row-sub">Each chapter is an independently incorporated entity with its own Purpose Trust, local board, and country-specific compliance — all bound to the same planetary mandate. No franchise fee. No revenue extraction. The mission is the only shareholder.</p>
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01 / STRUCTURE</div>
+        <div class="pillar-title">Local Purpose Trust</div>
+        <div class="pillar-body">Every chapter incorporates in its home jurisdiction with a Purpose Trust holding a Golden Share veto over environmental decisions. The mission cannot be diluted, sold, or redirected by any investor or government.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02 / TECHNOLOGY</div>
+        <div class="pillar-title">Shared 33-agent framework</div>
+        <div class="pillar-body">Mother Earth Kenya provides the AI agent architecture, the IRIS data stack, and the NEXUS blockchain layer to every chapter at zero cost. You operate; we maintain the planetary infrastructure.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03 / DATA</div>
+        <div class="pillar-title">Country-specific intelligence</div>
+        <div class="pillar-body">Each chapter monitors its own ecosystem — sensors, satellite feeds, regulatory landscape, climate risk. Data is sovereign to the chapter. Aggregate insights feed the global mesh, but local data stays local.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">04 / GOVERNANCE</div>
+        <div class="pillar-title">SAGE oversight network</div>
+        <div class="pillar-body">A federated council of chapter SAGE agents reviews cross-border decisions affecting more than one nation. No single chapter can override another's sovereignty. Disputes go to the global Purpose Trust panel.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">05 / FUNDING</div>
+        <div class="pillar-title">Local revenue, local mission</div>
+        <div class="pillar-body">Each chapter operates its own IRIS data marketplace, sets local pricing, and retains 100% of subscription revenue. Profits fund local environmental work and chapter operations. No remittance to the founding chapter.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">06 / RECOGNITION</div>
+        <div class="pillar-title">"Mother Earth [Country]" brand</div>
+        <div class="pillar-body">Approved chapters use the Mother Earth name, seal, and brand framework under a perpetual royalty-free licence — conditional only on maintaining the Purpose Trust structure and Golden Share integrity.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CHAPTER STATUS ═══════════════════════════════════════════════════════ -->
+<section class="row" id="chapters-row">
+  <div class="wrap">
+    <div class="row-head">
+      <div>
+        <div class="row-tag">// CHAPTER STATUS · WORLDWIDE</div>
+        <h2 class="row-title">Where Mother Earth is operating</h2>
+        <p class="row-sub">One chapter live. Nine in active dialogue. The rest of the world is open. Click any country card to express interest or apply to lead.</p>
+      </div>
+    </div>
+    <div class="country-grid" id="country-grid"></div>
+  </div>
+</section>
+
+<!-- ══ MISSION LOCK BAND ═══════════════════════════════════════════════════ -->
+<section class="row" id="lockband">
+  <div class="wrap">
+    <div class="lockband-inner">
+      <div class="lockband-icon">🗝️</div>
+      <div class="lockband-text">
+        <h3>The Golden Share guarantees the mission</h3>
+        <p>Every chapter must adopt the Purpose Trust structure with a Golden Share veto over any decision that would compromise environmental objectives. Without it, no chapter approval. This is non-negotiable.</p>
+      </div>
+      <a class="lockband-cta" href="/#governance">READ GOVERNANCE →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ APPLY ════════════════════════════════════════════════════════════════ -->
+<section class="row" id="apply">
+  <div class="wrap">
+    <div class="apply-grid">
+      <div class="apply-left">
+        <div class="row-tag">// APPLY TO LEAD</div>
+        <h2>Lead Mother Earth in <span>your country</span>.</h2>
+        <p style="font-size:15px;color:var(--muted);line-height:1.75;margin-top:12px;">
+          We're looking for founders, environmental scientists, lawyers, and civic-tech operators ready
+          to anchor a Mother Earth chapter. Approval is rigorous — every chapter represents the entire
+          network — but the framework, tech, and brand are ready when you are.
+        </p>
+        <ul class="apply-list">
+          <li><strong>Local incorporation</strong> — you handle company registration in your jurisdiction</li>
+          <li><strong>Purpose Trust adoption</strong> — Golden Share filed in your country's trust law</li>
+          <li><strong>Minimum viable team</strong> — at minimum 1 environmental scientist + 1 legal counsel before chapter activation</li>
+          <li><strong>90-day onboarding</strong> — joint Mother Earth Kenya team works alongside you to deploy your 33 agents</li>
+          <li><strong>Year-1 transparency</strong> — public mission log + audited financials for first 12 months</li>
+          <li><strong>No franchise fee, ever</strong> — we don't extract revenue from chapters</li>
+        </ul>
+        <div class="apply-quote">
+          "The planet doesn't recognise borders. Neither should planetary intelligence. Every nation that joins the network strengthens the mission for every other nation. This is how we make environmental governance the default — not the exception."
+          <span class="apply-quote-attrib">— ANDY MUYUNDO GODFREY · FOUNDER, MOTHER EARTH KENYA</span>
+        </div>
+      </div>
+
+      <form class="apply-form" onsubmit="submitChapterApp(event)">
+        <div class="apply-form-tag">// CHAPTER LEADERSHIP APPLICATION</div>
+        <div class="apply-form-h">Tell us about your country & background</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>YOUR NAME *</label>
+            <input type="text" id="f-name" required placeholder="Maria Silva"/>
+          </div>
+          <div class="form-group">
+            <label>EMAIL *</label>
+            <input type="email" id="f-email" required placeholder="maria@example.org"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>COUNTRY TO LEAD *</label>
+          <input type="text" id="f-country" required placeholder="Brazil"/>
+        </div>
+        <div class="form-group">
+          <label>YOUR PROFESSIONAL BACKGROUND *</label>
+          <input type="text" id="f-bg" required placeholder="Environmental lawyer, climate-tech founder, civic-tech operator..."/>
+        </div>
+        <div class="form-group">
+          <label>WHY THIS COUNTRY NEEDS A CHAPTER *</label>
+          <textarea id="f-why" required placeholder="Brazil's Amazon biome accounts for ~10% of global biodiversity. Existing environmental data infrastructure is fragmented and underfunded..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>HAVE LEGAL TEAM?</label>
+            <select id="f-legal">
+              <option>Not yet</option><option>Identified</option><option>Engaged</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>FUNDING IDENTIFIED?</label>
+            <select id="f-funding">
+              <option>Self-funded only</option><option>Seeking</option><option>Pre-committed</option>
+            </select>
+          </div>
+        </div>
+        <button class="submit-btn" type="submit" id="f-submit">SUBMIT CHAPTER APPLICATION →</button>
+        <div class="form-status" id="f-status"></div>
+        <p class="form-note">By submitting you agree to the <a href="/terms.html" style="color:var(--gold)">Terms of Service</a> and <a href="/privacy.html" style="color:var(--gold)">Privacy Policy</a>. Applications are reviewed by the Mother Earth Kenya governance committee. We respond within 14 days.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Limited · Global Chapters v1.0</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/mission-control.html">Mission Control</a>
+    <a href="/iris.html">IRIS Data</a>
+    <a href="/#governance">Governance</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   COUNTRY DATA — status + region + lat/lon for globe markers
+══════════════════════════════════════════════════════════════════════════ */
+const COUNTRIES = [
+  // ACTIVE
+  { name:'Kenya',         flag:'🇰🇪', region:'East Africa',    status:'active',    statusLabel:'ACTIVE · FOUNDING',
+    lat:-1.28,  lon:36.82,
+    detailLbl:'OPERATIONAL', detail:'33 agents · IRIS marketplace live · Purpose Trust filing in progress · BRS registration in motion.' },
+  // IN DIALOGUE
+  { name:'United States',  flag:'🇺🇸', region:'North America', status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:38.9,   lon:-77.0,
+    detailLbl:'STATUS', detail:'Diaspora-led conversations. Delaware LLC framework being scoped. Texas + Florida priority markets.' },
+  { name:'Brazil',         flag:'🇧🇷', region:'South America', status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:-15.78, lon:-47.93,
+    detailLbl:'STATUS', detail:'Two academic outreach contacts active. Amazon biome data partnership scoped. Awaiting leadership candidate.' },
+  { name:'South Africa',   flag:'🇿🇦', region:'Southern Africa', status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:-25.75, lon:28.19,
+    detailLbl:'STATUS', detail:'Two civic-tech operators engaged. JSE green-finance integration possible. Trust law review underway.' },
+  { name:'Nigeria',        flag:'🇳🇬', region:'West Africa',    status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:9.08,   lon:7.49,
+    detailLbl:'STATUS', detail:'Initial founder conversations. Lagos climate-tech ecosystem alignment strong. Awaiting lead application.' },
+  { name:'United Kingdom', flag:'🇬🇧', region:'Western Europe', status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:51.51,  lon:-0.13,
+    detailLbl:'STATUS', detail:'London-based environmental lawyer in dialogue. UK Purpose Trust precedent strong. Brexit-era regulatory uncertainty noted.' },
+  { name:'India',          flag:'🇮🇳', region:'South Asia',     status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:28.61,  lon:77.21,
+    detailLbl:'STATUS', detail:'Bangalore climate-tech network engaged. Air-quality crisis creates urgent civic demand. Need legal lead.' },
+  { name:'France',         flag:'🇫🇷', region:'Western Europe', status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:48.86,  lon:2.35,
+    detailLbl:'STATUS', detail:'Paris-based EU policy contact. CSRD alignment opportunity for compliance market entry. Lead pending.' },
+  { name:'Indonesia',      flag:'🇮🇩', region:'Southeast Asia', status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:-6.21,  lon:106.84,
+    detailLbl:'STATUS', detail:'Critical biome (peat fires, deforestation). Jakarta-based researcher referred by WMI Kenya. Awaiting initial call.' },
+  { name:'Canada',         flag:'🇨🇦', region:'North America', status:'exploring', statusLabel:'IN DIALOGUE',
+    lat:45.42,  lon:-75.69,
+    detailLbl:'STATUS', detail:'Indigenous-led environmental governance alignment of interest. Arctic monitoring corridor strategic priority.' },
+
+  // AVAILABLE — selected high-priority biomes
+  { name:'Australia',      flag:'🇦🇺', region:'Oceania',         status:'available', statusLabel:'AVAILABLE',
+    lat:-35.28, lon:149.13,
+    detailLbl:'WHY HERE', detail:'Great Barrier Reef in active bleach alert. No active Mother Earth chapter yet. Awaiting founding lead.' },
+  { name:'Germany',        flag:'🇩🇪', region:'Western Europe', status:'available', statusLabel:'AVAILABLE',
+    lat:52.52,  lon:13.40,
+    detailLbl:'WHY HERE', detail:'Largest EU economy. CSRD reporting market. Strong civic infrastructure for Purpose Trust adoption.' },
+  { name:'Japan',          flag:'🇯🇵', region:'East Asia',      status:'available', statusLabel:'AVAILABLE',
+    lat:35.68,  lon:139.69,
+    detailLbl:'WHY HERE', detail:'Advanced sensor manufacturing base. Climate disclosure ahead of region. Awaiting founding lead.' },
+  { name:'Mexico',         flag:'🇲🇽', region:'North America',  status:'available', statusLabel:'AVAILABLE',
+    lat:19.43,  lon:-99.13,
+    detailLbl:'WHY HERE', detail:'Mesoamerican biome corridor. Strategic for trans-border Amazon data link. No active chapter.' },
+  { name:'Argentina',      flag:'🇦🇷', region:'South America',  status:'available', statusLabel:'AVAILABLE',
+    lat:-34.61, lon:-58.38,
+    detailLbl:'WHY HERE', detail:'Patagonia ice retreat critical. Strong civic-tech sector. Awaiting founding lead.' },
+  { name:'Ethiopia',       flag:'🇪🇹', region:'East Africa',     status:'available', statusLabel:'AVAILABLE',
+    lat:9.03,   lon:38.74,
+    detailLbl:'WHY HERE', detail:'Cross-border environmental data partner for Kenya chapter. Drought monitoring priority.' },
+  { name:'Ghana',          flag:'🇬🇭', region:'West Africa',     status:'available', statusLabel:'AVAILABLE',
+    lat:5.60,   lon:-0.18,
+    detailLbl:'WHY HERE', detail:'Stable institutional framework. Strong Pan-African climate finance ecosystem. Awaiting lead.' },
+  { name:'Norway',         flag:'🇳🇴', region:'Northern Europe', status:'available', statusLabel:'AVAILABLE',
+    lat:59.91,  lon:10.75,
+    detailLbl:'WHY HERE', detail:'Arctic monitoring leadership. Sovereign wealth fund potential anchor partner. Awaiting lead.' },
+];
+
+/* ── BUILD COUNTRY GRID ── */
+function buildCountryGrid() {
+  const grid = document.getElementById('country-grid');
+  if (!grid) return;
+  grid.innerHTML = COUNTRIES.map(c => `
+    <div class="country-card s-${c.status}">
+      <div class="country-head">
+        <span class="country-flag">${c.flag}</span>
+        <span class="country-status">${c.statusLabel}</span>
+      </div>
+      <div class="country-name">${c.name}</div>
+      <div class="country-region">${c.region.toUpperCase()}</div>
+      <div class="country-detail">
+        <strong>${c.detailLbl}</strong>
+        ${c.detail}
+      </div>
+      <div class="country-foot">
+        <span>${c.status === 'active' ? '● FOUNDING CHAPTER' : c.status === 'exploring' ? '● ACTIVE DIALOGUE' : '○ ACCEPTING APPLICATIONS'}</span>
+        ${c.status === 'available' || c.status === 'exploring' ? `<a class="country-cta" href="#apply" onclick="prefillCountry('${c.name}')">APPLY →</a>` : '<span style="color:var(--gold)">LIVE NOW</span>'}
+      </div>
+    </div>
+  `).join('');
+}
+
+function prefillCountry(name) {
+  const el = document.getElementById('f-country');
+  if (el) el.value = name;
+  setTimeout(() => document.getElementById('apply')?.scrollIntoView({ behavior:'smooth' }), 50);
+}
+
+/* ── SUBMIT APPLICATION ── */
+function submitChapterApp(e) {
+  e.preventDefault();
+  const btn = document.getElementById('f-submit');
+  const st  = document.getElementById('f-status');
+  const get = id => document.getElementById(id).value;
+  const subject = encodeURIComponent(`Chapter Application — Mother Earth ${get('f-country')}`);
+  const body = encodeURIComponent(
+`CHAPTER LEADERSHIP APPLICATION
+================================
+Name:         ${get('f-name')}
+Email:        ${get('f-email')}
+Country:      ${get('f-country')}
+Background:   ${get('f-bg')}
+Legal team:   ${get('f-legal')}
+Funding:      ${get('f-funding')}
+
+Why this country needs a Mother Earth chapter:
+${get('f-why')}
+
+Submitted: ${new Date().toISOString()}
+`);
+  btn.textContent = 'Opening email client…';
+  btn.style.opacity = '0.7';
+  window.location.href = `mailto:hello@motherearth.systems?subject=${subject}&body=${body}`;
+  setTimeout(() => {
+    st.style.display = 'block';
+    st.textContent = '✓ Your application email opened. Send it and we will respond within 14 days.';
+    btn.textContent = 'Application Sent →';
+    btn.style.opacity = '1';
+  }, 1200);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3D GLOBE — chapter status markers
+══════════════════════════════════════════════════════════════════════════ */
+function initGlobe() {
+  const wrap = document.getElementById('globe-canvas');
+  if (!wrap || typeof THREE === 'undefined') return;
+  if (window.matchMedia('(max-width:700px)').matches) return;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 1000);
+  camera.position.set(0, 0, 7.2);
+
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  function fit() {
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    renderer.setSize(w, h); renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  fit(); wrap.appendChild(renderer.domElement);
+
+  const grp = new THREE.Group();
+  grp.rotation.z = 23.5 * Math.PI / 180;
+  scene.add(grp);
+
+  // Earth
+  const earth = new THREE.Mesh(
+    new THREE.SphereGeometry(2, 96, 96),
+    new THREE.MeshPhongMaterial({ color:0x0a2820, shininess:6 })
+  );
+  grp.add(earth);
+  new THREE.TextureLoader().load(
+    'https://unpkg.com/three-globe@2.24.13/example/img/earth-blue-marble.jpg',
+    tex => { tex.encoding = THREE.sRGBEncoding; earth.material.map = tex; earth.material.color.set(0xffffff); earth.material.needsUpdate = true; },
+    undefined, () => {}
+  );
+
+  // Atmosphere
+  grp.add(new THREE.Mesh(new THREE.SphereGeometry(2.10, 64, 64), new THREE.ShaderMaterial({
+    transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, side:THREE.FrontSide,
+    vertexShader:`varying vec3 vN; void main(){ vN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+    fragmentShader:`varying vec3 vN; void main(){ float i=pow(.7-dot(vN,vec3(0,0,1)),3.); gl_FragColor=vec4(.20,.78,.52,.45)*i; }`
+  })));
+
+  // Lat/lon → 3D
+  function llTo3D(lat, lon, r) {
+    const phi = (90-lat)*Math.PI/180, theta = (lon+180)*Math.PI/180;
+    return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+  }
+
+  const COLOR = { active:0xD4AF37, exploring:0xf59e0b, available:0x4ade80 };
+
+  const markers = [];
+  COUNTRIES.forEach(c => {
+    const pos = llTo3D(c.lat, c.lon, 2.02);
+    const col = COLOR[c.status] || 0x4ade80;
+    // Core dot
+    const r = c.status === 'active' ? 0.05 : 0.032;
+    const dot = new THREE.Mesh(
+      new THREE.SphereGeometry(r, 16, 16),
+      new THREE.MeshBasicMaterial({ color: col })
+    );
+    dot.position.copy(pos);
+    grp.add(dot);
+    // Pulse ring
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(r * 1.6, r * 2.8, 32),
+      new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide, transparent: true, opacity: 0.7 })
+    );
+    ring.position.copy(pos); ring.lookAt(0,0,0); ring.rotateY(Math.PI);
+    grp.add(ring);
+    markers.push({ ring, speed: 0.7 + Math.random() * 0.8, offset: Math.random() * Math.PI * 2 });
+  });
+
+  // Stars
+  const sBuf = new Float32Array(1800 * 3);
+  for (let i=0; i<1800; i++) {
+    const r = 30 + Math.random() * 40, t = Math.random() * Math.PI * 2, p = Math.acos(2 * Math.random() - 1);
+    sBuf[i*3] = r*Math.sin(p)*Math.cos(t); sBuf[i*3+1] = r*Math.sin(p)*Math.sin(t); sBuf[i*3+2] = r*Math.cos(p);
+  }
+  const sG = new THREE.BufferGeometry(); sG.setAttribute('position', new THREE.BufferAttribute(sBuf, 3));
+  scene.add(new THREE.Points(sG, new THREE.PointsMaterial({ color:0xffffff, size:0.06, transparent:true, opacity:.65 })));
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.32));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.15); sun.position.set(5, 3, 5); scene.add(sun);
+  const rim = new THREE.DirectionalLight(0xD4AF37, 0.25); rim.position.set(-5, -2, -5); scene.add(rim);
+
+  // Orbit controls
+  let controls;
+  if (THREE.OrbitControls) {
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = false; controls.enablePan = false;
+    controls.enableDamping = true; controls.dampingFactor = 0.07;
+    controls.rotateSpeed = 0.42;
+  }
+
+  let pulse = 0;
+  function loop() {
+    requestAnimationFrame(loop);
+    if (!controls || !controls.active) earth.rotation.y += 0.0007;
+    pulse += 0.035;
+    markers.forEach(m => {
+      const t = pulse * m.speed + m.offset;
+      m.ring.material.opacity = 0.25 + 0.55 * Math.abs(Math.sin(t));
+      const s = 1 + 0.20 * Math.sin(t * 1.2);
+      m.ring.scale.set(s, s, s);
+    });
+    if (controls) controls.update();
+    renderer.render(scene, camera);
+  }
+  loop();
+  window.addEventListener('resize', fit);
+  new ResizeObserver(fit).observe(wrap);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   UX LAYER — Lenis, cursor, reveals, magnetic buttons
+══════════════════════════════════════════════════════════════════════════ */
+function initLenis() {
+  if (typeof Lenis === 'undefined') return;
+  const lenis = new Lenis({ duration:0.55, smoothWheel:true, wheelMultiplier:2.0 });
+  if (typeof gsap !== 'undefined') {
+    gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
+  } else { (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0); }
+}
+function initCursor() {
+  const dot = document.getElementById('cd'), ring = document.getElementById('cr');
+  if (!dot || !ring) return;
+  if (!window.matchMedia('(hover:hover) and (pointer:fine)').matches) { dot.style.display = ring.style.display = 'none'; return; }
+  let mx=-200,my=-200,rx=-200,ry=-200; const LERP = 0.28;
+  window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+  document.querySelectorAll('a,button,.country-card,.pillar').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', ()=>document.body.classList.remove('ch'));
+  });
+  (function loop(){
+    rx += (mx-rx)*LERP; ry += (my-ry)*LERP;
+    dot.style.left = mx+'px'; dot.style.top = my+'px';
+    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+    requestAnimationFrame(loop);
+  })();
+}
+function initReveals() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  const ease = 'power3.out';
+
+  document.querySelectorAll('.row-tag').forEach(el =>
+    gsap.from(el, { opacity:0, x:-22, duration:0.55, ease, scrollTrigger:{trigger:el, start:'top 90%', once:true} }));
+  document.querySelectorAll('.row-title').forEach(el =>
+    gsap.from(el, { opacity:0, y:40, duration:0.8, ease, scrollTrigger:{trigger:el, start:'top 86%', once:true} }));
+  document.querySelectorAll('.row-sub').forEach(el =>
+    gsap.from(el, { opacity:0, y:24, duration:0.7, delay:0.12, ease, scrollTrigger:{trigger:el, start:'top 86%', once:true} }));
+
+  ScrollTrigger.batch('.pillar', { start:'top 90%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:40, scale:0.95, duration:0.7, ease:'back.out(1.3)', stagger:{ each:0.09 } }) });
+  ScrollTrigger.batch('.country-card', { start:'top 92%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:35, scale:0.96, duration:0.6, ease:'back.out(1.3)', stagger:{ each:0.05 } }) });
+  gsap.from('.lockband-inner > *', { opacity:0, y:24, duration:0.7, ease, stagger:0.12,
+    scrollTrigger:{ trigger:'#lockband', start:'top 85%', once:true } });
+  gsap.from('.apply-left > *', { opacity:0, y:30, duration:0.65, ease, stagger:0.1,
+    scrollTrigger:{ trigger:'#apply', start:'top 80%', once:true } });
+  gsap.from('.apply-form',     { opacity:0, x:30, duration:0.8, ease,
+    scrollTrigger:{ trigger:'#apply', start:'top 80%', once:true } });
+
+  // Hero entrance
+  gsap.from('.hero-tag',  { opacity:0, y:18, duration:0.6,  ease, delay:0.1 });
+  gsap.from('.hero-h',    { opacity:0, y:46, duration:0.85, ease, delay:0.25 });
+  gsap.from('.hero-sub',  { opacity:0, y:24, duration:0.7,  ease, delay:0.5 });
+  gsap.from('.hero-stat', { opacity:0, y:18, duration:0.55, ease, delay:0.7, stagger:0.1 });
+  gsap.from('.hero-cta-row a', { opacity:0, y:20, duration:0.55, ease, delay:0.95, stagger:0.1 });
+  gsap.from('.hero-right',{ opacity:0, x:40, duration:1.0, ease, delay:0.3 });
+
+  // Magnetic buttons
+  document.querySelectorAll('.btn-primary,.btn-outline,.nav-cta,.submit-btn,.lockband-cta').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r=btn.getBoundingClientRect();
+      gsap.to(btn, { x:(e.clientX-r.left-r.width/2)*.3, y:(e.clientY-r.top-r.height/2)*.3, duration:0.3, ease:'power2.out' });
+    });
+    btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:0.6,ease:'elastic.out(1,0.45)'}));
+  });
+}
+
+/* ── BOOT ── */
+initCursor();
+initLenis();
+buildCountryGrid();
+window.addEventListener('load', () => { initGlobe(); initReveals(); });
+</script>
+
+</body>
+</html>
