@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Governance — Mother Earth Kenya · The Constitution of a Planetary Mission</title>
+  <meta name="description" content="The Purpose Trust. The Golden Share. Protected Matters. Trustee succession. Human gates. The full constitutional architecture that makes Mother Earth's environmental mission un-acquirable."/>
+  <meta property="og:title" content="Governance — Mother Earth Kenya"/>
+  <meta property="og:description" content="The constitutional document. No acquisition can hollow out the mission."/>
+  <meta property="og:image" content="https://motherearth.systems/logo-official-512.png"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+  <link rel="canonical" href="https://motherearth.systems/governance"/>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="/echo-widget.js" defer></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg:#020606; --bg2:#050d0a;
+      --green:#4ade80; --gold:#D4AF37; --terra:#D4763A;
+      --amber:#f59e0b; --blue:#60a5fa; --indigo:#818cf8; --red:#ef4444;
+      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
+      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+    @media(hover:hover) and (pointer:fine){*,*::before,*::after{cursor:none !important}}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    body.ch #cd{width:10px;height:10px;background:var(--gold)}
+    body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
+    @media(hover:none){#cd,#cr{display:none}}
+
+    #grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite}
+    @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
+
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
+    .nav-logo img{width:48px;height:48px;object-fit:contain}
+    .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
+    .nav-mid a{color:var(--muted);transition:color .2s}
+    .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
+    .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    @media(max-width:1050px){.nav-mid{display:none}}
+
+    main{padding-top:72px}
+
+    /* HERO */
+    #hero{padding:90px 32px 60px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 30%, rgba(212,175,55,.06) 0%, transparent 70%)}
+    .hero-inner{max-width:920px;margin:0 auto}
+    .hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--gold);opacity:.7;margin-bottom:22px}
+    .hero-h{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6.5vw,84px);font-weight:400;line-height:1.05;letter-spacing:-.01em;margin-bottom:24px}
+    .hero-h em{font-style:italic;color:var(--gold)}
+    .hero-sub{font-size:clamp(15px,1.8vw,19px);color:var(--muted);line-height:1.7;max-width:680px;margin:0 auto 30px}
+
+    /* STRUCTURE DIAGRAM */
+    #diagram-row{padding:60px 32px;background:linear-gradient(180deg, transparent, rgba(13,43,28,.18), transparent)}
+    .diagram-wrap{max-width:900px;margin:0 auto;padding:36px 28px;background:var(--card);border:1px solid rgba(212,175,55,.18);border-radius:18px}
+    .diagram-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;color:var(--gold);opacity:.7;margin-bottom:6px;text-align:center}
+    .diagram-sub{text-align:center;font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.6}
+
+    .diagram{display:grid;gap:0;justify-items:center}
+    .d-node{
+      background:rgba(212,175,55,.06);border:1.5px solid rgba(212,175,55,.35);border-radius:14px;
+      padding:18px 24px;text-align:center;min-width:220px;position:relative;
+    }
+    .d-node.purpose{background:rgba(212,175,55,.10);border-color:var(--gold);box-shadow:0 0 24px rgba(212,175,55,.12)}
+    .d-node.opco{background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.35)}
+    .d-node.branch{background:rgba(96,165,250,.05);border-color:rgba(96,165,250,.3)}
+    .d-node .d-type{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--muted);margin-bottom:4px}
+    .d-node .d-name{font-weight:800;font-size:16px;letter-spacing:.02em}
+    .d-node .d-note{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+    .d-line{width:2px;background:linear-gradient(to bottom, var(--gold), transparent);height:36px}
+    .d-line.green{background:linear-gradient(to bottom, var(--green), transparent)}
+
+    .d-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+    .d-branch{
+      background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;
+      padding:10px 14px;text-align:center;font-family:'JetBrains Mono',monospace;
+      font-size:10px;letter-spacing:.15em;color:var(--muted);
+      transition:border-color .2s,color .2s;
+    }
+    .d-branch:hover{border-color:rgba(74,222,128,.4);color:var(--text)}
+    .d-branch strong{display:block;color:var(--text);font-size:13px;letter-spacing:.05em;margin-bottom:2px;font-weight:800;font-family:'Inter',sans-serif}
+
+    .veto-arrow{
+      position:absolute;left:50%;top:-44px;transform:translateX(-50%);
+      font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--gold);opacity:.7;
+      white-space:nowrap;
+    }
+    .veto-arrow::after{content:' ↓';font-size:14px}
+
+    /* PILLARS */
+    .row{padding:80px 32px}
+    .wrap{max-width:1100px;margin:0 auto}
+    .row-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;color:var(--green);opacity:.6;margin-bottom:14px}
+    .row-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4.5vw,50px);font-weight:400;line-height:1.1;letter-spacing:-.01em;margin-bottom:18px}
+    .row-title em{color:var(--gold);font-style:italic}
+    .row-sub{font-size:16px;color:var(--muted);max-width:680px;line-height:1.7;margin-bottom:40px}
+
+    .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .pillar{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .25s,transform .25s}
+    .pillar:hover{border-color:rgba(212,175,55,.3);transform:translateY(-3px)}
+    .pillar-icon{font-size:30px;margin-bottom:14px;line-height:1}
+    .pillar-h{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:10px;letter-spacing:-.005em;color:var(--gold)}
+    .pillar-body{font-size:14px;color:var(--muted);line-height:1.7}
+    .pillar-body strong{color:var(--text)}
+    .pillar-quote{margin-top:16px;padding:12px 14px;background:rgba(212,175,55,.05);border-left:2px solid var(--gold);border-radius:0 6px 6px 0;font-size:12px;font-style:italic;color:rgba(242,240,235,.7);line-height:1.6}
+
+    /* PROTECTED MATTERS */
+    #protected{background:linear-gradient(180deg, transparent, rgba(212,175,55,.04), transparent);border-top:1px solid rgba(212,175,55,.12);border-bottom:1px solid rgba(212,175,55,.12)}
+    .pm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+    .pm-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 22px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s}
+    .pm-item:hover{border-color:rgba(212,175,55,.3)}
+    .pm-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--gold);opacity:.6;font-weight:700;min-width:22px}
+    .pm-text{font-size:14px;color:var(--text);line-height:1.55}
+    .pm-text small{display:block;font-size:11px;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+
+    /* CRITICAL GATES TABLE */
+    .gates-table{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:16px}
+    .gates-row{display:grid;grid-template-columns:1fr 1.5fr auto;gap:24px;padding:18px 24px;border-bottom:1px solid var(--border);align-items:center}
+    .gates-row:last-child{border-bottom:none}
+    .gates-row:hover{background:rgba(255,255,255,.015)}
+    .gates-row.header{background:rgba(212,175,55,.04);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--gold);opacity:.85}
+    @media(max-width:700px){.gates-row{grid-template-columns:1fr;gap:8px} .gates-row.header{display:none}}
+    .gate-event{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);font-weight:700;letter-spacing:.05em}
+    .gate-desc{font-size:13px;color:rgba(242,240,235,.78);line-height:1.6}
+    .gate-action{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 12px;border-radius:5px;background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.25);letter-spacing:.15em;font-weight:700;white-space:nowrap;text-align:center}
+
+    /* SUCCESSION */
+    .succession-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media(max-width:700px){.succession-grid{grid-template-columns:1fr}}
+    .sx-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px;transition:border-color .25s}
+    .sx-card:hover{border-color:rgba(212,175,55,.3)}
+    .sx-role{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--gold);opacity:.7;margin-bottom:8px}
+    .sx-h{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;margin-bottom:8px;letter-spacing:-.005em}
+    .sx-body{font-size:13px;color:var(--muted);line-height:1.7}
+    .sx-body strong{color:var(--text)}
+
+    .clauses{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+    .clause{background:rgba(255,255,255,.02);border-left:2px solid rgba(212,175,55,.4);padding:10px 16px;font-size:12px;color:var(--muted);line-height:1.6}
+    .clause strong{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;margin-right:8px}
+
+    /* FAQ */
+    .faq-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+    .faq-item:hover{border-color:rgba(74,222,128,.3)}
+    .faq-q{padding:20px 24px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:15px;color:var(--text)}
+    .faq-q::after{content:'+';font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:20px;transition:transform .25s}
+    .faq-item.open .faq-q::after{transform:rotate(45deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 24px;color:var(--muted);font-size:13px;line-height:1.75}
+    .faq-item.open .faq-a{max-height:400px;padding:0 24px 22px}
+
+    /* CTA */
+    #cta{text-align:center;padding:90px 32px;background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212,175,55,.06) 0%, transparent 70%)}
+    .cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-weight:400;margin-bottom:18px}
+    .cta-h em{color:var(--gold);font-style:italic}
+    .cta-sub{font-size:15px;color:var(--muted);max-width:560px;margin:0 auto 30px;line-height:1.7}
+    .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{background:var(--gold);color:#000;border-radius:8px;padding:14px 28px;font-size:14px;font-weight:700;letter-spacing:.04em;transition:background .2s;display:inline-block}
+    .btn-primary:hover{background:#e8c860}
+    .btn-outline{border:1.5px solid var(--border);color:var(--text);border-radius:8px;padding:14px 28px;font-size:14px;font-weight:600;display:inline-block;transition:border-color .2s,color .2s}
+    .btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+    footer{padding:36px 32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted)}
+    .footer-links{display:flex;gap:24px;flex-wrap:wrap}
+    .footer-links a:hover{color:var(--green)}
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html">// LIVE OPS</a></li>
+    <li><a href="/iris.html">IRIS</a></li>
+    <li><a href="/chapters.html">CHAPTERS</a></li>
+    <li><a href="/about.html">ABOUT</a></li>
+    <li><a href="/roadmap.html">ROADMAP</a></li>
+    <li><a href="/governance.html" class="active">GOVERNANCE</a></li>
+  </ul>
+  <a class="nav-cta" href="/press.html">PRESS</a>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">// CONSTITUTIONAL ARCHITECTURE · NON-NEGOTIABLE</div>
+    <h1 class="hero-h">The mission is the <em>only shareholder</em>.</h1>
+    <p class="hero-sub">A Purpose Trust holds a Golden Share with absolute veto over any decision compromising environmental objectives. No investor, no acquirer, no government, no future leadership team can rewrite the mission. This page documents how.</p>
+  </div>
+</section>
+
+<!-- STRUCTURE DIAGRAM -->
+<section id="diagram-row">
+  <div class="diagram-wrap">
+    <div class="diagram-title">// STRUCTURAL ARCHITECTURE</div>
+    <div class="diagram-sub">Two entities. One Golden Share. Veto power flows downward.</div>
+
+    <div class="diagram">
+      <div class="d-node purpose">
+        <div class="d-type">CONSTITUTIONAL LAYER</div>
+        <div class="d-name">Mother Earth Environmental Purpose Trust</div>
+        <div class="d-note">Trustees (Perpetual Succession) Act · Kenya · holds the Golden Share</div>
+      </div>
+      <div class="d-line"></div>
+      <div class="d-node opco" style="position:relative">
+        <div class="veto-arrow">GOLDEN SHARE VETO</div>
+        <div class="d-type">OPERATING ENTITY</div>
+        <div class="d-name">Mother Earth Kenya Limited</div>
+        <div class="d-note">Companies Act 2015 · SEZ Enterprise · VASP Act 2025 applicant</div>
+      </div>
+      <div class="d-line green"></div>
+      <div class="d-row" style="margin-top:8px">
+        <div class="d-branch"><strong>AMARA</strong>Legal</div>
+        <div class="d-branch"><strong>NEXUS</strong>Tech</div>
+        <div class="d-branch"><strong>GAIA</strong>Environment</div>
+        <div class="d-branch"><strong>ATLAS</strong>Treasury</div>
+        <div class="d-branch"><strong>IRIS</strong>Marketplace</div>
+        <div class="d-branch"><strong>SAGE</strong>Governance</div>
+        <div class="d-branch"><strong>ECHO</strong>Comms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE PILLARS -->
+<section class="row">
+  <div class="wrap">
+    <div class="row-tag">// THE THREE-LAYER ARCHITECTURE</div>
+    <h2 class="row-title">Three things, <em>stacked</em>.</h2>
+    <p class="row-sub">Together they form what no traditional company structure can: an institution whose mission is constitutionally locked.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">🏛️</div>
+        <div class="pillar-h">Purpose Trust</div>
+        <div class="pillar-body">
+          <p>A Kenyan trust established under the <strong>Trustees (Perpetual Succession) Act Cap. 164</strong>. Its stated purpose is environmental protection, planetary intelligence, and the sustainable systems Mother Earth supplies.</p>
+          <p>Trusts of this kind exist for a purpose — not for shareholders. There is no equity to distribute. Profits serve the mission, not investors.</p>
+        </div>
+        <div class="pillar-quote">"The Trust exists for a purpose. The mission is the only shareholder."</div>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar-icon">🗝️</div>
+        <div class="pillar-h">Golden Share</div>
+        <div class="pillar-body">
+          <p>A single <strong>Class B non-transferable share</strong> in Mother Earth Kenya Limited, held in trust by the Purpose Trust. It carries one constitutional right: <strong>veto over any decision compromising environmental objectives</strong>.</p>
+          <p>It cannot be sold, transferred, diluted, or overridden by majority vote. Removal requires Trust dissolution — which itself requires the Trustees' unanimous consent.</p>
+        </div>
+        <div class="pillar-quote">"No acquisition can hollow out the mission."</div>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar-icon">🛡️</div>
+        <div class="pillar-h">Protected Matters</div>
+        <div class="pillar-body">
+          <p>Nine specific decision categories codified in the Trust Deed where the Golden Share automatically activates. Listed in the next section.</p>
+          <p>Anything from changing the mission statement, to selling environmental data on terms inconsistent with the mission, to amending Trust governance — all locked behind the veto.</p>
+        </div>
+        <div class="pillar-quote">"The list is short. The list is final. The list is the firewall."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTECTED MATTERS -->
+<section class="row" id="protected">
+  <div class="wrap">
+    <div class="row-tag">// PROTECTED MATTERS · TRUST DEED CLAUSE 9</div>
+    <h2 class="row-title">The nine <em>firewalls</em>.</h2>
+    <p class="row-sub">Each of these triggers automatic Golden Share veto. The operating company cannot proceed without explicit Trustee consent. Codified in Trust Deed Clauses 9.1–9.9.</p>
+
+    <div class="pm-grid">
+      <div class="pm-item"><div class="pm-num">9.1</div>
+        <div class="pm-text">Amendment of the company's environmental mission statement
+          <small>ANY CHANGE · ANY DEGREE</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.2</div>
+        <div class="pm-text">Sale, transfer, or licensing of environmental data on terms inconsistent with the mission
+          <small>INCLUDES BULK DATA EXPORTS</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.3</div>
+        <div class="pm-text">Acquisition, merger, or change of control of the operating company
+          <small>50%+ EQUITY OR EFFECTIVE CONTROL</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.4</div>
+        <div class="pm-text">Issuance of new share classes that could dilute the Golden Share
+          <small>OR ALTER VOTING ALGEBRA</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.5</div>
+        <div class="pm-text">Removal or amendment of the Trust Deed itself
+          <small>REQUIRES TRUSTEE UNANIMITY</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.6</div>
+        <div class="pm-text">Adoption of the MEDataLicense or its replacement
+          <small>DATA MARKETPLACE TERMS</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.7</div>
+        <div class="pm-text">Voluntary winding-up or dissolution of the operating company
+          <small>EVEN AT BOARD'S OWN REQUEST</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.8</div>
+        <div class="pm-text">Strategic partnerships that grant material control to non-aligned entities
+          <small>DEFENCE · EXTRACTIVE INDUSTRIES · ETC.</small></div>
+      </div>
+      <div class="pm-item"><div class="pm-num">9.9</div>
+        <div class="pm-text">Withdrawal from any planetary monitoring commitment of greater than 12-month duration
+          <small>NO QUIET RETREATS</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRITICAL GATES -->
+<section class="row">
+  <div class="wrap">
+    <div class="row-tag">// CRITICAL GATES · HUMAN ALWAYS REQUIRED</div>
+    <h2 class="row-title">Where the AI <em>stops</em> and humans decide.</h2>
+    <p class="row-sub">Mother Earth operates 33 autonomous agents — but specific operations are coded never to execute without human sign-off. These are enforced at the agent layer (encoded in <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:12px">CRITICAL_GATES</code> in the CEO agent).</p>
+
+    <div class="gates-table">
+      <div class="gates-row header">
+        <div>EVENT</div><div>DESCRIPTION</div><div>ACTION</div>
+      </div>
+      <div class="gates-row">
+        <div class="gate-event">golden_share_veto</div>
+        <div class="gate-desc">Any agent decision tagged as potentially triggering a Protected Matter under Trust Deed Clause 9.</div>
+        <div class="gate-action">HUMAN APPROVAL</div>
+      </div>
+      <div class="gates-row">
+        <div class="gate-event">tx_above_130M_kes</div>
+        <div class="gate-desc">Any financial transaction exceeding KES 130 million (~USD 1M). Hard ceiling at the ATLAS treasury layer regardless of context.</div>
+        <div class="gate-action">HUMAN APPROVAL</div>
+      </div>
+      <div class="gates-row">
+        <div class="gate-event">court_level_dispute</div>
+        <div class="gate-desc">Any legal matter that has been or could be referred to judicial proceedings. AMARA escalates immediately.</div>
+        <div class="gate-action">HUMAN APPROVAL</div>
+      </div>
+      <div class="gates-row">
+        <div class="gate-event">regulatory_submission_wet_signature</div>
+        <div class="gate-desc">Any regulatory filing requiring a wet (physical) signature from a director. CEO + AMARA review before signing.</div>
+        <div class="gate-action">HUMAN APPROVAL</div>
+      </div>
+      <div class="gates-row">
+        <div class="gate-event">emergency_pause_activated</div>
+        <div class="gate-desc">Any agent (typically NEXUS FORGE or AMARA SHIELD) flagging a system-wide pause due to security or compliance anomaly.</div>
+        <div class="gate-action">HUMAN APPROVAL</div>
+      </div>
+      <div class="gates-row">
+        <div class="gate-event">ips_limit_breached</div>
+        <div class="gate-desc">Treasury Investment Policy Statement limit breached (concentration, liquidity, currency exposure). ATLAS auto-freezes outflows and escalates.</div>
+        <div class="gate-action">HUMAN APPROVAL</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUCCESSION -->
+<section class="row" style="background:linear-gradient(180deg, transparent, rgba(13,43,28,.15), transparent)">
+  <div class="wrap">
+    <div class="row-tag">// TRUSTEE SUCCESSION · BUILT TO OUTLIVE THE FOUNDER</div>
+    <h2 class="row-title">A mission that <em>survives</em> any single person.</h2>
+    <p class="row-sub">The Trust Deed pre-codifies succession so the Golden Share remains active even on the death, incapacity, or extended absence of the Initial Trustee.</p>
+
+    <div class="succession-grid">
+      <div class="sx-card">
+        <div class="sx-role">CURRENT (2026 →)</div>
+        <div class="sx-h">Initial Trustee · Andy Muyundo Godfrey</div>
+        <div class="sx-body">
+          <p>Founder, CEO, and Settlor of the Trust. Holds the Golden Share in trust for the planetary mission. Cannot personally benefit from any Protected Matter decision. Bound by Trust Deed fiduciary duties.</p>
+        </div>
+      </div>
+
+      <div class="sx-card">
+        <div class="sx-role">DESIGNATED · 2043</div>
+        <div class="sx-h">Successor Trustee · Albahugh Billionaire Muyundo</div>
+        <div class="sx-body">
+          <p>Andy's son (born 2025). Designated under <strong>Clause 5.8</strong> to assume Trusteeship at age 18 (2043). Until activation, holds no executive power.</p>
+        </div>
+      </div>
+
+      <div class="sx-card" style="grid-column:1/-1">
+        <div class="sx-role">ACTIVATION ON ABSENCE</div>
+        <div class="sx-h">Protector · Francisca Mamu Mbaye</div>
+        <div class="sx-body">
+          <p>Appointed under <strong>Clause 6</strong>. Activates Golden Share authority in the event of the Initial Trustee's death, incapacity, or 90+ day unexplained absence. Powers limited to: holding the Golden Share, exercising veto on Protected Matters, and appointing a co-Trustee. <strong>Cannot revoke Albahugh's succession. Cannot personally benefit.</strong></p>
+        </div>
+        <div class="clauses">
+          <div class="clause"><strong>5.8</strong>Successor Trustee designation at age 18</div>
+          <div class="clause"><strong>6.1</strong>Protector activation conditions</div>
+          <div class="clause"><strong>6.2</strong>Protector powers — limited to mission protection</div>
+          <div class="clause"><strong>6.3</strong>Protector cannot benefit personally</div>
+          <div class="clause"><strong>6.4</strong>Independent co-Trustee appointment within 12 months of activation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="row">
+  <div class="wrap" style="max-width:840px">
+    <div class="row-tag">// FREQUENTLY ASKED</div>
+    <h2 class="row-title">What investors and regulators <em>actually ask</em>.</h2>
+    <p class="row-sub">Click any question to expand. If your question isn't here, ask ECHO on the bottom-right of this page.</p>
+
+    <div class="faq-item">
+      <div class="faq-q">If profits don't go to shareholders, how do investors get returns?</div>
+      <div class="faq-a"><p>They don't. Mother Earth Kenya does not raise equity capital from external investors. The operating company is funded by IRIS marketplace revenue (subscription tiers) and grant capital. Investors who want exposure to the planetary intelligence space can purchase IRIS data subscriptions, partner on specific projects, or fund individual chapter launches — but they do not buy equity that pays dividends or rises in valuation.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can a future board simply revoke the Golden Share?</div>
+      <div class="faq-a"><p>No. The Golden Share's existence and rights are codified in the company's Articles of Association — which cannot be amended without Trustee consent (Protected Matter 9.5). Even a 100% replacement of the company's directors cannot remove it. The only way to revoke the Golden Share is to dissolve the Trust, which itself requires Trustee unanimity and is also a Protected Matter (9.7).</p></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Who can actually be acquired here — and what happens if someone tries?</div>
+      <div class="faq-a"><p>An acquirer can attempt to buy Class A ordinary shares of the operating company. If they reach 50%+ effective control, Protected Matter 9.3 activates immediately and the Golden Share vetoes the transaction. The acquirer ends up holding shares with no decision rights over environmental matters. In practice, the structure makes Mother Earth Kenya economically un-acquirable for any acquirer whose interest is incompatible with the environmental mission.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How does this compare to a B-Corp or a Foundation-owned company?</div>
+      <div class="faq-a"><p>A B-Corp is a certification — it's a commitment that can be voluntarily abandoned. A Foundation-owned company (e.g. Patagonia's structure) is closer — but Foundations typically have broader fiduciary duties than a single-purpose Trust, which means mission drift is possible. The Kenyan Purpose Trust is narrower and stronger: the Trust's stated purpose is environmental, and Trustees breach their fiduciary duty if they consent to any decision against it.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What stops the founder from going rogue and undoing this himself?</div>
+      <div class="faq-a"><p>Three things. First, the Trust Deed makes the founder a Trustee bound by fiduciary duties — undoing the mission would be a breach he could be personally sued for. Second, the Protector role activates if the founder becomes absent, incapacitated, or non-compliant. Third, within 12 months of Trust registration, two independent co-Trustees are added — meaning the founder cannot make unilateral decisions on Protected Matters even while in good standing.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Why Kenya?</div>
+      <div class="faq-a"><p>Three reasons. The Trustees (Perpetual Succession) Act Cap. 164 is one of the cleanest Purpose Trust statutes available globally. The Kenya SEZ Act offers favourable corporate residency for a planetary-mission entity. And the VASP Act 2025 provides a clear regulatory pathway for the blockchain-anchored data marketplace (IRIS). Together they form a uniquely suitable jurisdiction for this combination of trust law, corporate vehicle, and virtual-asset operation.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How does the global chapter model interact with this?</div>
+      <div class="faq-a"><p>Every chapter must replicate the structure in its own jurisdiction: a local Purpose Trust holding a Golden Share over a local operating entity. No chapter is recognised as a Mother Earth chapter without this. Federated governance (via SAGE agents across chapters) handles cross-border decisions. No chapter can override another's sovereignty. Disputes go to a global Trustee panel comprising one representative per chapter.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Where can I read the actual Trust Deed?</div>
+      <div class="faq-a"><p>The full Trust Deed (16 clauses + 4 schedules) is available on request to <a href="mailto:hello@motherearth.systems?subject=Trust%20Deed%20request" style="color:var(--gold)">hello@motherearth.systems</a>. We share it freely with investors, journalists, regulators, prospective chapter leads, and any visitor with a serious enquiry. The companion First Board Resolutions (15 resolutions per Companies Act 2015 §149) are likewise available on request.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <h2 class="cta-h">Read the full <em>Trust Deed</em>?</h2>
+  <p class="cta-sub">For investors, regulators, journalists, and prospective chapter leads — the full constitutional document is available on request.</p>
+  <div class="cta-row">
+    <a class="btn-primary" href="mailto:hello@motherearth.systems?subject=Trust%20Deed%20request">Request Trust Deed →</a>
+    <a class="btn-outline" href="/chapters.html">Lead a Chapter ↗</a>
+    <a class="btn-outline" href="/about.html">Read the Manifesto ↗</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Limited · Governance Constitution v1.0</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/mission-control.html">Mission Control</a>
+    <a href="/iris.html">IRIS</a>
+    <a href="/chapters.html">Chapters</a>
+    <a href="/about.html">About</a>
+    <a href="/roadmap.html">Roadmap</a>
+    <a href="/press.html">Press</a>
+  </div>
+</footer>
+
+<script>
+/* FAQ toggle */
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+});
+
+/* UX layer */
+function initLenis(){
+  if(typeof Lenis==='undefined')return;
+  const lenis=new Lenis({duration:.55,smoothWheel:true,wheelMultiplier:2.0});
+  if(typeof gsap!=='undefined'){gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0)}
+  else{(function raf(t){lenis.raf(t);requestAnimationFrame(raf)})(0)}
+}
+function initCursor(){
+  const dot=document.getElementById('cd'),ring=document.getElementById('cr');
+  if(!dot||!ring)return;
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches){dot.style.display=ring.style.display='none';return}
+  let mx=-200,my=-200,rx=-200,ry=-200;const LERP=0.28;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  document.querySelectorAll('a,button,.pillar,.pm-item,.sx-card,.faq-q,.gates-row').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+  });
+  (function loop(){rx+=(mx-rx)*LERP;ry+=(my-ry)*LERP;
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(loop)})();
+}
+function initReveals(){
+  if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined')return;
+  gsap.registerPlugin(ScrollTrigger);
+  const ease='power3.out';
+
+  // Hero
+  gsap.from('.hero-tag',{opacity:0,y:14,duration:.6,ease,delay:.1});
+  gsap.from('.hero-h',  {opacity:0,y:42,duration:.95,ease,delay:.25});
+  gsap.from('.hero-sub',{opacity:0,y:24,duration:.7,ease,delay:.55});
+
+  // Diagram
+  gsap.from('.diagram-wrap',{opacity:0,y:32,duration:.8,ease,
+    scrollTrigger:{trigger:'#diagram-row',start:'top 80%',once:true}});
+  gsap.from('.d-node',{opacity:0,y:18,duration:.6,ease,stagger:.15,delay:.3,
+    scrollTrigger:{trigger:'#diagram-row',start:'top 80%',once:true}});
+  gsap.from('.d-branch',{opacity:0,y:12,duration:.4,ease,stagger:.05,delay:1.0,
+    scrollTrigger:{trigger:'#diagram-row',start:'top 80%',once:true}});
+
+  // Row standards
+  document.querySelectorAll('.row-tag').forEach(el => gsap.from(el,{opacity:0,x:-22,duration:.55,ease,
+    scrollTrigger:{trigger:el,start:'top 90%',once:true}}));
+  document.querySelectorAll('.row-title').forEach(el => gsap.from(el,{opacity:0,y:38,duration:.85,ease,
+    scrollTrigger:{trigger:el,start:'top 86%',once:true}}));
+  document.querySelectorAll('.row-sub').forEach(el => gsap.from(el,{opacity:0,y:22,duration:.65,delay:.1,ease,
+    scrollTrigger:{trigger:el,start:'top 86%',once:true}}));
+
+  ScrollTrigger.batch('.pillar',{start:'top 90%',once:true,
+    onEnter:b=>gsap.from(b,{opacity:0,y:40,scale:.95,duration:.7,ease:'back.out(1.3)',stagger:{each:.1}})});
+  ScrollTrigger.batch('.pm-item',{start:'top 94%',once:true,
+    onEnter:b=>gsap.from(b,{opacity:0,x:-16,duration:.5,ease,stagger:{each:.05}})});
+  ScrollTrigger.batch('.gates-row',{start:'top 94%',once:true,
+    onEnter:b=>gsap.from(b,{opacity:0,y:14,duration:.45,ease,stagger:{each:.06}})});
+  ScrollTrigger.batch('.sx-card',{start:'top 90%',once:true,
+    onEnter:b=>gsap.from(b,{opacity:0,y:30,duration:.65,ease,stagger:{each:.1}})});
+  ScrollTrigger.batch('.faq-item',{start:'top 94%',once:true,
+    onEnter:b=>gsap.from(b,{opacity:0,y:18,duration:.5,ease,stagger:{each:.06}})});
+
+  gsap.from('.cta-h, .cta-sub, .cta-row',{opacity:0,y:26,duration:.7,ease,stagger:.14,
+    scrollTrigger:{trigger:'#cta',start:'top 80%',once:true}});
+
+  document.querySelectorAll('.nav-cta,.btn-primary,.btn-outline').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      gsap.to(btn,{x:(e.clientX-r.left-r.width/2)*.3,y:(e.clientY-r.top-r.height/2)*.3,duration:.3,ease:'power2.out'});
+    });
+    btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:.55,ease:'elastic.out(1,0.45)'}));
+  });
+}
+initCursor();
+initLenis();
+window.addEventListener('load',initReveals);
+</script>
+
+</body>
+</html>
