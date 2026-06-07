@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roadmap — Mother Earth Kenya · What's Shipping &amp; When</title>
+  <meta name="description" content="The public roadmap for Mother Earth Kenya. Quarterly milestones, regulatory progress, chapter expansion, and product launches. Updated whenever anything ships."/>
+  <meta property="og:title" content="Roadmap — Mother Earth Kenya"/>
+  <meta property="og:description" content="The public roadmap. Quarterly milestones, regulatory progress, chapter expansion."/>
+  <meta property="og:image" content="https://motherearth.systems/logo-official-512.png"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+  <link rel="canonical" href="https://motherearth.systems/roadmap"/>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="/echo-widget.js" defer></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg:#020606; --bg2:#050d0a;
+      --green:#4ade80; --green-d:#22c55e;
+      --gold:#D4AF37; --terra:#D4763A; --amber:#f59e0b;
+      --blue:#60a5fa; --indigo:#818cf8; --red:#ef4444;
+      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
+      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+    @media(hover:hover) and (pointer:fine){*,*::before,*::after{cursor:none !important}}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    body.ch #cd{width:10px;height:10px;background:var(--gold)}
+    body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
+    @media(hover:none){#cd,#cr{display:none}}
+
+    #grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite}
+    @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
+
+    /* NAV */
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
+    .nav-logo img{width:48px;height:48px;object-fit:contain}
+    .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
+    .nav-mid a{color:var(--muted);transition:color .2s}
+    .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
+    .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    @media(max-width:1050px){.nav-mid{display:none}}
+
+    main{padding-top:72px}
+
+    /* HERO */
+    #hero{padding:90px 32px 50px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 30%, rgba(212,175,55,.05) 0%, transparent 70%)}
+    .hero-inner{max-width:900px;margin:0 auto}
+    .hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--gold);opacity:.7;margin-bottom:22px}
+    .hero-h{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,6vw,76px);font-weight:400;line-height:1.05;letter-spacing:-.01em;margin-bottom:24px}
+    .hero-h em{font-style:italic;color:var(--gold)}
+    .hero-sub{font-size:clamp(15px,1.8vw,19px);color:var(--muted);line-height:1.7;max-width:680px;margin:0 auto 32px}
+
+    /* PROGRESS BAR */
+    .progress-wrap{
+      max-width:780px;margin:32px auto 0;padding:24px 28px;
+      background:var(--card);border:1px solid var(--border);border-radius:14px;
+    }
+    .progress-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .progress-h-l{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--muted)}
+    .progress-h-r{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.05em}
+    .progress-bar{height:8px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden;display:flex}
+    .pb-done{background:linear-gradient(to right, var(--gold), #e8c860);height:100%;transition:width 1.2s ease}
+    .pb-now {background:var(--green);height:100%;animation:pbPulse 2s ease-in-out infinite}
+    @keyframes pbPulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .progress-labels{display:flex;justify-content:space-between;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--muted)}
+    .progress-labels span strong{display:block;color:var(--text);font-size:18px;font-weight:800;font-family:'Inter',sans-serif;margin-bottom:2px;letter-spacing:0}
+
+    /* LEGEND */
+    .legend{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:36px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--muted)}
+    .legend-item{display:inline-flex;align-items:center;gap:8px}
+    .legend-dot{width:10px;height:10px;border-radius:50%}
+    .legend-dot.done{background:var(--gold)}
+    .legend-dot.now{background:var(--green);box-shadow:0 0 8px var(--green);animation:pulseDot 1.8s ease-in-out infinite}
+    .legend-dot.next{background:transparent;border:1.5px solid rgba(74,222,128,.4)}
+    .legend-dot.horizon{background:transparent;border:1.5px solid rgba(255,255,255,.18)}
+    @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+
+    /* QUARTER SECTIONS */
+    .row{padding:80px 32px}
+    .wrap{max-width:1100px;margin:0 auto}
+
+    .quarter{margin-bottom:80px}
+    .q-head{
+      display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:14px;
+      padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:32px;
+    }
+    .q-h{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4.5vw,50px);font-weight:400;letter-spacing:-.01em;line-height:1.05}
+    .q-h em{color:var(--gold);font-style:italic}
+    .q-h .q-status{display:inline-block;margin-left:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;padding:5px 14px;border-radius:20px;border:1px solid;font-weight:700;vertical-align:middle}
+    .q-status.done{color:var(--gold);border-color:rgba(212,175,55,.45);background:rgba(212,175,55,.08)}
+    .q-status.now {color:var(--green);border-color:rgba(74,222,128,.45);background:rgba(74,222,128,.08)}
+    .q-status.next{color:var(--blue);border-color:rgba(96,165,250,.45);background:rgba(96,165,250,.08)}
+    .q-status.horizon{color:var(--muted);border-color:var(--border);background:rgba(255,255,255,.02)}
+    .q-meta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--muted);display:flex;gap:18px}
+    .q-meta span::before{content:'• ';color:var(--green)}
+
+    .milestones{display:grid;gap:14px}
+    .milestone{
+      display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:flex-start;
+      background:var(--card);border:1px solid var(--border);border-radius:12px;
+      padding:22px 24px;transition:border-color .25s,transform .25s;
+    }
+    .milestone:hover{border-color:rgba(74,222,128,.3);transform:translateY(-2px)}
+    @media(max-width:700px){.milestone{grid-template-columns:1fr;gap:10px}}
+    .ms-dot{
+      width:14px;height:14px;border-radius:50%;margin-top:5px;flex-shrink:0;
+    }
+    .ms-dot.done{background:var(--gold);box-shadow:0 0 10px rgba(212,175,55,.3)}
+    .ms-dot.now {background:var(--green);box-shadow:0 0 12px var(--green);animation:pulseDot 1.8s ease-in-out infinite}
+    .ms-dot.next{background:transparent;border:2px solid rgba(74,222,128,.5)}
+    .ms-dot.horizon{background:transparent;border:2px solid rgba(255,255,255,.18)}
+    .ms-content h3{font-size:16px;font-weight:700;letter-spacing:-.005em;margin-bottom:4px;line-height:1.35}
+    .ms-content p{font-size:13px;color:var(--muted);line-height:1.7}
+    .ms-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+    .ms-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 8px;border-radius:4px;color:var(--green);background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.18)}
+    .ms-tag.t-legal{color:var(--blue);background:rgba(96,165,250,.06);border-color:rgba(96,165,250,.18)}
+    .ms-tag.t-tech{color:var(--indigo);background:rgba(129,140,248,.06);border-color:rgba(129,140,248,.18)}
+    .ms-tag.t-finance{color:var(--amber);background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.18)}
+    .ms-tag.t-product{color:var(--terra);background:rgba(212,118,58,.06);border-color:rgba(212,118,58,.18)}
+    .ms-tag.t-governance{color:var(--gold);background:rgba(212,175,55,.06);border-color:rgba(212,175,55,.18)}
+    .ms-eta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--muted);align-self:center;text-align:right;white-space:nowrap}
+
+    /* PRINCIPLE BAND */
+    #principle{background:linear-gradient(180deg, transparent, rgba(212,175,55,.04), transparent);border-top:1px solid rgba(212,175,55,.12);border-bottom:1px solid rgba(212,175,55,.12);padding:60px 32px;text-align:center}
+    .principle-h{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,32px);font-weight:400;font-style:italic;color:var(--gold);line-height:1.5;max-width:780px;margin:0 auto;letter-spacing:-.005em}
+
+    /* CTA */
+    #cta{text-align:center;padding:90px 32px;background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(74,222,128,.05) 0%, transparent 70%)}
+    .cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-weight:400;margin-bottom:18px}
+    .cta-h em{color:var(--gold);font-style:italic}
+    .cta-sub{font-size:15px;color:var(--muted);max-width:560px;margin:0 auto 30px;line-height:1.7}
+    .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{background:var(--gold);color:#000;border-radius:8px;padding:14px 28px;font-size:14px;font-weight:700;letter-spacing:.04em;transition:background .2s;display:inline-block}
+    .btn-primary:hover{background:#e8c860}
+    .btn-outline{border:1.5px solid var(--border);color:var(--text);border-radius:8px;padding:14px 28px;font-size:14px;font-weight:600;display:inline-block;transition:border-color .2s,color .2s}
+    .btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+    footer{padding:36px 32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted)}
+    .footer-links{display:flex;gap:24px;flex-wrap:wrap}
+    .footer-links a:hover{color:var(--green)}
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html">// LIVE OPS</a></li>
+    <li><a href="/iris.html">IRIS</a></li>
+    <li><a href="/chapters.html">CHAPTERS</a></li>
+    <li><a href="/about.html">ABOUT</a></li>
+    <li><a href="/roadmap.html" class="active">ROADMAP</a></li>
+    <li><a href="/press.html">PRESS</a></li>
+  </ul>
+  <a class="nav-cta" href="mailto:hello@motherearth.systems">GET IN TOUCH</a>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">// PUBLIC ROADMAP · LIVE</div>
+    <h1 class="hero-h">What's <em>shipping</em> and when.</h1>
+    <p class="hero-sub">The public roadmap for Mother Earth Kenya. Quarterly milestones across product, legal, infrastructure, and chapter expansion. Updated whenever anything material moves.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-h">
+        <div class="progress-h-l">FOUNDATION YEAR · 2026</div>
+        <div class="progress-h-r">42% COMPLETE</div>
+      </div>
+      <div class="progress-bar">
+        <div class="pb-done" style="width:0"></div>
+        <div class="pb-now" style="width:0"></div>
+      </div>
+      <div class="progress-labels">
+        <span><strong>12</strong>SHIPPED</span>
+        <span><strong>4</strong>IN PROGRESS</span>
+        <span><strong>9</strong>NEXT 90 DAYS</span>
+        <span><strong>13</strong>HORIZON · 2027+</span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot done"></span>SHIPPED</span>
+      <span class="legend-item"><span class="legend-dot now"></span>IN PROGRESS</span>
+      <span class="legend-item"><span class="legend-dot next"></span>NEXT 90 DAYS</span>
+      <span class="legend-item"><span class="legend-dot horizon"></span>HORIZON · 2027+</span>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP CONTENT -->
+<section class="row">
+  <div class="wrap">
+
+    <!-- Q2 2026 — DONE -->
+    <div class="quarter">
+      <div class="q-head">
+        <h2 class="q-h">Q2 2026 <em>Foundation</em><span class="q-status done">SHIPPED</span></h2>
+        <div class="q-meta"><span>12 of 12 milestones</span><span>April – June 2026</span></div>
+      </div>
+      <div class="milestones">
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>33-agent architecture deployed</h3>
+            <p>All 7 branch heads + 26 sub-agents online under PM2 process management. Auto-restart on reboot. Prompt caching enabled — 50–80% reduction in API costs.</p>
+            <div class="ms-tags"><span class="ms-tag t-tech">INFRASTRUCTURE</span><span class="ms-tag">SHIPPED</span></div>
+          </div><div class="ms-eta">28 MAY 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>LLM Council protocol wired site-wide</h3>
+            <p>5-advisor deliberation (AXIOM/VECTOR/FORGE/HORIZON/CONTRARY) + Chairman synthesis on every high-stakes decision in every branch. Inter-agent collaboration channel live.</p>
+            <div class="ms-tags"><span class="ms-tag t-tech">AI</span><span class="ms-tag">SHIPPED</span></div>
+          </div><div class="ms-eta">4 JUN 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>Purpose Trust Deed v2 finalised</h3>
+            <p>16 clauses + 4 schedules under the Trustees (Perpetual Succession) Act. Successor Trustee designated. Protector appointed. Golden Share custody codified.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag t-governance">GOVERNANCE</span></div>
+          </div><div class="ms-eta">2 JUN 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>MoA &amp; AoA · BRS filing pack ready</h3>
+            <p>17 Articles in A4 BRS format. First Board Resolutions drafted (15 resolutions per Companies Act 2015 §149). Ready for upload at ecitizen.go.ke.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span></div>
+          </div><div class="ms-eta">28 MAY 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>MEDataLicense v1.0 published</h3>
+            <p>17 operative clauses + 4 schedules. Pricing tiers, permitted use matrix, attribution standards. Protected Matter for any future amendments.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag t-product">PRODUCT</span></div>
+          </div><div class="ms-eta">28 MAY 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>Privacy Policy v1.0 + Terms v1.0 live</h3>
+            <p>Kenya DPA 2019 compliant. ODPC-ready. 13 sections covering visitors, ECHO email, IRIS subscribers, GAIA sensor, Guardian members. Third-party processor table published.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span></div>
+          </div><div class="ms-eta">28 MAY 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>Website v1 launch · motherearth.systems</h3>
+            <p>Hero + brand identity. Three.js rotating Earth. Live data dashboard. Crisis stats. 8 agent modals. Pricing tiers. Governance section. Contact intake.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">PRODUCT</span></div>
+          </div><div class="ms-eta">31 MAY 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>X &amp; LinkedIn launch</h3>
+            <p>@motherEarthKe live with 5 launch posts. LinkedIn company page operational. ECHO X-poster module deployed for ongoing automated posting.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">COMMS</span></div>
+          </div><div class="ms-eta">31 MAY 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>Mission Control public dashboard</h3>
+            <p>Live agent feed · branch health matrix · Kenya sensor map · public Council Chamber where visitors can convene the 5-advisor council on any strategic question.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">PRODUCT</span><span class="ms-tag t-tech">AI</span></div>
+          </div><div class="ms-eta">6 JUN 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>IRIS Research Access programme</h3>
+            <p>6 months complimentary Guardian access for universities and registered NGOs. Institutional email only. First academic lead from University of Nairobi WMI confirmed.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">REVENUE</span></div>
+          </div><div class="ms-eta">5 JUN 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>Global Chapters framework + page</h3>
+            <p>Every nation invited. 9 chapters in active dialogue. ~190 available. Application form goes direct to governance committee. Local sovereignty model codified.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">EXPANSION</span></div>
+          </div><div class="ms-eta">6 JUN 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot done"></div>
+          <div class="ms-content"><h3>About · Press · Roadmap pages</h3>
+            <p>Manifesto + founder profile + principles + timeline. Press kit with boilerplate, founder bio, brand assets, recent shipping. Public roadmap (this page).</p>
+            <div class="ms-tags"><span class="ms-tag t-product">PRODUCT</span></div>
+          </div><div class="ms-eta">7 JUN 2026</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Q3 2026 — IN PROGRESS / NEXT -->
+    <div class="quarter">
+      <div class="q-head">
+        <h2 class="q-h">Q3 2026 <em>Incorporation &amp; Compliance</em><span class="q-status now">IN PROGRESS</span></h2>
+        <div class="q-meta"><span>4 in progress · 5 next</span><span>July – September 2026</span></div>
+      </div>
+      <div class="milestones">
+
+        <div class="milestone"><div class="ms-dot now"></div>
+          <div class="ms-content"><h3>BRS company registration</h3>
+            <p>Final filing for Mother Earth Kenya Limited via Business Registration Service. Unlocks Stripe + M-Pesa integration, VASP application, Trust registration, KRA PIN.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag">UNBLOCKS REVENUE</span></div>
+          </div><div class="ms-eta">JUNE 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot now"></div>
+          <div class="ms-content"><h3>Anthropic billing auto-reload</h3>
+            <p>Critical infrastructure dependency — 33 agents go silent if credits deplete. Auto-reload at minimum balance threshold needs to be enabled in Anthropic console.</p>
+            <div class="ms-tags"><span class="ms-tag t-finance">TREASURY</span><span class="ms-tag">CRITICAL</span></div>
+          </div><div class="ms-eta">URGENT</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot now"></div>
+          <div class="ms-content"><h3>D&amp;O + Cyber insurance binding</h3>
+            <p>APA Insurance or Jubilee Kenya. Required before any high-stakes partnership. Founder protection prerequisite. Quote requests in motion.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag t-finance">FOUNDER</span></div>
+          </div><div class="ms-eta">JULY 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot now"></div>
+          <div class="ms-content"><h3>Kenya advocate review of MoA/AoA</h3>
+            <p>1-hour external legal review before BRS filing to mitigate AI-drafted-document risk. Independent advocate engagement pending.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span></div>
+          </div><div class="ms-eta">JUNE 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>VASP licence application</h3>
+            <p>Capital Markets Authority filing under VASP Act 2025. KYC/AML Policy Manual already drafted. Requires post-BRS incorporation number.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">REGULATORY</span></div>
+          </div><div class="ms-eta">Q3 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>ODPC registration · 30 days post-BRS</h3>
+            <p>Office of the Data Protection Commissioner registration mandatory within 30 days of company incorporation. Resolution #13 in First Board Resolutions covers authority.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">REGULATORY</span></div>
+          </div><div class="ms-eta">Q3 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>Stripe + M-Pesa payment rails live</h3>
+            <p>Both rails activated post-BRS. Stripe for international Sentinel/Planetary subscribers. M-Pesa for Kenya-domiciled Guardian customers. Sandbox testing complete.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">REVENUE</span><span class="ms-tag t-tech">PAYMENTS</span></div>
+          </div><div class="ms-eta">Q3 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>Purpose Trust registration · AG's Office</h3>
+            <p>Formal Trust filing. Appointment of 2 independent co-trustees within 12 months of registration. Golden Share transferred to Trust custody.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag t-governance">GOVERNANCE</span></div>
+          </div><div class="ms-eta">Q3 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>First Sentinel/Planetary customer signed</h3>
+            <p>Active outreach: Safaricom Sustainability Team, WWF Kenya, University of Nairobi WMI. Target: 1 institutional contract closed before end of Q3.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">REVENUE</span><span class="ms-tag">MILESTONE</span></div>
+          </div><div class="ms-eta">Q3 2026</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Q4 2026 -->
+    <div class="quarter">
+      <div class="q-head">
+        <h2 class="q-h">Q4 2026 <em>Operations</em><span class="q-status next">NEXT</span></h2>
+        <div class="q-meta"><span>8 planned</span><span>October – December 2026</span></div>
+      </div>
+      <div class="milestones">
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>SEZ enterprise registration · SEZA</h3>
+            <p>Special Economic Zone Authority filing. Unlocks SEZ tax holiday, currency, and regulatory privileges. SEZA Business Plan v1.0 already drafted.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">REGULATORY</span></div>
+          </div><div class="ms-eta">OCT 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>Public Council Archive · KV-backed</h3>
+            <p>Persistent storage for every council deliberation (currently ephemeral). Each entry shareable via permalink. Adds searchable transparency layer.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">PRODUCT</span></div>
+          </div><div class="ms-eta">OCT 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>10 paying institutional customers</h3>
+            <p>5 Sentinel + 5 Guardian. Target ARR: $40,000+. Funds full Y1 operating budget. Unlocks Y2 expansion confidence.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">REVENUE</span></div>
+          </div><div class="ms-eta">DEC 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>First international chapter approved</h3>
+            <p>Most likely candidate: USA (diaspora-led, Delaware LLC structure), Brazil (Amazon biome), or South Africa (JSE green-finance integration).</p>
+            <div class="ms-tags"><span class="ms-tag t-product">EXPANSION</span></div>
+          </div><div class="ms-eta">Q4 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>SOC 2 Type I audit kick-off</h3>
+            <p>Required for US B2B procurement. ~$15–50K commitment. Drives infosec maturity across NEXUS, AMARA, and ATLAS controls.</p>
+            <div class="ms-tags"><span class="ms-tag t-tech">SECURITY</span><span class="ms-tag t-finance">COMPLIANCE</span></div>
+          </div><div class="ms-eta">Q4 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>Independent co-trustees onboarded</h3>
+            <p>Two independent co-trustees added to Mother Earth Environmental Purpose Trust within 12 months of registration. Strengthens governance credibility.</p>
+            <div class="ms-tags"><span class="ms-tag t-governance">GOVERNANCE</span></div>
+          </div><div class="ms-eta">Q4 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>GAIA full-page sensor map</h3>
+            <p>Interactive Kenya map with all 5 stations live (Nairobi, Mombasa, Kisumu, Nakuru, Rift Valley). Real-time PM2.5, AQI, station status. Embeddable.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">PRODUCT</span></div>
+          </div><div class="ms-eta">Q4 2026</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot next"></div>
+          <div class="ms-content"><h3>Year 1 audited financials published</h3>
+            <p>External audit complete. Public summary on /finances. First annual transparency report covering Q2–Q4 2026 operations.</p>
+            <div class="ms-tags"><span class="ms-tag t-finance">TRANSPARENCY</span></div>
+          </div><div class="ms-eta">DEC 2026</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- HORIZON 2027 -->
+    <div class="quarter">
+      <div class="q-head">
+        <h2 class="q-h">2027 <em>Scale</em><span class="q-status horizon">HORIZON</span></h2>
+        <div class="q-meta"><span>13 themes</span><span>Subject to council deliberation</span></div>
+      </div>
+      <div class="milestones">
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>3 international chapters operational</h3>
+            <p>Mother Earth USA, one EU chapter, one South American chapter. All on the same Purpose Trust framework. Federated SAGE governance network active.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">EXPANSION</span></div>
+          </div><div class="ms-eta">2027</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>Kenya CBK Payment Service Provider licence</h3>
+            <p>Application to Central Bank of Kenya for PSP licence — required for cross-border treasury operations and stablecoin settlement infrastructure.</p>
+            <div class="ms-tags"><span class="ms-tag t-legal">REGULATORY</span></div>
+          </div><div class="ms-eta">Q1 2027</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>NEXUS smart contracts on mainnet</h3>
+            <p>FORGE-deployed METoken, MEFeeRouter, dNFT contracts. SCOUT audit + external security audit. KEYS multi-sig active. Verified data anchored on-chain.</p>
+            <div class="ms-tags"><span class="ms-tag t-tech">BLOCKCHAIN</span></div>
+          </div><div class="ms-eta">2027</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>ISO 27001 certification</h3>
+            <p>Follow-on from SOC 2. International standard for information security management. Unlocks European public-sector contracts.</p>
+            <div class="ms-tags"><span class="ms-tag t-tech">SECURITY</span></div>
+          </div><div class="ms-eta">2027</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>Carbon-credit AI auditor product</h3>
+            <p>Kenya is a carbon credit hub. No dominant AI player yet. NEXUS-anchored verification + GAIA monitoring + AMARA compliance = differentiated audit service.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">PRODUCT</span></div>
+          </div><div class="ms-eta">2027</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>Kenya↔USA remittance corridor</h3>
+            <p>$500M+/year market, no AI-native operator. Mother Earth USA chapter operates US-side. Kenya chapter operates Kenya-side. Embedded environmental compliance.</p>
+            <div class="ms-tags"><span class="ms-tag t-finance">FINANCE</span></div>
+          </div><div class="ms-eta">2027</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>50 paying institutional customers</h3>
+            <p>Target ARR: $250,000+. Sustained Sentinel + Planetary tier growth. Begin investment in dedicated environmental analyst hires.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">REVENUE</span></div>
+          </div><div class="ms-eta">2027</div>
+        </div>
+
+        <div class="milestone"><div class="ms-dot horizon"></div>
+          <div class="ms-content"><h3>Mobile apps · iOS + Android</h3>
+            <p>Triggered at 500+ active users. Client-facing portal for IRIS subscribers. Push notifications for sensor alerts and council deliberations.</p>
+            <div class="ms-tags"><span class="ms-tag t-product">PRODUCT</span></div>
+          </div><div class="ms-eta">H2 2027</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRINCIPLE BAND -->
+<section id="principle">
+  <p class="principle-h">"Every milestone is just a position in time — the only thing that compounds is the discipline of shipping the next one."</p>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <h2 class="cta-h">Want to help <em>accelerate</em> a milestone?</h2>
+  <p class="cta-sub">Partnerships, capital, talent, and chapter applications are how things move from horizon to in-progress faster.</p>
+  <div class="cta-row">
+    <a class="btn-primary" href="mailto:hello@motherearth.systems?subject=Partnership%20enquiry">Partner With Us →</a>
+    <a class="btn-outline" href="/chapters.html">Lead a Chapter ↗</a>
+    <a class="btn-outline" href="/press.html">For Press ↗</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Limited · Roadmap v1.0 · Updated 7 Jun 2026</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/mission-control.html">Mission Control</a>
+    <a href="/iris.html">IRIS</a>
+    <a href="/chapters.html">Chapters</a>
+    <a href="/about.html">About</a>
+    <a href="/press.html">Press</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </div>
+</footer>
+
+<script>
+/* UX layer */
+function initLenis(){
+  if(typeof Lenis==='undefined')return;
+  const lenis=new Lenis({duration:.55,smoothWheel:true,wheelMultiplier:2.0});
+  if(typeof gsap!=='undefined'){gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0)}
+  else{(function raf(t){lenis.raf(t);requestAnimationFrame(raf)})(0)}
+}
+function initCursor(){
+  const dot=document.getElementById('cd'),ring=document.getElementById('cr');
+  if(!dot||!ring)return;
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches){dot.style.display=ring.style.display='none';return}
+  let mx=-200,my=-200,rx=-200,ry=-200;const LERP=0.28;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  document.querySelectorAll('a,button,.milestone').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+  });
+  (function loop(){rx+=(mx-rx)*LERP;ry+=(my-ry)*LERP;
+    dot.style.left=mx+'px';dot.style.top=my+'px';
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(loop)})();
+}
+function initReveals(){
+  if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined')return;
+  gsap.registerPlugin(ScrollTrigger);
+  const ease='power3.out';
+
+  // Hero entrance
+  gsap.from('.hero-tag',{opacity:0,y:14,duration:.6,ease,delay:.1});
+  gsap.from('.hero-h',  {opacity:0,y:42,duration:.95,ease,delay:.25});
+  gsap.from('.hero-sub',{opacity:0,y:24,duration:.7,ease,delay:.55});
+  gsap.from('.progress-wrap',{opacity:0,y:22,duration:.7,ease,delay:.75});
+  gsap.from('.legend-item',{opacity:0,y:12,duration:.5,ease,delay:1.0,stagger:.06});
+
+  // Animate progress bars after a beat
+  gsap.to('.pb-done',{width:'30%',duration:1.4,ease:'power2.out',delay:1.1});
+  gsap.to('.pb-now', {width:'12%',duration:1.4,ease:'power2.out',delay:1.5});
+
+  // Quarter sections
+  document.querySelectorAll('.q-head').forEach(el=>
+    gsap.from(el,{opacity:0,y:30,duration:.7,ease,scrollTrigger:{trigger:el,start:'top 88%',once:true}}));
+
+  ScrollTrigger.batch('.milestone',{start:'top 92%',once:true,
+    onEnter:b=>gsap.from(b,{opacity:0,x:-16,duration:.5,ease,stagger:{each:.05}})});
+
+  gsap.from('.principle-h',{opacity:0,y:24,duration:.85,ease,
+    scrollTrigger:{trigger:'#principle',start:'top 80%',once:true}});
+
+  gsap.from('.cta-h, .cta-sub, .cta-row',{opacity:0,y:26,duration:.7,ease,stagger:.14,
+    scrollTrigger:{trigger:'#cta',start:'top 80%',once:true}});
+
+  document.querySelectorAll('.nav-cta,.btn-primary,.btn-outline').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      gsap.to(btn,{x:(e.clientX-r.left-r.width/2)*.3,y:(e.clientY-r.top-r.height/2)*.3,duration:.3,ease:'power2.out'});
+    });
+    btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:.55,ease:'elastic.out(1,0.45)'}));
+  });
+}
+initCursor();
+initLenis();
+window.addEventListener('load',initReveals);
+</script>
+
+</body>
+</html>
