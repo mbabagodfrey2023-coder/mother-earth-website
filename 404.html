@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 · Off the map — Mother Earth Kenya</title>
+  <meta name="description" content="That page doesn't exist on the Mother Earth Kenya planetary intelligence platform. Here's where to go next."/>
+  <meta name="robots" content="noindex, follow"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+
+  <script src="/echo-widget.js" defer></script>
+  <script src="/mobile-menu.js" defer></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg:#020606; --green:#4ade80; --gold:#D4AF37; --terra:#D4763A;
+      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
+      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+    @media(hover:hover) and (pointer:fine){*,*::before,*::after{cursor:none !important}}
+    a{color:inherit;text-decoration:none}
+
+    #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    body.ch #cd{width:10px;height:10px;background:var(--gold)}
+    body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
+    @media(hover:none){#cd,#cr{display:none}}
+
+    #grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");background-size:220px 220px}
+
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
+    .nav-logo img{width:48px;height:48px;object-fit:contain}
+    .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+
+    main{flex:1;padding:140px 32px 60px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+    .wrap{max-width:780px}
+
+    .err-code{
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;
+      color:var(--gold);opacity:.7;margin-bottom:20px;
+    }
+    .err-h{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(46px,9vw,128px);font-weight:400;line-height:.95;letter-spacing:-.02em;
+      margin-bottom:20px;
+    }
+    .err-h em{color:var(--gold);font-style:italic}
+    .err-sub{
+      font-size:clamp(15px,1.7vw,18px);color:var(--muted);line-height:1.7;
+      max-width:520px;margin:0 auto 18px;
+    }
+    .err-path{
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+      color:var(--terra);background:rgba(212,118,58,.06);border:1px solid rgba(212,118,58,.2);
+      padding:8px 14px;border-radius:6px;display:inline-block;
+      margin-bottom:36px;word-break:break-all;max-width:600px;
+    }
+
+    .links-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;
+      max-width:720px;margin:0 auto;
+    }
+    .link-card{
+      background:var(--card);border:1px solid var(--border);border-radius:12px;
+      padding:22px;text-align:left;transition:border-color .25s,transform .25s,background .25s;
+    }
+    .link-card:hover{border-color:var(--green);transform:translateY(-3px);background:rgba(74,222,128,.04)}
+    .link-card .lc-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--gold);opacity:.7;margin-bottom:8px}
+    .link-card h3{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;margin-bottom:6px;letter-spacing:-.005em}
+    .link-card p{font-size:12px;color:var(--muted);line-height:1.55}
+
+    .footer-row{
+      margin-top:48px;padding-top:24px;border-top:1px solid var(--border);
+      font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--muted);
+    }
+    .footer-row a{color:var(--green);transition:color .2s}
+    .footer-row a:hover{color:#86efac}
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <a class="nav-cta" href="/">← HOME</a>
+</nav>
+
+<main>
+  <div class="wrap">
+    <div class="err-code">// 404 · OFF THE MAP · SECTOR EARTH-001</div>
+    <h1 class="err-h">Lost in the <em>biosphere</em>.</h1>
+    <p class="err-sub">That page doesn't exist on the planetary intelligence network. GAIA scanned for it — nothing returned.</p>
+    <div class="err-path" id="err-path">/unknown-coordinates</div>
+
+    <div class="links-grid">
+      <a class="link-card" href="/">
+        <div class="lc-tag">// HOMEBASE</div>
+        <h3>Mother Earth</h3>
+        <p>The planetary mission, 33 agents, full overview.</p>
+      </a>
+      <a class="link-card" href="/mission-control.html">
+        <div class="lc-tag">// LIVE OPS</div>
+        <h3>Mission Control</h3>
+        <p>Watch the agents work. Convene the Council.</p>
+      </a>
+      <a class="link-card" href="/iris.html">
+        <div class="lc-tag">// DATA</div>
+        <h3>IRIS Marketplace</h3>
+        <p>Environmental data feeds. Research access free.</p>
+      </a>
+      <a class="link-card" href="/chapters.html">
+        <div class="lc-tag">// EXPAND</div>
+        <h3>Global Chapters</h3>
+        <p>Every nation invited. Apply to lead yours.</p>
+      </a>
+      <a class="link-card" href="/governance.html">
+        <div class="lc-tag">// CONSTITUTION</div>
+        <h3>Governance</h3>
+        <p>Purpose Trust + Golden Share architecture.</p>
+      </a>
+      <a class="link-card" href="/council-archive.html">
+        <div class="lc-tag">// ARCHIVE</div>
+        <h3>Council Archive</h3>
+        <p>Public deliberations, permalinked forever.</p>
+      </a>
+    </div>
+
+    <div class="footer-row">
+      Still lost? Ask ECHO bottom-right · or email <a href="mailto:hello@motherearth.systems">hello@motherearth.systems</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Show the actual broken path
+  document.getElementById('err-path').textContent = location.pathname || '/unknown-coordinates';
+
+  // Custom cursor
+  (function(){
+    const dot=document.getElementById('cd'),ring=document.getElementById('cr');
+    if(!dot||!ring||!window.matchMedia('(hover:hover) and (pointer:fine)').matches){dot.style.display=ring.style.display='none';return}
+    let mx=-200,my=-200,rx=-200,ry=-200;const L=.28;
+    window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+    document.querySelectorAll('a,button').forEach(el=>{
+      el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+      el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+    });
+    (function lp(){rx+=(mx-rx)*L;ry+=(my-ry)*L;
+      dot.style.left=mx+'px';dot.style.top=my+'px';
+      ring.style.left=rx+'px';ring.style.top=ry+'px';
+      requestAnimationFrame(lp)})();
+  })();
+</script>
+</body>
+</html>

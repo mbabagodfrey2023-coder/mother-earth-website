@@ -192,13 +192,19 @@
     const map = {
       '/':                'the homepage',
       '/index':           'the homepage',
-      '/mission-control': 'Mission Control (live operations dashboard)',
+      '/mission-control': 'Mission Control (live operations dashboard with the public Council Chamber)',
       '/iris':            'the IRIS Data Marketplace landing page',
       '/chapters':        'the Global Chapters page',
+      '/governance':      'the Governance page (Purpose Trust + Golden Share constitutional document)',
       '/about':           'the About / Founder / Manifesto page',
+      '/roadmap':         'the public Roadmap page',
+      '/press':           'the Press kit / Recent shipping page',
+      '/finances':        'the Finances open-books transparency page',
+      '/council-archive': 'the public Council Archive (past AI deliberations with permalinks)',
       '/privacy':         'the Privacy Policy page',
       '/terms':           'the Terms of Service page',
       '/api-docs':        'the IRIS API documentation page',
+      '/brand-kit':       'the brand kit page',
     };
     return map[path] || ('the page ' + path);
   }
