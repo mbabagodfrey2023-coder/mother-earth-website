@@ -881,22 +881,83 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Mother Earth",
-    "alternateName": "Mother Earth Kenya Limited",
-    "url": "https://motherearth.systems",
-    "logo": "https://motherearth.systems/og.svg",
-    "description": "The world's first AI-powered environmental intelligence organisation. 33 autonomous agents. Purpose Trust governance. Blockchain-secured environmental data.",
-    "foundingLocation": {
-      "@type": "Place",
-      "name": "Nairobi, Kenya"
-    },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": "hello@motherearth.systems",
-      "contactType": "customer service"
-    },
-    "sameAs": []
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://motherearth.systems/#organization",
+        "name": "Mother Earth Kenya",
+        "alternateName": ["Mother Earth", "Mother Earth Kenya Limited", "Environmental AI Ltd"],
+        "url": "https://motherearth.systems",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://motherearth.systems/logo-official-512.png",
+          "width": 512,
+          "height": 512
+        },
+        "image": "https://motherearth.systems/og.svg",
+        "description": "The world's first AI-native environmental intelligence organisation. 33 autonomous AI agents across 7 specialist branches, governed by a Purpose Trust whose Golden Share holds absolute veto over any decision compromising the environmental mission.",
+        "slogan": "The mission is the only shareholder.",
+        "foundingDate": "2026",
+        "foundingLocation": {
+          "@type": "Place",
+          "name": "Nairobi, Kenya"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Suite 1105, Wing A, 11th Floor, Bazaar Plaza, Moi Avenue",
+          "addressLocality": "Nairobi",
+          "addressRegion": "Nairobi County",
+          "addressCountry": "KE"
+        },
+        "areaServed": {
+          "@type": "Place",
+          "name": "Worldwide"
+        },
+        "founder": { "@id": "https://motherearth.systems/#founder" },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "email": "hello@motherearth.systems",
+            "contactType": "customer service",
+            "availableLanguage": ["en", "sw"]
+          },
+          {
+            "@type": "ContactPoint",
+            "email": "press@motherearth.systems",
+            "contactType": "press",
+            "availableLanguage": ["en"]
+          }
+        ],
+        "knowsAbout": [
+          "Environmental Intelligence", "Climate Data", "AI Governance",
+          "Purpose Trust Law", "VASP Act 2025 Kenya", "Carbon Markets",
+          "Planetary Monitoring", "Blockchain Data Provenance"
+        ],
+        "sameAs": [
+          "https://x.com/motherEarthKe",
+          "https://www.linkedin.com/company/mother-earth-kenya"
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://motherearth.systems/#founder",
+        "name": "Andy Muyundo Godfrey",
+        "jobTitle": "Founder, CEO & Initial Trustee",
+        "worksFor": { "@id": "https://motherearth.systems/#organization" },
+        "url": "https://motherearth.systems/about.html",
+        "email": "andygodfrey@motherearth.systems",
+        "nationality": { "@type": "Country", "name": "Kenya" }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://motherearth.systems/#website",
+        "url": "https://motherearth.systems",
+        "name": "Mother Earth Kenya",
+        "description": "Live operations dashboard, IRIS data marketplace, global chapters, governance, roadmap, and press materials for the world's first AI-native environmental governance organisation.",
+        "publisher": { "@id": "https://motherearth.systems/#organization" },
+        "inLanguage": "en"
+      }
+    ]
   }
   </script>
 </head>
