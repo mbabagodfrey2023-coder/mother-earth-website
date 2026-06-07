@@ -12,11 +12,5 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "COUNCIL_ARCHIVE",
-      "id": "ed72059a838b4b8f8ccde26eb6122a85"
-    }
   ]
 }
