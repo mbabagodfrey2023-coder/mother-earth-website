@@ -8,7 +8,8 @@
   <meta property="og:title" content="IRIS Data Marketplace — Mother Earth Kenya"/>
   <meta property="og:description" content="Environmental data feeds, AI intelligence reports, and a verified provenance chain — built for serious research."/>
   <meta property="og:image" content="https://motherearth.systems/og.svg"/>
-  <link rel="icon" type="image/svg+xml" href="logo-final.svg"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
   <link rel="canonical" href="https://motherearth.systems/iris"/>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -58,13 +59,13 @@
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      padding: 0 40px; height: 64px;
+      padding: 0 40px; height: 72px;
       display: flex; align-items: center; justify-content: space-between;
       background: rgba(2,6,6,.85); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
     .nav-logo { display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.05em; }
-    .nav-logo img { width:36px;height:36px; }
+    .nav-logo img { width:48px;height:48px;object-fit:contain; }
     .nav-links { display:flex;gap:32px;list-style:none; }
     .nav-links a { font-size:13px;letter-spacing:.08em;color:var(--muted);transition:color .2s; }
     .nav-links a:hover, .nav-links a.active { color:var(--text); }
@@ -270,7 +271,7 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="/">
-    <img src="logo-icon-final.svg" alt="Mother Earth Kenya"/>
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya · Environmental AI Ltd"/>
     <span>MOTHER EARTH</span>
   </a>
   <ul class="nav-links">
