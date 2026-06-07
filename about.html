@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Mother Earth Kenya · Why We Built the World's First AI Organisation for the Planet</title>
+  <meta name="description" content="The why behind Mother Earth Kenya. The founder. The manifesto. The mission that cannot be sold."/>
+  <meta property="og:title" content="About — Mother Earth Kenya"/>
+  <meta property="og:description" content="One founder. 33 AI agents. One Purpose Trust. A planetary mission that cannot be killed."/>
+  <meta property="og:image" content="https://motherearth.systems/logo-official-512.png"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+  <link rel="canonical" href="https://motherearth.systems/about"/>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="/echo-widget.js" defer></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg:     #020606;
+      --bg2:    #050d0a;
+      --green:  #4ade80;
+      --gold:   #D4AF37;
+      --terra:  #D4763A;
+      --amber:  #f59e0b;
+      --text:   #F2F0EB;
+      --muted:  rgba(242,240,235,.45);
+      --dim:    rgba(242,240,235,.25);
+      --border: rgba(255,255,255,.07);
+      --card:   rgba(255,255,255,.03);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6;
+      overflow-x: hidden;
+    }
+    @media (hover: hover) and (pointer: fine) { *, *::before, *::after { cursor: none !important; } }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    #cd { position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s; }
+    #cr { position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s; }
+    body.ch #cd { width:10px;height:10px;background:var(--gold); }
+    body.ch #cr { width:56px;height:56px;border-color:rgba(212,175,55,.65); }
+    @media(hover:none){#cd,#cr{display:none}}
+    #grain { position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite; }
+    @keyframes grainShift { 0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)} }
+
+    /* ── NAV ── */
+    nav.topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(2,6,6,.86); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px; }
+    .nav-logo img { width:48px;height:48px;object-fit:contain; }
+    .nav-mid { display:flex;gap:26px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em; }
+    .nav-mid a { color:var(--muted);transition:color .2s; }
+    .nav-mid a:hover, .nav-mid a.active { color:var(--green); }
+    .nav-cta {
+      background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;
+      padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;
+      transition:border-color .2s,background .2s;
+    }
+    .nav-cta:hover { border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04); }
+    @media(max-width:900px){ .nav-mid{display:none} }
+
+    main { padding-top: 72px; }
+
+    /* ── HERO — full editorial moment ── */
+    #hero {
+      min-height: calc(100vh - 72px);
+      display:flex; align-items:center; justify-content:center;
+      padding: 80px 32px;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(212,175,55,.06) 0%, transparent 70%);
+      position: relative;
+    }
+    .hero-inner { max-width: 940px; text-align: center; }
+    .hero-tag {
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.3em;
+      color:var(--gold); opacity:.7; margin-bottom:36px;
+    }
+    .hero-h {
+      font-family:'Cormorant Garamond', serif;
+      font-size:clamp(40px,7vw,96px); font-weight:400; line-height:1.04; letter-spacing:-.01em;
+      margin-bottom:42px;
+    }
+    .hero-h em {
+      font-style: italic;
+      color: var(--gold);
+      font-weight: 400;
+    }
+    .hero-sub {
+      font-size:clamp(16px,1.9vw,21px); color:var(--muted); line-height:1.7;
+      max-width:680px; margin:0 auto 56px;
+    }
+    .hero-scroll {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.3em;
+      color:var(--muted); display:inline-block;
+      animation: scrollNudge 2.4s ease-in-out infinite;
+    }
+    @keyframes scrollNudge { 0%,100%{transform:translateY(0);opacity:.5} 50%{transform:translateY(8px);opacity:1} }
+
+    /* ── ROW BASE ── */
+    .row { padding: 100px 32px; }
+    .wrap { max-width: 940px; margin: 0 auto; }
+    .row-tag {
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.28em;
+      color:var(--green); opacity:.65; margin-bottom:18px;
+    }
+    .row-title {
+      font-family:'Cormorant Garamond', serif;
+      font-size:clamp(32px,5vw,58px); font-weight:400; letter-spacing:-.01em;
+      line-height:1.1; margin-bottom:32px;
+    }
+    .row-title em { color: var(--gold); font-style: italic; }
+    .row-body p {
+      font-size:17px; color: rgba(242,240,235,.78); line-height:1.85;
+      margin-bottom:20px;
+    }
+    .row-body p strong { color:var(--text); font-weight:600; }
+    .row-body p em { color: var(--gold); font-style: italic; }
+
+    /* ── MANIFESTO ── */
+    #manifesto { background:linear-gradient(180deg, transparent, rgba(212,175,55,.03), transparent); }
+
+    .pull-quote {
+      font-family:'Cormorant Garamond', serif;
+      font-size:clamp(24px,3.5vw,42px); font-weight:400; font-style:italic;
+      color: var(--gold); line-height:1.4; padding:48px 0;
+      border-top:1px solid rgba(212,175,55,.2);
+      border-bottom:1px solid rgba(212,175,55,.2);
+      text-align:center; margin:48px 0;
+      letter-spacing:-.005em;
+    }
+
+    /* ── FOUNDER ── */
+    #founder {
+      background: linear-gradient(180deg, transparent, rgba(13,43,28,.18), transparent);
+    }
+    .founder-grid { display:grid; grid-template-columns: 1fr 1.5fr; gap:48px; align-items:start; }
+    @media(max-width:800px) { .founder-grid { grid-template-columns:1fr; } }
+    .founder-card {
+      background:var(--card); border:1px solid rgba(212,175,55,.18); border-radius:18px;
+      padding:32px; text-align:center; position:sticky; top:96px;
+    }
+    .founder-mark {
+      width:120px; height:120px; border-radius:50%; margin:0 auto 24px;
+      background: radial-gradient(circle at 30% 30%, rgba(212,175,55,.35), rgba(13,43,28,.6));
+      border:2px solid rgba(212,175,55,.5);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Cormorant Garamond', serif; font-size:48px; font-weight:600;
+      color: var(--gold);
+      box-shadow: 0 0 36px rgba(212,175,55,.18);
+    }
+    .founder-name {
+      font-family:'Cormorant Garamond', serif; font-size:26px; font-weight:600;
+      letter-spacing:-.005em; margin-bottom:6px;
+    }
+    .founder-role {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.2em;
+      color: var(--gold); opacity:.85; margin-bottom:22px;
+    }
+    .founder-facts {
+      text-align:left; padding-top:22px; border-top:1px solid var(--border);
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .founder-fact {
+      display:flex; justify-content:space-between; font-size:12px;
+    }
+    .founder-fact span:first-child {
+      font-family:'JetBrains Mono',monospace; letter-spacing:.15em; color:var(--muted);
+    }
+    .founder-fact span:last-child { color:var(--text); font-weight:600; text-align:right; }
+
+    .founder-bio p {
+      font-size:17px; color: rgba(242,240,235,.78); line-height:1.85;
+      margin-bottom:20px;
+    }
+    .founder-bio p strong { color:var(--text); font-weight:600; }
+    .founder-bio p em { color: var(--gold); font-style: italic; }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative; padding-left: 36px; margin-top: 32px;
+    }
+    .timeline::before {
+      content:''; position:absolute; left:11px; top:8px; bottom:8px;
+      width:2px; background:linear-gradient(to bottom, var(--gold), transparent);
+    }
+    .tl-entry {
+      position: relative; margin-bottom: 36px;
+    }
+    .tl-entry::before {
+      content:''; position:absolute; left:-31px; top:6px; width:14px; height:14px;
+      border-radius:50%; background:var(--bg); border:2px solid var(--gold);
+      box-shadow: 0 0 12px rgba(212,175,55,.3);
+    }
+    .tl-entry.done::before { background:var(--gold); }
+    .tl-entry.now::before  { background:var(--green); border-color:var(--green);
+      box-shadow: 0 0 12px var(--green); animation:pulseDot 2s ease-in-out infinite; }
+    .tl-entry.next::before { background:transparent; border-color:rgba(212,175,55,.4); }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)} }
+    .tl-date {
+      font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em;
+      color:var(--gold); opacity:.7; margin-bottom:4px;
+    }
+    .tl-entry.next .tl-date { color: var(--muted); }
+    .tl-title { font-size:18px; font-weight:700; letter-spacing:-.005em; margin-bottom:6px; }
+    .tl-desc { font-size:14px; color:var(--muted); line-height:1.7; }
+
+    /* ── PRINCIPLES (5-point grid) ── */
+    #principles { background: linear-gradient(180deg, transparent, rgba(212,175,55,.04), transparent);
+      border-top:1px solid rgba(212,175,55,.12); border-bottom:1px solid rgba(212,175,55,.12); }
+    .principles { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:18px; margin-top:32px; }
+    .principle {
+      background: var(--card); border:1px solid var(--border); border-radius:14px; padding:28px;
+      transition:border-color .25s, transform .25s;
+    }
+    .principle:hover { border-color: rgba(212,175,55,.3); transform: translateY(-3px); }
+    .principle-num {
+      font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.3em;
+      color:var(--gold); opacity:.6; margin-bottom:14px;
+    }
+    .principle-title {
+      font-family:'Cormorant Garamond', serif;
+      font-size:22px; font-weight:600; letter-spacing:-.005em; margin-bottom:10px;
+    }
+    .principle-body { font-size:13px; color:var(--muted); line-height:1.7; }
+
+    /* ── CTA / MATERIALS ROW ── */
+    #cta-row { background: linear-gradient(180deg, transparent 0%, rgba(212,175,55,.05) 100%); }
+    .cta-grid {
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap:14px;
+      margin-top: 32px;
+    }
+    .cta-card {
+      background: var(--card); border:1px solid var(--border); border-radius:14px;
+      padding: 28px; transition: border-color .25s, transform .25s, background .25s;
+    }
+    .cta-card:hover { border-color: var(--green); transform: translateY(-3px); background: rgba(74,222,128,.04); }
+    .cta-card .cta-icon { font-size: 28px; margin-bottom: 14px; }
+    .cta-card h3 {
+      font-family:'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing:-.005em;
+    }
+    .cta-card p { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+    .cta-card .cta-go {
+      font-family:'JetBrains Mono',monospace; font-size: 10px; letter-spacing: .2em;
+      color: var(--green); font-weight: 700;
+    }
+
+    /* ── FINAL CALL ── */
+    #final {
+      text-align: center; padding: 120px 32px;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212,175,55,.06) 0%, transparent 70%);
+    }
+    .final-h {
+      font-family:'Cormorant Garamond', serif;
+      font-size:clamp(32px,5vw,58px); font-weight:400; line-height:1.15; letter-spacing:-.01em;
+      margin-bottom: 28px; max-width: 720px; margin-left:auto; margin-right:auto;
+    }
+    .final-h em { color: var(--gold); font-style: italic; }
+    .final-sub { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto 36px; line-height:1.7; }
+    .final-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+    .btn-primary {
+      background:var(--gold); color:#000; border-radius:8px;
+      padding:15px 32px; font-size:14px; font-weight:700; letter-spacing:.04em;
+      transition:background .2s; display:inline-block;
+    }
+    .btn-primary:hover { background:#e8c860; }
+    .btn-outline {
+      border:1.5px solid var(--border); color:var(--text); border-radius:8px;
+      padding:15px 32px; font-size:14px; font-weight:600; display:inline-block;
+      transition:border-color .2s, color .2s;
+    }
+    .btn-outline:hover { border-color:var(--green); color:var(--green); }
+
+    footer {
+      padding:36px 32px; border-top:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+      font-size:12px; color:var(--muted);
+    }
+    .footer-links { display:flex; gap:24px; }
+    .footer-links a:hover { color:var(--green); }
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html">// LIVE OPS</a></li>
+    <li><a href="/iris.html">IRIS DATA</a></li>
+    <li><a href="/chapters.html">CHAPTERS</a></li>
+    <li><a href="/about.html" class="active">ABOUT</a></li>
+    <li><a href="/#governance">GOVERNANCE</a></li>
+  </ul>
+  <a class="nav-cta" href="mailto:hello@motherearth.systems">CONTACT</a>
+</nav>
+
+<main>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">// THE WHY · THE FOUNDER · THE MISSION</div>
+    <h1 class="hero-h">The planet doesn't have a CEO.<br/>So we <em>built one</em>.</h1>
+    <p class="hero-sub">Mother Earth Kenya is the first AI organisation purpose-built to defend the biosphere. 33 autonomous agents. 7 specialist branches. One Purpose Trust whose only shareholder is the mission itself. This is the why behind it — and the people who started it.</p>
+    <span class="hero-scroll">SCROLL ↓</span>
+  </div>
+</section>
+
+<!-- ══ MANIFESTO ═══════════════════════════════════════════════════════════ -->
+<section class="row" id="manifesto">
+  <div class="wrap">
+    <div class="row-tag">// THE MANIFESTO</div>
+    <h2 class="row-title">Environmental governance is the <em>last great frontier</em> of human institutions.</h2>
+
+    <div class="row-body">
+      <p>For two centuries we built companies optimised for one thing: returns to shareholders. We built governments optimised for one thing: the next election cycle. We built NGOs optimised for one thing: the next donor report. <strong>Nobody built an institution optimised for the planet on a planetary timescale.</strong></p>
+
+      <p>The result is the world we live in. Carbon at 432 ppm. Temperatures +1.2°C above pre-industrial baseline. Ten thousand acres of rainforest lost every day. Greenland shedding 280 gigatonnes of ice a year. The Great Barrier Reef in active bleach alert. None of these are technical failures — we have the technology. They are <strong>governance failures</strong>. There is no institution whose job it is to win.</p>
+
+      <p>Mother Earth Kenya exists to fix that gap.</p>
+
+      <p>We started by asking: <em>what would an institution look like whose only purpose was the planet — and whose mission could not be diluted, sold, or rewritten by any future investor, board, or government?</em></p>
+
+      <p>The answer turned out to be three things stacked. <strong>A Purpose Trust</strong> — a legal entity in Kenya whose stated purpose is not profit but environmental protection. <strong>A Golden Share</strong> — a single non-transferable share held by the Trust with absolute veto over any decision that would compromise the environmental mission. And <strong>33 autonomous AI agents</strong> — because monitoring a planet requires capacity no human team alone can produce.</p>
+
+      <p>Together they form what we call <em>planetary intelligence</em>: an institution that can think, decide, and act at the speed and scale the climate crisis demands — and whose constitutional architecture means it cannot be hollowed out by the very capital that funds it.</p>
+    </div>
+
+    <div class="pull-quote">"The mission is the only shareholder."</div>
+
+    <div class="row-body">
+      <p>This is the wager: that the next century of environmental governance will not be won by writing better policy papers, raising better grants, or running better PR campaigns. <strong>It will be won by building institutions that cannot fail at their stated purpose.</strong></p>
+      <p>We started in Kenya because Kenya wrote one of the world's most progressive virtual-asset and SEZ frameworks. We are building it as an open network because no single nation owns the planet's atmosphere. And we are publishing every decision in real time because <strong>institutional credibility in the AI era requires radical transparency</strong> — not less.</p>
+      <p>This is Mother Earth Kenya. The first chapter of what we believe will be a global infrastructure for AI environmental governance. Every country is invited to join.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOUNDER ═══════════════════════════════════════════════════════════ -->
+<section class="row" id="founder">
+  <div class="wrap">
+    <div class="row-tag">// THE FOUNDER</div>
+    <h2 class="row-title">A builder, not a manager.</h2>
+
+    <div class="founder-grid">
+      <div class="founder-card">
+        <div class="founder-mark">A</div>
+        <div class="founder-name">Andy Muyundo Godfrey</div>
+        <div class="founder-role">FOUNDER · CEO · INITIAL TRUSTEE</div>
+        <div class="founder-facts">
+          <div class="founder-fact"><span>BASED</span><span>Nairobi, Kenya</span></div>
+          <div class="founder-fact"><span>ROLE</span><span>CEO, Initial Trustee</span></div>
+          <div class="founder-fact"><span>BUILDING SINCE</span><span>2026</span></div>
+          <div class="founder-fact"><span>SUCCESSOR TRUSTEE</span><span>Designated · 2043</span></div>
+          <div class="founder-fact"><span>PROTECTOR</span><span>Appointed under Trust Deed</span></div>
+        </div>
+      </div>
+
+      <div class="founder-bio">
+        <p>Andy Muyundo Godfrey is the founder and CEO of Mother Earth Kenya. He is the <strong>Settlor and Initial Trustee</strong> of the Mother Earth Environmental Purpose Trust — the legal entity that holds the Golden Share veto over the operating company.</p>
+
+        <p>His background is operational, not academic. He has spent years building, breaking, and rebuilding the systems that this organisation now runs on — the 33-agent architecture, the IRIS data marketplace, the NEXUS blockchain provenance layer, and the AMARA legal compliance pipeline. Most environmental organisations are run by environmentalists with administrators bolted on. Mother Earth Kenya is run by an operator who understood that <em>defending the planet requires infrastructure, not advocacy</em>.</p>
+
+        <p>"I am not here to save the world," he says when asked. <strong>"I am here to build the institution that does."</strong> The distinction matters. Saving the world is a posture. Building the institution is a daily 6 a.m. discipline of writing legal documents, debugging agent code, replying to compliance enquiries, and refusing to compromise the Purpose Trust to satisfy a quarterly KPI.</p>
+
+        <p>The Trust Deed designates his infant son, <strong>Albahugh Billionaire Muyundo</strong>, as Successor Trustee from age 18 (2043). A Protector is appointed under the Trust Deed to activate the Golden Share in the event of his death, incapacity, or 90-day absence. The mission is built to outlive the founder — that is the point.</p>
+
+        <p>He is supported by a planned independent board, a 33-agent AI operations team, and a growing network of advisors across legal, technology, climate science, and governance. He commits to one practice that most founders refuse: <em>publishing the daily decision log in public</em>, so the institution he is building can be audited not just by regulators but by the next generation of operators who will run it long after he is gone.</p>
+
+        <div class="timeline">
+          <div class="tl-entry done">
+            <div class="tl-date">MAY 2026</div>
+            <div class="tl-title">33-agent architecture deployed</div>
+            <div class="tl-desc">All 7 branches (AMARA, NEXUS, GAIA, ATLAS, IRIS, SAGE, ECHO) running 24/7 from Nairobi under PM2 process management.</div>
+          </div>
+          <div class="tl-entry done">
+            <div class="tl-date">MAY 2026</div>
+            <div class="tl-title">Purpose Trust Deed drafted</div>
+            <div class="tl-desc">15 clauses + 4 schedules under the Trustees (Perpetual Succession) Act. Golden Share custody, Protected Matters, Trustee governance, succession plan.</div>
+          </div>
+          <div class="tl-entry done">
+            <div class="tl-date">MAY 2026</div>
+            <div class="tl-title">Mission Control + IRIS + Chapters published</div>
+            <div class="tl-desc">Public live operations dashboard, Council Chamber API, IRIS research-access programme, and Global Chapters framework all online.</div>
+          </div>
+          <div class="tl-entry now">
+            <div class="tl-date">JUNE 2026 — IN PROGRESS</div>
+            <div class="tl-title">BRS company registration</div>
+            <div class="tl-desc">Final filing for Mother Earth Kenya Limited via Kenya's Business Registration Service. Unlocks Stripe, M-Pesa, VASP application, and Trust registration.</div>
+          </div>
+          <div class="tl-entry next">
+            <div class="tl-date">Q3 2026 — NEXT</div>
+            <div class="tl-title">VASP licence application + ODPC registration</div>
+            <div class="tl-desc">Capital Markets Authority filing under VASP Act 2025. Office of the Data Protection Commissioner registration within 30 days of incorporation.</div>
+          </div>
+          <div class="tl-entry next">
+            <div class="tl-date">Q4 2026 — PLANNED</div>
+            <div class="tl-title">Purpose Trust registration with AG's Office</div>
+            <div class="tl-desc">Formal Trust filing. Appointment of 2 independent co-trustees. Golden Share transferred to Trust custody.</div>
+          </div>
+          <div class="tl-entry next">
+            <div class="tl-date">2027 — HORIZON</div>
+            <div class="tl-title">First 3 international chapters activated</div>
+            <div class="tl-desc">Mother Earth USA (diaspora-led), one EU chapter, one South American chapter. All on the same Purpose Trust framework.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRINCIPLES ═══════════════════════════════════════════════════════ -->
+<section class="row" id="principles">
+  <div class="wrap">
+    <div class="row-tag">// FIVE PRINCIPLES · NON-NEGOTIABLE</div>
+    <h2 class="row-title">What we will not compromise.</h2>
+    <p class="row-body" style="margin-bottom:0;font-size:17px;color:rgba(242,240,235,.78);line-height:1.85;">Every Mother Earth chapter, every product, every partnership must respect these five. They are encoded in the Trust Deed and enforced by the Golden Share.</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-num">01</div>
+        <div class="principle-title">Mission supremacy</div>
+        <div class="principle-body">Profit, growth, and convenience all defer to the planetary mission. The Golden Share vetoes any decision that doesn't.</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">02</div>
+        <div class="principle-title">Radical transparency</div>
+        <div class="principle-body">Every agent decision logged publicly. Every council deliberation auditable. No black boxes — for regulators, journalists, or visitors.</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">03</div>
+        <div class="principle-title">Local sovereignty</div>
+        <div class="principle-body">Every chapter operates under its own jurisdiction with its own Purpose Trust. No central extraction. No franchise fee. Ever.</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">04</div>
+        <div class="principle-title">Human gates on critical paths</div>
+        <div class="principle-body">Transactions above threshold, regulatory submissions, and court-level decisions always require human sign-off. AI speed; human accountability.</div>
+      </div>
+      <div class="principle">
+        <div class="principle-num">05</div>
+        <div class="principle-title">Built to outlive the founder</div>
+        <div class="principle-body">Successor trustees, perpetual Trust succession, and a federated chapter network mean the institution survives any single person — including the founder.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA / PATHS ═══════════════════════════════════════════════════════ -->
+<section class="row" id="cta-row">
+  <div class="wrap">
+    <div class="row-tag">// FOUR WAYS IN</div>
+    <h2 class="row-title">If this resonates, here is how to join.</h2>
+
+    <div class="cta-grid">
+      <a class="cta-card" href="/mission-control.html">
+        <div class="cta-icon">🛰️</div>
+        <h3>Watch the agents</h3>
+        <p>Live operations dashboard. Council deliberations. Branch health. Every decision public.</p>
+        <span class="cta-go">→ MISSION CONTROL</span>
+      </a>
+      <a class="cta-card" href="/iris.html">
+        <div class="cta-icon">📡</div>
+        <h3>Use the data</h3>
+        <p>IRIS environmental intelligence. 6 months free for research institutions. Citation-ready provenance.</p>
+        <span class="cta-go">→ IRIS DATA</span>
+      </a>
+      <a class="cta-card" href="/chapters.html">
+        <div class="cta-icon">🌍</div>
+        <h3>Lead your country</h3>
+        <p>Start a Mother Earth chapter. Local Purpose Trust. Shared mission. No franchise fee.</p>
+        <span class="cta-go">→ APPLY</span>
+      </a>
+      <a class="cta-card" href="mailto:hello@motherearth.systems?subject=Mother%20Earth%20enquiry">
+        <div class="cta-icon">✉️</div>
+        <h3>Talk to us</h3>
+        <p>Partnerships, press, investment, research. hello@motherearth.systems — we read everything.</p>
+        <span class="cta-go">→ EMAIL</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CALL ═══════════════════════════════════════════════════════ -->
+<section id="final">
+  <div class="hero-inner">
+    <h2 class="final-h">The planet doesn't have a CEO.<br/>But it has a <em>mother</em> now.</h2>
+    <p class="final-sub">If you want to help build the institution, we're listening.</p>
+    <div class="final-row">
+      <a class="btn-primary" href="/chapters.html">Join the Network →</a>
+      <a class="btn-outline" href="mailto:hello@motherearth.systems">Get in Touch ↗</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Limited · The Mission is the Only Shareholder</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/mission-control.html">Mission Control</a>
+    <a href="/iris.html">IRIS</a>
+    <a href="/chapters.html">Chapters</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </div>
+</footer>
+
+<script>
+/* UX layer — Lenis, custom cursor, GSAP reveals, magnetic buttons */
+function initLenis() {
+  if (typeof Lenis === 'undefined') return;
+  const lenis = new Lenis({ duration:0.55, smoothWheel:true, wheelMultiplier:2.0 });
+  if (typeof gsap !== 'undefined') { gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  else { (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0); }
+}
+function initCursor() {
+  const dot=document.getElementById('cd'), ring=document.getElementById('cr');
+  if (!dot || !ring) return;
+  if (!window.matchMedia('(hover:hover) and (pointer:fine)').matches) { dot.style.display=ring.style.display='none'; return; }
+  let mx=-200,my=-200,rx=-200,ry=-200; const LERP=0.28;
+  window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+  document.querySelectorAll('a,button,.cta-card,.principle,.founder-card').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', ()=>document.body.classList.remove('ch'));
+  });
+  (function loop(){ rx+=(mx-rx)*LERP; ry+=(my-ry)*LERP;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+}
+function initReveals() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  const ease = 'power3.out';
+
+  document.querySelectorAll('.row-tag').forEach(el => gsap.from(el, { opacity:0, x:-22, duration:.55, ease,
+    scrollTrigger:{trigger:el, start:'top 90%', once:true} }));
+  document.querySelectorAll('.row-title').forEach(el => gsap.from(el, { opacity:0, y:40, duration:.85, ease,
+    scrollTrigger:{trigger:el, start:'top 86%', once:true} }));
+  document.querySelectorAll('.row-body p, .founder-bio p').forEach(el => gsap.from(el, { opacity:0, y:22, duration:.65, ease,
+    scrollTrigger:{trigger:el, start:'top 92%', once:true} }));
+
+  gsap.from('.pull-quote', { opacity:0, scale:.96, duration:.9, ease,
+    scrollTrigger:{trigger:'.pull-quote', start:'top 85%', once:true} });
+
+  ScrollTrigger.batch('.tl-entry', { start:'top 92%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, x:-24, duration:.55, ease, stagger:{each:.08} }) });
+
+  ScrollTrigger.batch('.principle', { start:'top 92%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:35, scale:.95, duration:.65, ease:'back.out(1.3)', stagger:{each:.08} }) });
+
+  ScrollTrigger.batch('.cta-card', { start:'top 92%', once:true,
+    onEnter: b => gsap.from(b, { opacity:0, y:35, scale:.96, duration:.6, ease:'back.out(1.3)', stagger:{each:.1} }) });
+
+  // Hero entrance
+  gsap.from('.hero-tag',    { opacity:0, y:14, duration:.6,  ease, delay:.1 });
+  gsap.from('.hero-h',      { opacity:0, y:42, duration:.95, ease, delay:.25 });
+  gsap.from('.hero-sub',    { opacity:0, y:24, duration:.75, ease, delay:.55 });
+  gsap.from('.hero-scroll', { opacity:0, duration:.6, ease, delay:.9 });
+
+  // Final call
+  gsap.from('.final-h, .final-sub, .final-row', { opacity:0, y:28, duration:.7, ease, stagger:.14,
+    scrollTrigger:{trigger:'#final', start:'top 80%', once:true} });
+
+  // Magnetic buttons
+  document.querySelectorAll('.btn-primary,.btn-outline,.nav-cta').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r=btn.getBoundingClientRect();
+      gsap.to(btn,{ x:(e.clientX-r.left-r.width/2)*.3, y:(e.clientY-r.top-r.height/2)*.3, duration:.3, ease:'power2.out' });
+    });
+    btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:.6,ease:'elastic.out(1,0.45)'}));
+  });
+}
+initCursor();
+initLenis();
+window.addEventListener('load', initReveals);
+</script>
+
+</body>
+</html>
