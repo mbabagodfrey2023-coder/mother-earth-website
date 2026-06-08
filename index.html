@@ -986,7 +986,7 @@
     /* ─── MODALS ─────────────────────────────────────────────────── */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 9000;
-      background: rgba(0,0,0,.88); backdrop-filter: blur(12px);
+      background: rgba(2,6,6,.96); backdrop-filter: blur(20px);
       align-items: flex-start; justify-content: center;
       padding: 48px 24px; overflow-y: auto;
       overscroll-behavior: contain;
@@ -3374,41 +3374,46 @@
   }
 
   var _modalScrollY = 0;
-  var _modalOpen = false;
 
-  // Block ALL scroll events on the page when modal is open
+  // Capture-phase blocker — fires BEFORE Lenis or any other listener
   function _blockBgScroll(e) {
-    // Allow scrolling inside .modal-box only
+    // Allow scroll inside the modal box itself
     var box = document.querySelector('.modal-overlay.open .modal-box');
-    if (box && box.contains(e.target)) return; // let modal content scroll
+    if (box && box.contains(e.target)) return;
     e.preventDefault();
-    e.stopPropagation();
+    e.stopImmediatePropagation();
   }
 
   function openModal(id) {
     var el = document.getElementById(id);
     if (!el) return;
     el.classList.add('open');
-    _modalOpen = true;
-    if (_lenis) _lenis.stop();
     _modalScrollY = window.scrollY;
+    // 1. Kill Lenis
+    if (_lenis) _lenis.stop();
+    // 2. Freeze body in place
     document.body.classList.add('modal-active');
     document.body.style.top = '-' + _modalScrollY + 'px';
-    // Intercept wheel + touch to prevent ANY background scroll
-    document.addEventListener('wheel', _blockBgScroll, { passive: false });
-    document.addEventListener('touchmove', _blockBgScroll, { passive: false });
+    // 3. Capture-phase intercept — kills events before Lenis sees them
+    window.addEventListener('wheel', _blockBgScroll, { passive: false, capture: true });
+    window.addEventListener('touchmove', _blockBgScroll, { passive: false, capture: true });
+    // 4. Also lock html element
+    document.documentElement.style.overflow = 'hidden';
   }
 
   function closeModal(id) {
     var el = document.getElementById(id);
     if (el) el.classList.remove('open');
     if (!document.querySelector('.modal-overlay.open')) {
-      _modalOpen = false;
+      // Remove capture-phase blockers
+      window.removeEventListener('wheel', _blockBgScroll, { capture: true });
+      window.removeEventListener('touchmove', _blockBgScroll, { capture: true });
+      // Restore body
       document.body.classList.remove('modal-active');
       document.body.style.top = '';
+      document.documentElement.style.overflow = '';
       window.scrollTo(0, _modalScrollY);
-      document.removeEventListener('wheel', _blockBgScroll);
-      document.removeEventListener('touchmove', _blockBgScroll);
+      // Resume Lenis
       if (_lenis) _lenis.start();
     }
   }
