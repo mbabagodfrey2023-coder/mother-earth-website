@@ -989,8 +989,11 @@
       background: rgba(0,0,0,.88); backdrop-filter: blur(12px);
       align-items: flex-start; justify-content: center;
       padding: 48px 24px; overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
     .modal-overlay.open { display: flex; }
+    body.modal-active { overflow: hidden !important; position: fixed !important; width: 100%; }
     .modal-box {
       background: #080e0e; border: 1px solid var(--border);
       max-width: 640px; width: 100%; max-height: 82vh;
@@ -3371,31 +3374,41 @@
   }
 
   var _modalScrollY = 0;
+  var _modalOpen = false;
+
+  // Block ALL scroll events on the page when modal is open
+  function _blockBgScroll(e) {
+    // Allow scrolling inside .modal-box only
+    var box = document.querySelector('.modal-overlay.open .modal-box');
+    if (box && box.contains(e.target)) return; // let modal content scroll
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   function openModal(id) {
-    const el = document.getElementById(id);
+    var el = document.getElementById(id);
     if (!el) return;
     el.classList.add('open');
-    // Kill ALL scrolling: Lenis + native
+    _modalOpen = true;
     if (_lenis) _lenis.stop();
     _modalScrollY = window.scrollY;
-    document.body.style.position = 'fixed';
+    document.body.classList.add('modal-active');
     document.body.style.top = '-' + _modalScrollY + 'px';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.documentElement.style.overflow = 'hidden';
+    // Intercept wheel + touch to prevent ANY background scroll
+    document.addEventListener('wheel', _blockBgScroll, { passive: false });
+    document.addEventListener('touchmove', _blockBgScroll, { passive: false });
   }
+
   function closeModal(id) {
-    const el = document.getElementById(id);
+    var el = document.getElementById(id);
     if (el) el.classList.remove('open');
     if (!document.querySelector('.modal-overlay.open')) {
-      // Restore body
-      document.body.style.position = '';
+      _modalOpen = false;
+      document.body.classList.remove('modal-active');
       document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.documentElement.style.overflow = '';
       window.scrollTo(0, _modalScrollY);
-      // Resume Lenis
+      document.removeEventListener('wheel', _blockBgScroll);
+      document.removeEventListener('touchmove', _blockBgScroll);
       if (_lenis) _lenis.start();
     }
   }
