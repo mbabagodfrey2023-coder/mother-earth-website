@@ -73,6 +73,18 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://motherearth.systems/partners</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://motherearth.systems/contact</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://motherearth.systems/privacy</loc>
     <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>

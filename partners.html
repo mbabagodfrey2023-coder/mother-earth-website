@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Partners — Mother Earth Kenya · Join the Planetary Intelligence Network</title>
+  <meta name="description" content="Partner with the world's first AI-native environmental intelligence organisation. Data partners, technology partners, chapter partners, and ESG intelligence programmes."/>
+  <meta property="og:title" content="Partners — Mother Earth Kenya"/>
+  <meta property="og:description" content="Four partnership tracks. One planetary mission. Join the network defending Earth."/>
+  <meta property="og:image" content="https://motherearth.systems/og.svg"/>
+  <meta name="theme-color" content="#020606"/>
+  <link rel="icon" type="image/png" href="/logo-favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo-official-256.png"/>
+  <link rel="canonical" href="https://motherearth.systems/partners"/>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "url": "https://motherearth.systems/partners",
+    "name": "Partners — Mother Earth Kenya",
+    "description": "Partner with the world's first AI-native environmental intelligence organisation.",
+    "isPartOf": { "@type": "WebSite", "url": "https://motherearth.systems", "name": "Mother Earth Kenya" },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",     "item": "https://motherearth.systems/" },
+        { "@type": "ListItem", "position": 2, "name": "Partners", "item": "https://motherearth.systems/partners" }
+      ]
+    }
+  }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="/echo-widget.js" defer></script>
+  <script src="/mobile-menu.js" defer></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg:#020606; --bg2:#050d0a;
+      --green:#4ade80; --green-d:#22c55e;
+      --gold:#D4AF37; --terra:#D4763A;
+      --amber:#f59e0b; --blue:#60a5fa; --indigo:#818cf8; --red:#ef4444;
+      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
+      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03); --card-h:rgba(255,255,255,.06);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+    @media(hover:hover) and (pointer:fine){*,*::before,*::after{cursor:none !important}}
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+
+    /* cursor */
+    #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    body.ch #cd{width:10px;height:10px;background:var(--gold)}
+    body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
+    @media(hover:none){#cd,#cr{display:none}}
+
+    /* grain */
+    #grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:99990;opacity:.038;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:220px 220px;animation:grainShift .45s steps(2) infinite}
+    @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
+
+    /* NAV */
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
+    .nav-logo img{width:48px;height:48px;object-fit:contain}
+    .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
+    .nav-mid a{color:var(--muted);transition:color .2s}
+    .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
+    .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    @media(max-width:1050px){.nav-mid{display:none}}
+
+    /* LAYOUT */
+    main{padding-top:72px}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 32px}
+    .wrap-narrow{max-width:780px;margin:0 auto;padding:0 32px}
+    section{padding:100px 0}
+    @media(max-width:768px){section{padding:72px 0}.wrap,.wrap-narrow{padding:0 20px}}
+
+    /* HERO */
+    #hero{padding:120px 0 80px;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(74,222,128,.08),transparent)}
+    .hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--green);margin-bottom:20px;text-transform:uppercase}
+    .hero-h{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:24px}
+    .hero-h em{font-style:italic;font-family:'Cormorant Garamond',serif;color:var(--green)}
+    .hero-sub{font-size:clamp(1rem,1.8vw,1.18rem);color:var(--muted);max-width:600px;line-height:1.75;margin-bottom:40px}
+    .hero-stats{display:flex;gap:48px;flex-wrap:wrap}
+    .hero-stat-num{font-size:2.4rem;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace;line-height:1}
+    .hero-stat-label{font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+    @media(max-width:600px){.hero-stats{gap:28px}}
+
+    /* ROW HEADING */
+    .row-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);margin-bottom:16px;text-transform:uppercase}
+    .row-title{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;line-height:1.15;margin-bottom:16px}
+    .row-sub{font-size:15px;color:var(--muted);line-height:1.75;max-width:600px}
+
+    /* CURRENT PARTNERS GRID */
+    #current{background:linear-gradient(to bottom,rgba(74,222,128,.03),transparent)}
+    .partners-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;margin-top:56px}
+    .pcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;transition:border-color .25s,transform .25s,background .25s;position:relative;overflow:hidden}
+    .pcard::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 50% -20%,rgba(74,222,128,.05),transparent);opacity:0;transition:opacity .3s}
+    .pcard:hover{border-color:rgba(74,222,128,.35);transform:translateY(-4px);background:var(--card-h)}
+    .pcard:hover::before{opacity:1}
+    .pcard-icon{font-size:28px;margin-bottom:14px}
+    .pcard-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+    .pcard-role{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:12px}
+    .pcard-desc{font-size:13px;color:var(--muted);line-height:1.7}
+    .pcard-badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;color:var(--dim);border:1px solid var(--border);border-radius:20px;padding:4px 10px}
+    .pcard-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green)}
+
+    /* TRACKS */
+    #tracks{border-top:1px solid var(--border)}
+    .tracks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-top:56px}
+    @media(max-width:720px){.tracks-grid{grid-template-columns:1fr}}
+    .track{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:36px;transition:border-color .25s,transform .25s;position:relative;overflow:hidden}
+    .track:hover{border-color:rgba(74,222,128,.3);transform:translateY(-3px)}
+    .track-accent{position:absolute;top:0;left:0;right:0;height:2px;border-radius:14px 14px 0 0}
+    .track.data .track-accent{background:linear-gradient(to right,var(--blue),var(--indigo))}
+    .track.tech .track-accent{background:linear-gradient(to right,var(--green),var(--green-d))}
+    .track.chapter .track-accent{background:linear-gradient(to right,var(--terra),var(--amber))}
+    .track.esg .track-accent{background:linear-gradient(to right,var(--gold),var(--amber))}
+    .track-icon{font-size:32px;margin-bottom:16px}
+    .track-type{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+    .track-title{font-size:1.3rem;font-weight:800;margin-bottom:12px}
+    .track-desc{font-size:14px;color:var(--muted);line-height:1.72;margin-bottom:24px}
+    .track-perks{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+    .track-perks li{font-size:13px;color:var(--muted);display:flex;align-items:flex-start;gap:10px}
+    .track-perks li::before{content:'→';color:var(--green);font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:2px;flex-shrink:0}
+    .track-cta{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:10px 18px;transition:border-color .2s,color .2s}
+    .track-cta:hover{border-color:var(--green);color:var(--green)}
+
+    /* WHAT WE LOOK FOR */
+    #criteria{background:linear-gradient(to bottom,transparent,rgba(0,20,10,.3),transparent)}
+    .criteria-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+    @media(max-width:860px){.criteria-row{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.criteria-row{grid-template-columns:1fr}}
+    .criterion{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px}
+    .criterion-num{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:rgba(74,222,128,.18);line-height:1;margin-bottom:12px}
+    .criterion-title{font-size:15px;font-weight:700;margin-bottom:8px}
+    .criterion-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+    /* APPLY SECTION */
+    #apply{border-top:1px solid var(--border)}
+    .apply-inner{max-width:680px;margin:0 auto;text-align:center}
+    .apply-h{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.1;margin-bottom:20px}
+    .apply-sub{font-size:15px;color:var(--muted);line-height:1.72;margin-bottom:48px}
+    .apply-form{display:flex;flex-direction:column;gap:14px;text-align:left}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:560px){.form-row{grid-template-columns:1fr}}
+    .form-field{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:14px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s;width:100%}
+    .form-field::placeholder{color:rgba(255,255,255,.28)}
+    .form-field:focus{border-color:var(--green)}
+    select.form-field{cursor:pointer;color:var(--muted)}
+    select.form-field option{background:#020606;color:var(--text)}
+    textarea.form-field{resize:vertical;min-height:120px}
+    .form-submit{background:var(--green);color:#000;border:none;border-radius:8px;padding:16px 32px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:.05em;cursor:pointer;transition:background .2s;align-self:flex-start}
+    .form-submit:hover{background:#86efac}
+    #apply-status{font-size:13px;color:var(--green);margin-top:8px;display:none}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:40px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+    .footer-links{display:flex;gap:20px;flex-wrap:wrap}
+    .footer-links a{color:var(--dim);transition:color .2s}
+    .footer-links a:hover{color:var(--green)}
+    @media(max-width:640px){footer{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+
+<div id="cd"></div>
+<div id="cr"></div>
+<div id="grain"></div>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-official-256.png" alt="Mother Earth Kenya"/>
+    <span>MOTHER EARTH</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/mission-control.html">// LIVE OPS</a></li>
+    <li><a href="/partners.html" class="active">PARTNERS</a></li>
+    <li><a href="/contact.html">CONTACT</a></li>
+    <li><a href="/governance.html">GOVERNANCE</a></li>
+    <li><a href="/about.html">ABOUT</a></li>
+    <li><a href="/roadmap.html">ROADMAP</a></li>
+  </ul>
+  <a class="nav-cta" href="/contact.html">GET IN TOUCH</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-tag">// PARTNERSHIP NETWORK</div>
+    <h1 class="hero-h">The Planet's<br><em>Intelligence</em> Network</h1>
+    <p class="hero-sub">Mother Earth Kenya runs on partnerships. We combine the world's best environmental data sources, AI infrastructure, and regional chapter networks to build planetary defence at scale. There is a role here for every serious organisation.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">6+</div>
+        <div class="hero-stat-label">Core Infrastructure Partners</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">33</div>
+        <div class="hero-stat-label">AI Agents Powered by Partners</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Partnership Tracks Open</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">7</div>
+        <div class="hero-stat-label">Active Global Branches</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ CURRENT PARTNERS ═══════════════════ -->
+<section id="current">
+  <div class="wrap">
+    <div class="row-tag">// CURRENT PARTNERS</div>
+    <h2 class="row-title">The Organisations<br>Running the Mission</h2>
+    <p class="row-sub">These partnerships are active today — data feeds, compute infrastructure, and jurisdictional foundations that keep 33 AI agents running 24/7.</p>
+
+    <div class="partners-grid">
+
+      <div class="pcard">
+        <div class="pcard-icon">🤖</div>
+        <div class="pcard-name">Anthropic Claude</div>
+        <div class="pcard-role">AI Engine</div>
+        <p class="pcard-desc">The reasoning backbone of all 33 agents. Claude models handle environmental analysis, report synthesis, council deliberations, and autonomous decision-making across every branch.</p>
+        <div class="pcard-badge">ACTIVE · AI INFRASTRUCTURE</div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-icon">☁️</div>
+        <div class="pcard-name">Cloudflare</div>
+        <div class="pcard-role">Global CDN &amp; Edge Compute</div>
+        <p class="pcard-desc">Cloudflare Pages hosts the public-facing platform and Workers handle serverless API logic. Zero-downtime deployment, DDoS protection, and edge caching across 300+ PoPs worldwide.</p>
+        <div class="pcard-badge">ACTIVE · INFRASTRUCTURE</div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-icon">🛰️</div>
+        <div class="pcard-name">NASA EONET</div>
+        <div class="pcard-role">Earth Observation Data</div>
+        <p class="pcard-desc">Earth Observatory Natural Event Tracker — real-time feeds for wildfires, severe storms, volcanoes, sea ice, and dust events. Directly powers GAIA's 15-minute planetary scan cycle.</p>
+        <div class="pcard-badge">ACTIVE · DATA FEED</div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-icon">🌊</div>
+        <div class="pcard-name">NOAA</div>
+        <div class="pcard-role">Climate &amp; Atmospheric Data</div>
+        <p class="pcard-desc">National Oceanic and Atmospheric Administration — the authoritative source for CO₂ concentration (Mauna Loa), global temperature anomaly, sea-level baselines, and ocean heat content.</p>
+        <div class="pcard-badge">ACTIVE · DATA FEED</div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-icon">🐙</div>
+        <div class="pcard-name">GitHub</div>
+        <div class="pcard-role">Version Control &amp; Transparency</div>
+        <p class="pcard-desc">All public-facing code, agent schemas, and data licence documents are maintained on GitHub. Open-source transparency is a core governance commitment under our Purpose Trust.</p>
+        <div class="pcard-badge">ACTIVE · TRANSPARENCY</div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-icon">🏛️</div>
+        <div class="pcard-name">Kenya SEZ Authority</div>
+        <div class="pcard-role">Jurisdiction &amp; Regulatory</div>
+        <p class="pcard-desc">Mother Earth Kenya is incorporated within Kenya's Special Economic Zone framework under VASP Act 2025, providing a digital-first regulatory environment for AI-native organisations.</p>
+        <div class="pcard-badge">ACTIVE · JURISDICTION</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ PARTNERSHIP TRACKS ════════════════ -->
+<section id="tracks">
+  <div class="wrap">
+    <div class="row-tag">// PARTNERSHIP TRACKS</div>
+    <h2 class="row-title">Four Ways to Partner</h2>
+    <p class="row-sub">Each track is designed for a different type of organisation. Every partnership is mission-tested — if it doesn't serve the planet, we don't do it.</p>
+
+    <div class="tracks-grid">
+
+      <!-- DATA & SCIENCE -->
+      <div class="track data">
+        <div class="track-accent"></div>
+        <div class="track-icon">🛰️</div>
+        <div class="track-type">// TRACK 01</div>
+        <h3 class="track-title">Data &amp; Science Partner</h3>
+        <p class="track-desc">Research institutions, space agencies, and environmental monitoring organisations that want their data powering real-time planetary intelligence — with full attribution and impact reporting.</p>
+        <ul class="track-perks">
+          <li>Live API integration into GAIA's 15-minute scan pipeline</li>
+          <li>Full co-attribution on all published environmental reports</li>
+          <li>Quarterly impact briefings: how your data changed decisions</li>
+          <li>Early access to Mother Earth data products before public release</li>
+          <li>Research collaboration with our 7-branch AI council</li>
+        </ul>
+        <a class="track-cta" href="mailto:hello@motherearth.systems?subject=Data%20%26%20Science%20Partnership%20Enquiry&body=Hello%20Mother%20Earth%2C%0A%0AWe%20are%20interested%20in%20a%20Data%20%26%20Science%20Partnership.%0A%0AOrganisation%3A%0AData%20type%20%2F%20feed%3A%0AContact%20name%3A">APPLY FOR TRACK 01 →</a>
+      </div>
+
+      <!-- TECHNOLOGY -->
+      <div class="track tech">
+        <div class="track-accent"></div>
+        <div class="track-icon">⚡</div>
+        <div class="track-type">// TRACK 02</div>
+        <h3 class="track-title">Technology Infrastructure Partner</h3>
+        <p class="track-desc">Technology companies whose tools, APIs, or platforms are critical to running an AI-native organisation at planetary scale. Compute, storage, observability, payments, communications.</p>
+        <ul class="track-perks">
+          <li>Listed as a named infrastructure partner on motherearth.systems</li>
+          <li>Use case case study published on our platform and press channels</li>
+          <li>Integration support from our core engineering team</li>
+          <li>Co-marketing opportunities with a mission-aligned audience</li>
+          <li>Priority consideration in our Kenya SEZ AI infrastructure procurement</li>
+        </ul>
+        <a class="track-cta" href="mailto:hello@motherearth.systems?subject=Technology%20Infrastructure%20Partnership&body=Hello%20Mother%20Earth%2C%0A%0AWe%20are%20interested%20in%20a%20Technology%20Partnership.%0A%0ACompany%3A%0AProduct%20%2F%20service%3A%0AContact%20name%3A">APPLY FOR TRACK 02 →</a>
+      </div>
+
+      <!-- CHAPTER -->
+      <div class="track chapter">
+        <div class="track-accent"></div>
+        <div class="track-icon">🌍</div>
+        <div class="track-type">// TRACK 03</div>
+        <h3 class="track-title">Regional Chapter Partner</h3>
+        <p class="track-desc">Environmental NGOs, government agencies, and civil society organisations that want to become the official Mother Earth chapter for their region — operating our AI platform at a local level.</p>
+        <ul class="track-perks">
+          <li>Full access to our 33-agent AI platform for regional operations</li>
+          <li>Dedicated sub-agent trained on local environmental data</li>
+          <li>Named chapter status on the public platform and governance docs</li>
+          <li>Revenue share on regional data products and reports</li>
+          <li>Representation in the Global Council deliberation framework</li>
+        </ul>
+        <a class="track-cta" href="/chapters.html">VIEW OPEN CHAPTERS →</a>
+      </div>
+
+      <!-- ESG -->
+      <div class="track esg">
+        <div class="track-accent"></div>
+        <div class="track-icon">📊</div>
+        <div class="track-type">// TRACK 04</div>
+        <h3 class="track-title">ESG Intelligence Partner</h3>
+        <p class="track-desc">Corporations, financial institutions, and asset managers that need verified, AI-synthesised environmental intelligence for sustainability reporting, ESG disclosure, and climate risk assessment.</p>
+        <ul class="track-perks">
+          <li>Custom environmental intelligence dashboards for your sector</li>
+          <li>Verified data provenance for TCFD, GRI, and CSRD reporting</li>
+          <li>Monthly AI-generated climate risk briefings for your portfolio</li>
+          <li>White-label data products under your brand with our attribution</li>
+          <li>Priority API access at Planetary tier ($1,499/mo) with custom SLA</li>
+        </ul>
+        <a class="track-cta" href="mailto:hello@motherearth.systems?subject=ESG%20Intelligence%20Partnership&body=Hello%20Mother%20Earth%2C%0A%0AWe%20are%20interested%20in%20an%20ESG%20Intelligence%20Partnership.%0A%0AOrganisation%3A%0AReporting%20framework%20%28TCFD%20%2F%20GRI%20%2F%20CSRD%29%3A%0AContact%20name%3A">APPLY FOR TRACK 04 →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ CRITERIA ═══════════════════════════ -->
+<section id="criteria">
+  <div class="wrap">
+    <div class="row-tag">// THE MISSION TEST</div>
+    <h2 class="row-title">What We Look For<br>in a Partner</h2>
+    <p class="row-sub">Every partnership passes the same three-question test before we formalise anything. These are non-negotiable — they come from the Purpose Trust, not from us.</p>
+
+    <div class="criteria-row">
+      <div class="criterion">
+        <div class="criterion-num">01</div>
+        <div class="criterion-title">Mission Alignment</div>
+        <p class="criterion-desc">Does this partnership strengthen our ability to defend the planet? Partnerships that dilute the environmental mission — for any reason — are rejected regardless of commercial value.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-num">02</div>
+        <div class="criterion-title">Data Integrity</div>
+        <p class="criterion-desc">Any data partner must provide verifiable, source-cited data. We do not use manipulated, commercially biassed, or unverifiable datasets. Our agents flag and reject non-credible sources.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-num">03</div>
+        <div class="criterion-title">Independence Preserved</div>
+        <p class="criterion-desc">No partner — regardless of size or investment — can direct our agents' outputs, alter our methodology, or influence our published findings. The Golden Share enforces this constitutionally.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-num">04</div>
+        <div class="criterion-title">Transparency by Default</div>
+        <p class="criterion-desc">Partnerships are disclosed publicly on this page within 30 days of signing. We don't do shadow partnerships. If you need confidentiality, we likely aren't the right fit.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-num">05</div>
+        <div class="criterion-title">Long-term Thinking</div>
+        <p class="criterion-desc">We are building a 50-year organisation. We prefer partners who think in decades, not quarters. Short-term transactional relationships don't serve a planetary mission.</p>
+      </div>
+      <div class="criterion">
+        <div class="criterion-num">06</div>
+        <div class="criterion-title">Kenya Jurisdiction</div>
+        <p class="criterion-desc">All formal partnership agreements are governed by Kenyan law and VASP Act 2025 compliance. Partners working in regulated sectors must meet our KYC and AML standards under ATLAS oversight.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ APPLY ═════════════════════════════ -->
+<section id="apply">
+  <div class="wrap">
+    <div class="apply-inner">
+      <div class="row-tag" style="text-align:center">// APPLY TO PARTNER</div>
+      <h2 class="apply-h">Ready to Join<br>the Network?</h2>
+      <p class="apply-sub">Tell us who you are, which track fits, and what you want to build together. We respond to every serious enquiry within 48 hours — personally, from Andy or a branch lead.</p>
+
+      <form class="apply-form" id="partner-form" onsubmit="submitPartner(event)">
+        <div class="form-row">
+          <input type="text" class="form-field" id="pf-name" placeholder="Your name *" required/>
+          <input type="text" class="form-field" id="pf-org" placeholder="Organisation *" required/>
+        </div>
+        <div class="form-row">
+          <input type="email" class="form-field" id="pf-email" placeholder="Work email *" required/>
+          <input type="text" class="form-field" id="pf-country" placeholder="Country / Region"/>
+        </div>
+        <select class="form-field" id="pf-track">
+          <option value="" disabled selected>Which partnership track? *</option>
+          <option value="Data &amp; Science Partner (Track 01)">Track 01 — Data &amp; Science Partner</option>
+          <option value="Technology Infrastructure Partner (Track 02)">Track 02 — Technology Infrastructure Partner</option>
+          <option value="Regional Chapter Partner (Track 03)">Track 03 — Regional Chapter Partner</option>
+          <option value="ESG Intelligence Partner (Track 04)">Track 04 — ESG Intelligence Partner</option>
+          <option value="Not sure — explore options">Not sure — let's explore</option>
+        </select>
+        <textarea class="form-field" id="pf-message" placeholder="What do you want to build together? Tell us about your organisation, your data or technology, and why the mission resonates…" rows="5"></textarea>
+        <button type="submit" class="form-submit" id="pf-submit">SEND PARTNERSHIP ENQUIRY →</button>
+        <div id="apply-status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>© 2026 Mother Earth Kenya Environmental AI Ltd · Partnership Network</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/mission-control.html">Mission Control</a>
+    <a href="/iris.html">IRIS</a>
+    <a href="/chapters.html">Chapters</a>
+    <a href="/governance.html">Governance</a>
+    <a href="/about.html">About</a>
+    <a href="/roadmap.html">Roadmap</a>
+    <a href="/contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+/* ── PARTNER FORM ── */
+function submitPartner(e) {
+  e.preventDefault();
+  const name    = document.getElementById('pf-name').value.trim();
+  const org     = document.getElementById('pf-org').value.trim();
+  const email   = document.getElementById('pf-email').value.trim();
+  const country = document.getElementById('pf-country').value.trim();
+  const track   = document.getElementById('pf-track').value;
+  const msg     = document.getElementById('pf-message').value.trim();
+  const status  = document.getElementById('apply-status');
+  const btn     = document.getElementById('pf-submit');
+  if (!name || !org || !email || !track) return;
+
+  const subject = encodeURIComponent('Partnership Enquiry — ' + track);
+  const body    = encodeURIComponent(
+    'Hello Mother Earth,\n\n' +
+    'I am interested in a partnership.\n\n' +
+    'Name: ' + name + '\n' +
+    'Organisation: ' + org + '\n' +
+    'Country: ' + (country || 'Not specified') + '\n' +
+    'Track: ' + track + '\n\n' +
+    'Message:\n' + (msg || 'No additional message provided.') + '\n\n' +
+    '—\nSent via motherearth.systems/partners'
+  );
+
+  window.location.href = 'mailto:hello@motherearth.systems?subject=' + subject + '&body=' + body;
+  btn.textContent = 'OPENING EMAIL CLIENT…';
+  btn.style.opacity = '0.6';
+  status.textContent = '✓ Your email client should open now. We respond within 48 hours.';
+  status.style.display = 'block';
+  setTimeout(() => { btn.textContent = 'SEND PARTNERSHIP ENQUIRY →'; btn.style.opacity = '1'; }, 4000);
+}
+
+/* ── CURSOR ── */
+function initCursor() {
+  const dot = document.getElementById('cd'), ring = document.getElementById('cr');
+  if (!dot || !ring) return;
+  if (!window.matchMedia('(hover:hover) and (pointer:fine)').matches) { dot.style.display = ring.style.display = 'none'; return; }
+  let mx = -200, my = -200, rx = -200, ry = -200;
+  const LERP = 0.28;
+  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  document.querySelectorAll('a,button,.pcard,.track,.criterion').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  });
+  (function loop() {
+    rx += (mx - rx) * LERP; ry += (my - ry) * LERP;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+}
+
+/* ── LENIS ── */
+function initLenis() {
+  if (typeof Lenis === 'undefined') return;
+  const lenis = new Lenis({ duration: .55, smoothWheel: true, wheelMultiplier: 2.0 });
+  if (typeof gsap !== 'undefined') { gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  else { (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0); }
+}
+
+/* ── REVEALS ── */
+function initReveals() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  const ease = 'power3.out';
+
+  gsap.from('.hero-tag',  { opacity: 0, y: 14, duration: .6,  ease, delay: .1 });
+  gsap.from('.hero-h',    { opacity: 0, y: 42, duration: .95, ease, delay: .25 });
+  gsap.from('.hero-sub',  { opacity: 0, y: 24, duration: .75, ease, delay: .55 });
+  gsap.from('.hero-stat-num', { opacity: 0, y: 20, duration: .6, ease, stagger: .1, delay: .8 });
+
+  document.querySelectorAll('.row-tag').forEach(el => gsap.from(el, { opacity: 0, x: -22, duration: .55, ease, scrollTrigger: { trigger: el, start: 'top 90%', once: true } }));
+  document.querySelectorAll('.row-title').forEach(el => gsap.from(el, { opacity: 0, y: 36, duration: .8, ease, scrollTrigger: { trigger: el, start: 'top 86%', once: true } }));
+  document.querySelectorAll('.row-sub').forEach(el => gsap.from(el, { opacity: 0, y: 22, duration: .65, delay: .1, ease, scrollTrigger: { trigger: el, start: 'top 86%', once: true } }));
+
+  ScrollTrigger.batch('.pcard', { start: 'top 90%', once: true, onEnter: b => gsap.from(b, { opacity: 0, y: 36, scale: .96, duration: .65, ease: 'back.out(1.3)', stagger: { each: .1 } }) });
+  ScrollTrigger.batch('.track', { start: 'top 88%', once: true, onEnter: b => gsap.from(b, { opacity: 0, y: 40, scale: .97, duration: .7, ease: 'back.out(1.2)', stagger: { each: .12 } }) });
+  ScrollTrigger.batch('.criterion', { start: 'top 92%', once: true, onEnter: b => gsap.from(b, { opacity: 0, y: 24, duration: .55, ease, stagger: { each: .08 } }) });
+
+  gsap.from('.apply-h, .apply-sub', { opacity: 0, y: 28, duration: .7, ease, stagger: .14, scrollTrigger: { trigger: '#apply', start: 'top 80%', once: true } });
+  gsap.from('.apply-form', { opacity: 0, y: 32, duration: .8, ease, delay: .2, scrollTrigger: { trigger: '#apply', start: 'top 78%', once: true } });
+
+  document.querySelectorAll('.nav-cta,.form-submit,.track-cta').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      gsap.to(btn, { x: (e.clientX - r.left - r.width / 2) * .28, y: (e.clientY - r.top - r.height / 2) * .28, duration: .3, ease: 'power2.out' });
+    });
+    btn.addEventListener('mouseleave', () => gsap.to(btn, { x: 0, y: 0, duration: .55, ease: 'elastic.out(1,0.45)' }));
+  });
+}
+
+initCursor();
+initLenis();
+window.addEventListener('load', initReveals);
+</script>
+
+</body>
+</html>
