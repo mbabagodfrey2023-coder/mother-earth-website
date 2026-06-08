@@ -407,16 +407,19 @@
     .stat-bar-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--green), var(--blue)); border-radius: 1px; }
 
     /* ─── AI INTELLIGENCE ────────────────────────────────────────── */
-    #intelligence { padding: 120px 0; }
+    #intelligence {
+      padding: 120px 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,10,5,.4), rgba(0,0,0,.5));
+    }
     .agents-grid {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
       margin-top: 72px;
     }
     .agent-card {
-      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22);
+      background: rgba(10,25,20,.85); border: 1px solid rgba(74,222,128,.2);
       padding: 32px 24px; position: relative; overflow: hidden;
       transition: all .3s;
-      box-shadow: 0 2px 12px rgba(0,0,0,.3);
+      box-shadow: 0 2px 16px rgba(0,0,0,.5);
     }
     .agent-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
@@ -425,8 +428,8 @@
       opacity: .7;
     }
     .agent-card:hover {
-      border-color: rgba(74,222,128,.5); background: rgba(74,222,128,.12);
-      box-shadow: 0 6px 32px rgba(74,222,128,.12);
+      border-color: rgba(74,222,128,.6); background: rgba(10,35,20,.95);
+      box-shadow: 0 6px 32px rgba(74,222,128,.15);
     }
     .agent-card:hover::before { opacity: 1; }
     .agent-icon { font-size: 32px; margin-bottom: 16px; }
@@ -435,10 +438,10 @@
       letter-spacing: 4px; color: var(--green); margin-bottom: 8px;
     }
     .agent-name { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #fff; }
-    .agent-role { font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; margin-bottom: 18px; }
+    .agent-role { font-size: 13px; color: rgba(255,255,255,.85); line-height: 1.6; margin-bottom: 18px; }
     .agent-count {
       font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      color: rgba(255,255,255,.45); letter-spacing: 2px;
+      color: rgba(255,255,255,.55); letter-spacing: 2px;
     }
     .agent-count span { color: var(--blue); }
 
@@ -504,10 +507,11 @@
 
     /* CEO card spans full width — top of hierarchy */
     .agent-ceo {
-      grid-column: 1 / -1; display: flex; align-items: center; gap: 48px;
-      padding: 44px 48px;
-      background: rgba(74,222,128,.1); border-color: rgba(74,222,128,.35);
-      box-shadow: 0 4px 24px rgba(74,222,128,.08);
+      grid-column: 1 / -1; grid-row: 1;
+      display: flex; align-items: center; gap: 48px;
+      padding: 44px 48px; order: -1;
+      background: rgba(5,30,15,.9); border-color: rgba(74,222,128,.4);
+      box-shadow: 0 4px 28px rgba(74,222,128,.12);
     }
     .agent-ceo::before { opacity: 1; height: 4px; }
     .agent-ceo .agent-icon { font-size: 48px; margin-bottom: 0; flex-shrink: 0; }
