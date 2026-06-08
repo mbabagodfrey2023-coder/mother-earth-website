@@ -3375,46 +3375,32 @@
 
   var _modalScrollY = 0;
 
-  // Capture-phase blocker — fires BEFORE Lenis or any other listener
-  function _blockBgScroll(e) {
-    // Allow scroll inside the modal box itself
-    var box = document.querySelector('.modal-overlay.open .modal-box');
-    if (box && box.contains(e.target)) return;
-    e.preventDefault();
-    e.stopImmediatePropagation();
-  }
-
   function openModal(id) {
     var el = document.getElementById(id);
     if (!el) return;
     el.classList.add('open');
     _modalScrollY = window.scrollY;
-    // 1. Kill Lenis
-    if (_lenis) _lenis.stop();
-    // 2. Freeze body in place
+    // Destroy Lenis completely — no scroll engine running at all
+    destroyLenis();
+    // Freeze page in place
     document.body.classList.add('modal-active');
     document.body.style.top = '-' + _modalScrollY + 'px';
-    // 3. Capture-phase intercept — kills events before Lenis sees them
-    window.addEventListener('wheel', _blockBgScroll, { passive: false, capture: true });
-    window.addEventListener('touchmove', _blockBgScroll, { passive: false, capture: true });
-    // 4. Also lock html element
     document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
   }
 
   function closeModal(id) {
     var el = document.getElementById(id);
     if (el) el.classList.remove('open');
     if (!document.querySelector('.modal-overlay.open')) {
-      // Remove capture-phase blockers
-      window.removeEventListener('wheel', _blockBgScroll, { capture: true });
-      window.removeEventListener('touchmove', _blockBgScroll, { capture: true });
-      // Restore body
+      // Unfreeze page
       document.body.classList.remove('modal-active');
       document.body.style.top = '';
+      document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
       window.scrollTo(0, _modalScrollY);
-      // Resume Lenis
-      if (_lenis) _lenis.start();
+      // Recreate Lenis fresh
+      initLenis();
     }
   }
   // Close on overlay click (clicking the dark backdrop)
@@ -3429,10 +3415,10 @@
       document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
     }
   });
-  // Safety net: if Lenis is stuck stopped with no modal open, restart it
+  // Safety net: if Lenis was destroyed but no modal is open, recreate it
   document.addEventListener('wheel', function() {
-    if (!document.querySelector('.modal-overlay.open') && _lenis && !_lenis.isScrolling) {
-      _lenis.start();
+    if (!document.querySelector('.modal-overlay.open') && !_lenis) {
+      initLenis();
     }
   }, { passive: true });
 
@@ -3876,9 +3862,15 @@
   }
 
   /* ── 2. LENIS SMOOTH SCROLL ─────────────────────────────────────────────── */
-  var _lenis = null; // exposed so modals can stop/start it
+  var _lenis = null;
+  var _lenisRaf = null; // GSAP ticker callback reference
+
   function initLenis() {
     if (typeof Lenis === 'undefined') return;
+    // Clean up previous instance if any
+    if (_lenis) { try { _lenis.destroy(); } catch(e){} _lenis = null; }
+    if (_lenisRaf && typeof gsap !== 'undefined') { gsap.ticker.remove(_lenisRaf); _lenisRaf = null; }
+
     _lenis = new Lenis({
       duration:        0.55,
       easing:          t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -3886,16 +3878,21 @@
       wheelMultiplier: 2.0,
       touchMultiplier: 2.8,
     });
-    // Wire Lenis into GSAP ticker so ScrollTrigger stays in sync
     if (typeof gsap !== 'undefined' && gsap.ticker) {
       _lenis.on('scroll', () => {
         if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.update();
       });
-      gsap.ticker.add(time => _lenis.raf(time * 1000));
+      _lenisRaf = function(time) { if (_lenis) _lenis.raf(time * 1000); };
+      gsap.ticker.add(_lenisRaf);
       gsap.ticker.lagSmoothing(0);
     } else {
-      (function raf(t) { _lenis.raf(t); requestAnimationFrame(raf); })(0);
+      (function raf(t) { if (_lenis) { _lenis.raf(t); requestAnimationFrame(raf); } })(0);
     }
+  }
+
+  function destroyLenis() {
+    if (_lenisRaf && typeof gsap !== 'undefined') { gsap.ticker.remove(_lenisRaf); _lenisRaf = null; }
+    if (_lenis) { try { _lenis.destroy(); } catch(e){} _lenis = null; }
   }
 
   /* ── 3. CUSTOM CURSOR ───────────────────────────────────────────────────── */
