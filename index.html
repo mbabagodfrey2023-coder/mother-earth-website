@@ -3370,30 +3370,19 @@
     }
   }
 
-  var _modalScrollY = 0;
   function openModal(id) {
     const el = document.getElementById(id);
     if (!el) return;
     el.classList.add('open');
-    // Lock background scroll — save position, fix body in place
-    _modalScrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = '-' + _modalScrollY + 'px';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.overflow = 'hidden';
+    // Stop Lenis smooth scroll so background can't move
+    if (_lenis) _lenis.stop();
   }
   function closeModal(id) {
     const el = document.getElementById(id);
     if (el) el.classList.remove('open');
-    // Restore background scroll if no modals remain open
+    // Resume Lenis if no modals remain open
     if (!document.querySelector('.modal-overlay.open')) {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.overflow = '';
-      window.scrollTo(0, _modalScrollY);
+      if (_lenis) _lenis.start();
     }
   }
   // Close on overlay click (clicking the dark backdrop)
@@ -3408,10 +3397,10 @@
       document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
     }
   });
-  // Safety net: if body overflow is stuck, any scroll attempt restores it
-  document.addEventListener('touchmove', function() {
-    if (!document.querySelector('.modal-overlay.open') && document.body.style.overflow === 'hidden') {
-      document.body.style.overflow = '';
+  // Safety net: if Lenis is stuck stopped with no modal open, restart it
+  document.addEventListener('wheel', function() {
+    if (!document.querySelector('.modal-overlay.open') && _lenis && !_lenis.isScrolling) {
+      _lenis.start();
     }
   }, { passive: true });
 
@@ -3855,9 +3844,10 @@
   }
 
   /* ── 2. LENIS SMOOTH SCROLL ─────────────────────────────────────────────── */
+  var _lenis = null; // exposed so modals can stop/start it
   function initLenis() {
     if (typeof Lenis === 'undefined') return;
-    const lenis = new Lenis({
+    _lenis = new Lenis({
       duration:        0.55,
       easing:          t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel:     true,
@@ -3866,13 +3856,13 @@
     });
     // Wire Lenis into GSAP ticker so ScrollTrigger stays in sync
     if (typeof gsap !== 'undefined' && gsap.ticker) {
-      lenis.on('scroll', () => {
+      _lenis.on('scroll', () => {
         if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.update();
       });
-      gsap.ticker.add(time => lenis.raf(time * 1000));
+      gsap.ticker.add(time => _lenis.raf(time * 1000));
       gsap.ticker.lagSmoothing(0);
     } else {
-      (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
+      (function raf(t) { _lenis.raf(t); requestAnimationFrame(raf); })(0);
     }
   }
 
