@@ -337,22 +337,102 @@
     }
     .crisis-stage.active { opacity: 1; transform: translateY(0); }
     .stage-orb {
-      width: 180px; height: 180px; border-radius: 50%;
+      width: 200px; height: 200px; border-radius: 50%;
       margin: 0 auto 36px; position: relative;
       animation: orbFloat 4s ease-in-out infinite;
+      overflow: hidden;
     }
+
+    /* ── ICE ORB — cracking, dripping, shattering ── */
     .stage-orb.ice {
       background: radial-gradient(circle at 35% 30%, #e0f2fe, #38bdf8 40%, #0c4a6e);
-      box-shadow: 0 0 60px rgba(56,189,248,.35);
+      box-shadow: 0 0 60px rgba(56,189,248,.35), inset 0 0 30px rgba(255,255,255,.15);
     }
+    .stage-orb.ice::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background:
+        linear-gradient(137deg, transparent 42%, rgba(255,255,255,.45) 42.5%, transparent 43%),
+        linear-gradient(215deg, transparent 55%, rgba(255,255,255,.35) 55.5%, transparent 56%),
+        linear-gradient(80deg,  transparent 30%, rgba(255,255,255,.25) 30.3%, transparent 31%),
+        linear-gradient(310deg, transparent 65%, rgba(255,255,255,.3) 65.3%, transparent 66%);
+      animation: iceCrack 3s ease-in-out infinite;
+    }
+    .stage-orb.ice::after {
+      content: ''; position: absolute; bottom: -8px; left: 50%; width: 4px;
+      height: 20px; border-radius: 0 0 4px 4px;
+      background: linear-gradient(to bottom, rgba(56,189,248,.8), transparent);
+      animation: iceDrip 2s ease-in infinite;
+      transform: translateX(-50%);
+    }
+    @keyframes iceCrack {
+      0%, 100% { opacity: .3; transform: scale(1); }
+      50% { opacity: .9; transform: scale(1.02); }
+    }
+    @keyframes iceDrip {
+      0% { height: 0; opacity: 0; bottom: 10px; }
+      30% { opacity: 1; }
+      100% { height: 30px; opacity: 0; bottom: -30px; }
+    }
+
+    /* ── FOREST ORB — burning embers, smoke, fire glow ── */
     .stage-orb.forest {
       background: radial-gradient(circle at 35% 30%, #bbf7d0, #16a34a 40%, #052e16);
       box-shadow: 0 0 60px rgba(22,163,74,.35);
+      animation: orbFloat 4s ease-in-out infinite, forestBurn 4s ease-in-out infinite;
     }
+    .stage-orb.forest::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      background: radial-gradient(circle at 55% 70%, rgba(239,68,68,.5) 0%, rgba(245,158,11,.3) 30%, transparent 60%);
+      animation: fireFlicker 1.5s ease-in-out infinite alternate;
+    }
+    .stage-orb.forest::after {
+      content: '🔥'; position: absolute; bottom: 15%; left: 50%;
+      font-size: 28px; transform: translateX(-50%);
+      animation: emberRise 2.5s ease-out infinite;
+      filter: brightness(1.3);
+    }
+    @keyframes forestBurn {
+      0%, 100% { box-shadow: 0 0 60px rgba(22,163,74,.35); }
+      50% { box-shadow: 0 0 80px rgba(239,68,68,.4), 0 0 120px rgba(245,158,11,.2); }
+    }
+    @keyframes fireFlicker {
+      0% { opacity: .3; transform: scale(.95); }
+      100% { opacity: .7; transform: scale(1.05); }
+    }
+    @keyframes emberRise {
+      0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-60px) scale(.4); }
+    }
+
+    /* ── OCEAN ORB — rising water, waves, warning pulse ── */
     .stage-orb.ocean {
       background: radial-gradient(circle at 35% 30%, #bfdbfe, #1d4ed8 40%, #030720);
       box-shadow: 0 0 60px rgba(29,78,216,.35);
     }
+    .stage-orb.ocean::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 45%; border-radius: 0 0 100px 100px;
+      background: linear-gradient(to top, rgba(29,78,216,.7), rgba(56,189,248,.3), transparent);
+      animation: oceanRise 6s ease-in-out infinite;
+    }
+    .stage-orb.ocean::after {
+      content: ''; position: absolute; bottom: 42%; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg,
+        transparent 0%, rgba(255,255,255,.3) 15%, rgba(255,255,255,.5) 30%,
+        rgba(255,255,255,.3) 50%, rgba(255,255,255,.5) 70%,
+        rgba(255,255,255,.3) 85%, transparent 100%);
+      animation: waveRipple 3s ease-in-out infinite;
+    }
+    @keyframes oceanRise {
+      0%, 100% { height: 40%; opacity: .7; }
+      50% { height: 55%; opacity: .9; }
+    }
+    @keyframes waveRipple {
+      0% { transform: translateX(-20px) scaleY(.6); opacity: .4; bottom: 38%; }
+      50% { transform: translateX(20px) scaleY(1.2); opacity: .8; bottom: 52%; }
+      100% { transform: translateX(-20px) scaleY(.6); opacity: .4; bottom: 38%; }
+    }
+
     @keyframes orbFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
     .crisis-title { font-size: clamp(32px, 5vw, 56px); font-weight: 800; margin-bottom: 16px; }
     .crisis-desc { font-size: 16px; color: var(--muted); line-height: 1.72; margin-bottom: 28px; }
@@ -403,6 +483,45 @@
       color: rgba(255,255,255,.28); letter-spacing: 2px;
     }
     .agent-count span { color: var(--blue); }
+
+    /* ─── SUB-AGENT PANELS (expandable under each branch card) ─── */
+    .sub-agents-panel {
+      grid-column: 1 / -1;
+      max-height: 0; overflow: hidden;
+      transition: max-height .5s ease, padding .3s ease;
+      background: rgba(74,222,128,.02); border: 1px solid transparent;
+    }
+    .sub-agents-panel.open {
+      max-height: 400px; padding: 20px 24px;
+      border-color: rgba(74,222,128,.12);
+    }
+    .sub-agents-row {
+      display: flex; flex-wrap: wrap; gap: 12px;
+    }
+    .sub-agent-chip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 18px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 2px;
+      transition: all .25s; flex: 1 1 180px; min-width: 160px;
+    }
+    .sub-agent-chip:hover { border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.05); }
+    .sub-agent-name {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      font-weight: 700; letter-spacing: 2px; color: var(--green);
+    }
+    .sub-agent-role {
+      font-size: 11px; color: var(--muted); line-height: 1.4;
+    }
+    .sub-agent-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+      box-shadow: 0 0 4px var(--green); flex-shrink: 0;
+      animation: dotPulse 2s infinite;
+    }
+    .sub-panel-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 4px; color: rgba(255,255,255,.28); margin-bottom: 14px;
+    }
+
     /* CEO card spans 4 columns on the bottom */
     .agent-ceo {
       grid-column: 1 / -1; display: flex; align-items: center; gap: 48px;
@@ -659,8 +778,23 @@
       .nav-links { gap: 18px; }
       .nav-cta { display: none; }
     }
-    /* Hide full menu earlier — 13 links don't fit cleanly under ~1280px */
-    @media (max-width: 1280px) {
+    /* Show compact nav with dropdowns at all widths above mobile */
+    .nav-group { position: relative; }
+    .nav-group > a { display: flex; align-items: center; gap: 3px; }
+    .nav-group > a::after { content: ''; }
+    .nav-dropdown {
+      display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      min-width: 160px; padding: 8px 0; margin-top: 12px;
+      background: rgba(8,14,14,.97); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); z-index: 300;
+    }
+    .nav-group:hover .nav-dropdown { display: block; }
+    .nav-dropdown a {
+      display: block !important; padding: 10px 20px !important;
+      font-size: 11px !important; letter-spacing: 1.5px !important; white-space: nowrap;
+    }
+    .nav-dropdown a:hover { background: rgba(74,222,128,.06); }
+    @media (max-width: 768px) {
       .nav-links { display: none; }
       #system-status { display: none !important; }
     }
@@ -768,8 +902,9 @@
     .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); background: var(--green); }
     .nav-hamburger.open span:nth-child(2) { opacity: 0; }
     .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); background: var(--green); }
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .nav-hamburger { display: flex; }
+      .nav-group .nav-dropdown { display: none !important; }
       .nav-links.mobile-open {
         display: flex !important; flex-direction: column; gap: 0;
         position: fixed; top: 62px; left: 0; right: 0;
@@ -777,8 +912,13 @@
         padding: 20px 32px; border-bottom: 1px solid var(--border);
         z-index: 190;
       }
+      .nav-links.mobile-open .nav-group .nav-dropdown {
+        display: block !important; position: static; transform: none;
+        background: transparent; border: none; backdrop-filter: none;
+        padding: 0 0 0 16px; margin: 0; min-width: 0;
+      }
       .nav-links.mobile-open li { border-bottom: 1px solid var(--border); }
-      .nav-links.mobile-open a {
+      .nav-links.mobile-open > li > a {
         display: block; padding: 16px 0; font-size: 13px; letter-spacing: 3px; color: var(--muted);
       }
       .nav-links.mobile-open a:hover, .nav-links.mobile-open a.active { color: var(--green); }
@@ -1024,18 +1164,27 @@
     MOTHER EARTH
   </a>
   <ul class="nav-links">
-    <li><a href="#hero" class="active">Home</a></li>
     <li><a href="/mission-control.html" style="color:var(--green);">● Mission Control</a></li>
-    <li><a href="#live-dashboard">Live Data</a></li>
-    <li><a href="#intelligence">Intelligence</a></li>
-    <li><a href="#platform">Platform</a></li>
-    <li><a href="/iris.html">Marketplace</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="/governance.html">Governance</a></li>
-    <li><a href="/chapters.html">Chapters</a></li>
-    <li><a href="/about.html">About</a></li>
-    <li><a href="/press.html">Press</a></li>
-    <li><a href="/roadmap.html">Roadmap</a></li>
+    <li class="nav-group">
+      <a href="#intelligence">Platform ▾</a>
+      <div class="nav-dropdown">
+        <a href="#live-dashboard">Live Data</a>
+        <a href="#intelligence">33 Agents</a>
+        <a href="#platform">Technology</a>
+        <a href="/iris.html">Marketplace</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+    </li>
+    <li class="nav-group">
+      <a href="/governance.html">About ▾</a>
+      <div class="nav-dropdown">
+        <a href="/about.html">Our Story</a>
+        <a href="/governance.html">Governance</a>
+        <a href="/chapters.html">Chapters</a>
+        <a href="/roadmap.html">Roadmap</a>
+        <a href="/press.html">Press</a>
+      </div>
+    </li>
     <li><a href="#join">Partners</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1232,69 +1381,139 @@
     </div>
 
     <div class="agents-grid">
-      <!-- Branch 1 -->
-      <div class="agent-card" onclick="openModal('modal-agent-amara')" role="button" tabindex="0">
+      <!-- Branch 1 — AMARA -->
+      <div class="agent-card" onclick="toggleSubPanel('sub-amara')" role="button" tabindex="0">
         <div class="agent-icon">🏛️</div>
         <div class="agent-id">BRANCH 01</div>
         <div class="agent-name">AMARA</div>
         <div class="agent-role">Legal & Compliance. Monitors VASP regulation, AML/KYC enforcement, and governance filings across jurisdictions in real time.</div>
         <div class="agent-count">Sub-agents: <span>REX · SHIELD · DEED · CLOCK</span></div>
-        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
+        <div class="agent-card-arrow">EXPAND SUB-AGENTS ↓</div>
       </div>
-      <!-- Branch 2 -->
-      <div class="agent-card" onclick="openModal('modal-agent-nexus')" role="button" tabindex="0">
+      <!-- Branch 2 — NEXUS -->
+      <div class="agent-card" onclick="toggleSubPanel('sub-nexus')" role="button" tabindex="0">
         <div class="agent-icon">⛓️</div>
         <div class="agent-id">BRANCH 02</div>
         <div class="agent-name">NEXUS</div>
         <div class="agent-role">Blockchain & Technology. Manages smart contract infrastructure, token architecture, and secure data provenance protocols.</div>
         <div class="agent-count">Sub-agents: <span>FORGE · SCOUT · PULSE · KEYS</span></div>
-        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
+        <div class="agent-card-arrow">EXPAND SUB-AGENTS ↓</div>
       </div>
-      <!-- Branch 3 -->
-      <div class="agent-card" onclick="openModal('modal-agent-gaia')" role="button" tabindex="0">
+      <!-- Branch 3 — GAIA -->
+      <div class="agent-card" onclick="toggleSubPanel('sub-gaia')" role="button" tabindex="0">
         <div class="agent-icon">🌿</div>
         <div class="agent-id">BRANCH 03</div>
         <div class="agent-name">GAIA</div>
         <div class="agent-role">Environmental Intelligence. Ingests satellite, sensor, and field data to generate ecological risk scores and predictive models.</div>
         <div class="agent-count">Sub-agents: <span>SENSE · VERIFY · REPORT · CARBON</span></div>
-        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
+        <div class="agent-card-arrow">EXPAND SUB-AGENTS ↓</div>
       </div>
-      <!-- Branch 4 -->
-      <div class="agent-card" onclick="openModal('modal-agent-atlas')" role="button" tabindex="0">
+      <!-- Branch 4 — ATLAS -->
+      <div class="agent-card" onclick="toggleSubPanel('sub-atlas')" role="button" tabindex="0">
         <div class="agent-icon">💎</div>
         <div class="agent-id">BRANCH 04</div>
         <div class="agent-name">ATLAS</div>
         <div class="agent-role">Treasury & Finance. Manages reserves, monitors financial compliance, and oversees all transactions within governance thresholds.</div>
         <div class="agent-count">Sub-agents: <span>WALL · SWEEP · TAX · YIELD</span></div>
-        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
+        <div class="agent-card-arrow">EXPAND SUB-AGENTS ↓</div>
       </div>
-      <!-- Branch 5 -->
-      <div class="agent-card" onclick="openModal('modal-agent-iris')" role="button" tabindex="0">
+
+      <!-- Sub-agents row 1: AMARA + NEXUS + GAIA + ATLAS -->
+      <div class="sub-agents-panel" id="sub-amara">
+        <div class="sub-panel-label">AMARA · LEGAL & COMPLIANCE AGENTS</div>
+        <div class="sub-agents-row">
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">REX</div><div class="sub-agent-role">Regulatory tracker — scans Kenya Gazette, CMA, ODPC</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SHIELD</div><div class="sub-agent-role">AML/KYC enforcer — transaction screening</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">DEED</div><div class="sub-agent-role">Document drafter — contracts, filings, compliance</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">CLOCK</div><div class="sub-agent-role">Deadline tracker — regulatory filing reminders</div></div></div>
+        </div>
+      </div>
+      <div class="sub-agents-panel" id="sub-nexus">
+        <div class="sub-panel-label">NEXUS · BLOCKCHAIN & TECH AGENTS</div>
+        <div class="sub-agents-row">
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">FORGE</div><div class="sub-agent-role">Smart contract builder — deploys & audits</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SCOUT</div><div class="sub-agent-role">Chain scanner — monitors on-chain activity</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">PULSE</div><div class="sub-agent-role">Network health — uptime, gas, throughput</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">KEYS</div><div class="sub-agent-role">Key management — multi-sig, rotations, custody</div></div></div>
+        </div>
+      </div>
+      <div class="sub-agents-panel" id="sub-gaia">
+        <div class="sub-panel-label">GAIA · ENVIRONMENTAL INTEL AGENTS</div>
+        <div class="sub-agents-row">
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SENSE</div><div class="sub-agent-role">Sensor ingestion — satellite, IoT, field data</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">VERIFY</div><div class="sub-agent-role">Data validation — anomaly detection, cross-ref</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">REPORT</div><div class="sub-agent-role">Report generation — risk scores, trend analysis</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">CARBON</div><div class="sub-agent-role">Carbon accounting — sequestration, emissions</div></div></div>
+        </div>
+      </div>
+      <div class="sub-agents-panel" id="sub-atlas">
+        <div class="sub-panel-label">ATLAS · TREASURY & FINANCE AGENTS</div>
+        <div class="sub-agents-row">
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">WALL</div><div class="sub-agent-role">Firewall — transaction limits, fraud detection</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SWEEP</div><div class="sub-agent-role">Cash sweeper — auto-allocates idle reserves</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">TAX</div><div class="sub-agent-role">Tax compliance — KRA filings, withholding</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">YIELD</div><div class="sub-agent-role">Yield optimizer — treasury returns strategy</div></div></div>
+        </div>
+      </div>
+
+      <!-- Branch 5 — IRIS -->
+      <div class="agent-card" onclick="toggleSubPanel('sub-iris')" role="button" tabindex="0">
         <div class="agent-icon">📊</div>
         <div class="agent-id">BRANCH 05</div>
         <div class="agent-name">IRIS</div>
         <div class="agent-role">Data Marketplace. Operates the verified environmental data exchange — connecting data producers with institutional buyers worldwide.</div>
         <div class="agent-count">Sub-agents: <span>MINT · TRADE · FEE · ARBITER</span></div>
-        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
+        <div class="agent-card-arrow">EXPAND SUB-AGENTS ↓</div>
       </div>
-      <!-- Branch 6 -->
-      <div class="agent-card" onclick="openModal('modal-agent-sage')" role="button" tabindex="0">
+      <!-- Branch 6 — SAGE -->
+      <div class="agent-card" onclick="toggleSubPanel('sub-sage')" role="button" tabindex="0">
         <div class="agent-icon">⚖️</div>
         <div class="agent-id">BRANCH 06</div>
         <div class="agent-name">SAGE</div>
         <div class="agent-role">Governance & Trust. Administers the Purpose Trust, enforces the Golden Share veto, and maintains mission integrity across all operations.</div>
         <div class="agent-count">Sub-agents: <span>VETO · BOARD · MISSION</span></div>
-        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
+        <div class="agent-card-arrow">EXPAND SUB-AGENTS ↓</div>
       </div>
-      <!-- Branch 7 -->
-      <div class="agent-card" onclick="openModal('modal-agent-echo')" role="button" tabindex="0">
+      <!-- Branch 7 — ECHO -->
+      <div class="agent-card" onclick="toggleSubPanel('sub-echo')" role="button" tabindex="0">
         <div class="agent-icon">📡</div>
         <div class="agent-id">BRANCH 07</div>
         <div class="agent-name">ECHO</div>
         <div class="agent-role">Communications & Growth. Manages investor relations, media, partnerships, and the global guardian community across all channels.</div>
         <div class="agent-count">Sub-agents: <span>STORY · GROW · PRESS · WEB</span></div>
-        <div class="agent-card-arrow">VIEW SUB-AGENTS →</div>
+        <div class="agent-card-arrow">EXPAND SUB-AGENTS ↓</div>
       </div>
+      <!-- Spacer for 4-col alignment -->
+      <div></div>
+
+      <!-- Sub-agents row 2: IRIS + SAGE + ECHO -->
+      <div class="sub-agents-panel" id="sub-iris">
+        <div class="sub-panel-label">IRIS · DATA MARKETPLACE AGENTS</div>
+        <div class="sub-agents-row">
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">MINT</div><div class="sub-agent-role">Data tokeniser — packages datasets as assets</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">TRADE</div><div class="sub-agent-role">Exchange engine — order matching, settlement</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">FEE</div><div class="sub-agent-role">Revenue collector — billing, subscriptions</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">ARBITER</div><div class="sub-agent-role">Dispute resolver — data quality arbitration</div></div></div>
+        </div>
+      </div>
+      <div class="sub-agents-panel" id="sub-sage">
+        <div class="sub-panel-label">SAGE · GOVERNANCE AGENTS</div>
+        <div class="sub-agents-row">
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">VETO</div><div class="sub-agent-role">Golden Share enforcer — mission-critical blocker</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">BOARD</div><div class="sub-agent-role">Board secretary — minutes, resolutions, votes</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">MISSION</div><div class="sub-agent-role">Mission alignment — audits all decisions vs charter</div></div></div>
+        </div>
+      </div>
+      <div class="sub-agents-panel" id="sub-echo">
+        <div class="sub-panel-label">ECHO · COMMUNICATIONS AGENTS</div>
+        <div class="sub-agents-row">
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">STORY</div><div class="sub-agent-role">Content creator — reports, social, narratives</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">GROW</div><div class="sub-agent-role">Growth engine — partnerships, outreach</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">PRESS</div><div class="sub-agent-role">Media relations — press releases, enquiries</div></div></div>
+          <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">WEB</div><div class="sub-agent-role">Web operations — site, chat widget, SEO</div></div></div>
+        </div>
+      </div>
+
       <!-- CEO — spans full width -->
       <div class="agent-card agent-ceo" onclick="openModal('modal-agent-ceo')" role="button" tabindex="0">
         <div class="agent-icon">🌍</div>
@@ -2892,6 +3111,21 @@
   }
 
   /* ── MODALS ─────────────────────────────────── */
+  /* Toggle sub-agent panels — click a branch card to expand/collapse */
+  function toggleSubPanel(id) {
+    const panel = document.getElementById(id);
+    if (!panel) return;
+    // Close all other panels first
+    document.querySelectorAll('.sub-agents-panel.open').forEach(p => {
+      if (p.id !== id) p.classList.remove('open');
+    });
+    panel.classList.toggle('open');
+    // Smooth scroll into view if opening
+    if (panel.classList.contains('open')) {
+      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+  }
+
   function openModal(id) {
     document.getElementById(id).classList.add('open');
     document.body.style.overflow = 'hidden';
