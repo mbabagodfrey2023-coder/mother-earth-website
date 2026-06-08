@@ -3370,18 +3370,32 @@
     }
   }
 
+  var _modalScrollY = 0;
   function openModal(id) {
     const el = document.getElementById(id);
     if (!el) return;
     el.classList.add('open');
-    // Stop Lenis smooth scroll so background can't move
+    // Kill ALL scrolling: Lenis + native
     if (_lenis) _lenis.stop();
+    _modalScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + _modalScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.documentElement.style.overflow = 'hidden';
   }
   function closeModal(id) {
     const el = document.getElementById(id);
     if (el) el.classList.remove('open');
-    // Resume Lenis if no modals remain open
     if (!document.querySelector('.modal-overlay.open')) {
+      // Restore body
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.documentElement.style.overflow = '';
+      window.scrollTo(0, _modalScrollY);
+      // Resume Lenis
       if (_lenis) _lenis.start();
     }
   }
