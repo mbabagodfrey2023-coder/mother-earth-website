@@ -838,7 +838,7 @@ function buildTicker(e, p) {
 ══════════════════════════════════════════════════════════════════════════ */
 const AGENT_DECISIONS = [
   ['GAIA',  'b-gaia',  'NASA EONET scan complete — 10 active environmental events tracked globally', 's-ok'],
-  ['AMARA', 'b-amara', 'BRS Name Reservation issued — PVT-PQ1AZ3KV · 30-day incorporation window opened', 's-ok'],
+  ['AMARA', 'b-amara', 'KRA PIN obtained — P052549132K · Tax registration complete · Incorporation filing in progress', 's-ok'],
   ['AMARA', 'b-amara', 'VASP Act 2025 compliance scan — no new regulatory changes detected', 's-ok'],
   ['NEXUS', 'b-nexus', 'Smart contract integrity check — 2-of-3 multi-sig active, no anomalies', 's-ok'],
   ['ATLAS', 'b-atlas', 'Treasury health check — API credit balance monitored, auto-reload recommended', 's-warn'],
@@ -856,7 +856,7 @@ const AGENT_DECISIONS = [
   ['GAIA',  'b-gaia',  'Air quality readings — PM2.5 nominal across Nairobi, Mombasa, Kisumu', 's-ok'],
   ['AMARA', 'b-amara', 'FATF Recommendation 15 — implementation verified, audit log clean', 's-ok'],
   ['CEO',   'b-ceo',   'Council deliberation completed — 5 advisors aligned on quarterly priority', 's-ok'],
-  ['ATLAS', 'b-atlas', 'M-Pesa sandbox connection — STK push tested, awaiting BRS for production', 's-warn'],
+  ['ATLAS', 'b-atlas', 'M-Pesa sandbox connection — STK push tested, awaiting bank account for production', 's-warn'],
   ['NEXUS', 'b-nexus', 'KEYS module — air-gapped hardware key health check passed', 's-ok'],
 ];
 
@@ -897,7 +897,7 @@ const BRANCHES = [
     task:'CURRENT TASK', taskBody:'Polling 5 Kenya sensor stations + NASA EONET, validating against IPCC baselines',
     subs:2, members:'SENSE · VERIFY' },
   { id:'04', code:'atlas', name:'ATLAS', role:'Treasury & Finance',
-    task:'CURRENT TASK', taskBody:'Watching API credit reserves, tracking pre-incorp expense register',
+    task:'CURRENT TASK', taskBody:'KRA PIN active (P052549132K), watching API credits, awaiting bank account opening',
     subs:4, members:'WALL · SWEEP · TAX · YIELD' },
   { id:'05', code:'iris',  name:'IRIS',  role:'Data Marketplace',
     task:'CURRENT TASK', taskBody:'Open lead pipeline, processing research-access applications',
