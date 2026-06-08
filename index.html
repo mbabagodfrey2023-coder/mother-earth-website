@@ -3370,18 +3370,30 @@
     }
   }
 
+  var _modalScrollY = 0;
   function openModal(id) {
     const el = document.getElementById(id);
     if (!el) return;
     el.classList.add('open');
+    // Lock background scroll — save position, fix body in place
+    _modalScrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + _modalScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
     document.body.style.overflow = 'hidden';
   }
   function closeModal(id) {
     const el = document.getElementById(id);
     if (el) el.classList.remove('open');
-    // Always restore scroll if no modals remain open
+    // Restore background scroll if no modals remain open
     if (!document.querySelector('.modal-overlay.open')) {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
       document.body.style.overflow = '';
+      window.scrollTo(0, _modalScrollY);
     }
   }
   // Close on overlay click (clicking the dark backdrop)
