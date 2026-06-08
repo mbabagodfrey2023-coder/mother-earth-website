@@ -3080,7 +3080,7 @@
     });
 
     // Agent cards stagger
-    // (Agent card animation handled by ScrollTrigger.batch below — single source of truth)
+    // (Agent card animation removed — cards are always visible)
 
     // Intel totals
     gsap.from('.intel-total', {
@@ -3961,14 +3961,10 @@
       });
     });
 
-    // Agent cards — staggered scale+fade
-    ScrollTrigger.batch('.agent-card', {
-      start: 'top 90%', once: true,
-      onEnter: batch => gsap.from(batch, {
-        opacity: 0, y: 48, scale: 0.94,
-        duration: 0.7, ease: EASE_BACK,
-        stagger: { each: 0.08, from: 'start' }
-      })
+    // Agent cards — safe CSS-only entrance (no gsap.from opacity:0 which breaks visibility)
+    document.querySelectorAll('.agent-card').forEach((card, i) => {
+      card.style.opacity = '1';
+      card.style.transform = 'none';
     });
 
     // Platform cards
