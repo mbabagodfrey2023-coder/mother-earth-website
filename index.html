@@ -1032,13 +1032,20 @@
         "name": "Mother Earth Kenya",
         "alternateName": ["Mother Earth", "Mother Earth Kenya Environmental AI Ltd", "Environmental AI Ltd"],
         "legalName": "Mother Earth Kenya Environmental AI Ltd",
-        "identifier": {
-          "@type": "PropertyValue",
-          "name": "BRS Name Reservation",
-          "value": "PVT-PQ1AZ3KV",
-          "validFrom": "2026-06-04",
-          "validThrough": "2026-07-04"
-        },
+        "identifier": [
+          {
+            "@type": "PropertyValue",
+            "name": "BRS Name Reservation",
+            "value": "PVT-PQ1AZ3KV",
+            "validFrom": "2026-06-04",
+            "validThrough": "2026-07-04"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "KRA PIN",
+            "value": "P052549132K"
+          }
+        ],
         "url": "https://motherearth.systems",
         "logo": {
           "@type": "ImageObject",
@@ -1999,7 +2006,7 @@
           <li class="roadmap-item active">n8n workflow automation — connecting live data pipelines</li>
           <li class="roadmap-item active">Slack command centre — 7 branch alert channels</li>
           <li class="roadmap-item done">KRA company PIN obtained — P052549132K</li>
-          <li class="roadmap-item active">FRC AML/CTF annual report — submission in progress</li>
+          <li class="roadmap-item planned">FRC AML/CTF annual report — pending FRC registration</li>
           <li class="roadmap-item active">Inter-branch message bus — direct agent-to-agent comms</li>
         </ul>
       </div>
@@ -3493,8 +3500,8 @@
 
     // ATLAS — treasury
     inject('modal-agent-atlas', 'TREASURY STATUS', [
-      metricRow('PAYMENT RAIL',        'M-PESA READY · BRS PENDING', YELLOW),
-      metricRow('STRIPE INTEGRATION',  'PENDING REGISTRATION',       YELLOW),
+      metricRow('PAYMENT RAIL',        'M-PESA READY · AWAITING BANK ACCOUNT', YELLOW),
+      metricRow('STRIPE INTEGRATION',  'PENDING BANK ACCOUNT',       YELLOW),
       metricRow('MULTI-SIG VAULT',     '2 OF 3 · HARDWARE BACKED',   GREEN),
       metricRow('TAX COMPLIANCE',      'KRA PIN P052549132K · ACTIVE', GREEN),
       metricRow('SWEEP POLICY',        '≤KES 50K AUTONOMOUS · AUTO', GREEN),
@@ -3514,8 +3521,9 @@
       metricRow('VASP ACT 2025',       'MONITORING · NO NEW CHANGES', GREEN),
       metricRow('FATF UPDATES',        'R.15 COMPLIANT — VERIFIED',   GREEN),
       metricRow('BRS NAME RESERVATION', '✓ APPROVED · PVT-PQ1AZ3KV',   GREEN),
-      metricRow('BRS INCORPORATION',    'FILING WITHIN 30-DAY WINDOW', YELLOW),
-      metricRow('ODPC REGISTRATION',   'PENDING POST-BRS',            YELLOW),
+      metricRow('KRA COMPANY PIN',       '✓ P052549132K · 7 JUN 2026',  GREEN),
+      metricRow('BRS INCORPORATION',    'FILING IN PROGRESS · ≤4 JUL', YELLOW),
+      metricRow('ODPC REGISTRATION',   'PENDING POST-INCORPORATION',  YELLOW),
       metricRow('KYC/AML POLICY',      'DRAFT COMPLETE · REVIEW DUE', YELLOW),
     ]);
 
