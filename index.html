@@ -409,31 +409,35 @@
     /* ─── AI INTELLIGENCE ────────────────────────────────────────── */
     #intelligence { padding: 120px 0; }
     .agents-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
       margin-top: 72px;
     }
     .agent-card {
-      background: var(--card); border: 1px solid var(--border);
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
       padding: 32px 24px; position: relative; overflow: hidden;
       transition: all .3s;
     }
     .agent-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, var(--green), var(--blue));
-      transform: scaleX(0); transform-origin: left; transition: transform .4s;
+      transform: scaleX(1); transform-origin: left; transition: transform .4s;
+      opacity: .6;
     }
-    .agent-card:hover { border-color: rgba(74,222,128,.25); background: rgba(74,222,128,.04); }
-    .agent-card:hover::before { transform: scaleX(1); }
-    .agent-icon { font-size: 28px; margin-bottom: 16px; }
+    .agent-card:hover {
+      border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.1);
+      box-shadow: 0 4px 24px rgba(74,222,128,.08);
+    }
+    .agent-card:hover::before { opacity: 1; }
+    .agent-icon { font-size: 32px; margin-bottom: 16px; }
     .agent-id {
       font-family: 'JetBrains Mono', monospace; font-size: 9px;
       letter-spacing: 4px; color: var(--green); margin-bottom: 8px;
     }
-    .agent-name { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-    .agent-role { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+    .agent-name { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #fff; }
+    .agent-role { font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; margin-bottom: 18px; }
     .agent-count {
       font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      color: rgba(255,255,255,.28); letter-spacing: 2px;
+      color: rgba(255,255,255,.45); letter-spacing: 2px;
     }
     .agent-count span { color: var(--blue); }
 
@@ -474,8 +478,8 @@
     }
     .sub-agent-chip {
       display: flex; align-items: flex-start; gap: 12px;
-      padding: 14px 18px; background: var(--card);
-      border: 1px solid var(--border); border-radius: 2px;
+      padding: 14px 18px; background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14); border-radius: 2px;
       transition: all .25s; position: relative;
     }
     .sub-agent-chip::before {
@@ -501,12 +505,14 @@
     .agent-ceo {
       grid-column: 1 / -1; display: flex; align-items: center; gap: 48px;
       padding: 40px 48px;
+      background: rgba(74,222,128,.06); border-color: rgba(74,222,128,.2);
     }
+    .agent-ceo::before { opacity: 1; height: 3px; }
     .agent-ceo .agent-icon { font-size: 48px; margin-bottom: 0; flex-shrink: 0; }
     .agent-ceo-text {}
     .agent-ceo .agent-id { font-size: 10px; }
     .agent-ceo .agent-name { font-size: 28px; }
-    .agent-ceo .agent-role { font-size: 15px; max-width: 680px; }
+    .agent-ceo .agent-role { font-size: 15px; max-width: 680px; color: rgba(255,255,255,.75); }
     .intel-totals {
       display: flex; gap: 48px; justify-content: center; margin-top: 60px;
       padding-top: 48px; border-top: 1px solid var(--border);
@@ -803,7 +809,7 @@
     .agent-card { cursor: pointer; }
     .agent-card-arrow {
       margin-top: 14px; font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; letter-spacing: 2px; color: var(--green); opacity: 0;
+      font-size: 9px; letter-spacing: 2px; color: var(--green); opacity: .4;
       transition: opacity .3s;
     }
     .agent-card:hover .agent-card-arrow,
