@@ -324,11 +324,72 @@
     .section-title { font-size: clamp(36px, 5vw, 64px); font-weight: 800; margin-bottom: 16px; }
     .section-sub { font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.7; }
 
-    /* ─── CRISIS (live ticker — no orbs) ──────────────────────────── */
+    /* ─── CRISIS (live ticker — clickable cards) ─────────────────── */
     @media (max-width: 768px) {
       #crisis .section-wrap > div[style*="grid-template-columns"] {
         grid-template-columns: 1fr !important;
       }
+    }
+    .ticker-card {
+      cursor: pointer; transition: all .35s ease; position: relative;
+    }
+    .ticker-card:hover {
+      transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,.4);
+    }
+    .ticker-card-hint {
+      margin-top: 14px; text-align: center;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px;
+      color: rgba(255,255,255,.15); transition: color .3s;
+    }
+    .ticker-card:hover .ticker-card-hint { color: rgba(255,255,255,.45); }
+
+    .ticker-detail {
+      max-height: 0; overflow: hidden;
+      transition: max-height .6s ease, padding .4s ease, margin .4s ease, border-color .4s;
+      border: 1px solid transparent; border-radius: 2px;
+    }
+    .ticker-detail.open {
+      max-height: 560px; padding: 28px; margin-top: 20px;
+      border-color: rgba(255,255,255,.08);
+    }
+    .ticker-detail-head {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 4px; margin-bottom: 20px; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .ticker-detail-close {
+      background: none; border: 1px solid rgba(255,255,255,.12); color: var(--muted);
+      padding: 4px 12px; font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 2px; cursor: pointer; transition: all .25s;
+    }
+    .ticker-detail-close:hover { border-color: rgba(255,255,255,.3); color: var(--text); }
+    .region-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    @media (max-width: 640px) { .region-grid { grid-template-columns: 1fr; } }
+    .region-card {
+      padding: 18px 16px; background: rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.06); border-radius: 2px;
+      transition: border-color .3s, background .3s;
+    }
+    .region-card:hover { border-color: rgba(255,255,255,.15); background: rgba(255,255,255,.04); }
+    .region-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .region-flag { font-size: 22px; }
+    .region-name {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 2px;
+    }
+    .region-rate { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .region-sub { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .region-bar {
+      height: 4px; background: rgba(255,255,255,.06);
+      border-radius: 2px; overflow: hidden; margin-top: 10px;
+    }
+    .region-bar-fill {
+      height: 100%; border-radius: 2px; width: 0;
+      transition: width 1.2s cubic-bezier(.22,1,.36,1);
+    }
+    .region-live {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600;
+      margin-top: 6px; opacity: .7;
     }
 
     /* ─── STATS GRID ─────────────────────────────────────────────── */
@@ -376,42 +437,64 @@
     }
     .agent-count span { color: var(--blue); }
 
-    /* ─── SUB-AGENT PANELS (outside grid, expand below) ─── */
+    /* ─── SUB-AGENT PANELS (hierarchy tree) ──────────────── */
     .sub-agents-panel {
       max-height: 0; overflow: hidden;
       transition: max-height .5s ease, padding .3s ease, margin .3s ease;
-      background: rgba(74,222,128,.02); border: 1px solid transparent;
-      margin: 0 0 0 0;
+      background: linear-gradient(135deg, rgba(74,222,128,.02), rgba(14,165,233,.01));
+      border: 1px solid transparent;
+      margin: 0 0 0 0; border-radius: 2px;
     }
     .sub-agents-panel.open {
-      max-height: 400px; padding: 20px 24px; margin: 12px 0;
+      max-height: 600px; padding: 24px 28px; margin: 16px 0;
       border-color: rgba(74,222,128,.12);
     }
+    .sub-panel-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 4px; color: rgba(255,255,255,.28); margin-bottom: 6px;
+    }
+    .sub-panel-workflow {
+      margin-bottom: 18px; padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 12px; color: var(--muted); line-height: 1.8;
+    }
+    .workflow-step {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; background: rgba(74,222,128,.06);
+      border: 1px solid rgba(74,222,128,.12); border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      color: var(--green); white-space: nowrap;
+    }
+    .workflow-arrow {
+      display: inline-block; margin: 0 6px; color: rgba(74,222,128,.3);
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    }
     .sub-agents-row {
-      display: flex; flex-wrap: wrap; gap: 12px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;
     }
     .sub-agent-chip {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 18px; background: var(--card);
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 18px; background: var(--card);
       border: 1px solid var(--border); border-radius: 2px;
-      transition: all .25s; flex: 1 1 180px; min-width: 160px;
+      transition: all .25s; position: relative;
+    }
+    .sub-agent-chip::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%;
+      background: var(--green); opacity: 0; transition: opacity .3s;
     }
     .sub-agent-chip:hover { border-color: rgba(74,222,128,.35); background: rgba(74,222,128,.05); }
+    .sub-agent-chip:hover::before { opacity: 1; }
     .sub-agent-name {
       font-family: 'JetBrains Mono', monospace; font-size: 11px;
       font-weight: 700; letter-spacing: 2px; color: var(--green);
     }
     .sub-agent-role {
-      font-size: 11px; color: var(--muted); line-height: 1.4;
+      font-size: 11px; color: var(--muted); line-height: 1.5;
     }
     .sub-agent-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--green);
-      box-shadow: 0 0 4px var(--green); flex-shrink: 0;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+      box-shadow: 0 0 6px var(--green); flex-shrink: 0; margin-top: 3px;
       animation: dotPulse 2s infinite;
-    }
-    .sub-panel-label {
-      font-family: 'JetBrains Mono', monospace; font-size: 9px;
-      letter-spacing: 4px; color: rgba(255,255,255,.28); margin-bottom: 14px;
     }
 
     /* CEO card spans 4 columns on the bottom */
@@ -1145,7 +1228,7 @@
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
       <!-- ICE -->
-      <div style="background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.15);padding:48px 28px;border-radius:2px;text-align:center;">
+      <div class="ticker-card" onclick="toggleTickerDetail('detail-ice')" style="background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
         <div style="font-size:48px;margin-bottom:16px;">🧊</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#38bdf8;margin-bottom:20px;">ARCTIC ICE LOST</div>
         <div id="ticker-ice" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#38bdf8;line-height:1;margin-bottom:8px;">0</div>
@@ -1154,10 +1237,11 @@
           <div id="bar-ice" style="height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#0ea5e9);transition:width 1s;"></div>
         </div>
         <div style="font-size:12px;color:rgba(255,255,255,.28);margin-top:12px;">280 billion tonnes / year — Greenland alone</div>
+        <div class="ticker-card-hint">CLICK TO EXPLORE REGIONS ↓</div>
       </div>
 
       <!-- FOREST -->
-      <div style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:48px 28px;border-radius:2px;text-align:center;">
+      <div class="ticker-card" onclick="toggleTickerDetail('detail-forest')" style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
         <div style="font-size:48px;margin-bottom:16px;">🔥</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#ef4444;margin-bottom:20px;">FOREST DESTROYED</div>
         <div id="ticker-forest" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#ef4444;line-height:1;margin-bottom:8px;">0</div>
@@ -1166,10 +1250,11 @@
           <div id="bar-forest" style="height:100%;width:0;background:linear-gradient(90deg,#f59e0b,#ef4444);transition:width 1s;"></div>
         </div>
         <div style="font-size:12px;color:rgba(255,255,255,.28);margin-top:12px;">10,000 acres / day — Amazon alone</div>
+        <div class="ticker-card-hint">CLICK TO EXPLORE REGIONS ↓</div>
       </div>
 
       <!-- OCEAN -->
-      <div style="background:rgba(29,78,216,.04);border:1px solid rgba(29,78,216,.15);padding:48px 28px;border-radius:2px;text-align:center;">
+      <div class="ticker-card" onclick="toggleTickerDetail('detail-ocean')" style="background:rgba(29,78,216,.04);border:1px solid rgba(29,78,216,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
         <div style="font-size:48px;margin-bottom:16px;">🌊</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#3b82f6;margin-bottom:20px;">SEA LEVEL RISEN</div>
         <div id="ticker-ocean" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#3b82f6;line-height:1;margin-bottom:8px;">0</div>
@@ -1178,6 +1263,121 @@
           <div id="bar-ocean" style="height:100%;width:0;background:linear-gradient(90deg,#3b82f6,#1d4ed8);transition:width 1s;"></div>
         </div>
         <div style="font-size:12px;color:rgba(255,255,255,.28);margin-top:12px;">3.4mm / year — 800M people at risk by 2050</div>
+        <div class="ticker-card-hint">CLICK TO EXPLORE REGIONS ↓</div>
+      </div>
+    </div>
+
+    <!-- ── ICE DETAIL PANEL ── -->
+    <div id="detail-ice" class="ticker-detail" style="background:rgba(56,189,248,.02);">
+      <div class="ticker-detail-head" style="color:#38bdf8;">
+        <span>REGIONAL ICE LOSS — LIVE BREAKDOWN</span>
+        <button class="ticker-detail-close" onclick="toggleTickerDetail('detail-ice')">CLOSE ✕</button>
+      </div>
+      <div class="region-grid">
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🇬🇱</span><span class="region-name" style="color:#38bdf8;">GREENLAND ICE SHEET</span></div>
+          <div class="region-rate" style="color:#38bdf8;">280 GT/year</div>
+          <div class="region-sub">The single largest contributor to sea-level rise. Losing mass at 6× the rate of the 1990s.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="100%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
+          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.536">↑ <span>0</span> tonnes</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🇦🇶</span><span class="region-name" style="color:#38bdf8;">ANTARCTIC ICE SHEET</span></div>
+          <div class="region-rate" style="color:#38bdf8;">150 GT/year</div>
+          <div class="region-sub">West Antarctic glaciers accelerating. Thwaites "Doomsday Glacier" retreat threatens 3m rise.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="54%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
+          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.287">↑ <span>0</span> tonnes</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🏔️</span><span class="region-name" style="color:#38bdf8;">MOUNTAIN GLACIERS</span></div>
+          <div class="region-rate" style="color:#38bdf8;">267 GT/year</div>
+          <div class="region-sub">Himalaya, Alps, Andes, Rockies. 2 billion people depend on glacial meltwater.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="95%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
+          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.511">↑ <span>0</span> tonnes</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">❄️</span><span class="region-name" style="color:#38bdf8;">ARCTIC SEA ICE</span></div>
+          <div class="region-rate" style="color:#38bdf8;">−13% per decade</div>
+          <div class="region-sub">Summer Arctic could be ice-free by 2050. Albedo feedback loop accelerates warming.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="72%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
+          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.380">↑ <span>0</span> tonnes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FOREST DETAIL PANEL ── -->
+    <div id="detail-forest" class="ticker-detail" style="background:rgba(239,68,68,.02);">
+      <div class="ticker-detail-head" style="color:#ef4444;">
+        <span>REGIONAL FOREST LOSS — LIVE BREAKDOWN</span>
+        <button class="ticker-detail-close" onclick="toggleTickerDetail('detail-forest')">CLOSE ✕</button>
+      </div>
+      <div class="region-grid">
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🇧🇷</span><span class="region-name" style="color:#ef4444;">AMAZON RAINFOREST</span></div>
+          <div class="region-rate" style="color:#ef4444;">2,500 acres/day</div>
+          <div class="region-sub">Earth's largest tropical forest. Cattle ranching and soy farming drive 80% of loss.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="78%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
+          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.02894">↑ <span>0</span> acres</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🌏</span><span class="region-name" style="color:#ef4444;">SOUTHEAST ASIA</span></div>
+          <div class="region-rate" style="color:#ef4444;">3,200 acres/day</div>
+          <div class="region-sub">Borneo, Sumatra, Myanmar. Palm oil and rubber plantations are the main drivers.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="100%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
+          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.03704">↑ <span>0</span> acres</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🇨🇩</span><span class="region-name" style="color:#ef4444;">CONGO BASIN</span></div>
+          <div class="region-rate" style="color:#ef4444;">1,500 acres/day</div>
+          <div class="region-sub">World's second-largest tropical forest. Charcoal, mining, and subsistence farming.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="47%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
+          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.01736">↑ <span>0</span> acres</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🌲</span><span class="region-name" style="color:#ef4444;">BOREAL FORESTS</span></div>
+          <div class="region-rate" style="color:#ef4444;">2,800 acres/day</div>
+          <div class="region-sub">Canada, Russia, Scandinavia. Wildfires now burn 2× the area they did in the 1970s.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="88%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
+          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.03241">↑ <span>0</span> acres</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── OCEAN DETAIL PANEL ── -->
+    <div id="detail-ocean" class="ticker-detail" style="background:rgba(59,130,246,.02);">
+      <div class="ticker-detail-head" style="color:#3b82f6;">
+        <span>REGIONAL SEA LEVEL RISE — LIVE BREAKDOWN</span>
+        <button class="ticker-detail-close" onclick="toggleTickerDetail('detail-ocean')">CLOSE ✕</button>
+      </div>
+      <div class="region-grid">
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🏝️</span><span class="region-name" style="color:#3b82f6;">PACIFIC ISLANDS</span></div>
+          <div class="region-rate" style="color:#3b82f6;">5.1 mm/year</div>
+          <div class="region-sub">Tuvalu, Marshall Islands, Kiribati face existential threat. Some islands already submerging.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="100%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
+          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001617">↑ <span>0</span> mm</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🌊</span><span class="region-name" style="color:#3b82f6;">ATLANTIC COAST</span></div>
+          <div class="region-rate" style="color:#3b82f6;">4.1 mm/year</div>
+          <div class="region-sub">US East Coast, West Africa, Northern Europe. Storm surge risk rising exponentially.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="80%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
+          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001300">↑ <span>0</span> mm</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">🌅</span><span class="region-name" style="color:#3b82f6;">INDIAN OCEAN</span></div>
+          <div class="region-rate" style="color:#3b82f6;">3.2 mm/year</div>
+          <div class="region-sub">Maldives, Bangladesh, East Africa. 400M+ people live within 10m of current sea level.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="63%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
+          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001015">↑ <span>0</span> mm</div>
+        </div>
+        <div class="region-card">
+          <div class="region-head"><span class="region-flag">❄️</span><span class="region-name" style="color:#3b82f6;">ARCTIC OCEAN</span></div>
+          <div class="region-rate" style="color:#3b82f6;">Accelerating</div>
+          <div class="region-sub">Thermal expansion + ice melt. Arctic warming 4× faster than the global average.</div>
+          <div class="region-bar"><div class="region-bar-fill" data-width="90%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
+          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001450">↑ <span>0</span> mm</div>
+        </div>
       </div>
     </div>
 
@@ -1369,64 +1569,119 @@
     <!-- Sub-agent panels — OUTSIDE the grid so they don't break layout -->
     <div id="sub-amara" class="sub-agents-panel">
       <div class="sub-panel-label">AMARA · LEGAL & COMPLIANCE AGENTS</div>
+      <div class="sub-panel-workflow">
+        <span class="workflow-step">Regulation Change</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">REX detects</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">SHIELD reviews AML</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">DEED drafts docs</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">CLOCK sets deadline</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">AMARA → CEO</span>
+      </div>
       <div class="sub-agents-row">
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">REX</div><div class="sub-agent-role">Regulatory tracker — scans Kenya Gazette, CMA, ODPC</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SHIELD</div><div class="sub-agent-role">AML/KYC enforcer — transaction screening</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">DEED</div><div class="sub-agent-role">Document drafter — contracts, filings, compliance</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">CLOCK</div><div class="sub-agent-role">Deadline tracker — regulatory filing reminders</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">REX</div><div class="sub-agent-role">Regulatory tracker — scans Kenya Gazette, CMA, ODPC for changes</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SHIELD</div><div class="sub-agent-role">AML/KYC enforcer — transaction screening & compliance checks</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">DEED</div><div class="sub-agent-role">Document drafter — contracts, filings, regulatory submissions</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">CLOCK</div><div class="sub-agent-role">Deadline tracker — filing dates, renewal reminders, compliance windows</div></div></div>
       </div>
     </div>
     <div id="sub-nexus" class="sub-agents-panel">
       <div class="sub-panel-label">NEXUS · BLOCKCHAIN & TECH AGENTS</div>
+      <div class="sub-panel-workflow">
+        <span class="workflow-step">New Contract</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">FORGE builds</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">SCOUT audits chain</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">PULSE monitors</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">KEYS secures</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">NEXUS → CEO</span>
+      </div>
       <div class="sub-agents-row">
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">FORGE</div><div class="sub-agent-role">Smart contract builder — deploys & audits</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SCOUT</div><div class="sub-agent-role">Chain scanner — monitors on-chain activity</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">PULSE</div><div class="sub-agent-role">Network health — uptime, gas, throughput</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">KEYS</div><div class="sub-agent-role">Key management — multi-sig, rotations, custody</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">FORGE</div><div class="sub-agent-role">Smart contract builder — deploys, tests & audits on-chain code</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SCOUT</div><div class="sub-agent-role">Chain scanner — monitors on-chain activity & anomalies</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">PULSE</div><div class="sub-agent-role">Network health — uptime, gas costs, throughput metrics</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">KEYS</div><div class="sub-agent-role">Key management — multi-sig wallets, rotations, cold custody</div></div></div>
       </div>
     </div>
     <div id="sub-gaia" class="sub-agents-panel">
       <div class="sub-panel-label">GAIA · ENVIRONMENTAL INTEL AGENTS</div>
+      <div class="sub-panel-workflow">
+        <span class="workflow-step">Raw Data</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">SENSE ingests</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">VERIFY validates</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">CARBON accounts</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">REPORT publishes</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">GAIA → IRIS</span>
+      </div>
       <div class="sub-agents-row">
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SENSE</div><div class="sub-agent-role">Sensor ingestion — satellite, IoT, field data</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">VERIFY</div><div class="sub-agent-role">Data validation — anomaly detection, cross-ref</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">REPORT</div><div class="sub-agent-role">Report generation — risk scores, trend analysis</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">CARBON</div><div class="sub-agent-role">Carbon accounting — sequestration, emissions</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SENSE</div><div class="sub-agent-role">Sensor ingestion — satellite feeds, IoT networks, field stations</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">VERIFY</div><div class="sub-agent-role">Data validation — anomaly detection, multi-source cross-reference</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">REPORT</div><div class="sub-agent-role">Report generation — risk scores, trend models, visual dashboards</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">CARBON</div><div class="sub-agent-role">Carbon accounting — sequestration tracking, emissions inventory</div></div></div>
       </div>
     </div>
     <div id="sub-atlas" class="sub-agents-panel">
       <div class="sub-panel-label">ATLAS · TREASURY & FINANCE AGENTS</div>
+      <div class="sub-panel-workflow">
+        <span class="workflow-step">Transaction</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">WALL screens</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">TAX calculates</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">SWEEP allocates</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">YIELD optimises</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">ATLAS → CEO</span>
+      </div>
       <div class="sub-agents-row">
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">WALL</div><div class="sub-agent-role">Firewall — transaction limits, fraud detection</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SWEEP</div><div class="sub-agent-role">Cash sweeper — auto-allocates idle reserves</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">TAX</div><div class="sub-agent-role">Tax compliance — KRA filings, withholding</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">YIELD</div><div class="sub-agent-role">Yield optimizer — treasury returns strategy</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">WALL</div><div class="sub-agent-role">Firewall — transaction limits, fraud patterns, spend controls</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">SWEEP</div><div class="sub-agent-role">Cash sweeper — auto-allocates idle reserves to working capital</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">TAX</div><div class="sub-agent-role">Tax compliance — KRA filings, withholding, SEZ exemptions</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">YIELD</div><div class="sub-agent-role">Yield optimizer — treasury returns, reserve strategy</div></div></div>
       </div>
     </div>
     <div id="sub-iris" class="sub-agents-panel">
       <div class="sub-panel-label">IRIS · DATA MARKETPLACE AGENTS</div>
+      <div class="sub-panel-workflow">
+        <span class="workflow-step">GAIA Data</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">MINT tokenises</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">TRADE matches</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">FEE bills</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">ARBITER resolves</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">IRIS → ATLAS</span>
+      </div>
       <div class="sub-agents-row">
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">MINT</div><div class="sub-agent-role">Data tokeniser — packages datasets as assets</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">TRADE</div><div class="sub-agent-role">Exchange engine — order matching, settlement</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">FEE</div><div class="sub-agent-role">Revenue collector — billing, subscriptions</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">ARBITER</div><div class="sub-agent-role">Dispute resolver — data quality arbitration</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">MINT</div><div class="sub-agent-role">Data tokeniser — packages validated datasets as tradeable assets</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">TRADE</div><div class="sub-agent-role">Exchange engine — order matching, settlement, delivery</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">FEE</div><div class="sub-agent-role">Revenue collector — billing cycles, subscriptions, invoicing</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">ARBITER</div><div class="sub-agent-role">Dispute resolver — data quality claims, SLA arbitration</div></div></div>
       </div>
     </div>
     <div id="sub-sage" class="sub-agents-panel">
       <div class="sub-panel-label">SAGE · GOVERNANCE AGENTS</div>
+      <div class="sub-panel-workflow">
+        <span class="workflow-step">Decision</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">MISSION checks</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">BOARD records</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">VETO gates</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">SAGE → CEO</span>
+      </div>
       <div class="sub-agents-row">
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">VETO</div><div class="sub-agent-role">Golden Share enforcer — mission-critical blocker</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">BOARD</div><div class="sub-agent-role">Board secretary — minutes, resolutions, votes</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">MISSION</div><div class="sub-agent-role">Mission alignment — audits all decisions vs charter</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">VETO</div><div class="sub-agent-role">Golden Share enforcer — blocks any decision that violates the charter</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">BOARD</div><div class="sub-agent-role">Board secretary — meeting minutes, resolutions, voting records</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">MISSION</div><div class="sub-agent-role">Mission alignment — audits every decision against the Purpose Trust</div></div></div>
       </div>
     </div>
     <div id="sub-echo" class="sub-agents-panel">
       <div class="sub-panel-label">ECHO · COMMUNICATIONS AGENTS</div>
+      <div class="sub-panel-workflow">
+        <span class="workflow-step">Event/Update</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">STORY writes</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">PRESS distributes</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">GROW promotes</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">WEB publishes</span><span class="workflow-arrow">→</span>
+        <span class="workflow-step">ECHO → CEO</span>
+      </div>
       <div class="sub-agents-row">
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">STORY</div><div class="sub-agent-role">Content creator — reports, social, narratives</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">GROW</div><div class="sub-agent-role">Growth engine — partnerships, outreach</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">PRESS</div><div class="sub-agent-role">Media relations — press releases, enquiries</div></div></div>
-        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">WEB</div><div class="sub-agent-role">Web operations — site, chat widget, SEO</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">STORY</div><div class="sub-agent-role">Content creator — impact reports, social posts, brand narratives</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">GROW</div><div class="sub-agent-role">Growth engine — partnerships, outreach campaigns, community</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">PRESS</div><div class="sub-agent-role">Media relations — press releases, journalist enquiries, interviews</div></div></div>
+        <div class="sub-agent-chip"><div class="sub-agent-dot"></div><div><div class="sub-agent-name">WEB</div><div class="sub-agent-role">Web operations — motherearth.systems, ECHO chat widget, SEO</div></div></div>
       </div>
     </div>
 
@@ -2812,10 +3067,7 @@
     });
 
     // Agent cards stagger
-    gsap.from('.agent-card', {
-      scrollTrigger: { trigger: '#intelligence', start: 'top 70%' },
-      y: 40, opacity: 0, duration: .7, stagger: .08, ease: 'power3.out'
-    });
+    // (Agent card animation handled by ScrollTrigger.batch below — single source of truth)
 
     // Intel totals
     gsap.from('.intel-total', {
@@ -3040,6 +3292,57 @@
 
   /* ── MODALS ─────────────────────────────────── */
   /* Toggle sub-agent panels — click a branch card to expand/collapse */
+  // ── Ticker detail panel toggle + live region counters ──
+  function toggleTickerDetail(id) {
+    const panel = document.getElementById(id);
+    if (!panel) return;
+    // Close other detail panels
+    document.querySelectorAll('.ticker-detail.open').forEach(p => {
+      if (p.id !== id) p.classList.remove('open');
+    });
+    const opening = !panel.classList.contains('open');
+    panel.classList.toggle('open');
+    if (opening) {
+      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
+      // Animate region bars in
+      panel.querySelectorAll('.region-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width || '0%';
+      });
+    }
+  }
+
+  // Live mini-tickers for region detail panels
+  (function() {
+    const pageStart = Date.now();
+    function updateRegionTickers() {
+      const elapsed = (Date.now() - pageStart) / 1000;
+
+      // Ice regions (rates in GT/sec, display as tonnes)
+      document.querySelectorAll('[data-rate-ice]').forEach(el => {
+        const rate = parseFloat(el.dataset.rateIce) * 1e9 / (365.25 * 86400); // GT/yr → tonnes/sec
+        const val = Math.floor(rate * elapsed);
+        el.querySelector('span').textContent = val.toLocaleString();
+      });
+
+      // Forest regions (rates in acres/sec)
+      document.querySelectorAll('[data-rate-forest]').forEach(el => {
+        const rate = parseFloat(el.dataset.rateForest);
+        const val = (rate * elapsed).toFixed(2);
+        el.querySelector('span').textContent = val;
+      });
+
+      // Ocean regions (rates in mm/sec)
+      document.querySelectorAll('[data-rate-ocean]').forEach(el => {
+        const rate = parseFloat(el.dataset.rateOcean);
+        const val = (rate * elapsed).toFixed(8);
+        el.querySelector('span').textContent = val;
+      });
+
+      requestAnimationFrame(updateRegionTickers);
+    }
+    updateRegionTickers();
+  })();
+
   function toggleSubPanel(id) {
     const panel = document.getElementById(id);
     if (!panel) return;
