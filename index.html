@@ -413,19 +413,20 @@
       margin-top: 72px;
     }
     .agent-card {
-      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22);
       padding: 32px 24px; position: relative; overflow: hidden;
       transition: all .3s;
+      box-shadow: 0 2px 12px rgba(0,0,0,.3);
     }
     .agent-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, var(--green), var(--blue));
-      transform: scaleX(1); transform-origin: left; transition: transform .4s;
-      opacity: .6;
+      transform: scaleX(1); transform-origin: left; transition: opacity .4s;
+      opacity: .7;
     }
     .agent-card:hover {
-      border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.1);
-      box-shadow: 0 4px 24px rgba(74,222,128,.08);
+      border-color: rgba(74,222,128,.5); background: rgba(74,222,128,.12);
+      box-shadow: 0 6px 32px rgba(74,222,128,.12);
     }
     .agent-card:hover::before { opacity: 1; }
     .agent-icon { font-size: 32px; margin-bottom: 16px; }
@@ -501,13 +502,14 @@
       animation: dotPulse 2s infinite;
     }
 
-    /* CEO card spans 4 columns on the bottom */
+    /* CEO card spans full width — top of hierarchy */
     .agent-ceo {
       grid-column: 1 / -1; display: flex; align-items: center; gap: 48px;
-      padding: 40px 48px;
-      background: rgba(74,222,128,.06); border-color: rgba(74,222,128,.2);
+      padding: 44px 48px;
+      background: rgba(74,222,128,.1); border-color: rgba(74,222,128,.35);
+      box-shadow: 0 4px 24px rgba(74,222,128,.08);
     }
-    .agent-ceo::before { opacity: 1; height: 3px; }
+    .agent-ceo::before { opacity: 1; height: 4px; }
     .agent-ceo .agent-icon { font-size: 48px; margin-bottom: 0; flex-shrink: 0; }
     .agent-ceo-text {}
     .agent-ceo .agent-id { font-size: 10px; }
@@ -980,8 +982,9 @@
     /* ─── MODALS ─────────────────────────────────────────────────── */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 9000;
-      background: rgba(0,0,0,.85); backdrop-filter: blur(12px);
-      align-items: center; justify-content: center; padding: 24px;
+      background: rgba(0,0,0,.88); backdrop-filter: blur(12px);
+      align-items: flex-start; justify-content: center;
+      padding: 48px 24px; overflow-y: auto;
     }
     .modal-overlay.open { display: flex; }
     .modal-box {
@@ -1504,6 +1507,16 @@
     </div>
 
     <div class="agents-grid">
+      <!-- CEO — spans full width, top of hierarchy -->
+      <div class="agent-card agent-ceo" onclick="openModal('modal-agent-ceo')" role="button" tabindex="0">
+        <div class="agent-icon">🌍</div>
+        <div class="agent-ceo-text">
+          <div class="agent-id">COMMAND CENTRE · CEO</div>
+          <div class="agent-name">Claude — Planetary CEO</div>
+          <div class="agent-role">Strategic command centre. Cross-branch decisions, critical governance gates, absolute mission alignment. Powered by Anthropic.</div>
+          <div class="agent-count">Manages: <span>7 BRANCH HEADS · 26 SUB-AGENTS · 4 CRITICAL GATES</span></div>
+        </div>
+      </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-amara')" role="button" tabindex="0">
         <div class="agent-icon">🏛️</div>
         <div class="agent-id">BRANCH 01</div>
@@ -1559,16 +1572,6 @@
         <div class="agent-role">Communications & Growth. Media, partnerships, and the global guardian community.</div>
         <div class="agent-count">Sub-agents: <span>STORY · GROW · PRESS · WEB</span></div>
         <div class="agent-card-arrow">EXPAND ↓</div>
-      </div>
-      <!-- CEO — spans full width -->
-      <div class="agent-card agent-ceo" onclick="openModal('modal-agent-ceo')" role="button" tabindex="0">
-        <div class="agent-icon">🌍</div>
-        <div class="agent-ceo-text">
-          <div class="agent-id">COMMAND CENTRE · CEO</div>
-          <div class="agent-name">Claude — Planetary CEO</div>
-          <div class="agent-role">Strategic command centre. Cross-branch decisions, critical governance gates, absolute mission alignment. Powered by Anthropic.</div>
-          <div class="agent-count">Manages: <span>7 BRANCH HEADS · 26 SUB-AGENTS · 4 CRITICAL GATES</span></div>
-        </div>
       </div>
     </div>
 
@@ -3364,14 +3367,20 @@
   }
 
   function openModal(id) {
-    document.getElementById(id).classList.add('open');
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
   function closeModal(id) {
-    document.getElementById(id).classList.remove('open');
-    document.body.style.overflow = '';
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('open');
+    // Always restore scroll if no modals remain open
+    if (!document.querySelector('.modal-overlay.open')) {
+      document.body.style.overflow = '';
+    }
   }
-  // Close on overlay click
+  // Close on overlay click (clicking the dark backdrop)
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', e => {
       if (e.target === overlay) closeModal(overlay.id);
@@ -3383,6 +3392,12 @@
       document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
     }
   });
+  // Safety net: if body overflow is stuck, any scroll attempt restores it
+  document.addEventListener('touchmove', function() {
+    if (!document.querySelector('.modal-overlay.open') && document.body.style.overflow === 'hidden') {
+      document.body.style.overflow = '';
+    }
+  }, { passive: true });
 
   // ── LIVE DATA → MODAL INJECTION ────────────────────────────────────────────
   // Pulls live-data.json on page load and injects real metrics into agent modals.
