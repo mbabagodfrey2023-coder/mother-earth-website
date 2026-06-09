@@ -1254,7 +1254,7 @@
       <div class="ticker-card" onclick="toggleTickerDetail('detail-ice')" style="background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
         <div style="font-size:48px;margin-bottom:16px;">🧊</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#38bdf8;margin-bottom:20px;">ARCTIC ICE LOST</div>
-        <div id="ticker-ice" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#38bdf8;line-height:1;margin-bottom:8px;">0</div>
+        <div id="ticker-ice" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#38bdf8;line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;">TONNES SINCE YOU OPENED THIS PAGE</div>
         <div style="margin-top:20px;height:3px;background:rgba(56,189,248,.1);border-radius:2px;overflow:hidden;">
           <div id="bar-ice" style="height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#0ea5e9);transition:width 1s;"></div>
@@ -1267,7 +1267,7 @@
       <div class="ticker-card" onclick="toggleTickerDetail('detail-forest')" style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
         <div style="font-size:48px;margin-bottom:16px;">🔥</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#ef4444;margin-bottom:20px;">FOREST DESTROYED</div>
-        <div id="ticker-forest" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#ef4444;line-height:1;margin-bottom:8px;">0</div>
+        <div id="ticker-forest" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#ef4444;line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;">ACRES SINCE YOU OPENED THIS PAGE</div>
         <div style="margin-top:20px;height:3px;background:rgba(239,68,68,.1);border-radius:2px;overflow:hidden;">
           <div id="bar-forest" style="height:100%;width:0;background:linear-gradient(90deg,#f59e0b,#ef4444);transition:width 1s;"></div>
@@ -1280,7 +1280,7 @@
       <div class="ticker-card" onclick="toggleTickerDetail('detail-ocean')" style="background:rgba(29,78,216,.04);border:1px solid rgba(29,78,216,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
         <div style="font-size:48px;margin-bottom:16px;">🌊</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#3b82f6;margin-bottom:20px;">SEA LEVEL RISEN</div>
-        <div id="ticker-ocean" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#3b82f6;line-height:1;margin-bottom:8px;">0</div>
+        <div id="ticker-ocean" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#3b82f6;line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;">MM SINCE YOU OPENED THIS PAGE</div>
         <div style="margin-top:20px;height:3px;background:rgba(29,78,216,.1);border-radius:2px;overflow:hidden;">
           <div id="bar-ocean" style="height:100%;width:0;background:linear-gradient(90deg,#3b82f6,#1d4ed8);transition:width 1s;"></div>
@@ -3051,25 +3051,39 @@
 
       if (!iceEl) return; // guard if section removed
 
-      function update() {
+      // Cache last displayed values — only write DOM when value actually changes
+      let lastIce = '', lastForest = '', lastOcean = '', lastPct = -1;
+      let lastTick = 0;
+      const TICK_MS = 100; // update at 10fps — smooth enough, 6× less paint work
+
+      function update(ts) {
+        requestAnimationFrame(update);
+        // Throttle: skip frames until TICK_MS has elapsed
+        if (ts - lastTick < TICK_MS) return;
+        lastTick = ts;
+
         const elapsed = (Date.now() - pageStart) / 1000;
         const ice    = Math.floor(ICE_PER_SEC * elapsed);
         const forest = (FOREST_PER_SEC * elapsed).toFixed(2);
         const ocean  = (OCEAN_PER_SEC * elapsed).toFixed(6);
 
-        iceEl.textContent    = ice.toLocaleString();
-        forestEl.textContent = forest;
-        oceanEl.textContent  = ocean;
+        // Only update DOM if value changed (avoids needless reflow)
+        const iceStr = ice.toLocaleString();
+        if (iceStr !== lastIce)       { iceEl.textContent    = iceStr;   lastIce    = iceStr; }
+        if (forest  !== lastForest)   { forestEl.textContent = forest;   lastForest = forest; }
+        if (ocean   !== lastOcean)    { oceanEl.textContent  = ocean;    lastOcean  = ocean; }
 
-        // Progress bars fill over 60 seconds
+        // Progress bars fill over 60 seconds — only update when pct changes by ≥0.5
         const pct = Math.min(100, (elapsed / 60) * 100);
-        if (barIce)    barIce.style.width    = pct + '%';
-        if (barForest) barForest.style.width = pct + '%';
-        if (barOcean)  barOcean.style.width  = pct + '%';
-
-        requestAnimationFrame(update);
+        if (Math.abs(pct - lastPct) >= 0.5) {
+          const pctStr = pct + '%';
+          if (barIce)    barIce.style.width    = pctStr;
+          if (barForest) barForest.style.width = pctStr;
+          if (barOcean)  barOcean.style.width  = pctStr;
+          lastPct = pct;
+        }
       }
-      update();
+      requestAnimationFrame(update);
     })();
 
     // Stat counters
@@ -3335,10 +3349,17 @@
     }
   }
 
-  // Live mini-tickers for region detail panels
+  // Live mini-tickers for region detail panels — throttled to 5fps (only visible when panel open)
   (function() {
     const pageStart = Date.now();
-    function updateRegionTickers() {
+    let lastRegionTick = 0;
+    const REGION_TICK_MS = 200; // 5fps — panels are rarely open, no need for more
+    function updateRegionTickers(ts) {
+      requestAnimationFrame(updateRegionTickers);
+      if (ts - lastRegionTick < REGION_TICK_MS) return;
+      lastRegionTick = ts;
+      // Skip entirely if no detail panel is open
+      if (!document.querySelector('.ticker-detail.open')) return;
       const elapsed = (Date.now() - pageStart) / 1000;
 
       // Ice regions (rates in GT/sec, display as tonnes)
@@ -3362,9 +3383,8 @@
         el.querySelector('span').textContent = val;
       });
 
-      requestAnimationFrame(updateRegionTickers);
     }
-    updateRegionTickers();
+    requestAnimationFrame(updateRegionTickers);
   })();
 
   function toggleSubPanel(id) {
