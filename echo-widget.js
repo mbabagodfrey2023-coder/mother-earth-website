@@ -141,6 +141,84 @@
     text-align: center; font-size: 10px; color: rgba(255,255,255,.2);
     padding: 0 16px 10px; font-family: 'JetBrains Mono', monospace;
   }
+  /* ── VOICE CONTROLS ── */
+  .me-echo-voice-btn {
+    background: none; border: 1px solid rgba(255,255,255,.12); border-radius: 6px;
+    color: rgba(255,255,255,.55); cursor: pointer;
+    width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; transition: color .2s, border-color .2s, background .2s;
+    margin-right: 6px;
+  }
+  .me-echo-voice-btn:hover { color: #4ade80; border-color: rgba(74,222,128,.4); }
+  .me-echo-voice-btn.active {
+    color: #4ade80; border-color: rgba(74,222,128,.45); background: rgba(74,222,128,.06);
+    box-shadow: 0 0 8px rgba(74,222,128,.18);
+  }
+  .me-echo-voice-btn.speaking { animation: meEchoSpeakPulse 1.2s ease-in-out infinite; }
+  @keyframes meEchoSpeakPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,.45); }
+    50%     { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+  }
+  .me-echo-voice-panel {
+    display: none; position: absolute; top: 60px; right: 14px; z-index: 5;
+    background: #050d0a; border: 1px solid rgba(74,222,128,0.25); border-radius: 10px;
+    padding: 12px 14px; min-width: 220px;
+    box-shadow: 0 12px 32px rgba(0,0,0,.5);
+  }
+  .me-echo-voice-panel.open { display: block; }
+  .me-echo-voice-panel h5 {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .2em;
+    color: rgba(74,222,128,.7); margin: 0 0 8px; font-weight: 700;
+  }
+  .me-echo-voice-panel .me-vp-row {
+    display: flex; gap: 6px; margin-bottom: 10px;
+  }
+  .me-echo-voice-panel .me-vp-gender {
+    flex: 1; padding: 7px; background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08); border-radius: 6px;
+    color: rgba(255,255,255,.55); cursor: pointer; font-size: 11px; font-weight: 600;
+    transition: all .2s;
+  }
+  .me-echo-voice-panel .me-vp-gender.active {
+    background: rgba(74,222,128,.1); color: #4ade80; border-color: rgba(74,222,128,.4);
+  }
+  .me-echo-voice-panel select {
+    width: 100%; padding: 8px 10px; background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08); border-radius: 6px;
+    color: #F2F0EB; font-size: 11px; font-family: 'Inter', sans-serif;
+    cursor: pointer; outline: none;
+  }
+  .me-echo-voice-panel select option { background: #050d0a; color: #F2F0EB; }
+  .me-echo-voice-panel .me-vp-note {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: rgba(255,255,255,.3); margin-top: 8px; letter-spacing: .05em;
+  }
+  .me-echo-voice-test {
+    background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.3);
+    color: #4ade80; padding: 6px 12px; border-radius: 5px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em;
+    width: 100%; margin-top: 6px; font-weight: 700;
+  }
+  .me-echo-voice-test:hover { background: rgba(74,222,128,.15); }
+
+  #me-echo-mic {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    color: rgba(255,255,255,.55); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0; transition: all .2s; margin-right: 6px;
+  }
+  #me-echo-mic:hover { color: #4ade80; border-color: rgba(74,222,128,.3); }
+  #me-echo-mic.recording {
+    background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.45);
+    color: #ef4444; animation: meEchoMicPulse 1s ease-in-out infinite;
+  }
+  @keyframes meEchoMicPulse {
+    0%,100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(239,68,68,.4); }
+    50%     { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+  }
+  #me-echo-mic[disabled] { opacity: .3; cursor: not-allowed; }
+
   @media (max-width: 500px) {
     #me-echo-btn { bottom: 20px; right: 20px; width: 50px; height: 50px; }
     #me-echo-panel { bottom: 84px; right: 16px; left: 16px; width: auto; }
@@ -157,13 +235,24 @@
       🌍 <span class="me-echo-badge">AI</span>
     </button>
     <div id="me-echo-panel">
-      <div class="me-echo-header">
+      <div class="me-echo-header" style="position:relative">
         <div class="me-echo-avatar">🌍</div>
         <div class="me-echo-header-info">
           <div class="me-echo-name">ECHO — Mother Earth AI</div>
           <div class="me-echo-status">Online · Environmental Intelligence</div>
         </div>
+        <button class="me-echo-voice-btn" id="me-echo-voice-toggle" type="button" title="Toggle voice mode — ECHO speaks responses">🔊</button>
         <button class="me-echo-close" type="button">✕</button>
+        <div class="me-echo-voice-panel" id="me-echo-voice-panel">
+          <h5>// VOICE SETTINGS</h5>
+          <div class="me-vp-row">
+            <button class="me-vp-gender" data-gender="female" type="button">Female</button>
+            <button class="me-vp-gender" data-gender="male" type="button">Male</button>
+          </div>
+          <select id="me-echo-voice-select"></select>
+          <button class="me-echo-voice-test" id="me-echo-voice-test" type="button">▶ TEST VOICE</button>
+          <div class="me-vp-note">Voices use your device's built-in TTS · free · private</div>
+        </div>
       </div>
       <div id="me-echo-messages"></div>
       <div class="me-echo-suggestions" id="me-echo-suggestions">
@@ -173,10 +262,11 @@
         <button class="me-echo-suggestion" type="button">How does IRIS data work?</button>
       </div>
       <div class="me-echo-input-row">
+        <button id="me-echo-mic" type="button" title="Tap to speak (instead of typing)">🎙️</button>
         <textarea id="me-echo-input" placeholder="Ask ECHO anything..." rows="1"></textarea>
         <button id="me-echo-send" type="button">➤</button>
       </div>
-      <div class="me-echo-footer-note">Powered by Claude · Mother Earth</div>
+      <div class="me-echo-footer-note">Powered by Claude · Voice via your device · Mother Earth</div>
     </div>
   `;
   document.body.appendChild(wrapper);
@@ -201,6 +291,9 @@
       '/press':           'the Press kit / Recent shipping page',
       '/finances':        'the Finances open-books transparency page',
       '/council-archive': 'the public Council Archive (past AI deliberations with permalinks)',
+      '/data-pipeline':   'the Data Pipeline explainer (NASA → GAIA → screen, 15-min refresh)',
+      '/partners':        'the Partners page (institutional partnerships, MOUs, chapter pipeline)',
+      '/contact':         'the Contact page (general, press, partnership, chapter, research routing)',
       '/privacy':         'the Privacy Policy page',
       '/terms':           'the Terms of Service page',
       '/api-docs':        'the IRIS API documentation page',
@@ -230,6 +323,8 @@
     d.textContent = text;
     m.appendChild(d);
     m.scrollTop = m.scrollHeight;
+    // Speak bot replies if voice mode is on
+    if (role === 'bot' && voicePrefs.enabled) speak(text);
   }
 
   function showTyping() {
@@ -310,4 +405,252 @@
   document.querySelectorAll('.me-echo-suggestion').forEach(btn => {
     btn.addEventListener('click', () => suggest(btn.textContent.trim()));
   });
+
+  /* ── VOICE ENGINE ──────────────────────────────────────────────────────
+     Browser Web Speech API — free, zero-latency, private.
+     speechSynthesis = TTS (ECHO speaks)
+     SpeechRecognition = STT (user speaks instead of typing)
+  ─────────────────────────────────────────────────────────────────────── */
+
+  const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  // Persisted prefs
+  const voicePrefs = {
+    enabled: localStorage.getItem('me-echo-voice-on')   === '1',
+    gender:  localStorage.getItem('me-echo-voice-gender') || 'female',
+    voiceURI:localStorage.getItem('me-echo-voice-uri')   || null,
+  };
+  let availableVoices = [];
+
+  // Heuristic gender classifier on voice name + lang
+  // Apple's M voices: Daniel, Alex, Fred, Aaron, Tom, Arthur, Bruce, etc.
+  // Apple's F voices: Samantha, Karen, Moira, Tessa, Victoria, Allison, Ava, etc.
+  // Google: "en-GB-Standard-A" patterns — we fall back to heuristic word match
+  const MALE_HINTS   = /\b(male|man|guy|adam|alex|alexander|arnold|antoni|aaron|arthur|brian|bruce|callum|charles|daniel|david|diego|domi|eddie|eric|fred|george|henry|jack|james|jason|jeff|john|josh|kevin|liam|luca|mark|matt|michael|nathan|noah|oliver|onyx|paul|peter|reuben|ryan|sam|sebastian|simon|stephen|steve|thomas|tom|toby|will|william)\b/i;
+  const FEMALE_HINTS = /\b(female|woman|girl|alice|allison|amy|anna|ava|bella|carla|cathy|charlotte|chloe|claire|domi|elena|elsa|emma|eva|fiona|grace|hannah|helena|isabella|jenny|joanna|julia|karen|kate|kathy|lara|laura|linda|lucy|lulu|maria|mary|maya|moira|monica|natasha|nicki|nicole|nova|olivia|paige|rachel|raveena|rebecca|samantha|sara|sarah|shimmer|sophia|stacy|stephanie|susan|tessa|valeria|victoria|zoe)\b/i;
+
+  function guessGender(voice) {
+    const name = (voice.name || '').toLowerCase();
+    if (MALE_HINTS.test(name))   return 'male';
+    if (FEMALE_HINTS.test(name)) return 'female';
+    // Voice name like "en-US-Standard-D" — D/B/I/J = male, A/C/E/F/G/H = female (Google convention)
+    const m = name.match(/-([a-z])$/i);
+    if (m) {
+      const ch = m[1].toUpperCase();
+      if ('BDIJ'.includes(ch)) return 'male';
+      if ('ACEFGH'.includes(ch)) return 'female';
+    }
+    return 'unknown';
+  }
+
+  function loadVoices() {
+    if (!synth) return [];
+    const all = synth.getVoices();
+    if (all.length === 0) return [];
+    // Filter to English voices only (any locale) for now
+    availableVoices = all.filter(v => /^en/i.test(v.lang));
+    return availableVoices;
+  }
+
+  function pickVoice() {
+    if (availableVoices.length === 0) loadVoices();
+    if (availableVoices.length === 0) return null;
+    // Try saved URI first
+    if (voicePrefs.voiceURI) {
+      const saved = availableVoices.find(v => v.voiceURI === voicePrefs.voiceURI);
+      if (saved) return saved;
+    }
+    // Then any voice matching preferred gender
+    const matches = availableVoices.filter(v => guessGender(v) === voicePrefs.gender);
+    if (matches.length > 0) {
+      // Prefer local (high-quality) voices over remote
+      const local = matches.find(v => v.localService);
+      return local || matches[0];
+    }
+    return availableVoices[0];
+  }
+
+  function speak(text) {
+    if (!synth || !text) return;
+    try {
+      synth.cancel();  // stop anything already speaking
+      const u = new SpeechSynthesisUtterance(text);
+      const v = pickVoice();
+      if (v) { u.voice = v; u.lang = v.lang; }
+      u.rate  = 1.0;
+      u.pitch = 1.0;
+      u.volume = 1.0;
+      const toggleBtn = $('me-echo-voice-toggle');
+      u.onstart = () => toggleBtn && toggleBtn.classList.add('speaking');
+      u.onend   = () => toggleBtn && toggleBtn.classList.remove('speaking');
+      u.onerror = () => toggleBtn && toggleBtn.classList.remove('speaking');
+      synth.speak(u);
+    } catch (e) { /* ignore — best effort */ }
+  }
+
+  function stopSpeaking() { if (synth) synth.cancel(); }
+
+  function populateVoiceSelect() {
+    const sel = $('me-echo-voice-select');
+    if (!sel) return;
+    if (availableVoices.length === 0) loadVoices();
+    const filtered = availableVoices.filter(v => guessGender(v) === voicePrefs.gender);
+    const list = filtered.length > 0 ? filtered : availableVoices;
+    sel.innerHTML = list.map(v =>
+      `<option value="${v.voiceURI}" ${v.voiceURI === voicePrefs.voiceURI ? 'selected' : ''}>${v.name} (${v.lang})${v.localService ? ' ★' : ''}</option>`
+    ).join('') || '<option>No voices available</option>';
+  }
+
+  function setVoiceMode(on) {
+    voicePrefs.enabled = on;
+    localStorage.setItem('me-echo-voice-on', on ? '1' : '0');
+    const btn = $('me-echo-voice-toggle');
+    if (btn) {
+      btn.classList.toggle('active', on);
+      btn.textContent = on ? '🔊' : '🔇';
+      btn.title = on
+        ? 'Voice mode ON — ECHO speaks replies. Click to open settings.'
+        : 'Voice mode OFF — click to enable spoken replies';
+    }
+    if (!on) stopSpeaking();
+  }
+
+  function setGender(g) {
+    voicePrefs.gender = g;
+    voicePrefs.voiceURI = null;  // reset specific voice so pickVoice() re-selects
+    localStorage.setItem('me-echo-voice-gender', g);
+    localStorage.removeItem('me-echo-voice-uri');
+    document.querySelectorAll('.me-vp-gender').forEach(b =>
+      b.classList.toggle('active', b.dataset.gender === g)
+    );
+    populateVoiceSelect();
+  }
+
+  /* ── MIC INPUT ── */
+  let recognition = null;
+  let recognising = false;
+  function initMic() {
+    const mic = $('me-echo-mic');
+    if (!mic) return;
+    if (!SpeechRec) {
+      mic.disabled = true;
+      mic.title = 'Voice input not supported in this browser';
+      return;
+    }
+    recognition = new SpeechRec();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      const input = $('me-echo-input');
+      input.value = transcript;
+      // Auto-send after a short pause so user can see what was captured
+      setTimeout(() => send(), 300);
+    };
+    recognition.onend = () => {
+      recognising = false;
+      mic.classList.remove('recording');
+      mic.textContent = '🎙️';
+    };
+    recognition.onerror = (e) => {
+      recognising = false;
+      mic.classList.remove('recording');
+      mic.textContent = '🎙️';
+      if (e.error === 'not-allowed') {
+        addMsg('bot', 'Microphone access denied. Enable it in browser settings to use voice input.');
+      }
+    };
+    mic.addEventListener('click', () => {
+      if (recognising) {
+        recognition.stop();
+      } else {
+        try {
+          stopSpeaking(); // don't talk over yourself
+          recognition.start();
+          recognising = true;
+          mic.classList.add('recording');
+          mic.textContent = '⏹';
+        } catch (e) { /* already running */ }
+      }
+    });
+  }
+
+  /* ── VOICE UI WIRING ── */
+  function initVoiceUI() {
+    const toggleBtn = $('me-echo-voice-toggle');
+    const panel     = $('me-echo-voice-panel');
+    const select    = $('me-echo-voice-select');
+    const testBtn   = $('me-echo-voice-test');
+
+    if (!synth) {
+      // No TTS support — hide controls
+      if (toggleBtn) toggleBtn.style.display = 'none';
+      return;
+    }
+
+    // Load voices (may need to wait for voiceschanged on Chrome)
+    loadVoices();
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = () => { loadVoices(); populateVoiceSelect(); };
+    }
+
+    // Click voice toggle: short-press = on/off; if on, also opens panel
+    let pressTimer = null;
+    let panelOpen = false;
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (voicePrefs.enabled) {
+        // Already on — toggle the settings panel
+        panelOpen = !panelOpen;
+        panel.classList.toggle('open', panelOpen);
+        if (panelOpen) populateVoiceSelect();
+      } else {
+        // Turn on
+        setVoiceMode(true);
+        // Brief test phrase so user hears the voice
+        speak("Voice mode on. I'm ECHO.");
+      }
+    });
+    // Long-press or right-click to turn OFF
+    toggleBtn.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      setVoiceMode(false);
+      panelOpen = false; panel.classList.remove('open');
+    });
+    // Click outside closes panel
+    document.addEventListener('click', (e) => {
+      if (panelOpen && !panel.contains(e.target) && e.target !== toggleBtn) {
+        panelOpen = false; panel.classList.remove('open');
+      }
+    });
+
+    // Gender buttons
+    document.querySelectorAll('.me-vp-gender').forEach(b => {
+      b.addEventListener('click', () => setGender(b.dataset.gender));
+    });
+    document.querySelector(`.me-vp-gender[data-gender="${voicePrefs.gender}"]`)?.classList.add('active');
+
+    // Voice select
+    select.addEventListener('change', () => {
+      voicePrefs.voiceURI = select.value;
+      localStorage.setItem('me-echo-voice-uri', select.value);
+    });
+
+    // Test button
+    testBtn.addEventListener('click', () => {
+      speak("Hello — I'm ECHO, Mother Earth's communications agent. This is how I sound when speaking replies.");
+    });
+
+    // Apply persisted state
+    setVoiceMode(voicePrefs.enabled);
+    populateVoiceSelect();
+
+    // Stop speaking when widget closes
+    document.querySelector('.me-echo-close').addEventListener('click', stopSpeaking);
+  }
+
+  initVoiceUI();
+  initMic();
 })();
