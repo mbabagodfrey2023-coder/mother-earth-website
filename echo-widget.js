@@ -530,6 +530,9 @@
   /* ── MIC INPUT ── */
   let recognition = null;
   let recognising = false;
+  let lastTranscript = '';
+  let gotAnyResult = false;
+
   function initMic() {
     const mic = $('me-echo-mic');
     if (!mic) return;
@@ -539,40 +542,88 @@
       return;
     }
     recognition = new SpeechRec();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-    recognition.onresult = (e) => {
-      const transcript = e.results[0][0].transcript;
+    recognition.continuous     = false;
+    recognition.interimResults = true;   // show live transcript as user speaks
+    recognition.lang           = 'en-US';
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      gotAnyResult = false;
+      lastTranscript = '';
       const input = $('me-echo-input');
-      input.value = transcript;
-      // Auto-send after a short pause so user can see what was captured
-      setTimeout(() => send(), 300);
+      if (input) input.placeholder = '🎙️ Listening… speak now';
     };
+
+    recognition.onresult = (e) => {
+      gotAnyResult = true;
+      // Build full transcript from all results
+      let interim = '', final = '';
+      for (let i = 0; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) final   += r[0].transcript;
+        else           interim += r[0].transcript;
+      }
+      lastTranscript = (final || interim).trim();
+      const input = $('me-echo-input');
+      if (input) input.value = lastTranscript;
+    };
+
     recognition.onend = () => {
       recognising = false;
-      mic.classList.remove('recording');
-      mic.textContent = '🎙️';
-    };
-    recognition.onerror = (e) => {
-      recognising = false;
-      mic.classList.remove('recording');
-      mic.textContent = '🎙️';
-      if (e.error === 'not-allowed') {
-        addMsg('bot', 'Microphone access denied. Enable it in browser settings to use voice input.');
+      const mic   = $('me-echo-mic');
+      const input = $('me-echo-input');
+      if (mic) {
+        mic.classList.remove('recording');
+        mic.textContent = '🎙️';
+      }
+      if (input) input.placeholder = 'Ask ECHO anything...';
+
+      // If we got a transcript, auto-send it. Otherwise, surface a helpful message.
+      if (lastTranscript && lastTranscript.length > 0) {
+        setTimeout(() => send(), 300);
+      } else if (!gotAnyResult) {
+        addMsg('bot', "🎙️ I didn't catch any speech. Try again — speak clearly within ~3 seconds of tapping the mic. Or type your question instead.");
       }
     };
+
+    recognition.onerror = (e) => {
+      recognising = false;
+      const mic = $('me-echo-mic');
+      const input = $('me-echo-input');
+      if (mic) {
+        mic.classList.remove('recording');
+        mic.textContent = '🎙️';
+      }
+      if (input) input.placeholder = 'Ask ECHO anything...';
+
+      const msg = {
+        'not-allowed':       "🔒 Microphone permission denied. To fix: Safari → Settings → Websites → Microphone → set motherearth.systems to 'Allow'. Also check System Settings → Privacy & Security → Microphone → Safari is enabled.",
+        'service-not-allowed':"🔒 Microphone service not available. Check System Settings → Privacy & Security → Microphone → Safari is enabled.",
+        'no-speech':         "🎙️ I didn't hear anything. Tap the mic again and speak clearly within ~3 seconds.",
+        'audio-capture':     "🎙️ No microphone detected on this device. Check your input device in System Settings → Sound.",
+        'network':           "🌐 Network error during speech recognition. Try again in a moment.",
+        'aborted':           null, // user cancelled — no message needed
+        'language-not-supported': "🌐 Speech recognition language not supported.",
+      }[e.error] || `🎙️ Speech recognition error: ${e.error}. Try typing instead.`;
+
+      if (msg) addMsg('bot', msg);
+    };
+
     mic.addEventListener('click', () => {
       if (recognising) {
-        recognition.stop();
-      } else {
-        try {
-          stopSpeaking(); // don't talk over yourself
-          recognition.start();
-          recognising = true;
-          mic.classList.add('recording');
-          mic.textContent = '⏹';
-        } catch (e) { /* already running */ }
+        try { recognition.stop(); } catch (_) {}
+        return;
+      }
+      try {
+        stopSpeaking(); // don't capture ECHO's own voice
+        recognition.start();
+        recognising = true;
+        mic.classList.add('recording');
+        mic.textContent = '⏹';
+      } catch (e) {
+        // Most common: 'recognition has already started' — recover by stopping then retrying
+        try { recognition.abort(); } catch (_) {}
+        addMsg('bot', `🎙️ Couldn't start mic: ${e.message}. Try again in a moment.`);
       }
     });
   }
