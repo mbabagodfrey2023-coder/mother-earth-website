@@ -107,9 +107,18 @@ export default {
       return json({ error: 'Method not allowed' }, 405);
     }
 
-    // Everything else → static assets, with 404 fallback to /404.html
-    const res = await env.ASSETS.fetch(request);
+    // Everything else → static assets
+    // Try exact path first, then try with .html extension for clean URLs
+    let res = await env.ASSETS.fetch(request);
     if (res.status === 404) {
+      const pth = url.pathname;
+      // If no file extension, try appending .html (clean URL support)
+      if (!pth.includes('.') && !pth.endsWith('/')) {
+        const htmlReq = new Request(new URL(pth + '.html', request.url), request);
+        const htmlRes = await env.ASSETS.fetch(htmlReq);
+        if (htmlRes.ok) return htmlRes;
+      }
+      // Fallback to custom 404 page
       const notFound = await env.ASSETS.fetch(new Request(new URL('/404.html', request.url)));
       return new Response(notFound.body, {
         status: 404,
