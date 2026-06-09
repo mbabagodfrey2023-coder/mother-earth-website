@@ -79,6 +79,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://motherearth.systems/earth-regions</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://motherearth.systems/partners</loc>
     <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>

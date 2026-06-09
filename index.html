@@ -1245,167 +1245,72 @@
 <!-- ══ CRISIS — LIVE DESTRUCTION TICKER ══════════════════════════════════════ -->
 <section id="crisis" style="padding:100px 0;background:linear-gradient(to bottom,transparent,rgba(239,68,68,.03),transparent);">
   <div class="section-wrap" style="text-align:center;">
-    <div class="section-tag" style="color:#ef4444;">// WHILE YOU READ THIS PAGE</div>
+    <div class="section-tag" style="color:#ef4444;">// HAPPENING RIGHT NOW · EARTH-WIDE</div>
     <h2 class="section-title" style="margin-bottom:12px;">The Planet Is Losing</h2>
-    <p class="section-sub" style="margin-bottom:60px;">These numbers are counting in real time, based on verified annual rates. This is why we built 33 agents.</p>
+    <p class="section-sub" style="margin-bottom:16px;">Global totals counting in real time from verified annual rates. Click any counter to see the regional breakdown.</p>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:52px;">DATA: NASA · NOAA · IPCC AR6 · GLOBAL FOREST WATCH</p>
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
       <!-- ICE -->
-      <div class="ticker-card" onclick="toggleTickerDetail('detail-ice')" style="background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
-        <div style="font-size:48px;margin-bottom:16px;">🧊</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#38bdf8;margin-bottom:20px;">ARCTIC ICE LOST</div>
-        <div id="ticker-ice" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#38bdf8;line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;">TONNES SINCE YOU OPENED THIS PAGE</div>
-        <div style="margin-top:20px;height:3px;background:rgba(56,189,248,.1);border-radius:2px;overflow:hidden;">
+      <a class="ticker-card" href="/earth-regions.html#ice" style="background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.15);padding:40px 24px 32px;border-radius:2px;text-align:center;display:block;text-decoration:none;">
+        <div style="font-size:44px;margin-bottom:14px;">🧊</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#38bdf8;margin-bottom:18px;">GLOBAL ICE LOST</div>
+        <div id="ticker-ice" style="font-size:clamp(28px,4.5vw,52px);font-weight:800;color:#38bdf8;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:16px;">TONNES SINCE YOU OPENED THIS PAGE</div>
+        <!-- TODAY counter -->
+        <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.12);border-radius:6px;padding:10px 14px;margin-bottom:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(56,189,248,.55);margin-bottom:5px;">TODAY SO FAR (UTC)</div>
+          <div id="today-ice" style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#38bdf8;font-variant-numeric:tabular-nums;">0</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.22);margin-top:3px;">tonnes lost since midnight</div>
+        </div>
+        <div style="height:2px;background:rgba(56,189,248,.1);border-radius:2px;overflow:hidden;margin-bottom:12px;">
           <div id="bar-ice" style="height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#0ea5e9);transition:width 1s;"></div>
         </div>
-        <div style="font-size:12px;color:rgba(255,255,255,.28);margin-top:12px;">280 billion tonnes / year — Greenland alone</div>
-        <div class="ticker-card-hint">CLICK TO EXPLORE REGIONS ↓</div>
-      </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);">700 Gt / year · Greenland + Antarctica + Glaciers</div>
+        <div class="ticker-card-hint">EXPLORE ALL REGIONS →</div>
+      </a>
 
       <!-- FOREST -->
-      <div class="ticker-card" onclick="toggleTickerDetail('detail-forest')" style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
-        <div style="font-size:48px;margin-bottom:16px;">🔥</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#ef4444;margin-bottom:20px;">FOREST DESTROYED</div>
-        <div id="ticker-forest" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#ef4444;line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;">ACRES SINCE YOU OPENED THIS PAGE</div>
-        <div style="margin-top:20px;height:3px;background:rgba(239,68,68,.1);border-radius:2px;overflow:hidden;">
+      <a class="ticker-card" href="/earth-regions.html#forest" style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);padding:40px 24px 32px;border-radius:2px;text-align:center;display:block;text-decoration:none;">
+        <div style="font-size:44px;margin-bottom:14px;">🌳</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#ef4444;margin-bottom:18px;">GLOBAL FOREST LOST</div>
+        <div id="ticker-forest" style="font-size:clamp(28px,4.5vw,52px);font-weight:800;color:#ef4444;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:16px;">ACRES SINCE YOU OPENED THIS PAGE</div>
+        <!-- TODAY counter -->
+        <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.12);border-radius:6px;padding:10px 14px;margin-bottom:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(239,68,68,.55);margin-bottom:5px;">TODAY SO FAR (UTC)</div>
+          <div id="today-forest" style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#ef4444;font-variant-numeric:tabular-nums;">0</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.22);margin-top:3px;">acres destroyed since midnight</div>
+        </div>
+        <div style="height:2px;background:rgba(239,68,68,.1);border-radius:2px;overflow:hidden;margin-bottom:12px;">
           <div id="bar-forest" style="height:100%;width:0;background:linear-gradient(90deg,#f59e0b,#ef4444);transition:width 1s;"></div>
         </div>
-        <div style="font-size:12px;color:rgba(255,255,255,.28);margin-top:12px;">10,000 acres / day — Amazon alone</div>
-        <div class="ticker-card-hint">CLICK TO EXPLORE REGIONS ↓</div>
-      </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);">37M acres / year · 15M ha global · GFW 2023</div>
+        <div class="ticker-card-hint">EXPLORE ALL REGIONS →</div>
+      </a>
 
       <!-- OCEAN -->
-      <div class="ticker-card" onclick="toggleTickerDetail('detail-ocean')" style="background:rgba(29,78,216,.04);border:1px solid rgba(29,78,216,.15);padding:48px 28px 36px;border-radius:2px;text-align:center;">
-        <div style="font-size:48px;margin-bottom:16px;">🌊</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#3b82f6;margin-bottom:20px;">SEA LEVEL RISEN</div>
-        <div id="ticker-ocean" style="font-size:clamp(32px,5vw,56px);font-weight:800;color:#3b82f6;line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;">MM SINCE YOU OPENED THIS PAGE</div>
-        <div style="margin-top:20px;height:3px;background:rgba(29,78,216,.1);border-radius:2px;overflow:hidden;">
+      <a class="ticker-card" href="/earth-regions.html#ocean" style="background:rgba(29,78,216,.04);border:1px solid rgba(29,78,216,.15);padding:40px 24px 32px;border-radius:2px;text-align:center;display:block;text-decoration:none;">
+        <div style="font-size:44px;margin-bottom:14px;">🌊</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:#3b82f6;margin-bottom:18px;">GLOBAL SEA LEVEL RISE</div>
+        <div id="ticker-ocean" style="font-size:clamp(28px,4.5vw,52px);font-weight:800;color:#3b82f6;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums;will-change:contents;">0</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:16px;">MM SINCE YOU OPENED THIS PAGE</div>
+        <!-- TODAY counter -->
+        <div style="background:rgba(29,78,216,.07);border:1px solid rgba(29,78,216,.12);border-radius:6px;padding:10px 14px;margin-bottom:16px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(59,130,246,.55);margin-bottom:5px;">TODAY SO FAR (UTC)</div>
+          <div id="today-ocean" style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#3b82f6;font-variant-numeric:tabular-nums;">0.000000</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.22);margin-top:3px;">mm risen since midnight</div>
+        </div>
+        <div style="height:2px;background:rgba(29,78,216,.1);border-radius:2px;overflow:hidden;margin-bottom:12px;">
           <div id="bar-ocean" style="height:100%;width:0;background:linear-gradient(90deg,#3b82f6,#1d4ed8);transition:width 1s;"></div>
         </div>
-        <div style="font-size:12px;color:rgba(255,255,255,.28);margin-top:12px;">3.4mm / year — 800M people at risk by 2050</div>
-        <div class="ticker-card-hint">CLICK TO EXPLORE REGIONS ↓</div>
-      </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);">3.4 mm / year · 800M people at risk by 2050</div>
+        <div class="ticker-card-hint">EXPLORE ALL REGIONS →</div>
+      </a>
     </div>
 
-    <!-- ── ICE DETAIL PANEL ── -->
-    <div id="detail-ice" class="ticker-detail" style="background:rgba(56,189,248,.02);">
-      <div class="ticker-detail-head" style="color:#38bdf8;">
-        <span>REGIONAL ICE LOSS — LIVE BREAKDOWN</span>
-        <button class="ticker-detail-close" onclick="toggleTickerDetail('detail-ice')">CLOSE ✕</button>
-      </div>
-      <div class="region-grid">
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🇬🇱</span><span class="region-name" style="color:#38bdf8;">GREENLAND ICE SHEET</span></div>
-          <div class="region-rate" style="color:#38bdf8;">280 GT/year</div>
-          <div class="region-sub">The single largest contributor to sea-level rise. Losing mass at 6× the rate of the 1990s.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="100%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
-          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.536">↑ <span>0</span> tonnes</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🇦🇶</span><span class="region-name" style="color:#38bdf8;">ANTARCTIC ICE SHEET</span></div>
-          <div class="region-rate" style="color:#38bdf8;">150 GT/year</div>
-          <div class="region-sub">West Antarctic glaciers accelerating. Thwaites "Doomsday Glacier" retreat threatens 3m rise.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="54%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
-          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.287">↑ <span>0</span> tonnes</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🏔️</span><span class="region-name" style="color:#38bdf8;">MOUNTAIN GLACIERS</span></div>
-          <div class="region-rate" style="color:#38bdf8;">267 GT/year</div>
-          <div class="region-sub">Himalaya, Alps, Andes, Rockies. 2 billion people depend on glacial meltwater.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="95%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
-          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.511">↑ <span>0</span> tonnes</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">❄️</span><span class="region-name" style="color:#38bdf8;">ARCTIC SEA ICE</span></div>
-          <div class="region-rate" style="color:#38bdf8;">−13% per decade</div>
-          <div class="region-sub">Summer Arctic could be ice-free by 2050. Albedo feedback loop accelerates warming.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="72%" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
-          <div class="region-live" style="color:#38bdf8;" data-rate-ice="0.380">↑ <span>0</span> tonnes</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── FOREST DETAIL PANEL ── -->
-    <div id="detail-forest" class="ticker-detail" style="background:rgba(239,68,68,.02);">
-      <div class="ticker-detail-head" style="color:#ef4444;">
-        <span>REGIONAL FOREST LOSS — LIVE BREAKDOWN</span>
-        <button class="ticker-detail-close" onclick="toggleTickerDetail('detail-forest')">CLOSE ✕</button>
-      </div>
-      <div class="region-grid">
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🇧🇷</span><span class="region-name" style="color:#ef4444;">AMAZON RAINFOREST</span></div>
-          <div class="region-rate" style="color:#ef4444;">2,500 acres/day</div>
-          <div class="region-sub">Earth's largest tropical forest. Cattle ranching and soy farming drive 80% of loss.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="78%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
-          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.02894">↑ <span>0</span> acres</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🌏</span><span class="region-name" style="color:#ef4444;">SOUTHEAST ASIA</span></div>
-          <div class="region-rate" style="color:#ef4444;">3,200 acres/day</div>
-          <div class="region-sub">Borneo, Sumatra, Myanmar. Palm oil and rubber plantations are the main drivers.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="100%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
-          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.03704">↑ <span>0</span> acres</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🇨🇩</span><span class="region-name" style="color:#ef4444;">CONGO BASIN</span></div>
-          <div class="region-rate" style="color:#ef4444;">1,500 acres/day</div>
-          <div class="region-sub">World's second-largest tropical forest. Charcoal, mining, and subsistence farming.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="47%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
-          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.01736">↑ <span>0</span> acres</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🌲</span><span class="region-name" style="color:#ef4444;">BOREAL FORESTS</span></div>
-          <div class="region-rate" style="color:#ef4444;">2,800 acres/day</div>
-          <div class="region-sub">Canada, Russia, Scandinavia. Wildfires now burn 2× the area they did in the 1970s.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="88%" style="background:linear-gradient(90deg,#f59e0b,#ef4444);"></div></div>
-          <div class="region-live" style="color:#ef4444;" data-rate-forest="0.03241">↑ <span>0</span> acres</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── OCEAN DETAIL PANEL ── -->
-    <div id="detail-ocean" class="ticker-detail" style="background:rgba(59,130,246,.02);">
-      <div class="ticker-detail-head" style="color:#3b82f6;">
-        <span>REGIONAL SEA LEVEL RISE — LIVE BREAKDOWN</span>
-        <button class="ticker-detail-close" onclick="toggleTickerDetail('detail-ocean')">CLOSE ✕</button>
-      </div>
-      <div class="region-grid">
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🏝️</span><span class="region-name" style="color:#3b82f6;">PACIFIC ISLANDS</span></div>
-          <div class="region-rate" style="color:#3b82f6;">5.1 mm/year</div>
-          <div class="region-sub">Tuvalu, Marshall Islands, Kiribati face existential threat. Some islands already submerging.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="100%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
-          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001617">↑ <span>0</span> mm</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🌊</span><span class="region-name" style="color:#3b82f6;">ATLANTIC COAST</span></div>
-          <div class="region-rate" style="color:#3b82f6;">4.1 mm/year</div>
-          <div class="region-sub">US East Coast, West Africa, Northern Europe. Storm surge risk rising exponentially.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="80%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
-          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001300">↑ <span>0</span> mm</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">🌅</span><span class="region-name" style="color:#3b82f6;">INDIAN OCEAN</span></div>
-          <div class="region-rate" style="color:#3b82f6;">3.2 mm/year</div>
-          <div class="region-sub">Maldives, Bangladesh, East Africa. 400M+ people live within 10m of current sea level.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="63%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
-          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001015">↑ <span>0</span> mm</div>
-        </div>
-        <div class="region-card">
-          <div class="region-head"><span class="region-flag">❄️</span><span class="region-name" style="color:#3b82f6;">ARCTIC OCEAN</span></div>
-          <div class="region-rate" style="color:#3b82f6;">Accelerating</div>
-          <div class="region-sub">Thermal expansion + ice melt. Arctic warming 4× faster than the global average.</div>
-          <div class="region-bar"><div class="region-bar-fill" data-width="90%" style="background:linear-gradient(90deg,#3b82f6,#1d4ed8);"></div></div>
-          <div class="region-live" style="color:#3b82f6;" data-rate-ocean="0.0000001450">↑ <span>0</span> mm</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.22);">
-      DATA: NASA · NOAA · IPCC AR6 · GLOBAL FOREST WATCH
+    <div style="margin-top:32px;font-size:12px;color:rgba(255,255,255,.22);font-family:'JetBrains Mono',monospace;letter-spacing:1px;">
+      "TODAY SO FAR" resets at midnight UTC · All visitors see the same shared number
     </div>
   </div>
 </section>
@@ -3034,46 +2939,72 @@
       .from('.hero-actions', { y: 16, opacity: 0, duration: .8, ease: 'power3.out' }, '-=.5')
       .from('.scroll-cue',   { opacity: 0, duration: .8, ease: 'power3.out' }, '-=.4');
 
-    // Live destruction ticker — counts up from page load using real annual rates
+    // Live destruction ticker — global rates, counts since page load + since midnight UTC
     (function() {
       const pageStart = Date.now();
-      // Rates per second (derived from annual figures)
-      const ICE_PER_SEC    = 280e9 / (365.25 * 86400);   // 280 billion tonnes/year
-      const FOREST_PER_SEC = 10000 / 86400;                // 10,000 acres/day
-      const OCEAN_PER_SEC  = 3.4 / (365.25 * 86400);      // 3.4mm/year
 
+      // ── Global annual rates (IPCC AR6 / GFW 2023 / NASA)
+      const ICE_PER_SEC    = 700e9 / (365.25 * 86400); // 700 Gt/yr — Greenland + Antarctica + Glaciers
+      const FOREST_PER_SEC = 37e6  / (365.25 * 86400); // 37M acres/yr — 15M ha global (GFW)
+      const OCEAN_PER_SEC  = 3.4   / (365.25 * 86400); // 3.4mm/yr global average (NASA)
+
+      // "Since you opened" elements
       const iceEl    = document.getElementById('ticker-ice');
       const forestEl = document.getElementById('ticker-forest');
       const oceanEl  = document.getElementById('ticker-ocean');
-      const barIce   = document.getElementById('bar-ice');
+      // "TODAY so far (UTC)" elements
+      const todayIceEl    = document.getElementById('today-ice');
+      const todayForestEl = document.getElementById('today-forest');
+      const todayOceanEl  = document.getElementById('today-ocean');
+      // Progress bars
+      const barIce    = document.getElementById('bar-ice');
       const barForest = document.getElementById('bar-forest');
-      const barOcean = document.getElementById('bar-ocean');
+      const barOcean  = document.getElementById('bar-ocean');
 
-      if (!iceEl) return; // guard if section removed
+      if (!iceEl) return;
 
-      // Cache last displayed values — only write DOM when value actually changes
-      let lastIce = '', lastForest = '', lastOcean = '', lastPct = -1;
+      // Seconds elapsed since midnight UTC — same number for every visitor right now
+      function todayElapsedSec() {
+        const now = Date.now();
+        const d   = new Date(now);
+        const midnightUTC = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+        return (now - midnightUTC) / 1000;
+      }
+
+      // Cache last displayed values to avoid unnecessary DOM writes
+      let lastIce = '', lastForest = '', lastOcean = '';
+      let lastTodayIce = '', lastTodayForest = '', lastTodayOcean = '';
+      let lastPct = -1;
       let lastTick = 0;
-      const TICK_MS = 100; // update at 10fps — smooth enough, 6× less paint work
+      const TICK_MS = 100; // 10fps — smooth enough, minimal paint work
 
       function update(ts) {
         requestAnimationFrame(update);
-        // Throttle: skip frames until TICK_MS has elapsed
         if (ts - lastTick < TICK_MS) return;
         lastTick = ts;
 
+        // ── "Since you opened" counters
         const elapsed = (Date.now() - pageStart) / 1000;
         const ice    = Math.floor(ICE_PER_SEC * elapsed);
         const forest = (FOREST_PER_SEC * elapsed).toFixed(2);
         const ocean  = (OCEAN_PER_SEC * elapsed).toFixed(6);
 
-        // Only update DOM if value changed (avoids needless reflow)
         const iceStr = ice.toLocaleString();
-        if (iceStr !== lastIce)       { iceEl.textContent    = iceStr;   lastIce    = iceStr; }
-        if (forest  !== lastForest)   { forestEl.textContent = forest;   lastForest = forest; }
-        if (ocean   !== lastOcean)    { oceanEl.textContent  = ocean;    lastOcean  = ocean; }
+        if (iceStr !== lastIce)     { iceEl.textContent    = iceStr;   lastIce    = iceStr; }
+        if (forest  !== lastForest) { forestEl.textContent = forest;   lastForest = forest; }
+        if (ocean   !== lastOcean)  { oceanEl.textContent  = ocean;    lastOcean  = ocean; }
 
-        // Progress bars fill over 60 seconds — only update when pct changes by ≥0.5
+        // ── "TODAY so far" counters (shared — same for all visitors)
+        const td         = todayElapsedSec();
+        const todayIce   = Math.floor(ICE_PER_SEC * td).toLocaleString();
+        const todayForest = Math.floor(FOREST_PER_SEC * td).toLocaleString();
+        const todayOcean = (OCEAN_PER_SEC * td).toFixed(6);
+
+        if (todayIce    !== lastTodayIce)    { if (todayIceEl)    todayIceEl.textContent    = todayIce;    lastTodayIce    = todayIce;    }
+        if (todayForest !== lastTodayForest) { if (todayForestEl) todayForestEl.textContent = todayForest; lastTodayForest = todayForest; }
+        if (todayOcean  !== lastTodayOcean)  { if (todayOceanEl)  todayOceanEl.textContent  = todayOcean;  lastTodayOcean  = todayOcean;  }
+
+        // ── Progress bars fill over 60 seconds
         const pct = Math.min(100, (elapsed / 60) * 100);
         if (Math.abs(pct - lastPct) >= 0.5) {
           const pctStr = pct + '%';
@@ -3330,62 +3261,7 @@
 
   /* ── MODALS ─────────────────────────────────── */
   /* Toggle sub-agent panels — click a branch card to expand/collapse */
-  // ── Ticker detail panel toggle + live region counters ──
-  function toggleTickerDetail(id) {
-    const panel = document.getElementById(id);
-    if (!panel) return;
-    // Close other detail panels
-    document.querySelectorAll('.ticker-detail.open').forEach(p => {
-      if (p.id !== id) p.classList.remove('open');
-    });
-    const opening = !panel.classList.contains('open');
-    panel.classList.toggle('open');
-    if (opening) {
-      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
-      // Animate region bars in
-      panel.querySelectorAll('.region-bar-fill').forEach(bar => {
-        bar.style.width = bar.dataset.width || '0%';
-      });
-    }
-  }
-
-  // Live mini-tickers for region detail panels — throttled to 5fps (only visible when panel open)
-  (function() {
-    const pageStart = Date.now();
-    let lastRegionTick = 0;
-    const REGION_TICK_MS = 200; // 5fps — panels are rarely open, no need for more
-    function updateRegionTickers(ts) {
-      requestAnimationFrame(updateRegionTickers);
-      if (ts - lastRegionTick < REGION_TICK_MS) return;
-      lastRegionTick = ts;
-      // Skip entirely if no detail panel is open
-      if (!document.querySelector('.ticker-detail.open')) return;
-      const elapsed = (Date.now() - pageStart) / 1000;
-
-      // Ice regions (rates in GT/sec, display as tonnes)
-      document.querySelectorAll('[data-rate-ice]').forEach(el => {
-        const rate = parseFloat(el.dataset.rateIce) * 1e9 / (365.25 * 86400); // GT/yr → tonnes/sec
-        const val = Math.floor(rate * elapsed);
-        el.querySelector('span').textContent = val.toLocaleString();
-      });
-
-      // Forest regions (rates in acres/sec)
-      document.querySelectorAll('[data-rate-forest]').forEach(el => {
-        const rate = parseFloat(el.dataset.rateForest);
-        const val = (rate * elapsed).toFixed(2);
-        el.querySelector('span').textContent = val;
-      });
-
-      // Ocean regions (rates in mm/sec)
-      document.querySelectorAll('[data-rate-ocean]').forEach(el => {
-        const rate = parseFloat(el.dataset.rateOcean);
-        const val = (rate * elapsed).toFixed(8);
-        el.querySelector('span').textContent = val;
-      });
-
-    }
-    requestAnimationFrame(updateRegionTickers);
-  })();
+  // (Region detail panels moved to /earth-regions.html)
 
   function toggleSubPanel(id) {
     const panel = document.getElementById(id);
