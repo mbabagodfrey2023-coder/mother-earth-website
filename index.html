@@ -343,55 +343,6 @@
     }
     .ticker-card:hover .ticker-card-hint { color: rgba(255,255,255,.45); }
 
-    .ticker-detail {
-      max-height: 0; overflow: hidden;
-      transition: max-height .6s ease, padding .4s ease, margin .4s ease, border-color .4s;
-      border: 1px solid transparent; border-radius: 2px;
-    }
-    .ticker-detail.open {
-      max-height: 560px; padding: 28px; margin-top: 20px;
-      border-color: rgba(255,255,255,.08);
-    }
-    .ticker-detail-head {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      letter-spacing: 4px; margin-bottom: 20px; display: flex;
-      align-items: center; justify-content: space-between;
-    }
-    .ticker-detail-close {
-      background: none; border: 1px solid rgba(255,255,255,.12); color: var(--muted);
-      padding: 4px 12px; font-family: 'JetBrains Mono', monospace; font-size: 9px;
-      letter-spacing: 2px; cursor: pointer; transition: all .25s;
-    }
-    .ticker-detail-close:hover { border-color: rgba(255,255,255,.3); color: var(--text); }
-    .region-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    @media (max-width: 640px) { .region-grid { grid-template-columns: 1fr; } }
-    .region-card {
-      padding: 18px 16px; background: rgba(255,255,255,.02);
-      border: 1px solid rgba(255,255,255,.06); border-radius: 2px;
-      transition: border-color .3s, background .3s;
-    }
-    .region-card:hover { border-color: rgba(255,255,255,.15); background: rgba(255,255,255,.04); }
-    .region-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .region-flag { font-size: 22px; }
-    .region-name {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
-      letter-spacing: 2px;
-    }
-    .region-rate { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-    .region-sub { font-size: 11px; color: var(--muted); line-height: 1.5; }
-    .region-bar {
-      height: 4px; background: rgba(255,255,255,.06);
-      border-radius: 2px; overflow: hidden; margin-top: 10px;
-    }
-    .region-bar-fill {
-      height: 100%; border-radius: 2px; width: 0;
-      transition: width 1.2s cubic-bezier(.22,1,.36,1);
-    }
-    .region-live {
-      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600;
-      margin-top: 6px; opacity: .7;
-    }
-
     /* ─── STATS GRID ─────────────────────────────────────────────── */
     #stats { padding: 100px 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,.4), transparent); }
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
@@ -1169,6 +1120,7 @@
         <a href="#live-dashboard">Live Data</a>
         <a href="#intelligence">33 Agents</a>
         <a href="/data-pipeline.html">How Data Works</a>
+        <a href="/earth-regions.html">Earth Regions</a>
         <a href="/iris.html">Marketplace</a>
         <a href="#pricing">Pricing</a>
       </div>
