@@ -87,6 +87,11 @@ const CORS = {
 };
 
 export default {
+  // Cron trigger — fires Mon/Wed/Fri at 09:00 UTC
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runSocialCycle(env));
+  },
+
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
@@ -105,6 +110,21 @@ export default {
       if (request.method === 'POST') return handleCouncilPost(request, env);
       if (request.method === 'GET')  return handleCouncilGet(request, env);
       return json({ error: 'Method not allowed' }, 405);
+    }
+
+    // Handle /api/social/run — manual trigger (protected by SOCIAL_ADMIN_SECRET)
+    if (url.pathname === '/api/social/run' && request.method === 'POST') {
+      const secret = request.headers.get('x-admin-secret');
+      if (!env.SOCIAL_ADMIN_SECRET || secret !== env.SOCIAL_ADMIN_SECRET) {
+        return json({ error: 'Unauthorized' }, 401);
+      }
+      const result = await runSocialCycle(env);
+      return json(result);
+    }
+
+    // Block public access to the social post queue file
+    if (url.pathname === '/social/posts.json') {
+      return new Response('Not found', { status: 404 });
     }
 
     // Everything else → static assets
@@ -363,4 +383,169 @@ async function handleCouncilGet(request, env) {
     console.error('Council GET error:', err);
     return json({ error: 'Failed to load archive.' }, 500);
   }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SOCIAL AUTO-POSTER — X + LinkedIn scheduled posting
+   Post queue lives in /social/posts.json (static asset, not publicly served).
+   Sent post IDs are tracked in POSTS_KV under the key "posted".
+   Fires on cron schedule defined in wrangler.jsonc (Mon/Wed/Fri 09:00 UTC).
+
+   Required Worker secrets (set via: npx wrangler secret put <NAME>):
+     X_API_KEY              — Twitter app Consumer Key
+     X_API_SECRET           — Twitter app Consumer Secret
+     X_ACCESS_TOKEN         — Twitter user Access Token (your account)
+     X_ACCESS_TOKEN_SECRET  — Twitter user Access Token Secret
+     LINKEDIN_ACCESS_TOKEN  — LinkedIn OAuth 2.0 token (w_organization_social scope)
+     LINKEDIN_ORG_URN       — e.g. urn:li:organization:12345678
+     SOCIAL_ADMIN_SECRET    — any random string (protects /api/social/run endpoint)
+══════════════════════════════════════════════════════════════════════════ */
+
+// ── OAuth 1.0a helpers for X (Twitter API v2) ─────────────────────────────
+
+// Percent-encodes a string per RFC 3986 (required by OAuth 1.0a spec)
+function pct(str) {
+  return encodeURIComponent(String(str))
+    .replace(/!/g, '%21').replace(/'/g, '%27')
+    .replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A');
+}
+
+// HMAC-SHA1 + base64 encode — Cloudflare Workers Web Crypto API
+async function hmacSha1b64(key, msg) {
+  const enc = new TextEncoder();
+  const k   = await crypto.subtle.importKey(
+    'raw', enc.encode(key),
+    { name: 'HMAC', hash: 'SHA-1' },
+    false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', k, enc.encode(msg));
+  return btoa(String.fromCharCode(...new Uint8Array(sig)));
+}
+
+// Builds the Authorization: OAuth ... header for a POST to api.twitter.com/2/tweets
+async function xAuthHeader(env) {
+  const nonce = crypto.randomUUID().replace(/-/g, '');
+  const ts    = String(Math.floor(Date.now() / 1000));
+  const oAuth = {
+    oauth_consumer_key:     env.X_API_KEY,
+    oauth_nonce:            nonce,
+    oauth_signature_method: 'HMAC-SHA1',
+    oauth_timestamp:        ts,
+    oauth_token:            env.X_ACCESS_TOKEN,
+    oauth_version:          '1.0',
+  };
+
+  // OAuth 1.0a signature base: method + URL + sorted params (JSON body excluded)
+  const paramStr = Object.keys(oAuth).sort()
+    .map(k => `${pct(k)}=${pct(oAuth[k])}`).join('&');
+  const base = `POST&${pct('https://api.twitter.com/2/tweets')}&${pct(paramStr)}`;
+
+  const sigKey = `${pct(env.X_API_SECRET)}&${pct(env.X_ACCESS_TOKEN_SECRET)}`;
+  oAuth.oauth_signature = await hmacSha1b64(sigKey, base);
+
+  return 'OAuth ' + Object.keys(oAuth).sort()
+    .map(k => `${pct(k)}="${pct(oAuth[k])}"`).join(', ');
+}
+
+// Posts a tweet using OAuth 1.0a user-context auth (required for write access)
+async function postToX(text, env) {
+  if (!env.X_API_KEY || !env.X_ACCESS_TOKEN) {
+    return { platform: 'x', ok: false, error: 'X credentials not configured' };
+  }
+  try {
+    const res = await fetch('https://api.twitter.com/2/tweets', {
+      method: 'POST',
+      headers: {
+        'Authorization': await xAuthHeader(env),
+        'Content-Type':  'application/json',
+      },
+      body: JSON.stringify({ text }),
+    });
+    const data = await res.json();
+    return { platform: 'x', ok: res.ok, status: res.status, data };
+  } catch (e) {
+    return { platform: 'x', ok: false, error: e.message };
+  }
+}
+
+// ── LinkedIn API (OAuth 2.0 Bearer, ugcPosts endpoint) ────────────────────
+
+// Posts to the Mother Earth Kenya company page via LinkedIn ugcPosts API
+async function postToLinkedIn(text, env) {
+  if (!env.LINKEDIN_ACCESS_TOKEN || !env.LINKEDIN_ORG_URN) {
+    return { platform: 'linkedin', ok: false, error: 'LinkedIn credentials not configured' };
+  }
+  try {
+    const res = await fetch('https://api.linkedin.com/v2/ugcPosts', {
+      method: 'POST',
+      headers: {
+        'Authorization':             `Bearer ${env.LINKEDIN_ACCESS_TOKEN}`,
+        'Content-Type':              'application/json',
+        'X-Restli-Protocol-Version': '2.0.0',
+      },
+      body: JSON.stringify({
+        author:         env.LINKEDIN_ORG_URN,       // urn:li:organization:XXXXXXXX
+        lifecycleState: 'PUBLISHED',
+        specificContent: {
+          'com.linkedin.ugc.ShareContent': {
+            shareCommentary:    { text },
+            shareMediaCategory: 'NONE',
+          },
+        },
+        visibility: {
+          'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
+        },
+      }),
+    });
+    const data = await res.json();
+    return { platform: 'linkedin', ok: res.ok, status: res.status, data };
+  } catch (e) {
+    return { platform: 'linkedin', ok: false, error: e.message };
+  }
+}
+
+// ── Core posting cycle (called by cron + manual trigger) ──────────────────
+
+async function runSocialCycle(env) {
+  if (!env.POSTS_KV) {
+    console.warn('Social: POSTS_KV not bound — skipping');
+    return { skipped: true, reason: 'POSTS_KV not bound. Run: npx wrangler kv namespace create POSTS_KV' };
+  }
+
+  // Read post queue from static asset (not publicly exposed — blocked in fetch handler)
+  let posts;
+  try {
+    const res = await env.ASSETS.fetch('https://motherearth.systems/social/posts.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    ({ posts } = await res.json());
+  } catch (e) {
+    console.error('Social: failed to load posts.json:', e.message);
+    return { skipped: true, reason: `posts.json read failed: ${e.message}` };
+  }
+
+  // Load set of already-sent post IDs
+  const sentRaw = await env.POSTS_KV.get('posted') || '[]';
+  const sent    = new Set(JSON.parse(sentRaw));
+
+  // Find next approved post that hasn't been sent yet
+  const pending = posts.filter(p => p.status === 'approved' && !sent.has(p.id));
+  if (pending.length === 0) {
+    console.log('Social: queue empty — all approved posts have been sent');
+    return { posted: null, remaining: 0 };
+  }
+  const post = pending[0];
+
+  // Fire to each platform
+  const results = [];
+  if (post.platforms.includes('x'))
+    results.push(await postToX(post.x_text, env));
+  if (post.platforms.includes('linkedin'))
+    results.push(await postToLinkedIn(post.linkedin_text || post.x_text, env));
+
+  // Persist sent state
+  sent.add(post.id);
+  await env.POSTS_KV.put('posted', JSON.stringify([...sent]));
+
+  console.log(`Social: posted ${post.id} →`, JSON.stringify(results));
+  return { posted: post.id, platforms: post.platforms, results, remaining: pending.length - 1 };
 }

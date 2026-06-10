@@ -1,0 +1,61 @@
+{
+  "_note": "Post queue for Mother Earth Kenya social auto-poster. Set status to 'approved' to queue a post. Deployed worker posts one per cron cycle (Mon/Wed/Fri 09:00 UTC). Track sent posts in POSTS_KV.",
+  "posts": [
+    {
+      "id": "post-001",
+      "status": "approved",
+      "platforms": ["x", "linkedin"],
+      "tags": ["launch", "announcement"],
+      "x_text": "Day 1.\n\nWe built an AI to watch the planet.\n\n33 agents. Real-time feeds from NASA, NOAA + Scripps. Ice, forest, ocean — running now.\n\nmotherearth.systems",
+      "linkedin_text": "We launched Mother Earth Kenya today.\n\nIt's an AI organisation — not a SaaS product, not a research project. A functioning 33-agent system monitoring Earth's climate systems in real time: Arctic sea ice, Amazonian deforestation, Pacific Ocean bleaching events.\n\nThe data comes from NASA, NOAA, and Scripps Institution of Oceanography. The analysis runs on Anthropic Claude. The infrastructure lives on Cloudflare's global edge. The legal entity is registered under Kenya's Special Economic Zone framework.\n\nWhy Kenya? The SEZ gives us something rare — a formal legal structure purpose-built for AI-native companies, zero corporate tax on qualifying technology activity, and regulatory clarity that most jurisdictions are still debating.\n\nClimate intelligence should be independent infrastructure, not a feature inside someone else's platform. That's what we're building.\n\nLive at motherearth.systems — all data is public."
+    },
+    {
+      "id": "post-002",
+      "status": "approved",
+      "platforms": ["x"],
+      "tags": ["data", "arctic"],
+      "x_text": "Arctic sea ice is running 2.1σ below the 1981–2010 baseline.\n\nEvery 6 hours, our system flags the deviation. No analyst. No delay. Just data.\n\nmotherearth.systems/earth-regions",
+      "linkedin_text": null
+    },
+    {
+      "id": "post-003",
+      "status": "approved",
+      "platforms": ["x", "linkedin"],
+      "tags": ["kenya", "strategy"],
+      "x_text": "Why build climate AI in Kenya?\n\n→ SEZ: zero tax on qualifying AI\n→ GMT+3: overlaps EU + Asia hours\n→ Nairobi: Africa's fastest-growing tech hub\n→ Equatorial: prime satellite geometry\n\nmotherearth.systems",
+      "linkedin_text": "Africa is about to produce the world's most important climate AI companies. Here's why Kenya specifically:\n\n1. Equatorial position — prime geometry for satellite data uplinks covering both poles\n2. GMT+3 timezone — overlaps EU trading hours in the morning and Asia in the evening\n3. Special Economic Zone framework — zero corporate tax on qualifying AI and technology activities under active legislation\n4. Nairobi's technical talent pipeline — the continent's fastest-growing engineering ecosystem\n\nWe chose Kenya not as an emerging-market story but as a first-principles engineering decision. The infrastructure advantages are real.\n\nMother Earth Kenya is building climate monitoring and environmental intelligence systems from Nairobi. The founding chapter is live at motherearth.systems."
+    },
+    {
+      "id": "post-004",
+      "status": "approved",
+      "platforms": ["x"],
+      "tags": ["engineering", "pipeline"],
+      "x_text": "Our data pipeline runs in under 800ms.\n\nNASA GISTEMP + NOAA + Scripps + NASA FIRMS — all four in parallel. Claude Sonnet on every cycle. Served from the edge nearest you.\n\nmotherearth.systems/data-pipeline",
+      "linkedin_text": null
+    },
+    {
+      "id": "post-005",
+      "status": "approved",
+      "platforms": ["x", "linkedin"],
+      "tags": ["ai-org", "architecture"],
+      "x_text": "Most companies use AI as a feature.\n\nWe built it as the organisation — 33 agents, domain-specific, governed under Kenya SEZ law.\n\nAMARA: legal. NEXUS: infrastructure. GAIA: biodiversity.\n\nAI-native from day one.\n\nmotherearth.systems",
+      "linkedin_text": "What does 'AI-native' actually mean for an organisation?\n\nIt doesn't mean using AI tools. It means structuring the company around autonomous agents from day one — before headcount, before offices, before most of the conventional corporate machinery.\n\nMother Earth Kenya runs 33 AI agents across 7 specialist branches:\n• AMARA: legal & compliance (VASP Act 2025, Kenya law)\n• NEXUS: blockchain & infrastructure\n• GAIA: environmental intelligence\n• ATLAS: treasury & finance\n• IRIS: data marketplace\n• SAGE: governance\n• ECHO: communications\n\nEach branch lead is a bounded autonomous agent with domain authority. The human layer governs strategy and signs off on decisions with irreversible consequences. Everything else runs continuously.\n\nWe published the full architecture at motherearth.systems/governance — worth reading if you're thinking about what post-conventional org design looks like."
+    },
+    {
+      "id": "post-006",
+      "status": "approved",
+      "platforms": ["x"],
+      "tags": ["partners", "stack"],
+      "x_text": "The stack behind Mother Earth Kenya:\n\n→ NASA EONET + GISTEMP — live earth observation\n→ NOAA — ocean + atmosphere feeds\n→ Anthropic Claude — analysis layer\n→ Cloudflare — global edge delivery\n→ Kenya SEZ — legal framework\n\nmotherearth.systems/partners",
+      "linkedin_text": null
+    },
+    {
+      "id": "post-007",
+      "status": "approved",
+      "platforms": ["x"],
+      "tags": ["systems", "data"],
+      "x_text": "We're tracking three planetary systems in real time:\n\n❄️ ICE — Arctic + Antarctic extent anomalies\n🌲 FOREST — deforestation + wildfire perimeter\n🌊 OCEAN — bleaching + acidification\n\nAll data public.\n\nmotherearth.systems",
+      "linkedin_text": null
+    }
+  ]
+}

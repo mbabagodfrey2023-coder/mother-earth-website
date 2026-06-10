@@ -17,6 +17,15 @@
     {
       "binding": "COUNCIL_ARCHIVE",
       "id": "ed72059a838b4b8f8ccde26eb6122a85"
+    },
+    {
+      // Run: npx wrangler kv namespace create POSTS_KV  — paste the returned id here
+      "binding": "POSTS_KV",
+      "id": "REPLACE_WITH_POSTS_KV_ID"
     }
-  ]
+  ],
+  // Social auto-poster cron: Mon/Wed/Fri at 09:00 UTC (12:00 Nairobi time)
+  "triggers": {
+    "crons": ["0 9 * * 1,3,5"]
+  }
 }
