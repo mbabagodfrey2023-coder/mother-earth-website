@@ -383,7 +383,8 @@
       box-shadow: 0 6px 32px rgba(74,222,128,.15);
     }
     .agent-card:hover::before { opacity: 1; }
-    .agent-icon { font-size: 32px; margin-bottom: 16px; }
+    .agent-icon { width:52px; height:52px; margin-bottom:16px; flex-shrink:0; }
+    .agent-icon svg { display:block; width:100%; height:100%; }
     .agent-id {
       font-family: 'JetBrains Mono', monospace; font-size: 9px;
       letter-spacing: 4px; color: var(--green); margin-bottom: 8px;
@@ -465,7 +466,7 @@
       box-shadow: 0 4px 28px rgba(74,222,128,.12);
     }
     .agent-ceo::before { opacity: 1; height: 4px; }
-    .agent-ceo .agent-icon { font-size: 48px; margin-bottom: 0; flex-shrink: 0; }
+    .agent-ceo .agent-icon { width:72px; height:72px; margin-bottom:0; flex-shrink:0; }
     .agent-ceo-text {}
     .agent-ceo .agent-id { font-size: 10px; }
     .agent-ceo .agent-name { font-size: 28px; }
@@ -1380,7 +1381,8 @@
     <div class="agents-grid">
       <!-- CEO — spans full width, top of hierarchy -->
       <div class="agent-card agent-ceo" onclick="openModal('modal-agent-ceo')" role="button" tabindex="0">
-        <div class="agent-icon">🌍</div>
+        <!-- CEO: Targeting crosshair — planetary command & oversight -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="17" stroke="#4ade80" stroke-width="1.5"/><circle cx="24" cy="24" r="8" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.12)"/><line x1="24" y1="7" x2="24" y2="16" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><line x1="24" y1="32" x2="24" y2="41" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><line x1="7" y1="24" x2="16" y2="24" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><line x1="32" y1="24" x2="41" y2="24" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><circle cx="24" cy="24" r="2.5" fill="#4ade80"/></svg></div>
         <div class="agent-ceo-text">
           <div class="agent-id">COMMAND CENTRE · CEO</div>
           <div class="agent-name">Claude — Planetary CEO</div>
@@ -1389,7 +1391,8 @@
         </div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-amara')" role="button" tabindex="0">
-        <div class="agent-icon">🏛️</div>
+        <!-- AMARA: Shield — law, compliance, protection -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 5L7 12V27c0 9 7 15.5 17 17 10-1.5 17-8 17-17V12L24 5z" stroke="#a78bfa" stroke-width="1.5" stroke-linejoin="round" fill="rgba(167,139,250,.09)"/><line x1="24" y1="17" x2="24" y2="27" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="22" x2="29" y2="22" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/></svg></div>
         <div class="agent-id">BRANCH 01</div>
         <div class="agent-name">AMARA</div>
         <div class="agent-role">Legal & Compliance. Monitors VASP regulation, AML/KYC enforcement, and governance filings.</div>
@@ -1397,7 +1400,8 @@
         <div class="agent-card-arrow">EXPAND ↓</div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-nexus')" role="button" tabindex="0">
-        <div class="agent-icon">⛓️</div>
+        <!-- NEXUS: Network nodes — blockchain, connectivity, provenance -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="24" r="5.5" stroke="#22d3ee" stroke-width="1.5" fill="rgba(34,211,238,.1)"/><circle cx="38" cy="10" r="5.5" stroke="#22d3ee" stroke-width="1.5" fill="rgba(34,211,238,.1)"/><circle cx="38" cy="38" r="5.5" stroke="#22d3ee" stroke-width="1.5" fill="rgba(34,211,238,.1)"/><line x1="14.5" y1="21" x2="32.5" y2="13" stroke="#22d3ee" stroke-width="1.5"/><line x1="14.5" y1="27" x2="32.5" y2="35" stroke="#22d3ee" stroke-width="1.5"/><line x1="38" y1="15.5" x2="38" y2="32.5" stroke="#22d3ee" stroke-width="1" stroke-dasharray="2 2.5" opacity="0.6"/></svg></div>
         <div class="agent-id">BRANCH 02</div>
         <div class="agent-name">NEXUS</div>
         <div class="agent-role">Blockchain & Technology. Smart contracts, token architecture, and data provenance.</div>
@@ -1405,7 +1409,8 @@
         <div class="agent-card-arrow">EXPAND ↓</div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-gaia')" role="button" tabindex="0">
-        <div class="agent-icon">🌿</div>
+        <!-- GAIA: Leaf with satellite arc — environmental intelligence -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M27 8C17 8 11 17 12 26c0 6 4 11 9 13 0-8 3-14 8-17-3 6-3 12-1 18 2 0 5-.5 7-2 5-3 8-9 8-15 0-9-6-15-13-15z" stroke="#4ade80" stroke-width="1.5" stroke-linejoin="round" fill="rgba(74,222,128,.1)"/><path d="M35 9 A15 15 0 0 1 43 22" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/><path d="M37 6 A19 19 0 0 1 46 24" stroke="#4ade80" stroke-width="1" stroke-linecap="round" opacity="0.28"/></svg></div>
         <div class="agent-id">BRANCH 03</div>
         <div class="agent-name">GAIA</div>
         <div class="agent-role">Environmental Intelligence. Satellite, sensor, and field data for ecological risk models.</div>
@@ -1413,7 +1418,8 @@
         <div class="agent-card-arrow">EXPAND ↓</div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-atlas')" role="button" tabindex="0">
-        <div class="agent-icon">💎</div>
+        <!-- ATLAS: Vault dial — treasury, finance, reserves -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="9" width="34" height="30" rx="2" stroke="#D4AF37" stroke-width="1.5" fill="rgba(212,175,55,.07)"/><line x1="7" y1="15" x2="41" y2="15" stroke="#D4AF37" stroke-width="1" opacity="0.4"/><circle cx="24" cy="27" r="8" stroke="#D4AF37" stroke-width="1.5"/><circle cx="24" cy="27" r="3.5" fill="#D4AF37" opacity="0.85"/><line x1="24" y1="19" x2="24" y2="22" stroke="#D4AF37" stroke-width="2" stroke-linecap="round"/><rect x="10" y="35.5" width="7" height="2" rx="1" fill="#D4AF37" opacity="0.45"/></svg></div>
         <div class="agent-id">BRANCH 04</div>
         <div class="agent-name">ATLAS</div>
         <div class="agent-role">Treasury & Finance. Reserve management, compliance, and transaction oversight.</div>
@@ -1421,7 +1427,8 @@
         <div class="agent-card-arrow">EXPAND ↓</div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-iris')" role="button" tabindex="0">
-        <div class="agent-icon">📊</div>
+        <!-- IRIS: Eye — data observation, marketplace intelligence -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 24C12 14 36 14 42 24C36 34 12 34 6 24z" stroke="#3b82f6" stroke-width="1.5" stroke-linejoin="round" fill="rgba(59,130,246,.07)"/><circle cx="24" cy="24" r="6" stroke="#3b82f6" stroke-width="1.5" fill="rgba(59,130,246,.15)"/><circle cx="24" cy="24" r="2.5" fill="#3b82f6"/><line x1="14" y1="38" x2="17" y2="34" stroke="#3b82f6" stroke-width="1" stroke-linecap="round" opacity="0.45"/><line x1="24" y1="40" x2="24" y2="36" stroke="#3b82f6" stroke-width="1" stroke-linecap="round" opacity="0.45"/><line x1="34" y1="38" x2="31" y2="34" stroke="#3b82f6" stroke-width="1" stroke-linecap="round" opacity="0.45"/></svg></div>
         <div class="agent-id">BRANCH 05</div>
         <div class="agent-name">IRIS</div>
         <div class="agent-role">Data Marketplace. Verified environmental data exchange for institutional buyers.</div>
@@ -1429,7 +1436,8 @@
         <div class="agent-card-arrow">EXPAND ↓</div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-sage')" role="button" tabindex="0">
-        <div class="agent-icon">⚖️</div>
+        <!-- SAGE: Golden seal — governance, veto, mission integrity -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L28 10L35 9L38 15L44 17L42 24L46 30L40 33L40 40L33 40L29 45L24 42L19 45L15 40L8 40L8 33L2 30L6 24L4 17L10 15L13 9L20 10L24 4z" stroke="#f59e0b" stroke-width="1.5" stroke-linejoin="round" fill="rgba(245,158,11,.07)"/><circle cx="24" cy="24" r="7" stroke="#f59e0b" stroke-width="1" opacity="0.45"/><circle cx="24" cy="24" r="3" fill="#f59e0b" opacity="0.9"/></svg></div>
         <div class="agent-id">BRANCH 06</div>
         <div class="agent-name">SAGE</div>
         <div class="agent-role">Governance & Trust. Purpose Trust, Golden Share veto, mission integrity.</div>
@@ -1437,7 +1445,8 @@
         <div class="agent-card-arrow">EXPAND ↓</div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-echo')" role="button" tabindex="0">
-        <div class="agent-icon">📡</div>
+        <!-- ECHO: Signal arcs — communications, broadcast, growth -->
+        <div class="agent-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="30" r="4" fill="#f97316"/><path d="M16 22 A11 11 0 0 1 32 22" stroke="#f97316" stroke-width="1.5" stroke-linecap="round"/><path d="M11 17 A18 18 0 0 1 37 17" stroke="#f97316" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/><path d="M7 12 A24 24 0 0 1 41 12" stroke="#f97316" stroke-width="1.5" stroke-linecap="round" opacity="0.32"/><line x1="24" y1="34" x2="24" y2="41" stroke="#f97316" stroke-width="1.5" stroke-linecap="round"/><line x1="19" y1="41" x2="29" y2="41" stroke="#f97316" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="agent-id">BRANCH 07</div>
         <div class="agent-name">ECHO</div>
         <div class="agent-role">Communications & Growth. Media, partnerships, and the global guardian community.</div>
