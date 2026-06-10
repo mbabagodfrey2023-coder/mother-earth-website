@@ -21,7 +21,7 @@
     {
       // Run: npx wrangler kv namespace create POSTS_KV  — paste the returned id here
       "binding": "POSTS_KV",
-      "id": "REPLACE_WITH_POSTS_KV_ID"
+      "id": "ef683fe0a8294704a0fc91faadcaab4d"
     }
   ],
   // Social auto-poster cron: Mon/Wed/Fri at 09:00 UTC (12:00 Nairobi time)
