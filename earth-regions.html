@@ -61,27 +61,130 @@
     .nav-back{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,color .2s;display:flex;align-items:center;gap:8px;}
     .nav-back:hover{border-color:var(--green);color:var(--green);}
 
-    /* ── Sticky section nav ── */
+    /* ══ SENTINEL PANEL NAV ════════════════════════════════════════════ */
     #snav {
       position:sticky; top:72px; z-index:900;
-      background:rgba(2,6,6,.92); backdrop-filter:blur(16px);
+      display:grid; grid-template-columns:repeat(3,1fr);
+      background:rgba(2,6,6,.97); backdrop-filter:blur(20px);
       border-bottom:1px solid var(--border);
-      display:flex; align-items:center; gap:0;
-      padding:0 32px;
     }
-    .snav-link {
-      display:flex; align-items:center; gap:8px;
-      padding:14px 24px; font-size:11px; font-weight:700;
-      letter-spacing:.15em; font-family:'JetBrains Mono',monospace;
-      color:var(--muted); border-bottom:2px solid transparent;
-      transition:color .2s, border-color .2s;
+
+    /* Panel base */
+    .snt-panel {
+      position:relative; overflow:hidden;
+      display:flex; align-items:center; gap:14px;
+      padding:18px 24px 16px;
+      border-top:3px solid rgba(255,255,255,.04);
+      border-right:1px solid var(--border);
+      transition:background .35s, border-top-color .35s;
+      text-decoration:none;
     }
-    .snav-link:hover { color:var(--text); }
-    .snav-link.ice.active   { color:var(--ice);   border-color:var(--ice); }
-    .snav-link.forest.active{ color:var(--fire);  border-color:var(--fire); }
-    .snav-link.ocean.active { color:var(--ocean); border-color:var(--ocean); }
-    .snav-right { margin-left:auto; font-size:10px; letter-spacing:.08em; color:var(--dim); font-family:'JetBrains Mono',monospace; }
-    @media(max-width:640px){ .snav-right{display:none;} .snav-link{padding:12px 14px;letter-spacing:.08em;} }
+    .snt-panel:last-child { border-right:none; }
+
+    /* Pulse dot */
+    .snt-dot {
+      width:8px; height:8px; border-radius:50%; flex-shrink:0;
+      transition:background .35s, box-shadow .35s;
+    }
+    .snt-panel.ice    .snt-dot { background:rgba(56,189,248,.2); }
+    .snt-panel.forest .snt-dot { background:rgba(239,68,68,.2); }
+    .snt-panel.ocean  .snt-dot { background:rgba(59,130,246,.2); }
+    .snt-panel.ice.active    .snt-dot { background:var(--ice);   box-shadow:0 0 10px 3px rgba(56,189,248,.45);  animation:snt-pulse 2s ease-in-out infinite; }
+    .snt-panel.forest.active .snt-dot { background:var(--fire);  box-shadow:0 0 10px 3px rgba(239,68,68,.45);   animation:snt-pulse 2s ease-in-out infinite; }
+    .snt-panel.ocean.active  .snt-dot { background:var(--ocean); box-shadow:0 0 10px 3px rgba(59,130,246,.45);  animation:snt-pulse 2s ease-in-out infinite; }
+    @keyframes snt-pulse {
+      0%,100% { transform:scale(1);   opacity:1; }
+      50%      { transform:scale(1.6); opacity:0.45; }
+    }
+
+    /* Body layout */
+    .snt-body   { flex:1; min-width:0; }
+    .snt-top    { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+    .snt-icon   { font-size:20px; flex-shrink:0; }
+    .snt-labels { flex:1; min-width:0; }
+    .snt-system {
+      font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.25em;
+      color:var(--dim); margin-bottom:2px; transition:color .35s;
+    }
+    .snt-name {
+      font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+      letter-spacing:.1em; color:var(--muted); white-space:nowrap;
+      transition:color .35s;
+    }
+    .snt-badge {
+      font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.1em;
+      padding:3px 9px; border-radius:20px; border:1px solid rgba(255,255,255,.07);
+      color:var(--dim); white-space:nowrap; flex-shrink:0;
+      transition:border-color .35s, color .35s, background .35s;
+    }
+
+    /* Bottom row */
+    .snt-bottom { display:flex; align-items:baseline; gap:14px; }
+    .snt-rate {
+      font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700;
+      color:var(--muted); white-space:nowrap; transition:color .35s;
+    }
+    .snt-live-wrap {
+      display:flex; align-items:baseline; gap:4px;
+      opacity:0; transform:translateX(-8px);
+      transition:opacity .4s, transform .4s;
+    }
+    .snt-panel.active .snt-live-wrap { opacity:1; transform:translateX(0); }
+    .snt-live {
+      font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700;
+      font-variant-numeric:tabular-nums; will-change:contents;
+    }
+    .snt-live-unit {
+      font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--dim);
+    }
+
+    /* Active colours */
+    .snt-panel.ice.active    { border-top-color:var(--ice);   background:rgba(56,189,248,.04); }
+    .snt-panel.forest.active { border-top-color:var(--fire);  background:rgba(239,68,68,.04); }
+    .snt-panel.ocean.active  { border-top-color:var(--ocean); background:rgba(59,130,246,.04); }
+
+    .snt-panel.ice.active    .snt-name, .snt-panel.ice.active    .snt-rate, .snt-panel.ice.active    .snt-live { color:var(--ice); }
+    .snt-panel.forest.active .snt-name, .snt-panel.forest.active .snt-rate, .snt-panel.forest.active .snt-live { color:var(--fire); }
+    .snt-panel.ocean.active  .snt-name, .snt-panel.ocean.active  .snt-rate, .snt-panel.ocean.active  .snt-live { color:var(--ocean); }
+
+    .snt-panel.ice.active    .snt-system { color:rgba(56,189,248,.6); }
+    .snt-panel.forest.active .snt-system { color:rgba(239,68,68,.6); }
+    .snt-panel.ocean.active  .snt-system { color:rgba(59,130,246,.6); }
+
+    .snt-panel.ice.active    .snt-badge { color:var(--ice);   border-color:rgba(56,189,248,.35);  background:rgba(56,189,248,.07); }
+    .snt-panel.forest.active .snt-badge { color:var(--fire);  border-color:rgba(239,68,68,.35);   background:rgba(239,68,68,.07); }
+    .snt-panel.ocean.active  .snt-badge { color:var(--ocean); border-color:rgba(59,130,246,.35);  background:rgba(59,130,246,.07); }
+
+    /* Animated scan-line sweeps across bottom of active panel */
+    .snt-panel::after {
+      content:''; position:absolute; bottom:0; left:-60%;
+      width:50%; height:1px; opacity:0; transition:opacity .3s;
+    }
+    .snt-panel.ice.active::after    { background:linear-gradient(90deg,transparent,var(--ice),transparent);   opacity:1; animation:snt-scan 2.8s linear infinite; }
+    .snt-panel.forest.active::after { background:linear-gradient(90deg,transparent,var(--fire),transparent);  opacity:1; animation:snt-scan 2.8s linear infinite; }
+    .snt-panel.ocean.active::after  { background:linear-gradient(90deg,transparent,var(--ocean),transparent); opacity:1; animation:snt-scan 2.8s linear infinite; }
+    @keyframes snt-scan { 0%{left:-60%} 100%{left:110%} }
+
+    /* Hover on inactive */
+    .snt-panel:not(.active):hover { background:rgba(255,255,255,.02); }
+    .snt-panel:not(.active):hover .snt-name { color:var(--text); }
+    .snt-panel:not(.active):hover .snt-rate { color:rgba(255,255,255,.6); }
+    .snt-panel:not(.active):hover .snt-badge { border-color:rgba(255,255,255,.14); color:var(--muted); }
+
+    /* Responsive */
+    @media(max-width:920px) { .snt-badge{display:none;} }
+    @media(max-width:680px) {
+      .snt-panel{ padding:13px 16px 11px; gap:10px; }
+      .snt-system{ display:none; }
+      .snt-live-wrap{ display:none; }
+      .snt-icon{ font-size:17px; }
+      .snt-name{ font-size:10px; letter-spacing:.06em; }
+      .snt-rate{ font-size:12px; }
+    }
+    @media(max-width:400px) {
+      .snt-dot{ display:none; }
+      .snt-bottom{ display:none; }
+    }
 
     /* ── Page wrapper ── */
     .page-wrap { max-width:1200px; margin:0 auto; padding:0 32px; }
@@ -247,12 +350,75 @@
   <a class="nav-back" href="/">← BACK TO PLATFORM</a>
 </nav>
 
-<!-- ══ STICKY SECTION NAV ════════════════════════════════════════════════════ -->
-<div id="snav">
-  <a class="snav-link ice active" href="#ice">🧊 ICE</a>
-  <a class="snav-link forest" href="#forest">🌳 FOREST</a>
-  <a class="snav-link ocean" href="#ocean">🌊 OCEAN</a>
-  <span class="snav-right">Numbers counting since you loaded this page</span>
+<!-- ══ SENTINEL PANEL NAV ════════════════════════════════════════════════════ -->
+<div id="snav" role="navigation" aria-label="Earth system sections">
+
+  <!-- ICE / CRYOSPHERE -->
+  <a class="snt-panel ice active" href="#ice">
+    <div class="snt-dot"></div>
+    <div class="snt-body">
+      <div class="snt-top">
+        <span class="snt-icon">🧊</span>
+        <div class="snt-labels">
+          <div class="snt-system">CRYOSPHERE</div>
+          <div class="snt-name">ICE LOSS</div>
+        </div>
+        <div class="snt-badge">MONITORING</div>
+      </div>
+      <div class="snt-bottom">
+        <div class="snt-rate">700 Gt / yr</div>
+        <div class="snt-live-wrap">
+          <span class="snt-live" id="snt-ice">0</span>
+          <span class="snt-live-unit">t since load</span>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <!-- FOREST / BIOSPHERE -->
+  <a class="snt-panel forest" href="#forest">
+    <div class="snt-dot"></div>
+    <div class="snt-body">
+      <div class="snt-top">
+        <span class="snt-icon">🌳</span>
+        <div class="snt-labels">
+          <div class="snt-system">BIOSPHERE</div>
+          <div class="snt-name">FOREST LOSS</div>
+        </div>
+        <div class="snt-badge">CRITICAL</div>
+      </div>
+      <div class="snt-bottom">
+        <div class="snt-rate">37M ac / yr</div>
+        <div class="snt-live-wrap">
+          <span class="snt-live" id="snt-forest">0.00</span>
+          <span class="snt-live-unit">ac since load</span>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <!-- OCEAN / HYDROSPHERE -->
+  <a class="snt-panel ocean" href="#ocean">
+    <div class="snt-dot"></div>
+    <div class="snt-body">
+      <div class="snt-top">
+        <span class="snt-icon">🌊</span>
+        <div class="snt-labels">
+          <div class="snt-system">HYDROSPHERE</div>
+          <div class="snt-name">SEA LEVEL RISE</div>
+        </div>
+        <div class="snt-badge">RISING</div>
+      </div>
+      <div class="snt-bottom">
+        <div class="snt-rate">3.4 mm / yr</div>
+        <div class="snt-live-wrap">
+          <span class="snt-live" id="snt-ocean">0.000000</span>
+          <span class="snt-live-unit">mm since load</span>
+        </div>
+      </div>
+    </div>
+  </a>
+
 </div>
 
 <main style="padding-top:72px;"><!-- offset for fixed nav -->
@@ -756,17 +922,17 @@
     requestAnimationFrame(lp)})();
 })();
 
-/* ── Sticky section nav active state ── */
+/* ── Sentinel panel active state (scroll-driven) ── */
 (function(){
-  const links   = document.querySelectorAll('.snav-link');
+  const panels   = document.querySelectorAll('.snt-panel');
   const sections = ['ice','forest','ocean'].map(id => document.getElementById(id));
 
   const obs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const id = entry.target.id;
-        links.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector(`.snav-link.${id}`);
+        panels.forEach(p => p.classList.remove('active'));
+        const active = document.querySelector(`.snt-panel.${id}`);
         if (active) active.classList.add('active');
       }
     });
@@ -824,6 +990,10 @@
 
   // Element refs — null if section not rendered (guard all writes)
   const el = {
+    // Sentinel panel nav counters
+    sntIce:    document.getElementById('snt-ice'),
+    sntForest: document.getElementById('snt-forest'),
+    sntOcean:  document.getElementById('snt-ocean'),
     // ICE global
     iceGlobalPage:  document.getElementById('gl-ice-page'),
     iceGlobalToday: document.getElementById('gl-ice-today'),
@@ -863,6 +1033,11 @@
 
     const since = (Date.now() - pageStart) / 1000; // since page load
     const today = todayElapsed();                    // since midnight UTC
+
+    // ── Sentinel panel live counters (visible in nav tabs)
+    setEl('sntIce',    Math.floor(RATE.iceTotal    * since).toLocaleString());
+    setEl('sntForest', (RATE.forestTotal * since).toFixed(2));
+    setEl('sntOcean',  (RATE.oceanTotal  * since).toFixed(6));
 
     // ── ICE
     setEl('iceGlobalPage',  Math.floor(RATE.iceTotal * since).toLocaleString());
