@@ -122,6 +122,11 @@ export default {
       return json(result);
     }
 
+    // Tipping Point Cascade Engine — live planetary threshold monitor
+    if (url.pathname === '/api/tipping-points' && request.method === 'GET') {
+      return handleTippingPoints(request, env);
+    }
+
     // Block public access to the social post queue file
     if (url.pathname === '/social/posts.json') {
       return new Response('Not found', { status: 404 });
@@ -549,3 +554,258 @@ async function runSocialCycle(env) {
   console.log(`Social: posted ${post.id} →`, JSON.stringify(results));
   return { posted: post.id, platforms: post.platforms, results, remaining: pending.length - 1 };
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TIPPING POINT CASCADE ENGINE — planetary climate threshold monitor
+   Tracks 9 major Earth system tipping points and calculates real-time
+   cascade probability using live data from NOAA GML, NASA GISTEMP, NSIDC.
+
+   Architecture:
+     • 4 live data feeds (CO₂, CH₄, global temp, Arctic sea ice)
+     • 5 computed proxies derived from live data + IPCC AR6 baselines
+     • Cascade network: directed graph of which systems trigger others
+     • KV cache: 6-hour TTL (key: 'tipping_cache' in POSTS_KV)
+     • Fable 5 layer: replace proxies with real sensor feeds + ML inference
+
+   Endpoint: GET /api/tipping-points
+   Returns: { cascade, tipping_points, data_sources, fetched_at, ... }
+══════════════════════════════════════════════════════════════════════════ */
+
+// IPCC AR6 baselines and critical thresholds
+const TP_REFS = {
+  co2:  { preindustrial: 280, paris_15: 430, critical: 450, unit: 'ppm' },
+  ch4:  { preindustrial: 722, warning: 1950, critical: 2100, unit: 'ppb' },
+  temp: { baseline: 0, paris_15: 1.0, critical: 1.5, unit: '°C anomaly vs 1951–1980' },
+  ice:  { mean_1981_2010: 6.24, sigma: 0.60, critical: 1.0, unit: 'M km²' },
+};
+
+// Directed cascade graph: which tipping points amplify others when stressed
+const CASCADE_EDGES = {
+  arctic_ice:  ['permafrost', 'amoc', 'greenland'],
+  co2:         ['temp', 'arctic_ice', 'coral'],
+  temp:        ['arctic_ice', 'coral', 'amazon'],
+  ch4:         ['greenland', 'west_antarctic'],
+  amoc:        ['west_antarctic', 'amazon'],
+  amazon:      ['amoc', 'monsoon'],
+  permafrost:  ['greenland', 'west_antarctic'],
+  coral:       ['monsoon'],
+  greenland:   ['amoc'],
+};
+
+async function handleTippingPoints(request, env) {
+  const CACHE_KEY = 'tipping_cache';
+  const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
+
+  // Serve from KV cache if fresh
+  if (env.POSTS_KV) {
+    try {
+      const cached = await env.POSTS_KV.get(CACHE_KEY, 'json');
+      if (cached && (Date.now() - cached.fetched_at) < CACHE_TTL) {
+        return json({ ...cached, cache: 'HIT' });
+      }
+    } catch (_) { /* cache miss — fetch fresh */ }
+  }
+
+  // Fetch the 4 live data sources in parallel (each has its own timeout + fallback)
+  const [co2R, ch4R, tempR, iceR] = await Promise.allSettled([
+    fetchCO2(), fetchCH4(), fetchGlobalTemp(), fetchArcticIce(),
+  ]);
+
+  const co2  = co2R.status  === 'fulfilled' ? co2R.value  : null;
+  const ch4  = ch4R.status  === 'fulfilled' ? ch4R.value  : null;
+  const temp = tempR.status === 'fulfilled' ? tempR.value : null;
+  const ice  = iceR.status  === 'fulfilled' ? iceR.value  : null;
+
+  const tippingPoints = buildTippingPoints(co2, ch4, temp, ice);
+  const cascade       = calculateCascade(tippingPoints);
+
+  const result = {
+    fetched_at: Date.now(),
+    timestamp:  new Date().toISOString(),
+    cascade,
+    tipping_points: tippingPoints,
+    data_sources: {
+      co2:  co2  ? { value: co2.ppm,      date: co2.date,  source: 'NOAA GML / Mauna Loa Observatory' }  : null,
+      ch4:  ch4  ? { value: ch4.ppb,      date: ch4.date,  source: 'NOAA GML Global Mean CH₄' }          : null,
+      temp: temp ? { value: temp.anomaly,  year: temp.year, source: 'NASA GISTEMP v4' }                    : null,
+      ice:  ice  ? { value: ice.extent,    date: ice.date,  source: 'NSIDC Sea Ice Index v3' }             : null,
+    },
+    notes: [
+      'Live: CO₂, CH₄, global temperature, Arctic sea ice extent.',
+      'Proxy: AMOC, Amazon, permafrost, coral, Greenland — derived from live data + IPCC AR6 rates.',
+      'Phase 2 (Fable 5): replace all proxies with direct sensor feeds and ML inference.',
+    ],
+  };
+
+  // Cache result
+  if (env.POSTS_KV) {
+    try { await env.POSTS_KV.put(CACHE_KEY, JSON.stringify(result)); }
+    catch (_) { /* non-fatal */ }
+  }
+
+  return json({ ...result, cache: 'MISS' });
+}
+
+// Build all 9 tipping point objects with stress scores (0–100)
+function buildTippingPoints(co2, ch4, temp, ice) {
+  const r = TP_REFS;
+
+  // ── LIVE: CO₂ ─────────────────────────────────────────────────────────────
+  let co2Stress = 83; // fallback — ~425 ppm
+  let co2Label  = `~425 ppm (fallback — NOAA unavailable)`;
+  if (co2) {
+    co2Stress = clampStress((co2.ppm - r.co2.preindustrial) / (r.co2.critical - r.co2.preindustrial) * 100);
+    co2Label  = `${co2.ppm.toFixed(1)} ppm CO₂ (pre-industrial: ${r.co2.preindustrial} ppm · 2°C threshold: ${r.co2.critical} ppm)`;
+  }
+
+  // ── LIVE: Global Temperature ──────────────────────────────────────────────
+  let tempStress = 72; // fallback — ~1.2°C
+  let tempLabel  = `~+1.2°C anomaly (fallback — GISTEMP unavailable)`;
+  if (temp) {
+    tempStress = clampStress((temp.anomaly - r.temp.baseline) / (r.temp.critical - r.temp.baseline) * 100);
+    tempLabel  = `+${temp.anomaly.toFixed(2)}°C anomaly vs 1951–1980 (Paris 1.5°C ≈ >${r.temp.paris_15}°C on this scale)`;
+  }
+
+  // ── LIVE: Arctic Sea Ice ──────────────────────────────────────────────────
+  let iceStress = 62; // fallback — well below mean
+  let iceLabel  = `~4.3 M km² (fallback — NSIDC unavailable)`;
+  if (ice) {
+    const sigma = (r.ice.mean_1981_2010 - ice.extent) / r.ice.sigma;
+    iceStress   = clampStress((sigma / 3.5) * 100); // 3.5σ = 100% stress
+    iceLabel    = `${ice.extent.toFixed(2)} M km² · ${sigma.toFixed(1)}σ below 1981–2010 mean (${ice.date})`;
+  }
+
+  // ── LIVE: Permafrost CH₄ (atmospheric signal) ─────────────────────────────
+  let ch4Stress = 70; // fallback — ~1930 ppb
+  let ch4Label  = `~1930 ppb (fallback — NOAA GML unavailable)`;
+  if (ch4) {
+    ch4Stress = clampStress((ch4.ppb - r.ch4.preindustrial) / (r.ch4.critical - r.ch4.preindustrial) * 100);
+    ch4Label  = `${ch4.ppb.toFixed(0)} ppb CH₄ (pre-industrial: ${r.ch4.preindustrial} ppb · critical: ${r.ch4.critical} ppb)`;
+  }
+
+  // ── PROXY tipping points — derived from live data + published rates ────────
+  // These will be replaced by Fable 5 with direct sensor feeds + ML inference
+
+  // AMOC: proxy from Arctic freshwater flux (ice loss) + heat budget (temp)
+  const amocStress     = clampStress(iceStress * 0.40 + tempStress * 0.60);
+
+  // Amazon: 17% deforested (Mongabay 2024, tipping at ~25%) + temp coupling
+  const amazonStress   = clampStress((17 / 25) * 100 * 0.90 + tempStress * 0.10);
+
+  // Permafrost thaw rate: driven by Arctic warming + CH₄ trend
+  const permafrostStress = clampStress(iceStress * 0.50 + ch4Stress * 0.50);
+
+  // Coral bleaching: 4th global bleaching event 2024 — SST proxy from temp
+  const coralStress    = clampStress(tempStress * 1.15);
+
+  // Greenland ice mass loss ~280 Gt/yr — proxy from ice + temp
+  const greenlandStress = clampStress(iceStress * 0.60 + tempStress * 0.40);
+
+  return [
+    { id: 'co2',         name: 'CO₂ Concentration',    system: 'ATMOSPHERE', stress: co2Stress,       data_type: 'live',  cascades_to: CASCADE_EDGES.co2,        label: co2Label },
+    { id: 'temp',        name: 'Global Temperature',   system: 'ATMOSPHERE', stress: tempStress,      data_type: 'live',  cascades_to: CASCADE_EDGES.temp,       label: tempLabel },
+    { id: 'arctic_ice',  name: 'Arctic Sea Ice',       system: 'CRYOSPHERE', stress: iceStress,       data_type: 'live',  cascades_to: CASCADE_EDGES.arctic_ice, label: iceLabel },
+    { id: 'ch4',         name: 'Atmospheric CH₄',      system: 'CRYOSPHERE', stress: ch4Stress,       data_type: 'live',  cascades_to: CASCADE_EDGES.ch4,        label: ch4Label },
+    { id: 'amoc',        name: 'AMOC Slowdown',        system: 'OCEAN',      stress: amocStress,      data_type: 'proxy', cascades_to: CASCADE_EDGES.amoc,       label: `RAPID array proxy — Arctic melt + heat budget coupling` },
+    { id: 'amazon',      name: 'Amazon Dieback',       system: 'BIOSPHERE',  stress: amazonStress,    data_type: 'proxy', cascades_to: CASCADE_EDGES.amazon,     label: `~17% deforested (Mongabay 2024) · tipping threshold: 25%` },
+    { id: 'permafrost',  name: 'Permafrost Thaw',      system: 'CRYOSPHERE', stress: permafrostStress,data_type: 'proxy', cascades_to: CASCADE_EDGES.permafrost, label: `Arctic ice loss + CH₄ trend coupling` },
+    { id: 'coral',       name: 'Coral Reef Collapse',  system: 'BIOSPHERE',  stress: coralStress,     data_type: 'proxy', cascades_to: CASCADE_EDGES.coral,      label: `4th global bleaching event (2024) — SST proxy` },
+    { id: 'greenland',   name: 'Greenland Ice Sheet',  system: 'CRYOSPHERE', stress: greenlandStress, data_type: 'proxy', cascades_to: CASCADE_EDGES.greenland,  label: `~280 Gt/yr mass loss — Arctic ice + temp proxy` },
+  ];
+}
+
+// Overall cascade risk: weighted stress + network amplification
+function calculateCascade(tps) {
+  // Live data = full weight, proxies = 0.85x (conservative)
+  const w = tps.map(tp => tp.data_type === 'live' ? 1.0 : 0.85);
+  const totalW = w.reduce((a, b) => a + b, 0);
+  const baseScore = tps.reduce((s, tp, i) => s + tp.stress * w[i], 0) / totalW;
+
+  // Amplify when multiple high-stress nodes are connected in cascade graph
+  const hot = new Set(tps.filter(tp => tp.stress >= 65).map(tp => tp.id));
+  let links = 0;
+  tps.forEach(tp => {
+    if (hot.has(tp.id)) tp.cascades_to.forEach(t => { if (hot.has(t)) links++; });
+  });
+  const amp   = 1 + links * 0.035; // each active cascade link +3.5%
+  const score = clampStress(baseScore * amp);
+
+  const [level, colour, description] =
+    score < 25 ? ['STABLE',   '#22c55e', 'Earth systems within normal variance.'] :
+    score < 50 ? ['ELEVATED', '#eab308', 'Multiple systems trending toward thresholds. Active monitoring required.'] :
+    score < 75 ? ['WARNING',  '#f97316', 'Several tipping points above critical thresholds. Cascade risk is real.'] :
+                 ['CRITICAL', '#ef4444', 'Cross-system cascade conditions present. Urgent coordinated global action required.'];
+
+  return { score, level, colour, description, hot_nodes: hot.size, active_cascade_links: links, amplification: amp.toFixed(3) };
+}
+
+// ── Data fetchers — each has a 10s timeout and throws on bad data ──────────
+
+async function fetchCO2() {
+  const res  = await fetch('https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_weekly_mlo.csv', { signal: AbortSignal.timeout(10000) });
+  if (!res.ok) throw new Error(`CO₂ HTTP ${res.status}`);
+  const text = await res.text();
+  const rows = text.split('\n').filter(l => l.trim() && !l.startsWith('#'));
+  const last = rows[rows.length - 1].trim().split(/\s*,\s*/);
+  // Columns: year, month, day, decimal_date, co2, days_elapsed, ...
+  const ppm = parseFloat(last[4]);
+  if (isNaN(ppm) || ppm < 350) throw new Error('CO₂ parse error');
+  return { ppm, date: `${last[0].trim()}-${last[1].trim().padStart(2,'0')}-${last[2].trim().padStart(2,'0')}` };
+}
+
+async function fetchCH4() {
+  const res  = await fetch('https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.csv', { signal: AbortSignal.timeout(10000) });
+  if (!res.ok) throw new Error(`CH₄ HTTP ${res.status}`);
+  const text = await res.text();
+  const rows = text.split('\n').filter(l => l.trim() && !l.startsWith('#'));
+  const last = rows[rows.length - 1].trim().split(/\s*,\s*/);
+  // Columns: year, month, decimal_date, average, trend, ...
+  const ppb = parseFloat(last[3]);
+  if (isNaN(ppb) || ppb < 1700) throw new Error('CH₄ parse error');
+  return { ppb, date: `${last[0].trim()}-${last[1].trim().padStart(2,'0')}` };
+}
+
+async function fetchGlobalTemp() {
+  const res  = await fetch('https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv', { signal: AbortSignal.timeout(12000) });
+  if (!res.ok) throw new Error(`GISTEMP HTTP ${res.status}`);
+  const text = await res.text();
+  // Filter to data rows (start with 4-digit year)
+  const rows = text.split('\n').filter(l => /^\d{4}/.test(l.trim()));
+  const last = rows[rows.length - 1].trim().split(/\s*,\s*/);
+  // Cols: Year, Jan–Dec (1–12), J-D (13), D-N (14), DJF (15), MAM (16), JJA (17), SON (18)
+  // CSV v4 values are in °C directly. "***" = missing (current year incomplete).
+  let raw = parseFloat(last[13]); // annual mean
+  if (isNaN(raw)) {
+    // Current year incomplete — use last valid monthly value
+    for (let i = 12; i >= 1; i--) { raw = parseFloat(last[i]); if (!isNaN(raw)) break; }
+  }
+  if (isNaN(raw)) throw new Error('GISTEMP parse error');
+  // NASA GISTEMP CSV v4 stores values in °C directly (not hundredths)
+  return { anomaly: raw, year: last[0].trim() };
+}
+
+async function fetchArcticIce() {
+  // Try two NSIDC endpoints — first is primary, second is mirror
+  const urls = [
+    'https://noaadata.apps.nsidc.org/NOAA/G02135/north/monthly/data/N_seaice_extent_monthly_v3.0.csv',
+    'https://masie_web.apps.nsidc.org/pub/DATASETS/NOAA/G02135/north/monthly/data/N_seaice_extent_monthly_v3.0.csv',
+  ];
+  let text = null;
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(12000) });
+      if (res.ok) { text = await res.text(); break; }
+    } catch (_) { /* try next URL */ }
+  }
+  if (!text) throw new Error('Sea ice: all endpoints unreachable');
+  // Skip header and comment lines
+  const rows = text.split('\n').filter(l => l.trim() && !l.startsWith('Year') && !l.startsWith('#') && /^\s*\d{4}/.test(l));
+  const last = rows[rows.length - 1].trim().split(/\s*,\s*/);
+  // Columns: Year, Month, Extent, Area, ...
+  const extent = parseFloat(last[2]);
+  if (isNaN(extent) || extent < 1 || extent > 20) throw new Error('Sea ice parse error');
+  return { extent, date: `${last[0].trim()}-${last[1].trim().padStart(2,'0')}` };
+}
+
+// Clamp to 0–100 integer
+function clampStress(n) { return Math.min(100, Math.max(0, Math.round(n))); }

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tipping Point Cascade Engine — Mother Earth</title>
+  <meta name="description" content="Real-time monitoring of 9 major planetary tipping points and cascade probability. Live data from NASA, NOAA, and NSIDC.">
+  <link rel="icon" href="/assets/logo-final.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://motherearth.systems/tipping-points">
+  <style>
+    :root {
+      --bg:        #050f09;
+      --surface:   #0d1f14;
+      --border:    #1a3a22;
+      --green:     #1a7a3a;
+      --green-hi:  #22c55e;
+      --gold:      #c4a000;
+      --text:      #e8f5ec;
+      --muted:     #6b8f72;
+      --red:       #ef4444;
+      --orange:    #f97316;
+      --yellow:    #eab308;
+      --blue:      #3b82f6;
+      --mono:      'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────────── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
+    nav a:hover { color: var(--text); }
+    nav .logo { color: var(--green-hi); font-weight: 700; font-size: 15px; margin-right: auto; }
+    nav .badge {
+      background: #0d2b14;
+      border: 1px solid var(--green);
+      color: var(--green-hi);
+      font-size: 10px;
+      font-family: var(--mono);
+      letter-spacing: .08em;
+      padding: 3px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO ────────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 60px 24px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 36px;
+      font-size: 15px;
+    }
+
+    /* ── CASCADE RISK BANNER ─────────────────────────────────────────────── */
+    .cascade-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      max-width: 700px;
+      margin: 0 auto 60px;
+      text-align: center;
+    }
+    .cascade-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .cascade-score {
+      font-size: 72px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin-bottom: 8px;
+      transition: color .4s;
+    }
+    .cascade-level {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+      transition: color .4s;
+    }
+    .cascade-desc {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 440px;
+      margin: 0 auto 20px;
+    }
+    .cascade-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-chip {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .05em;
+    }
+    .meta-chip span { color: var(--text); font-weight: 600; }
+
+    /* ── TIPPING POINT GRID ──────────────────────────────────────────────── */
+    .section-header {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      padding: 0 24px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-family: var(--mono);
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-sub { font-size: 12px; color: var(--muted); }
+
+    .tp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+
+    .tp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+      transition: border-color .2s;
+    }
+    .tp-card:hover { border-color: #2a5c34; }
+    .tp-card.hot   { border-color: #5a2a0a; }
+
+    .tp-system {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .tp-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tp-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .tp-badge.live  { background: #0d2b14; border: 1px solid var(--green); color: var(--green-hi); }
+    .tp-badge.proxy { background: #1a1a2e; border: 1px solid #3b3b70; color: #8888cc; }
+
+    /* Stress bar */
+    .stress-wrap { margin-bottom: 8px; }
+    .stress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      font-family: var(--mono);
+    }
+    .stress-val { font-weight: 700; }
+    .stress-bar {
+      height: 6px;
+      background: #1a2e1e;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .stress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width .8s cubic-bezier(.4,0,.2,1), background .4s;
+    }
+
+    .tp-label {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 10px;
+    }
+
+    /* Cascade arrow */
+    .tp-cascades {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .cascade-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: #111d14;
+      border: 1px solid #1e3a24;
+      color: var(--muted);
+    }
+    .cascade-tag::before { content: '→ '; }
+
+    /* ── DATA SOURCES ────────────────────────────────────────────────────── */
+    .sources {
+      max-width: 900px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .source-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .source-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .source-value {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green-hi);
+      margin-bottom: 4px;
+    }
+    .source-meta { font-size: 11px; color: var(--muted); }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a { color: var(--green-hi); text-decoration: none; }
+
+    /* ── LOADING / ERROR ─────────────────────────────────────────────────── */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+    .loading::after { content: '...'; animation: dots 1.2s steps(4, end) infinite; }
+    @keyframes dots { 0%,100%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+
+    .error-msg {
+      background: #1a0a0a;
+      border: 1px solid #5a1a1a;
+      border-radius: 8px;
+      padding: 16px 20px;
+      color: #f87171;
+      font-size: 13px;
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── LAST UPDATED ────────────────────────────────────────────────────── */
+    .updated {
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: .05em;
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Mother Earth</a>
+  <a href="/earth-regions">Regions</a>
+  <a href="/mission-control">Mission Control</a>
+  <a href="/iris">IRIS Data</a>
+  <div class="badge">GAIA · Live</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Tipping Point Cascade Engine · GAIA Branch</div>
+  <h1>Planetary Threshold Monitor</h1>
+  <p>
+    Nine Earth systems. Each has a tipping point. Cross enough simultaneously and
+    they amplify each other in ways that become self-sustaining. This is the cascade map.
+  </p>
+</div>
+
+<!-- Cascade risk banner -->
+<div style="max-width:900px;margin:0 auto;padding:0 24px">
+  <div class="cascade-banner" id="cascade-banner">
+    <div class="cascade-label">Overall Cascade Risk</div>
+    <div class="loading" id="banner-loading">Fetching live data</div>
+    <div id="banner-content" style="display:none">
+      <div class="cascade-score" id="cascade-score">—</div>
+      <div class="cascade-level" id="cascade-level">—</div>
+      <div class="cascade-desc" id="cascade-desc"></div>
+      <div class="cascade-meta">
+        <div class="meta-chip">HOT NODES <span id="meta-hot">—</span></div>
+        <div class="meta-chip">CASCADE LINKS <span id="meta-links">—</span></div>
+        <div class="meta-chip">AMPLIFICATION <span id="meta-amp">—</span>×</div>
+      </div>
+    </div>
+    <div class="error-msg" id="banner-error" style="display:none">
+      Unable to load live data. Retrying in 30 seconds.
+    </div>
+  </div>
+</div>
+
+<div class="updated" id="last-updated"></div>
+
+<!-- Tipping point cards -->
+<div class="section-header">
+  <span class="section-title">9 Tipping Points</span>
+  <span class="section-sub">Live feeds: CO₂, CH₄, temperature, sea ice · Proxies: AMOC, Amazon, permafrost, coral, Greenland</span>
+</div>
+
+<div class="tp-grid" id="tp-grid">
+  <div class="loading" style="grid-column:1/-1;padding:60px 0">Loading tipping point data</div>
+</div>
+
+<!-- Data sources -->
+<div class="section-header">
+  <span class="section-title">Live Data Sources</span>
+  <span class="section-sub">Cached 6 hours · Direct feeds from NASA, NOAA, NSIDC</span>
+</div>
+<div class="sources">
+  <div class="sources-grid" id="sources-grid">
+    <div class="loading" style="grid-column:1/-1">Loading</div>
+  </div>
+</div>
+
+<!-- Methodology note -->
+<div style="max-width:900px;margin:0 auto 60px;padding:0 24px">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px 24px;font-size:12px;color:var(--muted);line-height:1.8">
+    <strong style="color:var(--text);font-size:13px">Methodology</strong><br>
+    Baselines and critical thresholds from IPCC AR6 (2021). Stress scores (0–100) measure deviation from pre-industrial or 1981–2010 reference values.
+    Cascade probability amplifies when multiple high-stress (≥65) tipping points are connected in the cascade network — each active link adds 3.5%.
+    Four tipping points use live API feeds (NOAA GML, NASA GISTEMP, NSIDC). Five use proxy derivations from live data and published rates.
+    <strong style="color:var(--gold)">Phase 2 (Fable 5):</strong> All proxies will be replaced with direct sensor feeds and ML inference on raw observational data.
+  </div>
+</div>
+
+<footer>
+  <p>
+    Data: <a href="https://gml.noaa.gov/ccgg/trends/" target="_blank" rel="noopener">NOAA GML</a> ·
+    <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISTEMP</a> ·
+    <a href="https://nsidc.org/data/G02135" target="_blank" rel="noopener">NSIDC Sea Ice Index</a> ·
+    Science: IPCC AR6 (2021) · Lenton et al. (2019) Nature
+    <br><br>
+    <a href="https://motherearth.systems">motherearth.systems</a> ·
+    A GAIA Branch output of Mother Earth Kenya Environmental AI Ltd
+  </p>
+</footer>
+
+<script>
+// ── Colour helpers ──────────────────────────────────────────────────────────
+function stressColour(s) {
+  if (s < 30) return '#22c55e';
+  if (s < 55) return '#84cc16';
+  if (s < 70) return '#eab308';
+  if (s < 85) return '#f97316';
+  return '#ef4444';
+}
+
+const SYSTEM_ICONS = {
+  ATMOSPHERE: '🌡️',
+  CRYOSPHERE: '❄️',
+  OCEAN:      '🌊',
+  BIOSPHERE:  '🌿',
+};
+
+const TP_NAMES_SHORT = {
+  co2: 'CO₂', temp: 'Temperature', arctic_ice: 'Arctic Ice',
+  ch4: 'CH₄', amoc: 'AMOC', amazon: 'Amazon',
+  permafrost: 'Permafrost', coral: 'Coral', greenland: 'Greenland',
+};
+
+// ── Render ──────────────────────────────────────────────────────────────────
+function renderCascade(c) {
+  document.getElementById('banner-loading').style.display = 'none';
+  document.getElementById('banner-content').style.display = 'block';
+
+  const scoreEl = document.getElementById('cascade-score');
+  const levelEl = document.getElementById('cascade-level');
+  scoreEl.textContent = c.score;
+  scoreEl.style.color = c.colour;
+  levelEl.textContent = c.level;
+  levelEl.style.color = c.colour;
+  document.getElementById('cascade-desc').textContent  = c.description;
+  document.getElementById('meta-hot').textContent   = c.hot_nodes;
+  document.getElementById('meta-links').textContent = c.active_cascade_links;
+  document.getElementById('meta-amp').textContent   = c.amplification;
+}
+
+function renderTippingPoints(tps) {
+  const grid = document.getElementById('tp-grid');
+  grid.innerHTML = '';
+
+  tps.forEach(tp => {
+    const col   = stressColour(tp.stress);
+    const isHot = tp.stress >= 65;
+
+    const cascadeTagsHTML = (tp.cascades_to || []).map(t =>
+      `<span class="cascade-tag">${TP_NAMES_SHORT[t] || t}</span>`
+    ).join('');
+
+    const card = document.createElement('div');
+    card.className = 'tp-card' + (isHot ? ' hot' : '');
+    card.innerHTML = `
+      <div class="tp-system">${SYSTEM_ICONS[tp.system] || ''} ${tp.system}</div>
+      <div class="tp-name">
+        ${tp.name}
+        <span class="tp-badge ${tp.data_type}">${tp.data_type}</span>
+      </div>
+      <div class="stress-wrap">
+        <div class="stress-header">
+          <span>Stress</span>
+          <span class="stress-val" style="color:${col}">${tp.stress}/100</span>
+        </div>
+        <div class="stress-bar">
+          <div class="stress-fill" style="width:${tp.stress}%;background:${col}"></div>
+        </div>
+      </div>
+      <div class="tp-label">${tp.label}</div>
+      ${cascadeTagsHTML ? `<div class="tp-cascades">${cascadeTagsHTML}</div>` : ''}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderSources(ds) {
+  const grid = document.getElementById('sources-grid');
+  grid.innerHTML = '';
+
+  const entries = [
+    { key: 'co2',  label: 'CO₂',               unit: ' ppm',  icon: '🔵' },
+    { key: 'ch4',  label: 'Methane (CH₄)',       unit: ' ppb',  icon: '🟡' },
+    { key: 'temp', label: 'Temp Anomaly',         unit: '°C',    icon: '🌡️' },
+    { key: 'ice',  label: 'Arctic Sea Ice',       unit: ' M km²',icon: '❄️' },
+  ];
+
+  entries.forEach(e => {
+    const d = ds[e.key];
+    const card = document.createElement('div');
+    card.className = 'source-card';
+    if (d) {
+      const val = e.key === 'temp' ? `+${Number(d.value).toFixed(2)}` : Number(d.value).toFixed(e.key === 'ice' ? 2 : 1);
+      card.innerHTML = `
+        <div class="source-name">${e.icon} ${e.label}</div>
+        <div class="source-value">${val}${e.unit}</div>
+        <div class="source-meta">${d.source}</div>
+        <div class="source-meta" style="margin-top:2px">${d.date || d.year || ''}</div>
+      `;
+    } else {
+      card.innerHTML = `
+        <div class="source-name">${e.icon} ${e.label}</div>
+        <div class="source-value" style="color:var(--muted);font-size:14px">Unavailable</div>
+        <div class="source-meta">Fetch failed — using fallback</div>
+      `;
+    }
+    grid.appendChild(card);
+  });
+}
+
+// ── Fetch + render ──────────────────────────────────────────────────────────
+async function load() {
+  try {
+    const res  = await fetch('/api/tipping-points');
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    const data = await res.json();
+
+    renderCascade(data.cascade);
+    renderTippingPoints(data.tipping_points);
+    renderSources(data.data_sources);
+
+    const ts = new Date(data.timestamp);
+    const cacheStr = data.cache === 'HIT' ? ' · Cached' : ' · Fresh';
+    document.getElementById('last-updated').textContent =
+      `Data as of ${ts.toUTCString()}${cacheStr}`;
+  } catch (err) {
+    document.getElementById('banner-loading').style.display = 'none';
+    document.getElementById('banner-error').style.display = 'block';
+    document.getElementById('tp-grid').innerHTML =
+      `<div class="error-msg" style="grid-column:1/-1">Failed to load: ${err.message}</div>`;
+    // Retry in 30s
+    setTimeout(load, 30000);
+  }
+}
+
+load();
+</script>
+</body>
+</html>
