@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 2 — Fable 5 Roadmap · Mother Earth</title>
+  <meta name="description" content="The next frontier of Mother Earth's planetary intelligence system — 10 capabilities being designed for deployment with next-generation AI.">
+  <link rel="icon" href="/assets/logo-final.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://motherearth.systems/fable5-roadmap">
+  <style>
+    :root {
+      --bg: #050f09; --surface: #0d1f14; --border: #1a3a22;
+      --green: #1a7a3a; --green-hi: #22c55e; --gold: #c4a000;
+      --text: #e8f5ec; --muted: #6b8f72; --red: #ef4444;
+      --orange: #f97316; --yellow: #eab308; --purple: #a855f7;
+      --mono: 'SF Mono','Fira Code','Cascadia Code',monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+
+    nav { border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
+    nav a:hover { color: var(--text); }
+    nav .logo { color: var(--green-hi); font-weight: 700; font-size: 15px; margin-right: auto; }
+
+    .hero { max-width: 860px; margin: 0 auto; padding: 72px 24px 56px; text-align: center; }
+    .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--purple); text-transform: uppercase; margin-bottom: 16px; }
+    h1 { font-size: clamp(1.8rem, 4.5vw, 3rem); font-weight: 800; margin-bottom: 16px; line-height: 1.1; }
+    .hero p { color: var(--muted); max-width: 580px; margin: 0 auto 28px; font-size: 15px; }
+
+    .phase-bar {
+      display: flex; justify-content: center; gap: 0; max-width: 540px;
+      margin: 0 auto 64px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+    }
+    .phase-item {
+      flex: 1; padding: 12px 8px; text-align: center;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+      border-right: 1px solid var(--border);
+    }
+    .phase-item:last-child { border-right: none; }
+    .phase-item.done { background: #0d2b14; color: var(--green-hi); }
+    .phase-item.active { background: #1a1a0d; color: var(--gold); }
+    .phase-item.future { background: #110d1a; color: var(--purple); }
+    .phase-label { font-size: 8px; opacity: .6; margin-bottom: 3px; }
+
+    /* Cards */
+    .section { max-width: 900px; margin: 0 auto 64px; padding: 0 24px; }
+    .section-head { margin-bottom: 28px; }
+    .section-head h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+    .section-head p { color: var(--muted); font-size: 13px; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 22px; position: relative;
+      transition: border-color .2s;
+    }
+    .card:hover { border-color: #2a4c34; }
+    .card-num {
+      font-family: var(--mono); font-size: 10px; color: var(--muted);
+      letter-spacing: .1em; margin-bottom: 10px;
+    }
+    .card-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+    .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .card p { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .card-why {
+      font-size: 11px; color: var(--gold); font-family: var(--mono);
+      padding-top: 12px; border-top: 1px solid var(--border);
+      letter-spacing: .04em;
+    }
+    .card-why::before { content: 'WHY FABLE 5 — '; opacity: .6; }
+
+    .card.dark-carbon { border-color: #3a2a0a; }
+    .card.cascade    { border-color: #1a2a3a; }
+    .card.research   { border-color: #1a3a2a; }
+    .card.animal     { border-color: #2a1a3a; }
+
+    /* What's live now */
+    .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .live-card {
+      background: #0a1e0f; border: 1px solid #1a3a22; border-radius: 8px;
+      padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px;
+    }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-hi); box-shadow: 0 0 6px var(--green-hi); margin-top: 4px; flex-shrink: 0; }
+    .live-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+    .live-desc { font-size: 11px; color: var(--muted); }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+    .t-item { position: relative; margin-bottom: 32px; }
+    .t-dot { position: absolute; left: -28px; top: 4px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); }
+    .t-dot.live  { border-color: var(--green-hi); background: var(--green-hi); box-shadow: 0 0 8px var(--green-hi); }
+    .t-dot.build { border-color: var(--gold); background: var(--gold); }
+    .t-dot.fable { border-color: var(--purple); background: transparent; }
+    .t-date { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: .06em; margin-bottom: 4px; }
+    .t-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .t-desc { font-size: 12px; color: var(--muted); }
+
+    /* CTA */
+    .cta-block {
+      max-width: 600px; margin: 0 auto 80px; padding: 36px 32px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; text-align: center;
+    }
+    .cta-block h2 { font-size: 1.3rem; margin-bottom: 10px; }
+    .cta-block p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+    .cta-btn {
+      display: inline-block; padding: 12px 28px;
+      background: var(--green); color: #fff; text-decoration: none;
+      border-radius: 6px; font-size: 14px; font-weight: 600;
+      transition: background .2s;
+    }
+    .cta-btn:hover { background: #1e8a42; }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; font-size: 12px; color: var(--muted); }
+    footer a { color: var(--green-hi); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .phase-bar { flex-direction: column; max-width: 300px; }
+      .phase-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .phase-item:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Mother Earth</a>
+  <a href="/tipping-points">Tipping Points</a>
+  <a href="/mission-control">Mission Control</a>
+  <a href="/roadmap">Roadmap</a>
+  <a href="/iris">IRIS Data</a>
+</nav>
+
+<div class="hero">
+  <div class="tag">Phase 2 · Fable 5 Intelligence Layer</div>
+  <h1>What Comes Next</h1>
+  <p>
+    Phase 1 is live: 33 agents, live data feeds, tipping point cascade engine.
+    Phase 2 requires reasoning depth that current AI cannot sustain.
+    This is what Fable 5 will execute — with military precision.
+  </p>
+
+  <div class="phase-bar">
+    <div class="phase-item done">
+      <div class="phase-label">PHASE 1</div>
+      LIVE NOW
+    </div>
+    <div class="phase-item active">
+      <div class="phase-label">PIPELINE BUILD</div>
+      IN PROGRESS
+    </div>
+    <div class="phase-item future">
+      <div class="phase-label">PHASE 2</div>
+      FABLE 5
+    </div>
+    <div class="phase-item future">
+      <div class="phase-label">PHASE 3</div>
+      SCALE
+    </div>
+  </div>
+</div>
+
+<!-- What's live now -->
+<div class="section">
+  <div class="section-head">
+    <h2>Phase 1 — Live Now</h2>
+    <p>Everything built and deployed to motherearth.systems as of June 2026.</p>
+  </div>
+  <div class="live-grid">
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">33-Agent AI Org</div><div class="live-desc">7 branches running 24/7 on Node.js + Claude</div></div></div>
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">Tipping Point Engine</div><div class="live-desc">9 Earth systems, live NOAA/NASA/NSIDC feeds</div></div></div>
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">Social Auto-Poster</div><div class="live-desc">X + LinkedIn, Mon/Wed/Fri 12:00 Nairobi</div></div></div>
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">Council Chamber</div><div class="live-desc">Public LLM deliberation + KV archive</div></div></div>
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">IRIS Marketplace</div><div class="live-desc">4 data tiers, research access free 6 months</div></div></div>
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">Purpose Trust + Golden Share</div><div class="live-desc">Mission locked. No investor can override it.</div></div></div>
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">Kenya SEZ Entity</div><div class="live-desc">Incorporated PVT-PQ1AZ3KV · 7 June 2026</div></div></div>
+    <div class="live-card"><div class="live-dot"></div><div><div class="live-name">Global Chapter System</div><div class="live-desc">9 countries in active dialogue</div></div></div>
+  </div>
+</div>
+
+<!-- Fable 5 tasks -->
+<div class="section">
+  <div class="section-head">
+    <h2>Phase 2 — Fable 5 Capabilities</h2>
+    <p>These 10 tasks require reasoning depth, multi-modal data synthesis, and autonomous execution beyond current AI. Data pipelines are being built now. Intelligence layer deploys with Fable 5.</p>
+  </div>
+  <div class="cards">
+
+    <div class="card dark-carbon">
+      <span class="card-num">F5-001 · HIGHEST PRIORITY</span>
+      <span class="card-icon">🛰️</span>
+      <h3>Dark Carbon Ledger</h3>
+      <p>Cross-correlate satellite thermal signatures, AIS global shipping transponder data, energy grid consumption, and SEC/EU ETS financial disclosures to surface unreported emissions at the entity level. Output: verified intelligence briefs, not accusations. AMARA gates every publication.</p>
+      <div class="card-why">Requires simultaneous multi-modal reasoning across 4 incompatible data formats. Current models cannot maintain coherence at this cross-domain synthesis depth.</div>
+    </div>
+
+    <div class="card cascade">
+      <span class="card-num">F5-002 · GAIA FLAGSHIP</span>
+      <span class="card-icon">🌐</span>
+      <h3>Predictive Cascade Modelling</h3>
+      <p>Extend the current tipping point engine from "what is the stress now" to "if Amazon deforestation reaches 22%, what is the probability of AMOC weakening within 5 years?" Real-time probabilistic cascade forecasting with confidence intervals from IPCC scenarios.</p>
+      <div class="card-why">Requires sustained probabilistic reasoning over a directed graph with 9 nodes, non-linear feedback loops, and uncertainty propagation. Beyond current chain-of-thought depth.</div>
+    </div>
+
+    <div class="card research">
+      <span class="card-num">F5-003 · CREDIBILITY ENGINE</span>
+      <span class="card-icon">📄</span>
+      <h3>Autonomous Research Agent</h3>
+      <p>Fable 5 formulates original environmental hypotheses from GAIA data, runs statistical analysis, writes peer-reviewed papers, and submits to open-access journals. Human scientist signs as corresponding author. Mother Earth Kenya becomes a publishing institution.</p>
+      <div class="card-why">Requires closed-loop scientific reasoning: hypothesis → experiment design → analysis → paper. No current model has demonstrated reliable novel discovery in this loop.</div>
+    </div>
+
+    <div class="card animal">
+      <span class="card-num">F5-004 · MOST RADICAL</span>
+      <span class="card-icon">🐋</span>
+      <h3>Animal Behavioral Early Warning</h3>
+      <p>Decode animal stress signals as planetary early warning — whale song frequency shifts (NOAA PMEL hydrophones), bird migration deviation (Cornell Lab eBird API), coral spawning timing changes (AIMS reef sensors). Animals precede satellite data by weeks. No instrument detects what a billion years of evolution already knows.</p>
+      <div class="card-why">Requires cross-species signal interpretation across acoustic, movement, and biological data. Genuine frontier — no existing system attempts this at scale.</div>
+    </div>
+
+    <div class="card">
+      <span class="card-num">F5-005</span>
+      <span class="card-icon">💬</span>
+      <h3>Natural Language Data Query</h3>
+      <p>"Show me Arctic sea ice trend for the last 10 years vs Amazon fire frequency, with AMOC transport as a third axis." Fable 5 interprets plain-language requests, joins multi-source datasets, and returns charts + narrative in one pass.</p>
+      <div class="card-why">Requires multi-source data joining with semantic understanding of environmental variable relationships. Current models produce plausible but unreliable cross-domain queries.</div>
+    </div>
+
+    <div class="card">
+      <span class="card-num">F5-006</span>
+      <span class="card-icon">⚖️</span>
+      <h3>Environmental Litigation Intelligence</h3>
+      <p>AMARA + Fable 5 build the world's most comprehensive environmental law database: precedents, plaintiffs, outcomes, and novel legal arguments across 190 jurisdictions. Output: litigation strategy briefs for NGOs and governments. Published as intelligence, not legal advice.</p>
+      <div class="card-why">Requires synthesis of case law across languages, jurisdictions, and decades. Current models hallucinate citations under sustained legal reasoning pressure.</div>
+    </div>
+
+    <div class="card">
+      <span class="card-num">F5-007</span>
+      <span class="card-icon">🌍</span>
+      <h3>Multi-Language Chapter Portals</h3>
+      <p>Each of the 9 chapter countries (USA, Brazil, South Africa, Nigeria, UK, India, France, Indonesia, Canada) gets a localised portal in their primary language — not just translated, but culturally adapted. Content, regulatory framing, and data emphasis adapted per jurisdiction.</p>
+      <div class="card-why">Requires sustained cultural and regulatory context-switching across 9 markets simultaneously. Beyond current translation-only approaches.</div>
+    </div>
+
+    <div class="card">
+      <span class="card-num">F5-008</span>
+      <span class="card-icon">📊</span>
+      <h3>Real-Time Ecosystem Valuation</h3>
+      <p>Price ecosystem services in real time as tradeable IRIS assets: Amazon pollination ($X/acre/day), Atlantic fisheries stock ($/tonne carbon-equivalent), reef bleaching impact ($/km² loss). ATLAS prices these. NEXUS tokenises them. IRIS trades them.</p>
+      <div class="card-why">Requires real-time integration of ecological, economic, and financial models with live sensor data. No standard methodology exists — Fable 5 derives it from first principles.</div>
+    </div>
+
+    <div class="card">
+      <span class="card-num">F5-009</span>
+      <span class="card-icon">🔍</span>
+      <h3>Chapter Applicant AI Screening</h3>
+      <p>When a chapter application comes in (9 countries active, more incoming), Fable 5 screens: founder credibility, local regulatory environment, technical capacity, strategic fit, conflict of interest. Returns a structured recommendation to SAGE within 60 seconds.</p>
+      <div class="card-why">Requires integrating public data, application content, and jurisdictional context into a governance-grade decision. Current models produce inconsistent risk scores.</div>
+    </div>
+
+    <div class="card">
+      <span class="card-num">F5-010</span>
+      <span class="card-icon">🏛️</span>
+      <h3>Institutional Pitch Generator</h3>
+      <p>A climate fund, university, or government arrives at motherearth.systems. Fable 5 identifies them (via domain/IP), generates a custom pitch deck, data sample, and contract term sheet in their language and regulatory context — automatically, before a human has been in touch.</p>
+      <div class="card-why">Requires prospect identification, dynamic document generation, and jurisdictional customisation in a single coherent pass. Current models fail on the integration step.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Execution timeline -->
+<div class="section">
+  <div class="section-head">
+    <h2>Build Sequence</h2>
+    <p>What we're building now so Fable 5 can deploy instantly when available.</p>
+  </div>
+  <div class="timeline">
+    <div class="t-item">
+      <div class="t-dot live"></div>
+      <div class="t-date">JUNE 2026 — LIVE</div>
+      <div class="t-title">Tipping Point Cascade Engine (Phase 1)</div>
+      <div class="t-desc">Live NOAA/NASA data feeds, 9 tipping point stress scores, cascade network calculation, 6-hour KV cache.</div>
+    </div>
+    <div class="t-item">
+      <div class="t-dot live"></div>
+      <div class="t-date">JUNE 2026 — LIVE</div>
+      <div class="t-title">Social Auto-Poster</div>
+      <div class="t-desc">X + LinkedIn posting via Cloudflare cron. 14-post queue loaded. Mon/Wed/Fri 12:00 Nairobi.</div>
+    </div>
+    <div class="t-item">
+      <div class="t-dot build"></div>
+      <div class="t-date">JULY 2026 — BUILDING</div>
+      <div class="t-title">Dark Carbon Ledger Data Pipeline</div>
+      <div class="t-desc">AIS shipping ingestion, NASA FIRMS thermal layer, EU ETS financial cross-reference. AMARA legal gates designed. Ready for Fable 5 intelligence layer.</div>
+    </div>
+    <div class="t-item">
+      <div class="t-dot build"></div>
+      <div class="t-date">JULY 2026 — BUILDING</div>
+      <div class="t-title">Animal Behavioral Early Warning — Data Ingestion</div>
+      <div class="t-desc">Cornell Lab eBird API integration, NOAA PMEL hydrophone archive connector, AIMS reef sensor pipeline. Raw data flowing before Fable 5 interprets it.</div>
+    </div>
+    <div class="t-item">
+      <div class="t-dot build"></div>
+      <div class="t-date">AUGUST 2026</div>
+      <div class="t-title">IRIS Lead Capture + Payment Flow</div>
+      <div class="t-desc">Stripe integration, M-Pesa Daraja, automated onboarding. First institutional data contract target.</div>
+    </div>
+    <div class="t-item">
+      <div class="t-dot fable"></div>
+      <div class="t-date">ON FABLE 5 AVAILABILITY</div>
+      <div class="t-title">Dark Carbon Ledger — Intelligence Layer Activation</div>
+      <div class="t-desc">Pipelines ready. Fable 5 runs multi-modal cross-correlation and generates first Dark Carbon briefs. AMARA reviews before publication.</div>
+    </div>
+    <div class="t-item">
+      <div class="t-dot fable"></div>
+      <div class="t-date">ON FABLE 5 AVAILABILITY</div>
+      <div class="t-title">Predictive Cascade Modelling + Animal Early Warning</div>
+      <div class="t-desc">Both activated simultaneously — Fable 5 runs closed-loop analysis on pre-loaded data. First research output published.</div>
+    </div>
+    <div class="t-item">
+      <div class="t-dot fable"></div>
+      <div class="t-date">Q4 2026</div>
+      <div class="t-title">Autonomous Research Agent — First Submission</div>
+      <div class="t-desc">Fable 5 writes first paper. Human co-author review. Submission to Nature Climate Change or similar open-access journal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section" style="padding:0 24px">
+  <div class="cta-block">
+    <h2>Get Early Access</h2>
+    <p>Institutions, research partners, and government bodies who join now get first access to Dark Carbon Ledger briefs and Predictive Cascade data when Phase 2 launches.</p>
+    <a href="/iris" class="cta-btn">Request Research Access →</a>
+  </div>
+</div>
+
+<footer>
+  <p>
+    <a href="/">motherearth.systems</a> ·
+    <a href="/tipping-points">Tipping Points</a> ·
+    <a href="/roadmap">Roadmap</a> ·
+    <a href="/governance">Governance</a>
+    <br><br>
+    Mother Earth Kenya Environmental AI Ltd · PVT-PQ1AZ3KV · Nairobi, Kenya
+  </p>
+</footer>
+</body>
+</html>

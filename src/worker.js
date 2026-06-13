@@ -56,6 +56,7 @@ Recent milestones (cite these honestly when asked):
   post-incorporation.
 
 Key pages to direct visitors to:
+- /tipping-points  — live planetary tipping point cascade engine (9 systems, real-time data)
 - /mission-control — live AI ops, Council Chamber
 - /iris            — data marketplace + research access
 - /chapters        — global expansion + apply to lead
@@ -125,6 +126,11 @@ export default {
     // Tipping Point Cascade Engine — live planetary threshold monitor
     if (url.pathname === '/api/tipping-points' && request.method === 'GET') {
       return handleTippingPoints(request, env);
+    }
+
+    // Contact / lead capture — stores in KV + returns JSON (replaces mailto:)
+    if (url.pathname === '/api/contact' && request.method === 'POST') {
+      return handleContact(request, env);
     }
 
     // Block public access to the social post queue file
@@ -401,8 +407,8 @@ async function handleCouncilGet(request, env) {
      X_API_SECRET           — Twitter app Consumer Secret
      X_ACCESS_TOKEN         — Twitter user Access Token (your account)
      X_ACCESS_TOKEN_SECRET  — Twitter user Access Token Secret
-     LINKEDIN_ACCESS_TOKEN  — LinkedIn OAuth 2.0 token (w_organization_social scope)
-     LINKEDIN_ORG_URN       — e.g. urn:li:organization:12345678
+     LINKEDIN_ACCESS_TOKEN  — LinkedIn OAuth 2.0 token (w_member_social scope, expires ~2 months)
+     LINKEDIN_ORG_URN       — urn:li:person:kivpuFnfD6 (founder personal profile — NOT org URN)
      SOCIAL_ADMIN_SECRET    — any random string (protects /api/social/run endpoint)
 ══════════════════════════════════════════════════════════════════════════ */
 
@@ -553,6 +559,53 @@ async function runSocialCycle(env) {
 
   console.log(`Social: posted ${post.id} →`, JSON.stringify(results));
   return { posted: post.id, platforms: post.platforms, results, remaining: pending.length - 1 };
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONTACT / LEAD CAPTURE
+   Stores submissions in POSTS_KV under key leads:{timestamp}.
+   Replaces mailto: links across the site.
+   Endpoint: POST /api/contact
+   Body: { name, email, org, interest, message }
+══════════════════════════════════════════════════════════════════════════ */
+
+async function handleContact(request, env) {
+  try {
+    const body = await request.json();
+    const { name, email, org, interest, message } = body;
+
+    if (!email || !email.includes('@')) {
+      return json({ error: 'Valid email required.' }, 400);
+    }
+
+    const lead = {
+      id:        `lead_${Date.now()}`,
+      timestamp:  new Date().toISOString(),
+      name:      (name    || '').trim().slice(0, 120),
+      email:     (email   || '').trim().slice(0, 200),
+      org:       (org     || '').trim().slice(0, 200),
+      interest:  (interest|| '').trim().slice(0, 100),
+      message:   (message || '').trim().slice(0, 2000),
+      source:    request.headers.get('Referer') || 'direct',
+      ip:        request.headers.get('CF-Connecting-IP') || 'unknown',
+    };
+
+    // Store in KV
+    if (env.POSTS_KV) {
+      await env.POSTS_KV.put(`leads:${lead.id}`, JSON.stringify(lead));
+      // Maintain index of lead IDs
+      const idx = JSON.parse(await env.POSTS_KV.get('leads_index') || '[]');
+      idx.unshift(lead.id);
+      if (idx.length > 500) idx.length = 500;
+      await env.POSTS_KV.put('leads_index', JSON.stringify(idx));
+    }
+
+    console.log(`Contact: ${lead.email} (${lead.org}) — ${lead.interest}`);
+    return json({ ok: true, id: lead.id, message: 'Received. We will be in touch within 24 hours.' });
+  } catch (err) {
+    console.error('Contact error:', err);
+    return json({ error: 'Submission failed. Email hello@motherearth.systems directly.' }, 500);
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

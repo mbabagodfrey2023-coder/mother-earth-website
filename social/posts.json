@@ -56,6 +56,62 @@
       "tags": ["systems", "data"],
       "x_text": "We're tracking three planetary systems in real time:\n\n❄️ ICE — Arctic + Antarctic extent anomalies\n🌲 FOREST — deforestation + wildfire perimeter\n🌊 OCEAN — bleaching + acidification\n\nAll data public.\n\nmotherearth.systems",
       "linkedin_text": null
+    },
+    {
+      "id": "post-008",
+      "status": "approved",
+      "platforms": ["x", "linkedin"],
+      "tags": ["tipping-points", "cascade", "launch"],
+      "x_text": "New: Tipping Point Cascade Engine is live.\n\n9 Earth systems. Real-time stress scores. When enough cross their thresholds simultaneously, they amplify each other.\n\nCurrent cascade risk: CRITICAL.\n\nmotherearth.systems/tipping-points",
+      "linkedin_text": "We just launched something that didn't exist before: a live planetary tipping point cascade engine.\n\nNine Earth systems — Arctic sea ice, Amazon dieback, AMOC slowdown, permafrost thaw, coral collapse, Greenland ice sheet, global temperature, CO₂ concentration, atmospheric methane — each assigned a real-time stress score based on live feeds from NASA GISTEMP, NOAA GML, and NSIDC.\n\nWhen enough systems are simultaneously stressed, they don't just add up. They amplify each other. Arctic ice loss accelerates permafrost thaw. Amazon dieback weakens the Atlantic circulation. A cascade.\n\nThe engine calculates that amplification effect in real time using a directed cascade graph — each active link between stressed nodes adds to the overall risk score.\n\nCurrent reading: CRITICAL.\n\nThis is Phase 1. Phase 2 replaces the proxy calculations with direct sensor feeds and ML inference. The architecture is already designed.\n\nLive at motherearth.systems/tipping-points — public, no login required."
+    },
+    {
+      "id": "post-009",
+      "status": "approved",
+      "platforms": ["x"],
+      "tags": ["co2", "data", "live"],
+      "x_text": "CO₂ at Mauna Loa right now: 432 ppm.\n\nPre-industrial baseline: 280 ppm.\n2°C threshold: 450 ppm.\n\nWe're 89% of the way there.\n\nOur system reads it live from NOAA every 6 hours.\n\nmotherearth.systems/tipping-points",
+      "linkedin_text": null
+    },
+    {
+      "id": "post-010",
+      "status": "approved",
+      "platforms": ["x", "linkedin"],
+      "tags": ["governance", "purpose-trust", "golden-share"],
+      "x_text": "Most companies have shareholders.\n\nWe have a Purpose Trust with a Golden Share.\n\nIt means no investor, board, or acquirer can ever change the environmental mission.\n\nNot in theory. Legally.\n\nmotherearth.systems/governance",
+      "linkedin_text": "We structured Mother Earth Kenya around a legal mechanism most companies never use: the Purpose Trust + Golden Share architecture.\n\nHere's what it means in practice:\n\n• A Purpose Trust holds one Class B share — the Golden Share\n• That single share carries absolute veto power over any decision that would compromise the environmental mission\n• No shareholder vote, board resolution, or acquisition can override it\n• The Trust is governed by a Protector and a Successor Trustee — not by the company's commercial interests\n\nWhy does this matter? Because mission drift is the silent killer of impact organisations. The moment you take institutional money, the pressure begins. Metrics shift. Priorities blur.\n\nThe Golden Share structure makes drift structurally impossible, not just morally unlikely.\n\nFull architecture: motherearth.systems/governance"
+    },
+    {
+      "id": "post-011",
+      "status": "approved",
+      "platforms": ["x"],
+      "tags": ["methane", "permafrost", "data"],
+      "x_text": "Atmospheric methane: 1,940 ppb.\n\nPre-industrial level: 722 ppb.\nCurrent rate of increase: fastest in recorded history.\n\nPermafrost thaw is the feedback loop nobody is watching closely enough.\n\nWe are.\n\nmotherearth.systems/tipping-points",
+      "linkedin_text": null
+    },
+    {
+      "id": "post-012",
+      "status": "approved",
+      "platforms": ["x", "linkedin"],
+      "tags": ["iris", "data-marketplace", "research"],
+      "x_text": "Research access to our environmental intelligence platform: free for 6 months.\n\nNASA + NOAA + Scripps data. Claude Sonnet analysis. Edge-served globally.\n\nFor accredited institutions, universities, and independent researchers.\n\nmotherearth.systems/iris",
+      "linkedin_text": "We're offering 6 months of free research access to the IRIS environmental intelligence platform.\n\nWho qualifies:\n• Accredited universities and research institutions\n• Independent researchers with a verifiable project\n• Government environmental agencies\n• NGOs working on climate or ecological issues\n\nWhat's included:\n• Full API access to NASA GISTEMP, NOAA, Scripps, and NASA FIRMS data — pre-processed and normalised\n• Live tipping point cascade scores across 9 Earth systems\n• Queryable data going back to the earliest available satellite records\n• Claude Sonnet analysis layer on every query\n\nWe believe environmental intelligence should be infrastructure, not a product only well-funded institutions can afford.\n\nResearch access: motherearth.systems/iris"
+    },
+    {
+      "id": "post-013",
+      "status": "approved",
+      "platforms": ["x"],
+      "tags": ["chapters", "global", "expansion"],
+      "x_text": "9 countries in active dialogue for Mother Earth chapters.\n\nUSA. Brazil. South Africa. Nigeria. UK. India. France. Indonesia. Canada.\n\nThe model: one AI org. Every country gets a chapter. Same mission. Local law.\n\nmotherearth.systems/chapters",
+      "linkedin_text": null
+    },
+    {
+      "id": "post-014",
+      "status": "approved",
+      "platforms": ["x", "linkedin"],
+      "tags": ["temperature", "1-5c", "science"],
+      "x_text": "Global temperature anomaly: +1.12°C above the 1951–1980 baseline.\n\nParis Agreement target: limit warming to 1.5°C above pre-industrial.\n\nWe read NASA GISTEMP every 6 hours. The number keeps moving.\n\nmotherearth.systems/tipping-points",
+      "linkedin_text": "The number that defines our era: +1.12°C.\n\nThat's the current global surface temperature anomaly above the 1951–1980 baseline, according to NASA GISTEMP data read by our GAIA branch this morning.\n\nThe Paris Agreement target is to limit warming to 1.5°C above pre-industrial levels — which translates to roughly +1.0°C on the GISTEMP scale. We are already past it.\n\nWhat this means for Mother Earth Kenya's tipping point model:\n• Temperature stress score: 75/100\n• Coral bleaching risk: 86/100 (SST-coupled)\n• Permafrost thaw risk: 75/100\n• Overall cascade risk: CRITICAL\n\nThe numbers aren't predictions. They're readings.\n\nAll data public: motherearth.systems/tipping-points"
     }
   ]
 }

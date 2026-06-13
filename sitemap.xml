@@ -85,6 +85,18 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://motherearth.systems/tipping-points</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.92</priority>
+  </url>
+  <url>
+    <loc>https://motherearth.systems/fable5-roadmap</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
     <loc>https://motherearth.systems/partners</loc>
     <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>

@@ -742,7 +742,8 @@
       .stats-grid { grid-template-columns: 1fr; }
       .platform-grid { grid-template-columns: 1fr; }
       .market-visual { grid-template-columns: 1fr; }
-      .hud-bl, .hud-br { display: none; }
+      .hud-tr, .hud-bl, .hud-br { display: none; }
+      .hud-tl { left: 12px; top: 72px; }
       .section-wrap { padding: 0 24px; }
       .nav-logo { font-size: 11px; letter-spacing: 2px; }
       .nav-logo img { height: 36px; width: 36px; }
@@ -1122,6 +1123,7 @@
         <a href="#intelligence">33 Agents</a>
         <a href="/data-pipeline.html">How Data Works</a>
         <a href="/earth-regions.html">Earth Regions</a>
+        <a href="/tipping-points">Tipping Points ⚠️</a>
         <a href="/iris.html">Marketplace</a>
         <a href="#pricing">Pricing</a>
       </div>
@@ -1185,6 +1187,10 @@
       <a class="btn-primary" href="/mission-control.html">Enter Mission Control →</a>
       <a class="btn-outline" href="#intelligence">Explore Platform ↓</a>
     </div>
+    <a href="/tipping-points" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:#f87171;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(239,68,68,.15)'" onmouseout="this.style.background='rgba(239,68,68,.08)'">
+      <span style="width:6px;height:6px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px #ef4444;animation:pulse 1.5s infinite;display:inline-block;"></span>
+      LIVE: TIPPING POINT CASCADE ENGINE — CURRENT RISK: CRITICAL →
+    </a>
   </div>
   <div class="scroll-cue">
     <span>SCROLL TO EXPLORE</span>
@@ -3118,7 +3124,9 @@
       // Data freshness timestamp
       if (data.updated) {
         const age = Math.round((Date.now() - new Date(data.updated)) / 60000);
-        document.getElementById('hud-updated').textContent = age < 2 ? 'LIVE' : `${age}M AGO`;
+        const h = Math.floor(age / 60), m = age % 60;
+        const ageStr = age < 2 ? 'LIVE' : age < 60 ? `${age}M AGO` : m > 0 ? `${h}H ${m}M AGO` : `${h}H AGO`;
+        document.getElementById('hud-updated').textContent = ageStr;
         document.getElementById('hud-source').textContent  = 'NOAA · NASA';
       }
     } catch (e) {
