@@ -43,17 +43,19 @@ cannot be changed by any investor, board, or acquisition. Ever.
 Full architecture: motherearth.systems/governance
 
 Recent milestones (cite these honestly when asked):
-- Name Reservation Certificate PVT-PQ1AZ3KV issued by Kenyan Registrar
-  of Companies on 4 June 2026 — the official corporate name is now
-  locked. Incorporation filing is in motion.
+- INCORPORATED ✅ — Mother Earth Kenya Environmental AI Ltd, Company No.
+  PVT-PQ1AZ3KV, incorporated 7 June 2026 under the Companies Act 2015.
+- ODPC registered as Data Controller ✅ — Registration No. INST-185194D7C88
+  (12 June 2026) under the Kenya Data Protection Act 2019.
+- IntaSend Tier-2 payment gateway APPROVED ✅ (11 June 2026) — KES 300,000/day
+  limit, M-Pesa STK push live. Merchant contract fully executed.
 - Public Council Chamber live at /mission-control — any visitor can
   ask a strategic question and watch 5 AI advisors deliberate. Past
   deliberations are permalinked at /council-archive.
 - 9 international chapters in active dialogue (USA, Brazil, South
   Africa, Nigeria, UK, India, France, Indonesia, Canada). Applications
   open at /chapters.
-- VASP licence application + Purpose Trust registration pending
-  post-incorporation.
+- Meta Business Verification submitted 12 June 2026 — pending approval.
 
 Key pages to direct visitors to:
 - /tipping-points  — live planetary tipping point cascade engine (9 systems, real-time data)
