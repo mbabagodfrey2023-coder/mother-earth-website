@@ -1122,21 +1122,14 @@
   </script>
 </head>
 <body>
-<!-- Emergency bail-out: no CDN deps, fires 8 s after HTML reaches this point -->
+<!-- Hard bail-out: pure inline, no CDN deps, no guards that can be defeated -->
 <script>
-(function(){
-  var _bailed = false;
-  function bail() {
-    if (_bailed) return; _bailed = true;
-    var p = document.getElementById('preloader');
-    var l = document.getElementById('loader');
-    if (p) { p.style.transition='opacity 1s'; p.style.opacity='0'; setTimeout(function(){ if(p.parentNode) p.parentNode.removeChild(p); document.body.style.overflow=''; }, 1000); }
-    if (l) { l.style.opacity='0'; setTimeout(function(){ l.style.display='none'; }, 1000); }
-  }
-  setTimeout(bail, 8000);
-  // Also clear the bail if GSAP-driven preloader fires normally
-  window._preloaderBailClear = function(){ _bailed = true; };
-})();
+setTimeout(function() {
+  var l = document.getElementById('loader');
+  var p = document.getElementById('preloader');
+  if (l) { l.style.opacity = '0'; setTimeout(function(){ l.style.display = 'none'; }, 1100); }
+  if (p) { p.style.opacity = '0'; setTimeout(function(){ try { p.parentNode.removeChild(p); } catch(e){} document.body.style.overflow = ''; }, 900); }
+}, 8000);
 </script>
 
 <!-- ══ PRELOADER ══════════════════════════════════════════════════════════════ -->
@@ -3552,7 +3545,6 @@
 
   /* ── 1. PRELOADER ────────────────────────────────────────────────────────── */
   function runPreloader() {
-    if (window._preloaderBailClear) window._preloaderBailClear();
     const pre    = document.getElementById('preloader');
     const fill   = document.getElementById('pre-bar-fill');
     const pct    = document.getElementById('pre-pct');
