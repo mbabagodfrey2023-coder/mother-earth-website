@@ -45,6 +45,7 @@
     nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
     nav a:hover { color: var(--text); }
     nav .logo { color: var(--green-hi); font-weight: 700; font-size: 15px; margin-right: auto; }
+    @media (max-width: 600px) { nav a:not(.logo) { display: none; } }
     nav .badge {
       background: #0d2b14;
       border: 1px solid var(--green);
@@ -104,7 +105,7 @@
       margin-bottom: 12px;
     }
     .cascade-score {
-      font-size: 72px;
+      font-size: clamp(44px, 14vw, 72px);
       font-weight: 800;
       font-variant-numeric: tabular-nums;
       line-height: 1;

@@ -738,15 +738,63 @@
       #system-status { display: none !important; }
     }
     @media (max-width: 640px) {
+      /* ── Grids → single column ── */
       .agents-grid { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr; }
       .platform-grid { grid-template-columns: 1fr; }
       .market-visual { grid-template-columns: 1fr; }
+      .roadmap-phases { grid-template-columns: 1fr !important; }
+      .crisis-ticker-grid { grid-template-columns: 1fr !important; }
+
+      /* ── HUD ── */
       .hud-tr, .hud-bl, .hud-br { display: none; }
       .hud-tl { left: 12px; top: 72px; }
+
+      /* ── Spacing ── */
       .section-wrap { padding: 0 24px; }
       .nav-logo { font-size: 11px; letter-spacing: 2px; }
       .nav-logo img { height: 36px; width: 36px; }
+
+      /* ── Section vertical padding — 100px/120px is too tall on phones ── */
+      #stats, #intelligence, #platform, #marketplace, #governance, #roadmap { padding-top: 64px; padding-bottom: 64px; }
+
+      /* ── Hero CTA buttons — wrap on very narrow screens ── */
+      .hero-actions { flex-wrap: wrap; gap: 12px; }
+
+      /* ── Tipping badge — text wraps at narrow widths ── */
+      .tipping-badge {
+        font-size: 9px !important;
+        letter-spacing: .04em !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        max-width: calc(100vw - 48px);
+        box-sizing: border-box;
+      }
+
+      /* ── #join — 140px is way too tall on mobile ── */
+      #join { padding-top: 64px !important; padding-bottom: 64px !important; }
+
+      /* ── Inline-padded sections ── */
+      #crisis  { padding-top: 64px !important; padding-bottom: 64px !important; }
+      #contact { padding-top: 72px !important; padding-bottom: 72px !important; }
+
+      /* ── Contact form — name + org stack to 1 col ── */
+      .cf-name-row { grid-template-columns: 1fr !important; }
+
+      /* ── Footer — too much horizontal padding on mobile ── */
+      footer { padding: 32px 20px; }
+
+      /* ── Modal — 48px padding = 96px wasted on 375px screen ── */
+      .modal-box { padding: 28px 20px; }
+      .modal-overlay { padding: 24px 16px; }
+
+      /* ── Founder band ── */
+      .founder-band { padding: 28px 20px; margin-top: 40px; }
+
+      /* ── Join email form — stack input + button on very narrow screens ── */
+      .join-email-form { flex-direction: column; border-radius: 4px; }
+      .join-email-form button { padding: 14px; }
     }
 
     /* ─── PLATFORM CARD INTERACTIVE ────────────────────────────── */
@@ -1187,7 +1235,7 @@
       <a class="btn-primary" href="/mission-control.html">Enter Mission Control →</a>
       <a class="btn-outline" href="#intelligence">Explore Platform ↓</a>
     </div>
-    <a href="/tipping-points" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:#f87171;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(239,68,68,.15)'" onmouseout="this.style.background='rgba(239,68,68,.08)'">
+    <a href="/tipping-points" class="tipping-badge" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:#f87171;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(239,68,68,.15)'" onmouseout="this.style.background='rgba(239,68,68,.08)'">
       <span style="width:6px;height:6px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px #ef4444;animation:pulse 1.5s infinite;display:inline-block;"></span>
       LIVE: TIPPING POINT CASCADE ENGINE — CURRENT RISK: CRITICAL →
     </a>
@@ -1209,7 +1257,7 @@
     <p class="section-sub" style="margin-bottom:16px;">Global totals counting in real time from verified annual rates. Click any counter to see the regional breakdown.</p>
     <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:52px;">DATA: NASA · NOAA · IPCC AR6 · GLOBAL FOREST WATCH</p>
 
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+    <div class="crisis-ticker-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
       <!-- ICE -->
       <a class="ticker-card" href="/earth-regions.html#ice" style="background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.15);padding:40px 24px 32px;border-radius:2px;text-align:center;display:block;text-decoration:none;">
         <div style="margin:0 auto 14px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;"><svg width="52" height="52" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="8" x2="24" y2="40" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/><line x1="8" y1="24" x2="40" y2="24" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/><line x1="12.7" y1="12.7" x2="35.3" y2="35.3" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/><line x1="35.3" y1="12.7" x2="12.7" y2="35.3" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="8" r="2.5" fill="#38bdf8"/><circle cx="24" cy="40" r="2.5" fill="#38bdf8"/><circle cx="8" cy="24" r="2.5" fill="#38bdf8"/><circle cx="40" cy="24" r="2.5" fill="#38bdf8"/><circle cx="12.7" cy="12.7" r="2.5" fill="#38bdf8"/><circle cx="35.3" cy="35.3" r="2.5" fill="#38bdf8"/><circle cx="35.3" cy="12.7" r="2.5" fill="#38bdf8"/><circle cx="12.7" cy="35.3" r="2.5" fill="#38bdf8"/><circle cx="24" cy="24" r="5" stroke="#38bdf8" stroke-width="1.5" fill="rgba(56,189,248,.15)"/></svg></div>
@@ -1967,7 +2015,7 @@
     </div>
 
     <form id="contact-form" style="display:flex;flex-direction:column;gap:16px;" onsubmit="submitContact(event)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="cf-name-row" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <input id="cf-name" type="text" placeholder="Your name *" required
           style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:14px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s;"
           onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
@@ -2535,33 +2583,35 @@
 
   /* ── LOADER ─────────────────────────────────── */
   const loader = document.getElementById('loader');
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      loader.style.opacity = '0';
-      setTimeout(() => { loader.style.display = 'none'; initAnimations(); }, 1200);
-    }, 2800);
-  });
+  let _loaderGone = false;
+  function _dismissLoader() {
+    if (_loaderGone) return;
+    _loaderGone = true;
+    loader.style.opacity = '0';
+    setTimeout(() => { loader.style.display = 'none'; initAnimations(); }, 1200);
+  }
+  // Normal path: dismiss 2.8 s after all resources load
+  window.addEventListener('load', () => setTimeout(_dismissLoader, 2800));
+  // Fallback: dismiss at 6 s regardless — handles slow connections & CDN timeouts
+  setTimeout(_dismissLoader, 6000);
 
-  /* ── THREE.JS GLOBE (desktop only — skip on mobile to save battery/RAM) ── */
+  /* ── THREE.JS GLOBE — full quality desktop, lightweight mobile ── */
   const isMobile = window.innerWidth < 768;
-  if (isMobile) {
-    // Mobile: show a static gradient instead of the 3D globe
-    document.getElementById('globe-wrap').style.background =
-      'radial-gradient(ellipse at 60% 40%, rgba(74,222,128,0.15) 0%, rgba(14,165,233,0.08) 40%, transparent 70%)';
-  }
 
-  const scene    = new THREE.Scene();
-  const camera   = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 1000);
-  camera.position.set(0, 0, 8);
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 1000);
+  camera.position.set(0, 0, isMobile ? 7 : 8); // closer on mobile so globe fills screen
 
-  const renderer = isMobile ? null : new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  if (renderer) {
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    document.getElementById('globe-wrap').appendChild(renderer.domElement);
-  }
+  // Always render — mobile uses low-power mode, 1× pixel ratio, no antialiasing
+  const renderer = new THREE.WebGLRenderer({
+    antialias: !isMobile, alpha: true,
+    powerPreference: isMobile ? 'low-power' : 'high-performance'
+  });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(isMobile ? 1 : Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  document.getElementById('globe-wrap').appendChild(renderer.domElement);
 
   // ── Drag-to-rotate controls + hotspot state (outer scope for animate closure) ──
   let controls, hotspotMeshes = [], arcPulses = [], pulseT = 0, hoveredHotspot = null, starBright = null;
@@ -2577,7 +2627,8 @@
   ].join(';');
   document.body.appendChild(globeTooltip);
 
-  if (renderer) {
+  // Drag controls desktop only — on mobile touch would block page scroll
+  if (!isMobile) {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping  = true;
     controls.dampingFactor  = 0.06;
@@ -2611,33 +2662,40 @@
     });
   }
 
-  Promise.all(Object.values(TEX).map(loadTex)).then(([day, night, bump, clouds, spec]) => {
-    // Earth sphere
-    const geo = new THREE.SphereGeometry(2, 128, 128);
-    const mat = new THREE.MeshPhongMaterial({
-      map:          day,
-      bumpMap:      bump,   bumpScale:   0.05,
-      specularMap:  spec,   specular:    new THREE.Color(0x333333),
-      emissiveMap:  night,  emissive:    new THREE.Color(0xffffff),
-      emissiveIntensity: 0.45
-    });
-    // Day/night shader blend
-    mat.onBeforeCompile = shader => {
-      shader.uniforms.sunDir = { value: new THREE.Vector3(1, 0.1, 0.5).normalize() };
-      shader.fragmentShader = shader.fragmentShader
-        .replace('#include <common>', '#include <common>\nuniform vec3 sunDir;')
-        .replace('#include <emissivemap_fragment>',
-          `#include <emissivemap_fragment>
-           float dayMix = smoothstep(-0.25, 0.35, dot(normalize(vNormal), normalize(sunDir)));
-           emissiveColor.rgb *= (1.0 - dayMix) * 2.0;
-           diffuseColor.rgb   = mix(diffuseColor.rgb + vec3(0.04,0.07,0.14), diffuseColor.rgb, dayMix);`
-        );
-    };
+  // Mobile: only fetch day texture (~2MB vs ~6MB for full set)
+  const texturesToFetch = isMobile ? [TEX.day] : Object.values(TEX);
+  Promise.all(texturesToFetch.map(loadTex)).then((texResults) => {
+    const [day, night, bump, clouds, spec] = isMobile
+      ? [texResults[0], null, null, null, null] : texResults;
+
+    // Earth sphere — 48 segments on mobile (vs 128), saves significant GPU
+    const seg = isMobile ? 48 : 128;
+    const geo = new THREE.SphereGeometry(2, seg, seg);
+    const mat = new THREE.MeshPhongMaterial({ map: day });
+
+    // Desktop only: bump, specular, night emissive + day/night shader blend
+    if (!isMobile && bump && spec && night) {
+      mat.bumpMap = bump; mat.bumpScale = 0.05;
+      mat.specularMap = spec; mat.specular = new THREE.Color(0x333333);
+      mat.emissiveMap = night; mat.emissive = new THREE.Color(0xffffff);
+      mat.emissiveIntensity = 0.45;
+      mat.onBeforeCompile = shader => {
+        shader.uniforms.sunDir = { value: new THREE.Vector3(1, 0.1, 0.5).normalize() };
+        shader.fragmentShader = shader.fragmentShader
+          .replace('#include <common>', '#include <common>\nuniform vec3 sunDir;')
+          .replace('#include <emissivemap_fragment>',
+            `#include <emissivemap_fragment>
+             float dayMix = smoothstep(-0.25, 0.35, dot(normalize(vNormal), normalize(sunDir)));
+             emissiveColor.rgb *= (1.0 - dayMix) * 2.0;
+             diffuseColor.rgb   = mix(diffuseColor.rgb + vec3(0.04,0.07,0.14), diffuseColor.rgb, dayMix);`
+          );
+      };
+    }
     earthMesh = new THREE.Mesh(geo, mat);
     earthGroup.add(earthMesh);
 
-    // Clouds
-    if (clouds) {
+    // Clouds — desktop only (saves ~1MB texture + extra draw call on mobile)
+    if (!isMobile && clouds) {
       const cMat = new THREE.MeshPhongMaterial({ map: clouds, transparent: true, opacity: 0.8, depthWrite: false });
       cloudsMesh = new THREE.Mesh(new THREE.SphereGeometry(2.03, 64, 64), cMat);
       earthGroup.add(cloudsMesh);
@@ -2673,17 +2731,19 @@
       const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(buf, 3));
       return new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size, transparent: true, opacity }));
     }
-    const starField = makeStars(10000, 35, 85, 0.09, 0.70);
-    starBright      = makeStars(300,   40, 70, 0.22, 0.90);  // outer-scope for twinkling
+    // Reduce star count on mobile — full 10k stars are overkill on small screens
+    const starField = makeStars(isMobile ? 1500 : 10000, 35, 85, 0.09, 0.70);
+    starBright      = makeStars(isMobile ? 60   : 300,   40, 70, 0.22, 0.90);
     scene.add(starField); scene.add(starBright);
 
     // ── LIGHTS — sun + blue rim + green brand rim ─────────────────────────────
-    scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+    scene.add(new THREE.AmbientLight(0xffffff, isMobile ? 0.55 : 0.22)); // brighter ambient on mobile (no night shader)
     const sun      = new THREE.DirectionalLight(0xffffff, 1.25); sun.position.set(5, 3, 5); scene.add(sun);
     const bluRim   = new THREE.DirectionalLight(0x99d8ff, 0.22); bluRim.position.set(-5, -2, -5); scene.add(bluRim);
     const greenRim = new THREE.DirectionalLight(0x52B788,  0.20); greenRim.position.set(0, -5, -3); scene.add(greenRim);
 
-    // ── EARTH HOTSPOTS + DATA ARCS ───────────────────────────────────────────
+    // ── EARTH HOTSPOTS + DATA ARCS — desktop only ────────────────────────────
+    if (!isMobile) {
     function latLonTo3D(lat, lon, r) {
       const phi = (90 - lat) * Math.PI / 180, theta = (lon + 180) * Math.PI / 180;
       return new THREE.Vector3(
@@ -2808,7 +2868,9 @@
       renderer.domElement.addEventListener('mouseup', () => {
         renderer.domElement.style.cursor = hoveredHotspot ? 'pointer' : 'grab';
       });
-    }
+    } // end raycaster block
+
+    } // end if (!isMobile) hotspots + arcs + raycaster
 
     animate();
   });
@@ -3068,17 +3130,33 @@
   }
 
   /* ── EMAIL SUBSCRIBE ────────────────────────── */
-  document.getElementById('email-submit').addEventListener('click', () => {
-    const email = document.getElementById('email-input').value.trim();
+  document.getElementById('email-submit').addEventListener('click', async () => {
+    const input = document.getElementById('email-input');
+    const btn   = document.getElementById('email-submit');
+    const email = input.value.trim();
     if (!email || !email.includes('@')) {
-      document.getElementById('email-input').style.borderColor = 'red';
+      input.style.borderColor = 'red';
       return;
     }
-    // Opens native mail client with pre-filled message
-    window.location.href = `mailto:hello@motherearth.systems?subject=Subscribe — ${encodeURIComponent(email)}&body=Please add me to the Mother Earth intelligence updates.%0D%0A%0D%0AEmail: ${encodeURIComponent(email)}`;
-    document.getElementById('email-input').value = '';
-    document.getElementById('email-submit').textContent = 'SUBSCRIBED ✓';
-    setTimeout(() => { document.getElementById('email-submit').textContent = 'SUBSCRIBE'; }, 4000);
+    input.style.borderColor = '';
+    btn.textContent = 'SUBSCRIBING…';
+    btn.disabled = true;
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: email,
+          email,
+          interest: 'Newsletter',
+          message: 'Subscribe to Mother Earth intelligence updates.',
+        }),
+      });
+    } catch (_) { /* fail silently */ }
+    input.value = '';
+    btn.textContent = 'SUBSCRIBED ✓';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = 'SUBSCRIBE'; }, 4000);
   });
 
   // Allow Enter key on email input
@@ -3147,7 +3225,7 @@
   });
 
   /* ── PLATFORM FEATURE WAITLIST ───────────────── */
-  function notifyMe(btn, featureName) {
+  async function notifyMe(btn, featureName) {
     const form  = btn.closest('.modal-notify-form');
     const input = form.querySelector('input');
     const email = input.value.trim();
@@ -3159,15 +3237,26 @@
     }
     input.style.outline = '';
 
-    // Use mailto — opens native mail client pre-filled
-    // In Phase 3 this becomes a POST to the WEB agent's Cloudflare Worker endpoint
-    const subject = `Feature Waitlist: ${featureName}`;
-    const body    = `Please add me to the waitlist for ${featureName}.\n\nEmail: ${email}`;
-    window.location.href = `mailto:hello@motherearth.systems?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // POST to /api/contact — stores lead in KV for IRIS/NEXUS follow-up
+    btn.textContent = 'SENDING…';
+    btn.disabled = true;
+    try {
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: email,   // email as name since we only collect email here
+          email,
+          interest: `Feature Waitlist: ${featureName}`,
+          message: `Platform feature waitlist request for: ${featureName}`,
+        }),
+      });
+    } catch (_) { /* fail silently — lead not critical */ }
 
     // Update UI
     btn.textContent = 'REQUEST SENT ✓';
     btn.style.background = '#16a34a';
+    btn.disabled = false;
     input.value = '';
     setTimeout(() => {
       btn.textContent = 'NOTIFY ME';
@@ -3199,7 +3288,7 @@
     }, 100);
   }
 
-  function submitContact(e) {
+  async function submitContact(e) {
     e.preventDefault();
     const name     = document.getElementById('cf-name').value.trim();
     const org      = document.getElementById('cf-org').value.trim();
@@ -3213,19 +3302,37 @@
 
     btn.textContent = 'SENDING…';
     btn.style.opacity = '0.7';
+    btn.disabled = true;
 
-    // Compose mailto with all fields pre-filled
-    const subject = encodeURIComponent(`[${interest}] Enquiry from ${name}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nOrganisation: ${org || 'N/A'}\nEmail: ${email}\nInterest: ${interest}\n\n${message}`
-    );
-    window.location.href = `mailto:hello@motherearth.systems?subject=${subject}&body=${body}`;
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, org, email, interest, message }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        status.textContent = '✓ Received. We'll be in touch within 24 hours.';
+        status.style.color = 'var(--green-hi)';
+        document.getElementById('cf-name').value    = '';
+        document.getElementById('cf-org').value     = '';
+        document.getElementById('cf-email').value   = '';
+        document.getElementById('cf-interest').value = '';
+        document.getElementById('cf-message').value = '';
+      } else {
+        status.textContent = data.error || 'Submission failed. Email hello@motherearth.systems directly.';
+        status.style.color = '#f87171';
+      }
+    } catch (err) {
+      status.textContent = 'Network error. Email hello@motherearth.systems directly.';
+      status.style.color = '#f87171';
+    }
 
     btn.textContent = 'SEND MESSAGE →';
     btn.style.opacity = '1';
-    status.textContent = '✓ Opening your email client…';
+    btn.disabled = false;
     status.style.display = 'block';
-    setTimeout(() => { status.style.display = 'none'; }, 4000);
+    setTimeout(() => { status.style.display = 'none'; }, 6000);
   }
 
   /* ── MODALS ─────────────────────────────────── */
