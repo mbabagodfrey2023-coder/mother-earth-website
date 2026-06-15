@@ -2688,7 +2688,8 @@ setTimeout(function() {
     // Earth sphere — 48 segments on mobile (vs 128), saves significant GPU
     const seg = isMobile ? 48 : 128;
     const geo = new THREE.SphereGeometry(2, seg, seg);
-    const mat = new THREE.MeshPhongMaterial({ map: day });
+    // Fallback ocean-blue color if CDN texture fails on slow connection
+    const mat = new THREE.MeshPhongMaterial({ map: day || null, color: day ? 0xffffff : 0x1a4a7a });
 
     // Desktop only: bump, specular, night emissive + day/night shader blend
     if (!isMobile && bump && spec && night) {
