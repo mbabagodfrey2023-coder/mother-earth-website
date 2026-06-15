@@ -2606,8 +2606,11 @@ setTimeout(function() {
   function _dismissLoader() {
     if (_loaderGone) return;
     _loaderGone = true;
-    loader.style.opacity = '0';
-    setTimeout(() => { loader.style.display = 'none'; initAnimations(); }, 1200);
+    if (loader) loader.style.opacity = '0';
+    setTimeout(() => {
+      try { if (loader) loader.style.display = 'none'; } catch(e) {}
+      try { initAnimations(); } catch(e) { console.error('initAnimations:', e); }
+    }, 1200);
   }
   // Normal path: dismiss 2.8 s after all resources load
   window.addEventListener('load', () => setTimeout(_dismissLoader, 2800));
@@ -2681,15 +2684,13 @@ setTimeout(function() {
     });
   }
 
-  // ── Render immediately: blue globe visible before CDN textures arrive ──────
-  const _earlyAmb = new THREE.AmbientLight(0x6688cc, 1.0);
-  scene.add(_earlyAmb);
+  // ── Render immediately: bright blue globe before CDN textures arrive ────────
   earthMesh = new THREE.Mesh(
     new THREE.SphereGeometry(2, isMobile ? 48 : 128, isMobile ? 48 : 128),
-    new THREE.MeshPhongMaterial({ color: 0x1a4a7a })
+    new THREE.MeshBasicMaterial({ color: 0x1565c0 }) // unlit bright blue — always visible
   );
   earthGroup.add(earthMesh);
-  animate(); // globe rotates now; full texture/lighting upgrade comes after CDN load
+  animate(); // globe rotates now; texture/lighting upgrade comes after CDN load
 
   // Mobile: only fetch day texture (~2MB vs ~6MB for full set)
   const texturesToFetch = isMobile ? [TEX.day] : Object.values(TEX);
