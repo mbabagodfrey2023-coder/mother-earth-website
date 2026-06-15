@@ -404,7 +404,7 @@
 
     /* ─── SUB-AGENT PANELS (hierarchy tree) ──────────────── */
     .sub-agents-panel {
-      max-height: 0; overflow: hidden;
+      max-height: 0; overflow: hidden; grid-column: 1 / -1;
       transition: max-height .5s ease, padding .3s ease, margin .3s ease;
       background: linear-gradient(135deg, rgba(74,222,128,.02), rgba(14,165,233,.01));
       border: 1px solid transparent;
@@ -2679,6 +2679,16 @@ setTimeout(function() {
     });
   }
 
+  // ── Render immediately: blue globe visible before CDN textures arrive ──────
+  const _earlyAmb = new THREE.AmbientLight(0x6688cc, 1.0);
+  scene.add(_earlyAmb);
+  earthMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(2, isMobile ? 48 : 128, isMobile ? 48 : 128),
+    new THREE.MeshPhongMaterial({ color: 0x1a4a7a })
+  );
+  earthGroup.add(earthMesh);
+  animate(); // globe rotates now; full texture/lighting upgrade comes after CDN load
+
   // Mobile: only fetch day texture (~2MB vs ~6MB for full set)
   const texturesToFetch = isMobile ? [TEX.day] : Object.values(TEX);
   Promise.all(texturesToFetch.map(loadTex)).then((texResults) => {
@@ -2709,8 +2719,9 @@ setTimeout(function() {
           );
       };
     }
-    earthMesh = new THREE.Mesh(geo, mat);
-    earthGroup.add(earthMesh);
+    scene.remove(_earlyAmb); // swap placeholder lighting for full scene
+    earthMesh.material = mat;
+    mat.needsUpdate = true;
 
     // Clouds — desktop only (saves ~1MB texture + extra draw call on mobile)
     if (!isMobile && clouds) {
@@ -2890,7 +2901,7 @@ setTimeout(function() {
 
     } // end if (!isMobile) hotspots + arcs + raycaster
 
-    animate();
+    // animate() already running from early-init above
   });
 
   function animate() {
