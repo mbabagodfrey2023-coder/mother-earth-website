@@ -2649,17 +2649,19 @@ setTimeout(function() {
   ].join(';');
   document.body.appendChild(globeTooltip);
 
-  // Drag controls desktop only — on mobile touch would block page scroll
-  if (!isMobile) {
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping  = true;
-    controls.dampingFactor  = 0.06;
-    controls.enableZoom     = false;
-    controls.enablePan      = false;
-    controls.rotateSpeed    = 0.38;
-    controls.minPolarAngle  = Math.PI * 0.12;
-    controls.maxPolarAngle  = Math.PI * 0.88;
-    renderer.domElement.style.cursor = 'grab';
+  // Drag controls desktop only — guarded in case OrbitControls CDN fails
+  if (!isMobile && typeof THREE.OrbitControls !== 'undefined') {
+    try {
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping  = true;
+      controls.dampingFactor  = 0.06;
+      controls.enableZoom     = false;
+      controls.enablePan      = false;
+      controls.rotateSpeed    = 0.38;
+      controls.minPolarAngle  = Math.PI * 0.12;
+      controls.maxPolarAngle  = Math.PI * 0.88;
+      renderer.domElement.style.cursor = 'grab';
+    } catch(e) { console.warn('OrbitControls unavailable:', e); }
   }
 
   const earthGroup = new THREE.Group();
@@ -2722,7 +2724,6 @@ setTimeout(function() {
           );
       };
     }
-    scene.remove(_earlyAmb); // swap placeholder lighting for full scene
     earthMesh.material = mat;
     mat.needsUpdate = true;
 
@@ -2989,6 +2990,68 @@ setTimeout(function() {
     requestAnimationFrame(drawNet);
   })();
 
+  /* ── LIVE DESTRUCTION TICKER — starts immediately, no loader dependency ── */
+  (function() {
+    const pageStart = Date.now();
+    const ICE_PER_SEC    = 700e9 / (365.25 * 86400);
+    const FOREST_PER_SEC = 37e6  / (365.25 * 86400);
+    const OCEAN_PER_SEC  = 3.4   / (365.25 * 86400);
+
+    const iceEl       = document.getElementById('ticker-ice');
+    const forestEl    = document.getElementById('ticker-forest');
+    const oceanEl     = document.getElementById('ticker-ocean');
+    const todayIceEl  = document.getElementById('today-ice');
+    const todayFEl    = document.getElementById('today-forest');
+    const todayOEl    = document.getElementById('today-ocean');
+    const barIce      = document.getElementById('bar-ice');
+    const barForest   = document.getElementById('bar-forest');
+    const barOcean    = document.getElementById('bar-ocean');
+
+    if (!iceEl) return;
+
+    function todayElapsedSec() {
+      const now = Date.now(), d = new Date(now);
+      return (now - Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())) / 1000;
+    }
+
+    let lastIce = '', lastForest = '', lastOcean = '';
+    let lastTI = '', lastTF = '', lastTO = '';
+    let lastPct = -1, lastTick = 0;
+    const TICK_MS = 100;
+
+    function update(ts) {
+      requestAnimationFrame(update);
+      if (ts - lastTick < TICK_MS) return;
+      lastTick = ts;
+
+      const elapsed = (Date.now() - pageStart) / 1000;
+      const iceStr  = Math.floor(ICE_PER_SEC * elapsed).toLocaleString();
+      const fStr    = (FOREST_PER_SEC * elapsed).toFixed(2);
+      const oStr    = (OCEAN_PER_SEC  * elapsed).toFixed(6);
+      if (iceStr !== lastIce)    { iceEl.textContent    = iceStr;  lastIce    = iceStr; }
+      if (fStr   !== lastForest) { forestEl.textContent = fStr;    lastForest = fStr;   }
+      if (oStr   !== lastOcean)  { oceanEl.textContent  = oStr;    lastOcean  = oStr;   }
+
+      const td   = todayElapsedSec();
+      const ti   = Math.floor(ICE_PER_SEC * td).toLocaleString();
+      const tf   = Math.floor(FOREST_PER_SEC * td).toLocaleString();
+      const to   = (OCEAN_PER_SEC * td).toFixed(6);
+      if (ti !== lastTI) { if (todayIceEl) todayIceEl.textContent = ti; lastTI = ti; }
+      if (tf !== lastTF) { if (todayFEl)   todayFEl.textContent   = tf; lastTF = tf; }
+      if (to !== lastTO) { if (todayOEl)   todayOEl.textContent   = to; lastTO = to; }
+
+      const pct = Math.min(100, (elapsed / 60) * 100);
+      if (Math.abs(pct - lastPct) >= 0.5) {
+        const p = pct + '%';
+        if (barIce)    barIce.style.width    = p;
+        if (barForest) barForest.style.width = p;
+        if (barOcean)  barOcean.style.width  = p;
+        lastPct = pct;
+      }
+    }
+    requestAnimationFrame(update);
+  })();
+
   /* ── ALL GSAP ANIMATIONS ────────────────────── */
   function initAnimations() {
 
@@ -2999,84 +3062,6 @@ setTimeout(function() {
       .from('.hero-sub',     { y: 20, opacity: 0, duration: .9, ease: 'power3.out' }, '-=.6')
       .from('.hero-actions', { y: 16, opacity: 0, duration: .8, ease: 'power3.out' }, '-=.5')
       .from('.scroll-cue',   { opacity: 0, duration: .8, ease: 'power3.out' }, '-=.4');
-
-    // Live destruction ticker — global rates, counts since page load + since midnight UTC
-    (function() {
-      const pageStart = Date.now();
-
-      // ── Global annual rates (IPCC AR6 / GFW 2023 / NASA)
-      const ICE_PER_SEC    = 700e9 / (365.25 * 86400); // 700 Gt/yr — Greenland + Antarctica + Glaciers
-      const FOREST_PER_SEC = 37e6  / (365.25 * 86400); // 37M acres/yr — 15M ha global (GFW)
-      const OCEAN_PER_SEC  = 3.4   / (365.25 * 86400); // 3.4mm/yr global average (NASA)
-
-      // "Since you opened" elements
-      const iceEl    = document.getElementById('ticker-ice');
-      const forestEl = document.getElementById('ticker-forest');
-      const oceanEl  = document.getElementById('ticker-ocean');
-      // "TODAY so far (UTC)" elements
-      const todayIceEl    = document.getElementById('today-ice');
-      const todayForestEl = document.getElementById('today-forest');
-      const todayOceanEl  = document.getElementById('today-ocean');
-      // Progress bars
-      const barIce    = document.getElementById('bar-ice');
-      const barForest = document.getElementById('bar-forest');
-      const barOcean  = document.getElementById('bar-ocean');
-
-      if (!iceEl) return;
-
-      // Seconds elapsed since midnight UTC — same number for every visitor right now
-      function todayElapsedSec() {
-        const now = Date.now();
-        const d   = new Date(now);
-        const midnightUTC = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
-        return (now - midnightUTC) / 1000;
-      }
-
-      // Cache last displayed values to avoid unnecessary DOM writes
-      let lastIce = '', lastForest = '', lastOcean = '';
-      let lastTodayIce = '', lastTodayForest = '', lastTodayOcean = '';
-      let lastPct = -1;
-      let lastTick = 0;
-      const TICK_MS = 100; // 10fps — smooth enough, minimal paint work
-
-      function update(ts) {
-        requestAnimationFrame(update);
-        if (ts - lastTick < TICK_MS) return;
-        lastTick = ts;
-
-        // ── "Since you opened" counters
-        const elapsed = (Date.now() - pageStart) / 1000;
-        const ice    = Math.floor(ICE_PER_SEC * elapsed);
-        const forest = (FOREST_PER_SEC * elapsed).toFixed(2);
-        const ocean  = (OCEAN_PER_SEC * elapsed).toFixed(6);
-
-        const iceStr = ice.toLocaleString();
-        if (iceStr !== lastIce)     { iceEl.textContent    = iceStr;   lastIce    = iceStr; }
-        if (forest  !== lastForest) { forestEl.textContent = forest;   lastForest = forest; }
-        if (ocean   !== lastOcean)  { oceanEl.textContent  = ocean;    lastOcean  = ocean; }
-
-        // ── "TODAY so far" counters (shared — same for all visitors)
-        const td         = todayElapsedSec();
-        const todayIce   = Math.floor(ICE_PER_SEC * td).toLocaleString();
-        const todayForest = Math.floor(FOREST_PER_SEC * td).toLocaleString();
-        const todayOcean = (OCEAN_PER_SEC * td).toFixed(6);
-
-        if (todayIce    !== lastTodayIce)    { if (todayIceEl)    todayIceEl.textContent    = todayIce;    lastTodayIce    = todayIce;    }
-        if (todayForest !== lastTodayForest) { if (todayForestEl) todayForestEl.textContent = todayForest; lastTodayForest = todayForest; }
-        if (todayOcean  !== lastTodayOcean)  { if (todayOceanEl)  todayOceanEl.textContent  = todayOcean;  lastTodayOcean  = todayOcean;  }
-
-        // ── Progress bars fill over 60 seconds
-        const pct = Math.min(100, (elapsed / 60) * 100);
-        if (Math.abs(pct - lastPct) >= 0.5) {
-          const pctStr = pct + '%';
-          if (barIce)    barIce.style.width    = pctStr;
-          if (barForest) barForest.style.width = pctStr;
-          if (barOcean)  barOcean.style.width  = pctStr;
-          lastPct = pct;
-        }
-      }
-      requestAnimationFrame(update);
-    })();
 
     // Stat counters
     document.querySelectorAll('.stat-card').forEach(card => {
