@@ -2594,9 +2594,11 @@ setTimeout(function() {
 
   loadLiveDashboard();
   loadMissionLog();
+  fetchLiveData(); // hoisted async fn — fires before globe code, survives any globe crash
   setInterval(loadLiveDashboard, 15 * 60 * 1000);
+  setInterval(fetchLiveData,     5 * 60 * 1000);
 
-  gsap.registerPlugin(ScrollTrigger);
+  if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
   /* ── LOADER ─────────────────────────────────── */
   const loader = document.getElementById('loader');
@@ -3237,13 +3239,10 @@ setTimeout(function() {
         document.getElementById('hud-source').textContent  = 'NOAA · NASA';
       }
     } catch (e) {
-      // Fail silently — HUD defaults remain visible
+      const el = document.getElementById('hud-updated');
+      if (el) el.textContent = 'ERR: ' + String(e.message || e).slice(0, 28);
     }
   }
-
-  // Fetch immediately then every 5 minutes
-  fetchLiveData();
-  setInterval(fetchLiveData, 5 * 60 * 1000);
 
   /* ── KEYBOARD ACCESSIBILITY FOR CARDS ──────── */
   // Allow Enter/Space to "click" any card that has onclick
