@@ -2,6 +2,7 @@
   "name": "mother-earth-website",
   "private": true,
   "scripts": {
+    "predeploy": "node scripts/check-syntax.js",
     "deploy":  "npx wrangler deploy --name mother-earth-website",
     "dev":     "npx wrangler dev --name mother-earth-website",
     "secret":  "npx wrangler secret put --name mother-earth-website",

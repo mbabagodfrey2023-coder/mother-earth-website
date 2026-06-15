@@ -1,0 +1,86 @@
+name: Site Health Check
+
+on:
+  schedule:
+    - cron: '17 6 * * *'   # 06:17 UTC daily — cloud-side, Mac-independent
+  push:
+    paths: ['index.html']   # also runs on every deploy commit
+  workflow_dispatch:        # manual trigger from GitHub UI
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Syntax gate — block bad JS before it can reach prod
+        run: node scripts/check-syntax.js
+
+      - name: Live site — HTTP status
+        id: http
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://motherearth.systems)
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "HTTP $STATUS"
+          [ "$STATUS" = "200" ] || exit 1
+
+      - name: Live site — key JS strings present
+        run: |
+          PAGE=$(curl -s https://motherearth.systems)
+          echo "$PAGE" | grep -q "ticker-ice"      || (echo "FAIL: ticker-ice missing"   && exit 1)
+          echo "$PAGE" | grep -q "fetchLiveData"   || (echo "FAIL: fetchLiveData missing" && exit 1)
+          echo "$PAGE" | grep -q "MeshBasicMaterial" || (echo "FAIL: globe code missing" && exit 1)
+          echo "✓ All key strings present in deployed HTML"
+
+      - name: Live data — freshness check
+        run: |
+          DATA=$(curl -s https://motherearth.systems/live-data.json)
+          echo "$DATA" | python3 -c "
+          import sys, json
+          from datetime import datetime, timezone
+          d = json.load(sys.stdin)
+          updated = datetime.fromisoformat(d['updated'].replace('Z','+00:00'))
+          age_h = (datetime.now(timezone.utc) - updated).total_seconds() / 3600
+          co2 = d['environmental']['co2_ppm']
+          print(f'CO2: {co2} ppm | Data age: {age_h:.1f}h')
+          if age_h > 24:
+              print(f'WARNING: live-data.json is {age_h:.0f}h old — WEB agent may be down')
+              sys.exit(1)
+          "
+
+      - name: Report success
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✓ motherearth.systems HEALTHY"
+          echo "✓ Syntax clean"
+          echo "✓ HTTP 200"
+          echo "✓ JS strings present"
+          echo "✓ Live data fresh"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Site health failure — ${new Date().toISOString().slice(0,10)}`,
+              body: [
+                '## Automated Health Check Failed',
+                '',
+                `**Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+                '',
+                '**Checks:**',
+                '- Syntax gate',
+                '- HTTP 200',
+                '- JS key strings in deployed HTML',
+                '- live-data.json freshness',
+                '',
+                '**Action required:** Check the failed step above and deploy a fix.',
+                '',
+                '_This issue was opened automatically by the 24h cloud health monitor._'
+              ].join('\n'),
+              labels: ['bug', 'automated']
+            });
