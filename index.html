@@ -2617,6 +2617,67 @@ setTimeout(function() {
   // Fallback: dismiss at 6 s regardless — handles slow connections & CDN timeouts
   setTimeout(_dismissLoader, 6000);
 
+  /* ── LIVE DESTRUCTION TICKER — runs before globe, survives WebGL crash ── */
+  (function() {
+    const pageStart = Date.now();
+    const ICE_PER_SEC    = 700e9 / (365.25 * 86400);
+    const FOREST_PER_SEC = 37e6  / (365.25 * 86400);
+    const OCEAN_PER_SEC  = 3.4   / (365.25 * 86400);
+
+    const iceEl      = document.getElementById('ticker-ice');
+    const forestEl   = document.getElementById('ticker-forest');
+    const oceanEl    = document.getElementById('ticker-ocean');
+    const todayIceEl = document.getElementById('today-ice');
+    const todayFEl   = document.getElementById('today-forest');
+    const todayOEl   = document.getElementById('today-ocean');
+    const barIce     = document.getElementById('bar-ice');
+    const barForest  = document.getElementById('bar-forest');
+    const barOcean   = document.getElementById('bar-ocean');
+
+    if (!iceEl) return;
+
+    function todayElapsedSec() {
+      const now = Date.now(), d = new Date(now);
+      return (now - Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())) / 1000;
+    }
+
+    let lastIce = '', lastForest = '', lastOcean = '';
+    let lastTI = '', lastTF = '', lastTO = '';
+    let lastPct = -1, lastTick = 0;
+
+    function update(ts) {
+      requestAnimationFrame(update);
+      if (ts - lastTick < 100) return;
+      lastTick = ts;
+
+      const elapsed = (Date.now() - pageStart) / 1000;
+      const iceStr = Math.floor(ICE_PER_SEC * elapsed).toLocaleString();
+      const fStr   = (FOREST_PER_SEC * elapsed).toFixed(2);
+      const oStr   = (OCEAN_PER_SEC  * elapsed).toFixed(6);
+      if (iceStr !== lastIce)    { iceEl.textContent    = iceStr; lastIce    = iceStr; }
+      if (fStr   !== lastForest) { forestEl.textContent = fStr;   lastForest = fStr;   }
+      if (oStr   !== lastOcean)  { oceanEl.textContent  = oStr;   lastOcean  = oStr;   }
+
+      const td = todayElapsedSec();
+      const ti = Math.floor(ICE_PER_SEC * td).toLocaleString();
+      const tf = Math.floor(FOREST_PER_SEC * td).toLocaleString();
+      const to = (OCEAN_PER_SEC * td).toFixed(6);
+      if (ti !== lastTI) { if (todayIceEl) todayIceEl.textContent = ti; lastTI = ti; }
+      if (tf !== lastTF) { if (todayFEl)   todayFEl.textContent   = tf; lastTF = tf; }
+      if (to !== lastTO) { if (todayOEl)   todayOEl.textContent   = to; lastTO = to; }
+
+      const pct = Math.min(100, (elapsed / 60) * 100);
+      if (Math.abs(pct - lastPct) >= 0.5) {
+        const p = pct + '%';
+        if (barIce)    barIce.style.width    = p;
+        if (barForest) barForest.style.width = p;
+        if (barOcean)  barOcean.style.width  = p;
+        lastPct = pct;
+      }
+    }
+    requestAnimationFrame(update);
+  })();
+
   /* ── THREE.JS GLOBE — full quality desktop, lightweight mobile ── */
   const isMobile = window.innerWidth < 768;
 
@@ -2624,16 +2685,31 @@ setTimeout(function() {
   const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 1000);
   camera.position.set(0, 0, isMobile ? 7 : 8); // closer on mobile so globe fills screen
 
-  // Always render — mobile uses low-power mode, 1× pixel ratio, no antialiasing
-  const renderer = new THREE.WebGLRenderer({
-    antialias: !isMobile, alpha: true,
-    powerPreference: isMobile ? 'low-power' : 'high-performance'
-  });
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.setPixelRatio(isMobile ? 1 : Math.min(devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.outputEncoding = THREE.sRGBEncoding;
-  document.getElementById('globe-wrap').appendChild(renderer.domElement);
+  // WebGL init — guarded so GPU failure shows CSS fallback, never crashes the page
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({
+      antialias: !isMobile, alpha: true,
+      powerPreference: isMobile ? 'low-power' : 'high-performance'
+    });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(isMobile ? 1 : Math.min(devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    document.getElementById('globe-wrap').appendChild(renderer.domElement);
+  } catch(e) {
+    console.warn('WebGL unavailable, showing CSS globe:', e);
+    const wrap = document.getElementById('globe-wrap');
+    if (wrap) wrap.innerHTML = `
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+        <div style="width:min(55vw,55vh);height:min(55vw,55vh);border-radius:50%;
+          background:radial-gradient(circle at 35% 30%,#1a7a4a 0%,#0a4a6a 45%,#061428 80%);
+          box-shadow:0 0 80px rgba(74,222,128,.25),inset -20px -10px 40px rgba(0,0,0,.6);
+          animation:cssGlobe 18s linear infinite;">
+        </div>
+      </div>
+      <style>@keyframes cssGlobe{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}</style>`;
+  }
 
   // ── Drag-to-rotate controls + hotspot state (outer scope for animate closure) ──
   let controls, hotspotMeshes = [], arcPulses = [], pulseT = 0, hoveredHotspot = null, starBright = null;
@@ -2909,6 +2985,7 @@ setTimeout(function() {
   });
 
   function animate() {
+    if (!renderer) return;
     requestAnimationFrame(animate);
 
     // Auto-rotate only when user isn't dragging
@@ -2988,68 +3065,6 @@ setTimeout(function() {
       if (dots[i].y < 0 || dots[i].y > netCanvas.height) dots[i].vy *= -1;
     }
     requestAnimationFrame(drawNet);
-  })();
-
-  /* ── LIVE DESTRUCTION TICKER — starts immediately, no loader dependency ── */
-  (function() {
-    const pageStart = Date.now();
-    const ICE_PER_SEC    = 700e9 / (365.25 * 86400);
-    const FOREST_PER_SEC = 37e6  / (365.25 * 86400);
-    const OCEAN_PER_SEC  = 3.4   / (365.25 * 86400);
-
-    const iceEl       = document.getElementById('ticker-ice');
-    const forestEl    = document.getElementById('ticker-forest');
-    const oceanEl     = document.getElementById('ticker-ocean');
-    const todayIceEl  = document.getElementById('today-ice');
-    const todayFEl    = document.getElementById('today-forest');
-    const todayOEl    = document.getElementById('today-ocean');
-    const barIce      = document.getElementById('bar-ice');
-    const barForest   = document.getElementById('bar-forest');
-    const barOcean    = document.getElementById('bar-ocean');
-
-    if (!iceEl) return;
-
-    function todayElapsedSec() {
-      const now = Date.now(), d = new Date(now);
-      return (now - Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())) / 1000;
-    }
-
-    let lastIce = '', lastForest = '', lastOcean = '';
-    let lastTI = '', lastTF = '', lastTO = '';
-    let lastPct = -1, lastTick = 0;
-    const TICK_MS = 100;
-
-    function update(ts) {
-      requestAnimationFrame(update);
-      if (ts - lastTick < TICK_MS) return;
-      lastTick = ts;
-
-      const elapsed = (Date.now() - pageStart) / 1000;
-      const iceStr  = Math.floor(ICE_PER_SEC * elapsed).toLocaleString();
-      const fStr    = (FOREST_PER_SEC * elapsed).toFixed(2);
-      const oStr    = (OCEAN_PER_SEC  * elapsed).toFixed(6);
-      if (iceStr !== lastIce)    { iceEl.textContent    = iceStr;  lastIce    = iceStr; }
-      if (fStr   !== lastForest) { forestEl.textContent = fStr;    lastForest = fStr;   }
-      if (oStr   !== lastOcean)  { oceanEl.textContent  = oStr;    lastOcean  = oStr;   }
-
-      const td   = todayElapsedSec();
-      const ti   = Math.floor(ICE_PER_SEC * td).toLocaleString();
-      const tf   = Math.floor(FOREST_PER_SEC * td).toLocaleString();
-      const to   = (OCEAN_PER_SEC * td).toFixed(6);
-      if (ti !== lastTI) { if (todayIceEl) todayIceEl.textContent = ti; lastTI = ti; }
-      if (tf !== lastTF) { if (todayFEl)   todayFEl.textContent   = tf; lastTF = tf; }
-      if (to !== lastTO) { if (todayOEl)   todayOEl.textContent   = to; lastTO = to; }
-
-      const pct = Math.min(100, (elapsed / 60) * 100);
-      if (Math.abs(pct - lastPct) >= 0.5) {
-        const p = pct + '%';
-        if (barIce)    barIce.style.width    = p;
-        if (barForest) barForest.style.width = p;
-        if (barOcean)  barOcean.style.width  = p;
-        lastPct = pct;
-      }
-    }
-    requestAnimationFrame(update);
   })();
 
   /* ── ALL GSAP ANIMATIONS ────────────────────── */
