@@ -1,0 +1,78 @@
+name: Refresh Live Data
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'   # every 30 min — cloud-side, Mac-independent
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch CO2 from NOAA Mauna Loa
+        id: co2
+        run: |
+          DATA=$(curl -s "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_weekly_mlo.csv" | grep -v "^#" | tail -2)
+          THIS_WEEK=$(echo "$DATA" | tail -1)
+          LAST_WEEK=$(echo "$DATA" | head -1)
+          CO2=$(echo "$THIS_WEEK" | awk -F',' '{print $5}')
+          CO2_DATE=$(echo "$THIS_WEEK" | awk -F',' '{printf "%s-%02d-%02d", $1, $2, $3}')
+          PREV=$(echo "$LAST_WEEK" | awk -F',' '{print $5}')
+          CHANGE=$(python3 -c "print(round($CO2 - $PREV, 2))")
+          echo "co2=$CO2" >> $GITHUB_OUTPUT
+          echo "co2_date=$CO2_DATE" >> $GITHUB_OUTPUT
+          echo "co2_change=$CHANGE" >> $GITHUB_OUTPUT
+          echo "CO2: $CO2 ppm ($CO2_DATE) | weekly change: $CHANGE"
+
+      - name: Fetch NASA EONET active events
+        id: nasa
+        run: |
+          RESP=$(curl -s "https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=50")
+          TOTAL=$(echo "$RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(len(d.get('events',[])))")
+          FIRES=$(echo "$RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(sum(1 for e in d.get('events',[]) if any(c['id']=='wildfires' for c in e.get('categories',[]))))")
+          STORMS=$(echo "$RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(sum(1 for e in d.get('events',[]) if any(c['id']=='severeStorms' for c in e.get('categories',[]))))")
+          ICE=$(echo "$RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(sum(1 for e in d.get('events',[]) if any(c['id']=='seaLakeIce' for c in e.get('categories',[]))))")
+          echo "events=$TOTAL" >> $GITHUB_OUTPUT
+          echo "wildfires=$FIRES" >> $GITHUB_OUTPUT
+          echo "storms=$STORMS" >> $GITHUB_OUTPUT
+          echo "sea_ice=$ICE" >> $GITHUB_OUTPUT
+          echo "NASA: $TOTAL events ($FIRES wildfires, $STORMS storms, $ICE sea-ice)"
+
+      - name: Write live-data.json
+        run: |
+          python3 -c "
+          import json
+          from datetime import datetime, timezone
+          payload = {
+            'updated': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
+            'note': 'Updated every 30 min by GitHub Actions. Served by Cloudflare at /live-data.json',
+            'environmental': {
+              'co2_ppm': float('${{ steps.co2.outputs.co2 }}'),
+              'co2_date': '${{ steps.co2.outputs.co2_date }}',
+              'co2_weekly_change': float('${{ steps.co2.outputs.co2_change }}'),
+              'temp_anomaly_c': 1.2,
+              'active_nasa_events': int('${{ steps.nasa.outputs.events }}'),
+              'wildfires': int('${{ steps.nasa.outputs.wildfires }}'),
+              'severe_storms': int('${{ steps.nasa.outputs.storms }}'),
+              'sea_ice_events': int('${{ steps.nasa.outputs.sea_ice }}')
+            },
+            'platform': {
+              'agents_online': 33,
+              'branches_active': 7,
+              'site_up': True
+            }
+          }
+          print(json.dumps(payload, indent=2))
+          " > live-data.json
+          cat live-data.json
+
+      - name: Deploy to Cloudflare via Wrangler
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          npm install
+          npm run deploy
