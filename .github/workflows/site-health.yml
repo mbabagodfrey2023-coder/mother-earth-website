@@ -27,9 +27,11 @@ jobs:
       - name: Live site — key JS strings present
         run: |
           PAGE=$(curl -s https://motherearth.systems)
-          echo "$PAGE" | grep -q "ticker-ice"      || (echo "FAIL: ticker-ice missing"   && exit 1)
-          echo "$PAGE" | grep -q "fetchLiveData"   || (echo "FAIL: fetchLiveData missing" && exit 1)
-          echo "$PAGE" | grep -q "MeshBasicMaterial" || (echo "FAIL: globe code missing" && exit 1)
+          echo "$PAGE" | grep -q "ticker-ice"            || (echo "FAIL: ticker-ice missing"        && exit 1)
+          echo "$PAGE" | grep -q "fetchLiveData"         || (echo "FAIL: fetchLiveData missing"     && exit 1)
+          echo "$PAGE" | grep -q "MeshBasicMaterial"     || (echo "FAIL: globe code missing"        && exit 1)
+          echo "$PAGE" | grep -q "KENYA SEZ INCORPORATED" || (echo "FAIL: Trust Strip missing"      && exit 1)
+          echo "$PAGE" | grep -q "Starting in Kenya"     || (echo "FAIL: Mission Statement missing" && exit 1)
           echo "✓ All key strings present in deployed HTML"
 
       - name: Live data — freshness check
