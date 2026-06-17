@@ -1,13 +1,13 @@
 {
-  "updated": "2026-06-17T15:45:05.429Z",
+  "updated": "2026-06-17T23:15:38.883Z",
   "note": "Updated every 15 min by WEB agent. Served by Cloudflare Pages at /live-data.json",
   "environmental": {
-    "co2_ppm": 432.15,
-    "co2_date": "2026-06-07",
-    "co2_weekly_change": 0.12,
+    "co2_ppm": null,
+    "co2_date": null,
+    "co2_weekly_change": null,
     "temp_anomaly_c": 1.2,
-    "active_nasa_events": 20,
-    "wildfires": 10,
+    "active_nasa_events": 31,
+    "wildfires": 21,
     "severe_storms": 0,
     "sea_ice_events": 10
   },
