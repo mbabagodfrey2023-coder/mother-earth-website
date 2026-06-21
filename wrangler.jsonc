@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "mother-earth-website",
+  "account_id": "3ebcfcea1aa3545e90eb465b84facbc5",
   "main": "src/worker.js",
   "compatibility_date": "2026-05-26",
   "observability": {
