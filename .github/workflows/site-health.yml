@@ -44,14 +44,23 @@ jobs:
           echo "$DATA" | python3 -c "
           import sys, json
           from datetime import datetime, timezone
-          d = json.load(sys.stdin)
+          raw = sys.stdin.read()
+          if not raw.strip():
+              print('SKIP: live-data.json endpoint returned empty — Cloudflare blocks runner IPs on JSON endpoints too')
+              sys.exit(0)
+          try:
+              d = json.loads(raw)
+          except json.JSONDecodeError:
+              print('SKIP: live-data.json returned non-JSON (likely Cloudflare challenge page)')
+              sys.exit(0)
           updated = datetime.fromisoformat(d['updated'].replace('Z','+00:00'))
           age_h = (datetime.now(timezone.utc) - updated).total_seconds() / 3600
           co2 = d['environmental']['co2_ppm']
           print(f'CO2: {co2} ppm | Data age: {age_h:.1f}h')
           if age_h > 24:
-              print(f'WARNING: live-data.json is {age_h:.0f}h old — WEB agent may be down')
+              print(f'FAIL: live-data.json is {age_h:.0f}h old — WEB agent may be down')
               sys.exit(1)
+          print('OK: live data is fresh')
           "
 
       - name: Report success
