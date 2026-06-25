@@ -373,7 +373,7 @@
     }
     .agent-card {
       background: rgba(10,25,20,.85); border: 1px solid rgba(74,222,128,.2);
-      padding: 32px 24px; position: relative; overflow: hidden;
+      padding: 32px 24px; position: relative; overflow: visible;
       transition: all .3s;
       box-shadow: 0 2px 16px rgba(0,0,0,.5);
     }
@@ -649,6 +649,7 @@
       border: 1px solid var(--border); background: var(--card);
       padding: 40px 32px; border-radius: 2px; text-align: left;
       transition: all .3s; text-decoration: none; display: block;
+      opacity: 1; /* fallback if GSAP ScrollTrigger fails to fire */
     }
     .join-card:hover { border-color: rgba(74,222,128,.35); transform: translateY(-4px); }
     .join-card-type {
@@ -1496,7 +1497,11 @@ setTimeout(function() {
         <div class="agent-name">AMARA</div>
         <div class="agent-role">Legal & Compliance. Monitors VASP regulation, AML/KYC enforcement, and governance filings.</div>
         <div class="agent-count">Sub-agents: <span>REX · SHIELD · DEED · CLOCK</span></div>
-        <div class="agent-card-arrow">EXPAND ↓</div>
+        <a href="https://wa.me/254141910586?text=Hi%20AMARA%2C%20I%20have%20a%20legal%20question" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:7px 14px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);border-radius:20px;font-size:12px;font-weight:600;color:#25d166;text-decoration:none;letter-spacing:.02em;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#25d166"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat with AMARA
+        </a>
+        <div class="agent-card-arrow" style="margin-top:8px;">EXPAND ↓</div>
       </div>
       <div class="agent-card" onclick="toggleSubPanel('sub-nexus')" role="button" tabindex="0">
         <!-- NEXUS: Network nodes — blockchain, connectivity, provenance -->
@@ -1557,6 +1562,17 @@ setTimeout(function() {
     <!-- Sub-agent panels — OUTSIDE the grid so they don't break layout -->
     <div id="sub-amara" class="sub-agents-panel">
       <div class="sub-panel-label">AMARA · LEGAL & COMPLIANCE AGENTS</div>
+      <!-- AMARA WhatsApp public clinic -->
+      <div style="margin:14px 0 18px;padding:16px 20px;background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.25);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#25d166;margin-bottom:4px;">AMARA Public Legal Clinic — WhatsApp</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.5;">Ask any Kenyan legal question. AMARA answers in plain language, 24/7.<br>Free · AI-powered · Kenya law · Not legal advice.</div>
+        </div>
+        <a href="https://wa.me/254141910586?text=Hi%20AMARA%2C%20I%20have%20a%20legal%20question" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#25d166;border-radius:24px;font-size:13px;font-weight:700;color:#000;text-decoration:none;white-space:nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#000"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Start a conversation
+        </a>
+      </div>
       <div class="sub-panel-workflow">
         <span class="workflow-step">Regulation Change</span><span class="workflow-arrow">→</span>
         <span class="workflow-step">REX detects</span><span class="workflow-arrow">→</span>
@@ -1912,10 +1928,10 @@ setTimeout(function() {
       <div class="sez-left">
         <div class="sez-tag">// JURISDICTION</div>
         <div class="sez-title">Global by Design. Anchored in East Africa.</div>
-        <p class="sez-desc">Incorporated under the Kenya Special Economic Zone Act — one of the world's most progressive frameworks for technology and virtual asset enterprises. Operating globally from a jurisdiction built for the future.</p>
+        <p class="sez-desc">Incorporated in Kenya as a private company (No. PVT-PQ1AZ3KV) under the Companies Act 2015. Regulated under the VASP Act 2025 framework, governed by a Purpose Trust with Golden Share veto. SEZ Enterprise licence application in progress.</p>
       </div>
       <div class="sez-badges">
-        <span class="sez-badge">KENYA SEZ ACT</span>
+        <span class="sez-badge">COMPANIES ACT 2015</span>
         <span class="sez-badge">VASP ACT 2025</span>
         <span class="sez-badge">FATF REC. 15</span>
         <span class="sez-badge">ODPC COMPLIANT</span>
@@ -1932,7 +1948,7 @@ setTimeout(function() {
     <div class="section-head">
       <div class="section-tag">// BUILD LOG</div>
       <h2 class="section-title">From Idea to<br>Live AI Organisation</h2>
-      <p class="section-sub">Built in public. Every milestone logged. Phase 1 is complete — the infrastructure is live and running 24/7 from Nairobi.</p>
+      <p class="section-sub">Built in public. Every milestone logged. Phase 1 complete. Phase 2 infrastructure is live — 9 major milestones delivered, running 24/7 from Nairobi.</p>
     </div>
 
     <div class="roadmap-phases">
@@ -1968,12 +1984,21 @@ setTimeout(function() {
           <div class="roadmap-badge active">IN PROGRESS</div>
         </div>
         <ul class="roadmap-items">
-          <li class="roadmap-item active">n8n workflow automation — connecting live data pipelines</li>
-          <li class="roadmap-item active">Slack command centre — 7 branch alert channels</li>
           <li class="roadmap-item done">Company incorporated — PVT-PQ1AZ3KV · 7 June 2026</li>
           <li class="roadmap-item done">KRA company PIN obtained — P052549132K</li>
-          <li class="roadmap-item planned">FRC AML/CTF annual report — pending FRC registration</li>
+          <li class="roadmap-item done">Meta Business Verification — WhatsApp API approved · 100k+ msg/day</li>
+          <li class="roadmap-item done">Equity Bank business account — funded · Equity Online activated</li>
+          <li class="roadmap-item done">Nairobi County UBP — issued · Ref UBP419961</li>
+          <li class="roadmap-item done">n8n workflow automation — 10 workflows live · 23 June 2026</li>
+          <li class="roadmap-item done">Slack command centre — 8 channels active (CEO + 7 branches)</li>
+          <li class="roadmap-item done">AMARA Legal Clinic Stage 0 — WhatsApp live · ToS + Privacy Notice published</li>
+          <li class="roadmap-item done">GitHub Actions cloud monitoring — both workflows green</li>
+          <li class="roadmap-item active">ODPC data protection registration — under ODPC review</li>
+          <li class="roadmap-item active">Purpose Trust deed — awaiting counsel filing</li>
           <li class="roadmap-item active">Inter-branch message bus — direct agent-to-agent comms</li>
+          <li class="roadmap-item planned">KIPI trademark filing — Classes 9, 35, 36, 42, 45</li>
+          <li class="roadmap-item planned">IntaSend Tier-3 KYC — card payments &amp; higher limits</li>
+          <li class="roadmap-item planned">FRC AML/CTF annual report — pending FRC registration</li>
         </ul>
       </div>
 
@@ -2129,8 +2154,8 @@ setTimeout(function() {
       </div>
       <div style="display:flex;align-items:center;gap:10px;opacity:0.5;transition:opacity .2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
         <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="40" width="28" height="2.5" rx="1" fill="#D4AF37" opacity=".6"/><rect x="10" y="10" width="28" height="5" rx="1" fill="rgba(212,175,55,.2)" stroke="#D4AF37" stroke-width="1.2"/><rect x="13" y="15" width="5" height="25" rx="1" stroke="#D4AF37" stroke-width="1.5" fill="rgba(212,175,55,.06)"/><rect x="21.5" y="15" width="5" height="25" rx="1" stroke="#D4AF37" stroke-width="1.5" fill="rgba(212,175,55,.06)"/><rect x="30" y="15" width="5" height="25" rx="1" stroke="#D4AF37" stroke-width="1.5" fill="rgba(212,175,55,.06)"/><polyline points="8,10 24,2 40,10" stroke="#D4AF37" stroke-width="1.5" stroke-linejoin="round"/></svg>
-        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">Kenya SEZ</span>
-        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">JURISDICTION</span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text);">Kenya Incorporated</span>
+        <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">PVT-PQ1AZ3KV</span>
       </div>
     </div>
   </div>
@@ -2184,7 +2209,7 @@ setTimeout(function() {
       <img src="/logo-official-512.png" alt="Mother Earth Kenya" style="height:72px;width:72px;object-fit:contain;" />
     </div>
     <div class="footer-copy">© 2026 Mother Earth Organisation</div>
-    <div class="footer-sez">Africa-Built · Globally Compliant · Kenya Special Economic Zone</div>
+    <div class="footer-sez">Africa-Built · Globally Compliant · Kenya Private Company</div>
   </div>
   <div class="footer-links">
     <a href="#intelligence">Intelligence</a>
@@ -2514,7 +2539,7 @@ setTimeout(function() {
     <div class="modal-title">Privacy Policy</div>
     <div class="modal-body">
       <h3>Who We Are</h3>
-      <p>Mother Earth Organisation is a purpose trust incorporated under the laws of Kenya (Special Economic Zone). Our domain is motherearth.systems and our contact is hello@motherearth.systems.</p>
+      <p>Mother Earth Kenya Environmental AI Ltd is a private company incorporated under the laws of Kenya (Companies Act 2015, Co. No. PVT-PQ1AZ3KV). Our domain is motherearth.systems and our contact is hello@motherearth.systems.</p>
       <h3>What Data We Collect</h3>
       <p>When you submit your email address via our subscribe form, we collect your email address only. We do not use third-party analytics cookies, tracking pixels, or advertising networks on this website.</p>
       <h3>How We Use Your Data</h3>
@@ -3172,6 +3197,12 @@ setTimeout(function() {
       scrollTrigger: { trigger: '#join', start: 'top 75%' },
       y: 36, opacity: 0, duration: .7, stagger: .1, ease: 'power3.out'
     });
+    // Fallback: if ScrollTrigger doesn't fire (slow JS, bot, restricted env), show cards after 3s
+    setTimeout(() => {
+      document.querySelectorAll('.join-card').forEach(el => {
+        if (parseFloat(getComputedStyle(el).opacity) < 0.1) { el.style.opacity = '1'; el.style.transform = 'none'; }
+      });
+    }, 3000);
 
     // Active nav link on scroll
     const sections = ['hero', 'intelligence', 'platform', 'marketplace', 'governance', 'join'];

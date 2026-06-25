@@ -409,8 +409,10 @@ async function handleCouncilGet(request, env) {
      X_API_SECRET           — Twitter app Consumer Secret
      X_ACCESS_TOKEN         — Twitter user Access Token (your account)
      X_ACCESS_TOKEN_SECRET  — Twitter user Access Token Secret
-     LINKEDIN_ACCESS_TOKEN  — LinkedIn OAuth 2.0 token (w_member_social scope, expires ~2 months)
-     LINKEDIN_ORG_URN       — urn:li:person:kivpuFnfD6 (founder personal profile — NOT org URN)
+     LINKEDIN_ACCESS_TOKEN  — LinkedIn OAuth 2.0 token (REQUIRED scopes: rw_organization_admin + w_organization_social)
+     LINKEDIN_ORG_URN       — MUST be company page URN: urn:li:organization:XXXXXXXXX
+                               (was urn:li:person:kivpuFnfD6 — personal profile caused Jun 2026 account restriction)
+                               To get: create MEKE AI company page on LinkedIn → numeric ID is in the page URL
      SOCIAL_ADMIN_SECRET    — any random string (protects /api/social/run endpoint)
 ══════════════════════════════════════════════════════════════════════════ */
 
