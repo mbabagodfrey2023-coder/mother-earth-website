@@ -7,6 +7,9 @@ on:
     paths: ['index.html']   # also runs on every deploy commit
   workflow_dispatch:        # manual trigger from GitHub UI
 
+permissions:
+  issues: write
+
 jobs:
   health:
     runs-on: ubuntu-latest
@@ -19,18 +22,19 @@ jobs:
       - name: Live site — HTTP status
         id: http
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://motherearth.systems)
+          # Use browser User-Agent to bypass Cloudflare bot protection (returns 403 to plain curl)
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -A "Mozilla/5.0 (compatible; HealthCheck/1.0)" https://motherearth.systems)
           echo "status=$STATUS" >> $GITHUB_OUTPUT
           echo "HTTP $STATUS"
           [ "$STATUS" = "200" ] || exit 1
 
       - name: Live site — key JS strings present
         run: |
-          PAGE=$(curl -s https://motherearth.systems)
+          PAGE=$(curl -s -A "Mozilla/5.0 (compatible; HealthCheck/1.0)" https://motherearth.systems)
           echo "$PAGE" | grep -q "ticker-ice"            || (echo "FAIL: ticker-ice missing"        && exit 1)
           echo "$PAGE" | grep -q "fetchLiveData"         || (echo "FAIL: fetchLiveData missing"     && exit 1)
           echo "$PAGE" | grep -q "MeshBasicMaterial"     || (echo "FAIL: globe code missing"        && exit 1)
-          echo "$PAGE" | grep -q "KENYA INCORPORATED" || (echo "FAIL: Trust Strip missing"      && exit 1)
+          echo "$PAGE" | grep -q "PVT-PQ1AZ3KV"         || (echo "FAIL: Company reg number missing" && exit 1)
           echo "$PAGE" | grep -q "Starting in Kenya"     || (echo "FAIL: Mission Statement missing" && exit 1)
           echo "✓ All key strings present in deployed HTML"
 
