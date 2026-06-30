@@ -356,6 +356,43 @@
     .cta-link:hover { opacity: 0.85; }
 
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ── AUDIT ADDITIONS ─────────────────────────────────────────────────── */
+    /* Cached fallback badge — amber, distinct from LIVE (green) and ANNUAL (amber pulse) */
+    .badge-cached { background: rgba(245,158,11,0.06); color: #c49000; border: 1px solid rgba(245,158,11,0.22); }
+    .badge-cached .bdot { background: #c49000; }
+
+    /* Uncertainty interval text under metric values */
+    .uncertainty {
+      font-family: var(--mono); font-size: 10px; color: #4a6a50;
+      margin-top: 4px; line-height: 1.5;
+    }
+
+    /* Rate-model label under ticking counters */
+    .rate-label {
+      font-family: var(--mono); font-size: 10px; color: #3d5540;
+      margin-top: 3px; font-style: italic;
+    }
+
+    /* Methodology download link */
+    .method-dl-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border: 1px solid var(--green);
+      border-radius: 5px; font-size: 12px; color: var(--green-hi);
+      text-decoration: none; margin-top: 16px; margin-bottom: 22px;
+      font-family: var(--mono); letter-spacing: .04em;
+    }
+    .method-dl-link:hover { background: rgba(34,197,94,0.06); }
+
+    /* Costanza controversy note */
+    .controversy-note {
+      margin-top: 14px; padding: 12px 14px;
+      background: rgba(245,158,11,0.04);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 5px; font-size: 12px;
+      color: #8a7a50; line-height: 1.65;
+    }
+    .controversy-note strong { color: var(--amber); }
   </style>
 </head>
 <body>
@@ -470,6 +507,7 @@
           </div>
           <div class="metric-value v-red" id="l-co2-year"><span class="loading">—</span></div>
           <div class="metric-source">Global Carbon Project 2024 — 40.5 Gt/year · 1,284 tonnes/second</div>
+          <div class="rate-label">Rate-interpolated from annual total · not a real-time sensor · ±5% annual uncertainty (GCP 2024)</div>
         </div>
 
         <hr class="metric-divider">
@@ -477,7 +515,7 @@
         <div class="metric">
           <div class="metric-header">
             <span class="metric-label">Atmospheric Methane (CH₄)</span>
-            <span class="badge badge-live"><span class="bdot"></span>Live</span>
+            <span class="badge badge-cached" id="badge-ch4"><span class="bdot"></span>Cached · NOAA GML</span>
           </div>
           <div class="metric-value v-purple" id="l-ch4"><span class="loading">—</span></div>
           <div class="metric-source">NOAA GML Global Mean CH₄ · <span id="l-ch4-date">—</span> · pre-industrial: 722 ppb</div>
@@ -500,6 +538,7 @@
             <span class="badge badge-live"><span class="bdot"></span>Live</span>
           </div>
           <div class="metric-value v-red" id="l-temp"><span class="loading">—</span></div>
+          <div class="uncertainty">Measurement uncertainty: ±0.05°C (2σ) · NASA GISTEMP v4 technical notes</div>
           <div class="metric-source">NASA GISTEMP v4 · vs 1951–1980 baseline · <span id="l-temp-year">—</span></div>
         </div>
 
@@ -519,7 +558,7 @@
         <div class="metric">
           <div class="metric-header">
             <span class="metric-label">Arctic Sea Ice Extent</span>
-            <span class="badge badge-live"><span class="bdot"></span>Live</span>
+            <span class="badge badge-cached" id="badge-ice"><span class="bdot"></span>Cached · NSIDC</span>
           </div>
           <div class="metric-value v-blue" id="l-ice"><span class="loading">—</span></div>
           <div class="metric-source">NSIDC Sea Ice Index v3 · <span id="l-ice-date">—</span> · 1981–2010 mean: 6.24 M km²</div>
@@ -554,6 +593,7 @@
           </div>
           <div class="metric-value v-red" id="l-trees-year">—</div>
           <div class="metric-source">Hansen et al. / Global Forest Watch 2024 — 15B net loss/year · 475 trees/second</div>
+          <div class="rate-label">Rate-interpolated from GFW annual satellite data · net loss (regrowth subtracted) · ±20% uncertainty</div>
         </div>
 
         <hr class="metric-divider">
@@ -618,6 +658,7 @@
           </div>
           <div class="metric-value v-amber" id="l-plastic-year">—</div>
           <div class="metric-source">UNEP — From Pollution to Solution 2023 — 11M tonnes/year entering oceans · 349 kg/second</div>
+          <div class="rate-label">Rate-interpolated from UNEP 2023 annual estimate · ±40% model uncertainty · range 5–23M t/yr</div>
         </div>
 
         <hr class="metric-divider">
@@ -628,6 +669,7 @@
             <span class="badge badge-annual"><span class="bdot"></span>van Sebille 2023</span>
           </div>
           <div class="metric-value v-muted">~171 trillion</div>
+          <div class="uncertainty">Published range: 82–383 trillion pieces · uncertainty driven by particle-size detection limits</div>
           <div class="metric-source">van Sebille et al. 2023 — Environmental Science & Technology. DOI: 10.1021/acs.est.3c01553</div>
         </div>
 
@@ -635,7 +677,7 @@
 
         <div class="metric">
           <div class="metric-header">
-            <span class="metric-label">Active Ocean Distress Events</span>
+            <span class="metric-label">Sea-Ice & Marine Events (NASA EONET)</span>
             <span class="badge badge-live"><span class="bdot"></span>NASA EONET</span>
           </div>
           <div class="metric-value v-blue" id="l-ocean-events"><span class="loading">—</span></div>
@@ -660,6 +702,7 @@
           </div>
           <div class="metric-value v-amber" id="l-topsoil-year">—</div>
           <div class="metric-source">FAO State of the World's Soil Resources 2022 — 24B tonnes/year · 760 tonnes/second. ISBN: 978-92-5-138736-0</div>
+          <div class="rate-label">Rate-interpolated from FAO global estimate · soil loss ≠ net land loss (some topsoil redistributed locally)</div>
         </div>
 
         <hr class="metric-divider">
@@ -734,6 +777,7 @@
             <span class="badge badge-annual"><span class="bdot"></span>WWF 2024</span>
           </div>
           <div class="metric-value v-amber">73%</div>
+          <div class="uncertainty">Living Planet Index — 32,000+ monitored vertebrate populations · 95% CI not separately published at index level</div>
           <div class="metric-source">WWF Living Planet Report 2024 — average monitored vertebrate population size decline 1970–2020. wwf.org.uk/living-planet-report</div>
         </div>
 
@@ -795,6 +839,9 @@
   <!-- METHODOLOGY ──────────────────────────────────────────────────────── -->
   <div class="methodology">
     <h3>Data Quality Framework</h3>
+    <a href="/earth-debt-clock-methodology" class="method-dl-link" target="_blank">
+      ↓ Full Methodology Document — print / save as PDF
+    </a>
     <p class="method-intro">Every metric on this page is classified by its data quality tier. We do not present estimated figures as live measurements.</p>
     <div class="method-badges">
       <div class="method-badge-item"><span class="badge badge-live"><span class="bdot"></span>Live</span> — Real-time API. NOAA, NASA, NSIDC. Exact timestamp shown.</div>
@@ -866,6 +913,10 @@
       </tr>
     </table>
 
+    <div class="controversy-note">
+      <strong>Note on Costanza et al. 2014 (Ecosystem Service Loss counter):</strong> The $10T/year central estimate has been subject to peer-reviewed critique — notably Obst et al. (2016) and Brouwer & van Beukering (2017) — who argue that adding marginal values across all ecosystem services double-counts welfare and overstates the aggregate. The wide $3T–$20T uncertainty range on this page reflects that debate. We present this counter as an <em>illustrative economic frame</em>, not an audited financial metric, and the MODEL badge should be read accordingly. For a fuller treatment see: DOI 10.1016/j.jenvman.2016.10.016.
+    </div>
+
     <div class="disclaimer">
       <strong>Scientific transparency statement.</strong> This clock separates live measurements from model estimates using visible data quality badges. The Carbon Removal Cost is computed in real time from a live NOAA CO₂ reading and published IEA/Climeworks pricing — it is the most precise figure on the page. The Ecosystem Service Loss counter is a model derived from Costanza et al. 2014, which itself acknowledges a wide uncertainty range; it is shown in amber and labelled "Model" to reflect this. Ticking counters for trees, plastic, and topsoil are rate-based interpolations from peer-reviewed annual figures — the same methodology used by national debt clocks globally. No data on this page is fabricated; all sources are peer-reviewed or from authoritative intergovernmental bodies with DOIs or institutional URLs cited. Data sourced and maintained by MEKE AI Environmental Intelligence, Nairobi, Kenya.
     </div>
@@ -886,30 +937,35 @@
     // ── Constants ────────────────────────────────────────────────────────────
     const START = new Date('2026-01-01T00:00:00.000Z');
 
-    // Ecosystem Service Loss (Costanza 2014) — clearly a model
-    const ECO_PER_SEC   = 317098;   // $10T / 31,536,000 sec
+    const ECO_PER_SEC   = 317098;   // $10T / 31,536,000 sec (Costanza 2014)
     const WORLD_POP     = 8.2e9;
     const CO2_PPM_BASE  = 280;      // IPCC AR6 pre-industrial baseline
-    const CO2_GT_PPM    = 7.81;     // 1 ppm CO₂ ≈ 7.81 Gt (IPCC AR6)
+    const CO2_GT_PPM    = 7.81;     // 1 ppm CO₂ ≈ 7.81 Gt (IPCC AR6 Appendix 7A)
     const DAC_LOW       = 400;      // $/tonne — IEA BECCS/nature-based lower bound
     const DAC_HIGH      = 1000;     // $/tonne — Climeworks 2024 commercial price
 
-    // Annual rates → per second (for ticking interpolated metrics)
-    const CO2_PER_SEC     = 1284;   // tonnes/sec (40.5 Gt/yr ÷ 31,536,000 sec — Global Carbon Project 2024)
-    const TREES_PER_SEC   = 475.6;  // trees/sec net (GFW: 15B/yr)
-    const PLASTIC_PER_SEC = 349;    // kg/sec (UNEP: 11M tonnes/yr)
-    const TOPSOIL_PER_SEC = 760.9;  // tonnes/sec (FAO: 24B tonnes/yr)
+    const CO2_PER_SEC     = 1284;   // tonnes/sec (40.5 Gt/yr ÷ 31,536,000 — GCP 2024)
+    const TREES_PER_SEC   = 475.6;  // trees/sec net (GFW 15B/yr)
+    const PLASTIC_PER_SEC = 349;    // kg/sec (UNEP 11M t/yr)
+    const TOPSOIL_PER_SEC = 760.9;  // tonnes/sec (FAO 24B t/yr)
 
-    // Live data — populated by API fetch below
-    let liveCO2     = null;  // ppm — from /api/tipping-points or live-data.json
-    let liveCO2Date = null;
-    let liveCH4     = null;  // ppb
-    let liveCH4Date = null;
-    let liveTemp    = null;  // °C anomaly
-    let liveTempYear= null;
-    let liveIce     = null;  // M km²
-    let liveIceDate = null;
-    let liveEvents  = { sea_ice_events: 10 };
+    // Fallback values — most recent published data at time of writing (Jun 2026)
+    // Displayed with CACHED badge; replaced with LIVE badge when API responds
+    const FALLBACK_CH4      = 1923;             // NOAA GML global mean, Jan 2026 preliminary
+    const FALLBACK_CH4_DATE = 'Jan 2026 (cached)';
+    const FALLBACK_ICE      = 12.2;             // NSIDC Sea Ice Index, May 2026 estimate
+    const FALLBACK_ICE_DATE = 'May 2026 (cached)';
+
+    // Live data state
+    let liveCO2      = null;
+    let liveCO2Date  = null;
+    let liveCH4      = null;   // null until API or fallback applied
+    let liveCH4Date  = null;
+    let liveTemp     = null;
+    let liveTempYear = null;
+    let liveIce      = null;
+    let liveIceDate  = null;
+    let liveEvents   = { sea_ice_events: 10 };
 
     // ── Formatters ────────────────────────────────────────────────────────────
     function fmtT(n)   { return (n / 1e12).toFixed(2) + 'T'; }
@@ -922,78 +978,66 @@
     function tick() {
       const sec = (Date.now() - START.getTime()) / 1000;
 
-      // ── Ecosystem Service Loss counter (model)
+      // Ecosystem Service Loss (model)
       const ecoLoss = sec * ECO_PER_SEC;
       document.getElementById('eco-loss-value').textContent = '$' + fmtT(ecoLoss);
       document.getElementById('eco-per-second').textContent = fmtK(ECO_PER_SEC);
       document.getElementById('eco-per-capita').textContent = '$' + comma(Math.round(ecoLoss / WORLD_POP));
 
-      // ── Carbon Removal Cost (live once CO₂ data arrives)
+      // Carbon Removal Cost — updates when CO₂ data arrives
       if (liveCO2 !== null) {
         const excess   = liveCO2 - CO2_PPM_BASE;
         const massGt   = excess * CO2_GT_PPM;
         const costLow  = massGt * 1e9 * DAC_LOW;
         const costHigh = massGt * 1e9 * DAC_HIGH;
-
         document.getElementById('carbon-cost-low').textContent = '$' + fmtT(costLow);
         document.getElementById('carbon-cost-range').textContent =
           'Range: $' + fmtT(costLow) + ' – $' + fmtT(costHigh) +
           ' · ($400–$1,000/tonne · IEA–Climeworks 2024)';
         document.getElementById('co2-excess-display').textContent = excess.toFixed(2) + ' ppm';
         document.getElementById('co2-mass-display').textContent = massGt.toFixed(1);
-        if (liveCO2Date) {
-          document.getElementById('co2-date-display').textContent = 'Measured ' + liveCO2Date;
-        }
-
-        // Ledger: atmosphere
+        if (liveCO2Date) document.getElementById('co2-date-display').textContent = 'Measured ' + liveCO2Date;
         document.getElementById('l-co2-ppm').textContent = liveCO2.toFixed(2) + ' ppm';
         document.getElementById('l-co2-date').textContent = liveCO2Date || '';
         document.getElementById('l-co2-excess').textContent = excess.toFixed(2) + ' ppm above baseline';
         document.getElementById('l-co2-mass').textContent = massGt.toFixed(1);
       }
 
-      // ── CH₄
+      // CH₄ (shows fallback until live API responds)
       if (liveCH4 !== null) {
         document.getElementById('l-ch4').textContent = liveCH4.toFixed(0) + ' ppb';
         document.getElementById('l-ch4-date').textContent = liveCH4Date || '';
       }
 
-      // ── Temperature
+      // Temperature
       if (liveTemp !== null) {
         document.getElementById('l-temp').textContent = '+' + liveTemp.toFixed(2) + '°C';
         document.getElementById('l-temp-year').textContent = liveTempYear ? 'year ' + liveTempYear : '';
       }
 
-      // ── Arctic sea ice
+      // Arctic sea ice (shows fallback until live API responds)
       if (liveIce !== null) {
         document.getElementById('l-ice').textContent = liveIce.toFixed(2) + ' M km²';
         document.getElementById('l-ice-date').textContent = liveIceDate || '';
       }
 
-      // ── Active ocean/ice events
+      // Sea-ice / marine events (NASA EONET)
       const iceEvts = liveEvents.sea_ice_events || 10;
       document.getElementById('l-ocean-events').textContent =
-        iceEvts + ' sea-ice distress event' + (iceEvts !== 1 ? 's' : '') + ' (NASA EONET)';
+        iceEvts + ' active sea-ice/marine event' + (iceEvts !== 1 ? 's' : '') + ' tracked (NASA EONET)';
 
-      // ── Ticking rate-based metrics (labelled MODEL)
+      // Ticking rate-interpolated metrics
       const co2YearGt = (sec * CO2_PER_SEC) / 1e9;
       document.getElementById('l-co2-year').textContent = co2YearGt.toFixed(2) + ' Gt emitted in 2026';
-
       document.getElementById('l-trees-year').textContent = comma(sec * TREES_PER_SEC) + ' trees';
-
       const plasticTonnes = (sec * PLASTIC_PER_SEC) / 1000;
       document.getElementById('l-plastic-year').textContent = comma(Math.round(plasticTonnes)) + ' tonnes';
-
       const topsoilTonnes = sec * TOPSOIL_PER_SEC;
       document.getElementById('l-topsoil-year').textContent =
-        topsoilTonnes >= 1e9
-          ? fmtB(topsoilTonnes, 2) + ' tonnes'
-          : fmtM(topsoilTonnes, 2) + ' tonnes';
+        topsoilTonnes >= 1e9 ? fmtB(topsoilTonnes, 2) + ' tonnes' : fmtM(topsoilTonnes, 2) + ' tonnes';
     }
 
     // ── Fetch live data ───────────────────────────────────────────────────────
-    // Primary: /api/tipping-points — has CO₂, CH₄, temp, sea ice with dates + sources
-    // Fallback: /live-data.json — CO₂ only, no CH₄/temp/ice
     async function loadLiveData() {
       try {
         const [tpRes, ldRes] = await Promise.allSettled([
@@ -1001,28 +1045,34 @@
           fetch('/live-data.json'),
         ]);
 
-        // Tipping points — richer data
         if (tpRes.status === 'fulfilled' && tpRes.value.ok) {
           const tp = await tpRes.value.json();
           const ds = tp.data_sources || {};
           if (ds.co2?.value) { liveCO2 = ds.co2.value; liveCO2Date = ds.co2.date || ''; }
-          if (ds.ch4?.value) { liveCH4 = ds.ch4.value; liveCH4Date = ds.ch4.date || ''; }
+          if (ds.ch4?.value) {
+            liveCH4 = ds.ch4.value; liveCH4Date = ds.ch4.date || '';
+            const b = document.getElementById('badge-ch4');
+            if (b) { b.className = 'badge badge-live'; b.innerHTML = '<span class="bdot"></span>Live · NOAA GML'; }
+          }
           if (ds.temp?.value != null) { liveTemp = ds.temp.value; liveTempYear = ds.temp.year || ''; }
-          if (ds.ice?.value) { liveIce = ds.ice.value; liveIceDate = ds.ice.date || ''; }
+          if (ds.ice?.value) {
+            liveIce = ds.ice.value; liveIceDate = ds.ice.date || '';
+            const b = document.getElementById('badge-ice');
+            if (b) { b.className = 'badge badge-live'; b.innerHTML = '<span class="bdot"></span>Live · NSIDC'; }
+          }
         }
 
-        // live-data.json fallback for CO₂ and events
         if (ldRes.status === 'fulfilled' && ldRes.value.ok) {
           const ld = await ldRes.value.json();
           if (liveCO2 === null && ld.environmental?.co2_ppm) liveCO2 = ld.environmental.co2_ppm;
           if (ld.environmental?.sea_ice_events != null) liveEvents = ld.environmental;
-          if (ld.environmental?.temp_anomaly_c != null && liveTemp === null) {
-            liveTemp = ld.environmental.temp_anomaly_c;
-          }
+          if (ld.environmental?.temp_anomaly_c != null && liveTemp === null) liveTemp = ld.environmental.temp_anomaly_c;
         }
-      } catch (_) {
-        // Silent — DOM shows "loading…" state and ticking model metrics still work
-      }
+      } catch (_) {}
+
+      // Apply fallbacks for anything the API did not supply
+      if (liveCH4 === null) { liveCH4 = FALLBACK_CH4; liveCH4Date = FALLBACK_CH4_DATE; }
+      if (liveIce === null) { liveIce = FALLBACK_ICE; liveIceDate = FALLBACK_ICE_DATE; }
     }
 
     // ── Boot ──────────────────────────────────────────────────────────────────
