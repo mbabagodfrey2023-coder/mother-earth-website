@@ -22,7 +22,9 @@ jobs:
           CO2=$(echo "$THIS_WEEK" | awk -F',' '{print $5}')
           CO2_DATE=$(echo "$THIS_WEEK" | awk -F',' '{printf "%s-%02d-%02d", $1, $2, $3}')
           PREV=$(echo "$LAST_WEEK" | awk -F',' '{print $5}')
-          CHANGE=$(python3 -c "print(round($CO2 - $PREV, 2))")
+          # NOAA uses -999.99 for missing data — fall back to previous week's value
+          CO2=$(python3 -c "v=float('$CO2'); print(v if v > 0 else float('$PREV'))")
+          CHANGE=$(python3 -c "print(round($CO2 - float('$PREV'), 2))")
           echo "co2=$CO2" >> $GITHUB_OUTPUT
           echo "co2_date=$CO2_DATE" >> $GITHUB_OUTPUT
           echo "co2_change=$CHANGE" >> $GITHUB_OUTPUT
@@ -74,5 +76,5 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          npm install
+          npm install --prefer-offline
           npm run deploy
