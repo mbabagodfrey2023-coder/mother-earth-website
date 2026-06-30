@@ -145,14 +145,16 @@ export default {
     let res = await env.ASSETS.fetch(request);
     if (res.status === 404) {
       const pth = url.pathname;
-      // If no file extension, try appending .html (clean URL support)
+      // If no file extension, try appending .html (clean URL support).
+      // Use a fresh minimal Request — passing the original request as init
+      // can cause asset lookup failures in wrangler v4's assets binding.
       if (!pth.includes('.') && !pth.endsWith('/')) {
-        const htmlReq = new Request(new URL(pth + '.html', request.url), request);
-        const htmlRes = await env.ASSETS.fetch(htmlReq);
+        const htmlUrl = `https://${url.hostname}${pth}.html`;
+        const htmlRes = await env.ASSETS.fetch(new Request(htmlUrl));
         if (htmlRes.ok) return htmlRes;
       }
       // Fallback to custom 404 page
-      const notFound = await env.ASSETS.fetch(new Request(new URL('/404.html', request.url)));
+      const notFound = await env.ASSETS.fetch(new Request(`https://${url.hostname}/404.html`));
       return new Response(notFound.body, {
         status: 404,
         headers: notFound.headers,
