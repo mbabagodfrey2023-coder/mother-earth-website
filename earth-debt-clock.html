@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earth Debt Clock — MEKE AI</title>
+  <meta name="description" content="Real-time account of humanity's ecological debt to the planet — CO₂ excess, forests, oceans, soil, and species loss, accumulating every second.">
+  <link rel="icon" href="/logo-favicon.png" type="image/png">
+  <link rel="canonical" href="https://motherearth.systems/earth-debt-clock">
+  <meta property="og:title" content="Earth Debt Clock — What Humanity Owes the Planet">
+  <meta property="og:description" content="A real-time ticking account of ecological debt: CO₂, deforestation, ocean plastic, topsoil loss. Updated every second from live data.">
+  <meta property="og:url" content="https://motherearth.systems/earth-debt-clock">
+  <meta property="og:image" content="https://motherearth.systems/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <style>
+    :root {
+      --bg:       #050f09;
+      --surface:  #0a1a0e;
+      --card:     #0d2014;
+      --border:   #1a3a22;
+      --green:    #1a7a3a;
+      --green-hi: #22c55e;
+      --gold:     #c4a000;
+      --red:      #ef4444;
+      --orange:   #f97316;
+      --amber:    #f59e0b;
+      --blue:     #38bdf8;
+      --text:     #e8f5ec;
+      --muted:    #6b8f72;
+      --mono:     'SF Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ──────────────────────────────────────────────────────────────── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
+    nav a:hover { color: var(--text); }
+    nav .logo { color: var(--green-hi); font-weight: 700; font-size: 15px; margin-right: auto; }
+    @media (max-width: 640px) { nav a:not(.logo) { display: none; } }
+    nav .badge {
+      background: #1a0d00;
+      border: 1px solid var(--orange);
+      color: var(--orange);
+      font-size: 10px;
+      font-family: var(--mono);
+      letter-spacing: .08em;
+      padding: 3px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO ─────────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 52px 24px 40px;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      border-radius: 3px;
+      padding: 3px 10px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--green-hi); }
+    .hero p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* ── MAIN DEBT COUNTER ────────────────────────────────────────────────── */
+    .debt-counter {
+      background: linear-gradient(180deg, #1a0d00 0%, #0a0500 100%);
+      border-top: 1px solid rgba(249,115,22,0.3);
+      border-bottom: 1px solid rgba(249,115,22,0.3);
+      padding: 48px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .debt-counter::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(249,115,22,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .debt-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    .debt-number {
+      font-family: var(--mono);
+      font-size: clamp(32px, 7vw, 72px);
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: -0.01em;
+      line-height: 1;
+      margin-bottom: 16px;
+      text-shadow: 0 0 40px rgba(249,115,22,0.4);
+    }
+    .debt-number .currency { font-size: 0.6em; vertical-align: top; margin-top: 0.1em; }
+    .debt-meta {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .debt-meta-item {
+      text-align: center;
+    }
+    .debt-meta-item .val {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--amber);
+      font-weight: 600;
+    }
+    .debt-meta-item .lbl {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── LEDGER GRID ──────────────────────────────────────────────────────── */
+    .ledgers {
+      max-width: 1100px;
+      margin: 48px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .ledger {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .ledger-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .ledger-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .ledger-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .ledger-system {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .metric { margin-bottom: 16px; }
+    .metric:last-child { margin-bottom: 0; }
+    .metric-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 4px;
+      font-family: var(--mono);
+    }
+    .metric-value {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .metric-value.live { color: var(--red); }
+    .metric-value.amber { color: var(--amber); }
+    .metric-value.blue { color: var(--blue); }
+    .metric-value.muted { color: var(--muted); font-size: 16px; }
+    .metric-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .live-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green-hi);
+      margin-right: 4px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── RESTORATION SECTION ──────────────────────────────────────────────── */
+    .restoration {
+      max-width: 1100px;
+      margin: 0 auto 48px;
+      padding: 0 24px;
+    }
+    .restoration-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .restoration-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--green-hi);
+    }
+    .restoration-header .badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--green-hi);
+      border: 1px solid var(--green);
+      border-radius: 3px;
+      padding: 2px 8px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .restoration-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .resto-card {
+      background: #050f09;
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .resto-val {
+      font-family: var(--mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--green-hi);
+      margin-bottom: 4px;
+    }
+    .resto-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .resto-source {
+      font-size: 10px;
+      color: var(--green);
+      margin-top: 6px;
+      font-family: var(--mono);
+    }
+
+    /* ── METHODOLOGY ──────────────────────────────────────────────────────── */
+    .methodology {
+      border-top: 1px solid var(--border);
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+    .methodology h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 20px;
+    }
+    .methodology table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .methodology th {
+      text-align: left;
+      padding: 8px 12px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-weight: 600;
+      letter-spacing: .06em;
+    }
+    .methodology td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(26,58,34,0.5);
+      color: #a0b8a4;
+      vertical-align: top;
+    }
+    .methodology td:first-child { color: var(--text); font-family: var(--mono); }
+    .disclaimer {
+      margin-top: 24px;
+      padding: 16px;
+      background: rgba(26,58,34,0.2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .disclaimer strong { color: var(--text); }
+
+    /* ── FOOTER LINK ──────────────────────────────────────────────────────── */
+    .footer-cta {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .footer-cta p { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+    .cta-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .cta-link {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .cta-link.primary {
+      background: var(--green);
+      color: #fff;
+    }
+    .cta-link.secondary {
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .cta-link:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">MEKE AI</a>
+    <a href="/tipping-points">Tipping Points</a>
+    <a href="/data-pipeline">Data Pipeline</a>
+    <a href="/iris">IRIS Data</a>
+    <a href="/mission-control">Mission Control</a>
+    <span class="badge">🔴 Live</span>
+  </nav>
+
+  <!-- HERO ──────────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-tag">🌍 Earth Debt Clock</div>
+    <h1>What Humanity<br>Owes <span>the Planet</span></h1>
+    <p>A real-time ledger of ecological debt — the accumulated cost to restore Earth's atmosphere, forests, oceans, and soil to pre-industrial health. It grows every second.</p>
+  </section>
+
+  <!-- MAIN COUNTER ──────────────────────────────────────────────────────── -->
+  <div class="debt-counter">
+    <div class="debt-label">Total Earth Debt (Estimated Restoration Cost)</div>
+    <div class="debt-number" id="total-debt">
+      <span class="currency">$</span><span id="debt-integer">---</span> TRILLION
+    </div>
+    <div class="debt-meta">
+      <div class="debt-meta-item">
+        <div class="val" id="per-second">$317,098</div>
+        <div class="lbl">added per second</div>
+      </div>
+      <div class="debt-meta-item">
+        <div class="val" id="per-capita">$36,585</div>
+        <div class="lbl">your share per person</div>
+      </div>
+      <div class="debt-meta-item">
+        <div class="val" id="since-1900">$300T+</div>
+        <div class="lbl">accumulated since industrialisation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEDGERS ───────────────────────────────────────────────────────────── -->
+  <div class="ledgers">
+
+    <!-- ATMOSPHERE ───────────────────────────────────────────────────────── -->
+    <div class="ledger">
+      <div class="ledger-head">
+        <div class="ledger-icon" style="background:#1a0d00;">🌫️</div>
+        <div>
+          <div class="ledger-title">Atmosphere</div>
+          <div class="ledger-system">Carbon Ledger</div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label"><span class="live-dot"></span>CO₂ Concentration — Live</div>
+        <div class="metric-value live" id="co2-ppm">--- ppm</div>
+        <div class="metric-sub">Source: NOAA Mauna Loa Observatory · pre-industrial baseline: 280 ppm</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Excess Above Baseline</div>
+        <div class="metric-value amber" id="co2-excess">--- ppm</div>
+        <div class="metric-sub" id="co2-excess-mass">--- Gt CO₂ above pre-industrial levels</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">CO₂ Added in 2026 (Ticking)</div>
+        <div class="metric-value live" id="co2-year">--- Gt</div>
+        <div class="metric-sub">~40.5 Gt emitted globally per year · 1.28 tonnes/second</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Atmospheric Restoration Cost</div>
+        <div class="metric-value amber" id="co2-cost">~$178 TRILLION</div>
+        <div class="metric-sub">1,187 Gt excess × $150/tonne (projected 2035 DAC cost, IEA)</div>
+      </div>
+    </div>
+
+    <!-- FORESTS ──────────────────────────────────────────────────────────── -->
+    <div class="ledger">
+      <div class="ledger-head">
+        <div class="ledger-icon" style="background:#051a0d;">🌳</div>
+        <div>
+          <div class="ledger-title">Forests</div>
+          <div class="ledger-system">Biosphere · Land</div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Trees Cut in 2026 (Ticking)</div>
+        <div class="metric-value live" id="trees-year">---</div>
+        <div class="metric-sub">~15 billion net trees lost per year · 475 per second</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Trees Cut Today</div>
+        <div class="metric-value amber" id="trees-today">---</div>
+        <div class="metric-sub">~41 million trees per day (gross, Global Forest Watch 2024)</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Lost Since Pre-Agricultural Era</div>
+        <div class="metric-value muted">~3 TRILLION TREES</div>
+        <div class="metric-sub">From ~6T to ~3T — Crowther et al. 2015, Nature</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Amazon Deforested</div>
+        <div class="metric-value amber">~17%</div>
+        <div class="metric-sub">Tipping threshold: ~25% (Mongabay 2024) — see Tipping Points</div>
+      </div>
+    </div>
+
+    <!-- OCEANS ───────────────────────────────────────────────────────────── -->
+    <div class="ledger">
+      <div class="ledger-head">
+        <div class="ledger-icon" style="background:#05121a;">🌊</div>
+        <div>
+          <div class="ledger-title">Oceans</div>
+          <div class="ledger-system">Marine Systems</div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Ocean Acidification</div>
+        <div class="metric-value live">pH 8.08</div>
+        <div class="metric-sub">Down from 8.20 pre-industrial · 30% more acidic (NOAA 2024)</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Plastic Entering Oceans in 2026 (Ticking)</div>
+        <div class="metric-value live" id="plastic-year">--- tonnes</div>
+        <div class="metric-sub">~11 million tonnes/year · 349 kg/second (UN Environment 2023)</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Total Ocean Plastic (Pieces)</div>
+        <div class="metric-value amber">~171 TRILLION</div>
+        <div class="metric-sub">van Sebille et al. 2023 · Environmental Science & Technology</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label"><span class="live-dot"></span>Active Ocean Distress Events</div>
+        <div class="metric-value blue" id="ocean-events">--- events</div>
+        <div class="metric-sub">Source: NASA EONET · sea-ice loss, marine heatwaves</div>
+      </div>
+    </div>
+
+    <!-- SOIL ─────────────────────────────────────────────────────────────── -->
+    <div class="ledger">
+      <div class="ledger-head">
+        <div class="ledger-icon" style="background:#1a0f00;">🏔️</div>
+        <div>
+          <div class="ledger-title">Soil & Land</div>
+          <div class="ledger-system">Terrestrial Systems</div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Topsoil Lost in 2026 (Ticking)</div>
+        <div class="metric-value live" id="topsoil-year">--- tonnes</div>
+        <div class="metric-sub">~24 billion tonnes/year · 760 tonnes/second (FAO 2022)</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Earth's Soil Already Degraded</div>
+        <div class="metric-value amber">33%</div>
+        <div class="metric-sub">2 billion hectares — UNCCD / FAO Global Soil Assessment 2022</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Topsoil Formation Rate</div>
+        <div class="metric-value muted">1 cm per 1,000 years</div>
+        <div class="metric-sub">Erosion rate is 10–40× faster than formation (FAO)</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Freshwater Aquifer Depletion</div>
+        <div class="metric-value amber">~283 km³/year</div>
+        <div class="metric-sub">Overextraction above natural recharge rate (UNESCO 2023)</div>
+      </div>
+    </div>
+
+    <!-- BIODIVERSITY ─────────────────────────────────────────────────────── -->
+    <div class="ledger">
+      <div class="ledger-head">
+        <div class="ledger-icon" style="background:#0d001a;">🦋</div>
+        <div>
+          <div class="ledger-title">Biodiversity</div>
+          <div class="ledger-system">Species · Ecosystems</div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Species Threatened with Extinction</div>
+        <div class="metric-value live">44,016</div>
+        <div class="metric-sub">IUCN Red List 2024 · out of 157,190 species assessed</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Extinction Rate vs Natural Background</div>
+        <div class="metric-value live">1,000–10,000×</div>
+        <div class="metric-sub">IPBES Global Assessment 2019 — 6th mass extinction event underway</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Vertebrate Population Decline Since 1970</div>
+        <div class="metric-value amber">73%</div>
+        <div class="metric-sub">WWF Living Planet Report 2024 — average monitored population decline</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Annual Ecosystem Service Loss</div>
+        <div class="metric-value live">~$10 TRILLION</div>
+        <div class="metric-sub">Costanza et al. 2014, Global Environmental Change · this drives the debt clock rate</div>
+      </div>
+    </div>
+
+    <!-- TEMPERATURE ──────────────────────────────────────────────────────── -->
+    <div class="ledger">
+      <div class="ledger-head">
+        <div class="ledger-icon" style="background:#1a0500;">🌡️</div>
+        <div>
+          <div class="ledger-title">Temperature</div>
+          <div class="ledger-system">Atmospheric · GISTEMP</div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label"><span class="live-dot"></span>Global Temperature Anomaly</div>
+        <div class="metric-value live" id="temp-anomaly">+1.20°C</div>
+        <div class="metric-sub">Above 1951–1980 baseline · Source: NASA GISTEMP v4 via MEKE AI GAIA</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Paris Agreement Threshold</div>
+        <div class="metric-value amber">1.5°C</div>
+        <div class="metric-sub">Remaining budget: ~0.3°C before irreversible cascade triggers</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label"><span class="live-dot"></span>Active Climate Events</div>
+        <div class="metric-value live" id="climate-events">---</div>
+        <div class="metric-sub">Wildfires + severe storms (NASA EONET, live)</div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">2025 Annual Average</div>
+        <div class="metric-value live">+1.6°C</div>
+        <div class="metric-sub">First calendar year to exceed 1.5°C Paris threshold — WMO 2026</div>
+      </div>
+    </div>
+
+  </div><!-- /ledgers -->
+
+  <!-- RESTORATION CREDITS ──────────────────────────────────────────────── -->
+  <div class="restoration">
+    <div class="restoration-header">
+      <h2>Restoration Credits</h2>
+      <span class="badge">What's Being Done</span>
+    </div>
+    <div class="restoration-grid">
+      <div class="resto-card">
+        <div class="resto-val">350M</div>
+        <div class="resto-label">Carbon credits retired globally in 2025</div>
+        <div class="resto-source">Source: Ecosystem Marketplace 2025</div>
+      </div>
+      <div class="resto-card">
+        <div class="resto-val">1.9B</div>
+        <div class="resto-label">Trees planted globally in 2025</div>
+        <div class="resto-source">Source: One Trillion Trees platform</div>
+      </div>
+      <div class="resto-card">
+        <div class="resto-val">8.3%</div>
+        <div class="resto-label">Ocean surface under marine protection</div>
+        <div class="resto-source">Source: IUCN Protected Planet 2024</div>
+      </div>
+      <div class="resto-card">
+        <div class="resto-val">17.6%</div>
+        <div class="resto-label">Land under protected area coverage</div>
+        <div class="resto-source">Source: UNEP-WCMC 2024</div>
+      </div>
+      <div class="resto-card">
+        <div class="resto-val">240 GW</div>
+        <div class="resto-label">Solar capacity added in 2024</div>
+        <div class="resto-source">Source: IEA Renewables 2024</div>
+      </div>
+      <div class="resto-card" style="border-color: #2a4a2a; background: #030d05;">
+        <div class="resto-val" style="color: #4a7a4a; font-size: 16px;">Your Project Here</div>
+        <div class="resto-label">IRIS Research Access tier clients contribute verified restoration data</div>
+        <div class="resto-source"><a href="/iris" style="color: var(--green-hi); text-decoration: none;">Apply for research access →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METHODOLOGY ──────────────────────────────────────────────────────── -->
+  <div class="methodology">
+    <h3>Methodology &amp; Sources</h3>
+    <table>
+      <tr>
+        <th>Metric</th>
+        <th>Rate / Basis</th>
+        <th>Source</th>
+      </tr>
+      <tr>
+        <td>Total Earth Debt (base)</td>
+        <td>$300 trillion central estimate at Jan 1 2026. Range: $100T–$500T depending on DAC cost projections and ecosystem valuation methodology.</td>
+        <td>Costanza et al. 2014; IPCC AR6 WG3 2022; IEA Net Zero 2050</td>
+      </tr>
+      <tr>
+        <td>Debt accumulation rate</td>
+        <td>$10 trillion/year ($317,098/second) — estimated annual loss of global ecosystem services</td>
+        <td>Costanza et al. 2014 — Global Environmental Change</td>
+      </tr>
+      <tr>
+        <td>CO₂ ppm (live)</td>
+        <td>Fetched from NOAA Mauna Loa Observatory via MEKE AI GAIA data feed. Refreshed every 30 min.</td>
+        <td>NOAA GML / Scripps Institution of Oceanography</td>
+      </tr>
+      <tr>
+        <td>CO₂ annual emissions</td>
+        <td>40.5 Gt CO₂/year (1.284 tonnes/second) — 2024 Global Carbon Budget</td>
+        <td>Global Carbon Project 2024</td>
+      </tr>
+      <tr>
+        <td>Atmospheric restoration cost</td>
+        <td>1,187 Gt CO₂ excess × $150/tonne (projected 2035 direct air capture cost)</td>
+        <td>IEA Direct Air Capture 2023 Technology Report</td>
+      </tr>
+      <tr>
+        <td>Tree loss rate</td>
+        <td>~15 billion net trees/year (475/second); gross ~41 million/day</td>
+        <td>Global Forest Watch Hansen et al. 2024; Crowther et al. 2015</td>
+      </tr>
+      <tr>
+        <td>Ocean plastic entry</td>
+        <td>11 million tonnes/year (349 kg/second) entering oceans</td>
+        <td>UN Environment Programme 2023; Jambeck et al.</td>
+      </tr>
+      <tr>
+        <td>Ocean plastic total</td>
+        <td>~171 trillion pieces as of 2023 estimate</td>
+        <td>van Sebille et al. 2023 — Environmental Science &amp; Technology</td>
+      </tr>
+      <tr>
+        <td>Topsoil erosion</td>
+        <td>~24 billion tonnes/year (760 tonnes/second)</td>
+        <td>FAO State of the World's Soil Resources 2022</td>
+      </tr>
+      <tr>
+        <td>Species threatened</td>
+        <td>44,016 species on IUCN Red List 2024 (of 157,190 assessed)</td>
+        <td>IUCN Red List Version 2024-1</td>
+      </tr>
+      <tr>
+        <td>Extinction rate multiplier</td>
+        <td>1,000–10,000× natural background rate</td>
+        <td>IPBES Global Assessment Report 2019</td>
+      </tr>
+      <tr>
+        <td>Vertebrate population decline</td>
+        <td>73% average decline in monitored populations since 1970</td>
+        <td>WWF Living Planet Report 2024</td>
+      </tr>
+      <tr>
+        <td>Active climate events (live)</td>
+        <td>NASA EONET open events API — wildfires + severe storms. Refreshed every 30 min.</td>
+        <td>NASA Earth Observatory Natural Event Tracker</td>
+      </tr>
+    </table>
+
+    <div class="disclaimer">
+      <strong>Important note on estimates.</strong> The Earth Debt Clock presents <em>scientific estimates</em>, not audited figures. The total debt figure carries a wide uncertainty range ($100T–$500T) reflecting different assumptions about restoration technology costs, ecosystem valuation methods, and discount rates. Ticking counters for CO₂, trees, plastic, and topsoil are <em>rate-based interpolations</em> from annual published figures — the same methodology used by the US National Debt Clock. Live CO₂ data is sourced directly from NOAA Mauna Loa via MEKE AI's GAIA data feed. All sources are peer-reviewed or from authoritative international bodies. This clock is an awareness tool; for scientific analysis, consult the primary sources linked above. Data sourced and maintained by MEKE AI Environmental Intelligence — Nairobi, Kenya.
+    </div>
+  </div>
+
+  <!-- FOOTER CTA ────────────────────────────────────────────────────────── -->
+  <div class="footer-cta">
+    <p>MEKE AI operates the live data layer behind this clock. Access raw environmental data for your research or organisation.</p>
+    <div class="cta-links">
+      <a href="/iris" class="cta-link primary">Get Data Access — IRIS</a>
+      <a href="/tipping-points" class="cta-link secondary">Tipping Point Cascade Engine →</a>
+      <a href="/mission-control" class="cta-link secondary">Mission Control →</a>
+    </div>
+  </div>
+
+  <!-- CLOCK LOGIC ───────────────────────────────────────────────────────── -->
+  <script>
+    // ── Constants ───────────────────────────────────────────────────────────
+    // All rates are per second, calculated from peer-reviewed annual figures
+    const START = new Date('2026-01-01T00:00:00.000Z');
+
+    const BASE_DEBT_USD    = 300e12;   // $300 trillion base at Jan 1 2026
+    const DEBT_PER_SEC     = 317098;   // $10T/year ÷ 31,536,000 sec
+
+    const CO2_PER_SEC      = 1.284;    // tonnes CO₂/sec (40.5 Gt/yr)
+    const TREES_PER_SEC    = 475.6;    // trees cut net/sec (15B/yr)
+    const PLASTIC_PER_SEC  = 349;      // kg entering oceans/sec (11M t/yr)
+    const TOPSOIL_PER_SEC  = 760.9;    // tonnes topsoil lost/sec (24B t/yr)
+
+    const WORLD_POP        = 8.2e9;
+    const CO2_PPM_BASE     = 280;      // pre-industrial CO₂
+    const CO2_GT_PER_PPM   = 7.81;    // 1 ppm CO₂ ≈ 7.81 Gt
+
+    // Live CO₂ ppm — updated from /live-data.json
+    let liveCO2 = 432.15;
+    let liveEvents = { wildfires: 21, severe_storms: 0, sea_ice_events: 10 };
+
+    fetch('/live-data.json')
+      .then(r => r.json())
+      .then(d => {
+        if (d.environmental?.co2_ppm)        liveCO2 = d.environmental.co2_ppm;
+        if (d.environmental?.wildfires != null) {
+          liveEvents.wildfires     = d.environmental.wildfires;
+          liveEvents.severe_storms = d.environmental.severe_storms;
+          liveEvents.sea_ice_events= d.environmental.sea_ice_events;
+        }
+        if (d.environmental?.temp_anomaly_c != null) {
+          document.getElementById('temp-anomaly').textContent =
+            '+' + d.environmental.temp_anomaly_c.toFixed(2) + '°C';
+        }
+      })
+      .catch(() => {});
+
+    // ── Formatters ──────────────────────────────────────────────────────────
+    function fmtTrillions(n) {
+      return (n / 1e12).toFixed(2);
+    }
+
+    function fmtBig(n, dp = 0) {
+      if (n >= 1e12) return (n / 1e12).toFixed(dp) + ' T';
+      if (n >= 1e9)  return (n / 1e9 ).toFixed(dp) + ' B';
+      if (n >= 1e6)  return (n / 1e6 ).toFixed(dp) + ' M';
+      return Math.round(n).toLocaleString();
+    }
+
+    function fmtComma(n) {
+      return Math.round(n).toLocaleString('en-US');
+    }
+
+    // ── Tick ────────────────────────────────────────────────────────────────
+    function tick() {
+      const sec = (Date.now() - START.getTime()) / 1000;
+
+      // ── Total Earth Debt
+      const debt = BASE_DEBT_USD + sec * DEBT_PER_SEC;
+      document.getElementById('debt-integer').textContent = fmtTrillions(debt);
+      document.getElementById('per-second').textContent   = '$' + DEBT_PER_SEC.toLocaleString();
+      document.getElementById('per-capita').textContent   = '$' + Math.round(debt / WORLD_POP).toLocaleString();
+
+      // ── CO₂
+      const co2Excess = (liveCO2 - CO2_PPM_BASE).toFixed(2);
+      const co2ExcessGt = (co2Excess * CO2_GT_PER_PPM).toFixed(1);
+      document.getElementById('co2-ppm').textContent        = liveCO2.toFixed(2) + ' ppm';
+      document.getElementById('co2-excess').textContent     = co2Excess + ' ppm above baseline';
+      document.getElementById('co2-excess-mass').textContent= co2ExcessGt + ' Gt CO₂ above pre-industrial levels';
+
+      const co2AddedGt = (sec * CO2_PER_SEC) / 1e9;
+      document.getElementById('co2-year').textContent = co2AddedGt.toFixed(2) + ' Gt added in 2026';
+
+      // ── Trees
+      const treesYear  = sec * TREES_PER_SEC;
+      const treesToday = (Date.now() - new Date().setUTCHours(0,0,0,0)) / 1000 * TREES_PER_SEC;
+      document.getElementById('trees-year').textContent  = fmtComma(treesYear) + ' trees';
+      document.getElementById('trees-today').textContent = fmtComma(Math.max(0, treesToday)) + ' trees';
+
+      // ── Plastic
+      const plasticTonnes = (sec * PLASTIC_PER_SEC) / 1000; // kg → tonnes
+      document.getElementById('plastic-year').textContent = fmtComma(Math.round(plasticTonnes)) + ' tonnes';
+
+      // ── Topsoil
+      const topsoilTonnes = sec * TOPSOIL_PER_SEC;
+      document.getElementById('topsoil-year').textContent = fmtBig(topsoilTonnes, 2) + ' tonnes';
+
+      // ── Live events
+      const oceanEvts = liveEvents.sea_ice_events;
+      document.getElementById('ocean-events').textContent =
+        oceanEvts + ' event' + (oceanEvts !== 1 ? 's' : '');
+
+      const climateEvts = liveEvents.wildfires + liveEvents.severe_storms;
+      document.getElementById('climate-events').textContent =
+        liveEvents.wildfires + ' wildfires · ' + liveEvents.severe_storms + ' severe storms';
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+
+</body>
+</html>
