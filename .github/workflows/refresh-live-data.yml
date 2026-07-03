@@ -3,6 +3,12 @@ name: Refresh Live Data
 on:
   schedule:
     - cron: '*/30 * * * *'   # every 30 min — cloud-side, Mac-independent
+  push:
+    branches: [main]          # deploy immediately on every push — no 30-min wait
+    paths-ignore:
+      - '**.md'
+      - 'live-data.json'
+      - '.github/**'
   workflow_dispatch:
 
 jobs:

@@ -29,6 +29,29 @@ jobs:
           grep -q "Starting in Kenya" index.html || (echo "FAIL: Mission Statement missing"  && exit 1)
           echo "✓ All key strings present in local HTML"
 
+      - name: Feature integrity — Orbital Spectrum theme (agreed 2 Jul 2026)
+        # If these fail someone has accidentally reverted the agreed palette — auto-alert ECHO
+        run: |
+          grep -q -- "--surface: #02101e"  index.html || (echo "FAIL: Orbital Spectrum bg #02101e missing — theme reverted?"   && exit 1)
+          grep -q "1eff8c"                 index.html || (echo "FAIL: Orbital Spectrum green #1eff8c missing — theme reverted?" && exit 1)
+          grep -q "4db8ff"                 index.html || (echo "FAIL: Orbital Spectrum blue #4db8ff missing — theme reverted?"  && exit 1)
+          grep -q "d4eeff"                 index.html || (echo "FAIL: Orbital Spectrum text #d4eeff missing — theme reverted?"  && exit 1)
+          echo "✓ Orbital Spectrum palette intact"
+
+      - name: Feature integrity — Earth Debt Clock teaser (agreed 2 Jul 2026)
+        run: |
+          grep -q "debt-clock-teaser"  index.html || (echo "FAIL: Earth Debt Clock teaser section missing from homepage" && exit 1)
+          grep -q "edc-carbon"         index.html || (echo "FAIL: Carbon counter (edc-carbon) missing from teaser"       && exit 1)
+          grep -q "edc-trees"          index.html || (echo "FAIL: Trees counter (edc-trees) missing from teaser"         && exit 1)
+          grep -q "edc-plastic"        index.html || (echo "FAIL: Plastic counter (edc-plastic) missing from teaser"     && exit 1)
+          echo "✓ Earth Debt Clock teaser present"
+
+      - name: Feature integrity — ECHO system (agreed 2 Jul 2026)
+        run: |
+          grep -q "PLAIN TEXT ONLY"    src/worker.js || (echo "FAIL: ECHO no-markdown rule missing from worker.js"           && exit 1)
+          grep -q "earth-debt-clock"   src/worker.js || (echo "FAIL: Earth Debt Clock page missing from ECHO worker context"  && exit 1)
+          echo "✓ ECHO system integrity confirmed"
+
       - name: Live site — Cloudflare responding (not 5xx)
         id: http
         run: |
@@ -69,6 +92,9 @@ jobs:
           echo "✓ motherearth.systems HEALTHY"
           echo "✓ Syntax clean"
           echo "✓ Key strings in HTML"
+          echo "✓ Orbital Spectrum palette intact"
+          echo "✓ Earth Debt Clock teaser present"
+          echo "✓ ECHO system intact"
           echo "✓ Cloudflare responding"
           echo "✓ Live data fresh"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -87,15 +113,56 @@ jobs:
                 '',
                 `**Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
                 '',
-                '**Checks:**',
+                '**Checks run:**',
                 '- Syntax gate',
                 '- Key JS strings in local HTML',
+                '- Orbital Spectrum theme integrity (--surface #02101e, green #1eff8c, blue #4db8ff)',
+                '- Earth Debt Clock teaser section (debt-clock-teaser, edc-carbon, edc-trees, edc-plastic)',
+                '- ECHO system integrity (no-markdown rule, earth-debt-clock context)',
                 '- Cloudflare HTTP response (not 5xx)',
                 '- live-data.json freshness',
                 '',
-                '**Action required:** Check the failed step above and deploy a fix.',
+                '**Action required:** Check the failed step above. If an agreed feature was accidentally reverted,',
+                'restore it in the source file and push to main — the deploy workflow will fire automatically.',
                 '',
-                '_This issue was opened automatically by the 24h cloud health monitor._'
+                '_This issue was opened automatically by the ECHO site health monitor._'
               ].join('\n'),
               labels: ['bug', 'automated']
             });
+
+      - name: Email Andy on feature regression
+        if: failure()
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        run: |
+          python3 -c "
+          import smtplib, os
+          from email.mime.text import MIMEText
+          user = os.environ.get('SMTP_USER','')
+          pw   = os.environ.get('SMTP_PASS','')
+          if not user or not pw:
+              print('SMTP secrets not set — skipping email alert')
+              exit(0)
+          msg = MIMEText('''ECHO ALERT: motherearth.systems health check failed.
+
+          One or more agreed features may have regressed:
+          - Orbital Spectrum theme (#02101e / #1eff8c / #4db8ff)
+          - Earth Debt Clock teaser on homepage
+          - ECHO no-markdown rule or Earth Debt Clock context
+
+          GitHub Actions run: https://github.com/andygodfrey031/mother-earth/actions
+
+          Action: Check the failed step, restore the feature in source, push to main.
+          The deploy workflow fires automatically on push — no manual deploy needed.
+
+          — ECHO / Site Health Monitor''')
+          msg['Subject'] = 'ECHO ALERT: Site feature regression detected'
+          msg['From']    = user
+          msg['To']      = 'andygodfrey031@gmail.com'
+          s = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+          s.login(user, pw)
+          s.sendmail(user, ['andygodfrey031@gmail.com'], msg.as_string())
+          s.quit()
+          print('Alert email sent to Andy')
+          " || echo "Email step failed — GitHub Issue already created"
