@@ -8,7 +8,7 @@
   <meta property="og:title" content="How We Get Real Data — Mother Earth Kenya"/>
   <meta property="og:description" content="NASA satellites → GAIA agent → your screen. The full data pipeline, explained."/>
   <meta property="og:image" content="https://motherearth.systems/og.svg"/>
-  <meta name="theme-color" content="#020606"/>
+  <meta name="theme-color" content="#02101e"/>
   <link rel="icon" type="image/png" href="/logo-favicon.png"/>
   <link rel="apple-touch-icon" href="/logo-official-256.png"/>
   <link rel="canonical" href="https://motherearth.systems/data-pipeline"/>
@@ -23,13 +23,13 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
 
     :root {
-      --bg:#020606; --bg2:#040c09;
-      --green:#4ade80; --green-d:#22c55e; --green-dim:rgba(74,222,128,.12);
-      --blue:#60a5fa; --blue-dim:rgba(96,165,250,.12);
-      --indigo:#818cf8; --amber:#f59e0b; --gold:#D4AF37;
-      --terra:#D4763A; --red:#ef4444;
-      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.22);
-      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03); --card-h:rgba(255,255,255,.055);
+      --bg:#02101e; --bg2:#04182a;
+      --green:#1eff8c; --green-d:#0a4f28; --green-dim:rgba(30,255,140,0.10);
+      --blue:#4db8ff; --blue-dim:rgba(77,184,255,0.10);
+      --indigo:#8b6bff; --amber:#ff9520; --gold:#d4a200;
+      --terra:#ff6a20; --red:#ff4a4a;
+      --text:#d4eeff; --muted:rgba(77,184,255,0.42); --dim:rgba(77,184,255,0.22);
+      --border:rgba(77,184,255,0.14); --card:rgba(77,184,255,0.04); --card-h:rgba(77,184,255,0.07);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
@@ -39,7 +39,7 @@
     img{display:block;max-width:100%}
 
     #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
-    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(30,255,140,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
     body.ch #cd{width:10px;height:10px;background:var(--gold)}
     body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
     @media(hover:none){#cd,#cr{display:none}}
@@ -50,14 +50,14 @@
     @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
 
     /* NAV */
-    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,16,30,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
     .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
     .nav-logo img{width:48px;height:48px;object-fit:contain}
     .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
     .nav-mid a{color:var(--muted);transition:color .2s}
     .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
     .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
-    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(30,255,140,.04)}
     @media(max-width:1050px){.nav-mid{display:none}}
 
     main{padding-top:72px}
@@ -78,7 +78,7 @@
     ═══════════════════════════════════════════════════════ */
     #hero{
       padding:130px 0 80px;
-      background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(74,222,128,.07),transparent);
+      background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(30,255,140,.07),transparent);
       text-align:center;
     }
     .hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--green);text-transform:uppercase;margin-bottom:24px}
@@ -90,7 +90,7 @@
     .live-pill{
       display:inline-flex;align-items:center;gap:10px;
       font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;
-      background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.22);
+      background:rgba(30,255,140,.07);border:1px solid rgba(30,255,140,.22);
       border-radius:100px;padding:10px 20px;margin-bottom:64px;
     }
     .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulseDot 2s ease-in-out infinite;flex-shrink:0}
@@ -119,10 +119,10 @@
       content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:14px 14px 0 0;
       background:var(--sc-accent,var(--green));
     }
-    .source-card:hover{border-color:rgba(74,222,128,.3);transform:translateY(-3px)}
+    .source-card:hover{border-color:rgba(30,255,140,.3);transform:translateY(-3px)}
     .sc-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
     .sc-icon{font-size:32px;flex-shrink:0}
-    .sc-live{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--green);background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:20px;padding:4px 10px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+    .sc-live{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--green);background:rgba(30,255,140,.07);border:1px solid rgba(30,255,140,.2);border-radius:20px;padding:4px 10px;white-space:nowrap;display:flex;align-items:center;gap:6px}
     .sc-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulseDot 2s ease-in-out infinite;flex-shrink:0}
     .sc-name{font-size:17px;font-weight:800;margin-bottom:4px}
     .sc-org{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
@@ -147,7 +147,7 @@
     .steps{display:flex;flex-direction:column;gap:0;position:relative}
     .steps::before{
       content:'';position:absolute;left:28px;top:56px;bottom:56px;width:1px;
-      background:linear-gradient(to bottom,var(--green),rgba(74,222,128,.1));
+      background:linear-gradient(to bottom,var(--green),rgba(30,255,140,.1));
     }
     .step{display:flex;gap:28px;align-items:flex-start;padding:24px 0;position:relative}
     .step-num-wrap{flex-shrink:0;position:relative;z-index:1}
@@ -158,7 +158,7 @@
       font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--muted);
       transition:border-color .3s,color .3s,box-shadow .3s;
     }
-    .step.active .step-num{border-color:var(--green);color:var(--green);box-shadow:0 0 20px rgba(74,222,128,.25)}
+    .step.active .step-num{border-color:var(--green);color:var(--green);box-shadow:0 0 20px rgba(30,255,140,.25)}
     .step-body{flex:1;padding-top:14px}
     .step-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
     .step-title{font-size:1.1rem;font-weight:800;margin-bottom:8px}
@@ -176,7 +176,7 @@
     .step-badge{
       display:inline-flex;align-items:center;gap:6px;margin-top:12px;
       font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;
-      color:var(--green);background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.18);
+      color:var(--green);background:rgba(30,255,140,.07);border:1px solid rgba(30,255,140,.18);
       border-radius:20px;padding:5px 12px;text-transform:uppercase;
     }
 
@@ -185,8 +185,8 @@
     ═══════════════════════════════════════════════════════ */
     #terminal-section{border-top:1px solid var(--border)}
     .terminal-wrap{
-      background:rgba(2,8,4,.95);border:1px solid rgba(74,222,128,.15);border-radius:14px;
-      overflow:hidden;margin-top:52px;box-shadow:0 0 60px rgba(74,222,128,.04);
+      background:rgba(2,8,4,.95);border:1px solid rgba(30,255,140,.15);border-radius:14px;
+      overflow:hidden;margin-top:52px;box-shadow:0 0 60px rgba(30,255,140,.04);
     }
     .terminal-bar{
       display:flex;align-items:center;gap:8px;padding:14px 20px;
@@ -215,11 +215,11 @@
     .terminal-controls{padding:16px 24px;border-top:1px solid var(--border);display:flex;align-items:center;gap:16px}
     .btn-run{
       font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;
-      background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.3);
+      background:rgba(30,255,140,.1);color:var(--green);border:1px solid rgba(30,255,140,.3);
       border-radius:6px;padding:9px 18px;cursor:pointer;transition:background .2s,border-color .2s;
       font-weight:700;
     }
-    .btn-run:hover{background:rgba(74,222,128,.18);border-color:var(--green)}
+    .btn-run:hover{background:rgba(30,255,140,.18);border-color:var(--green)}
     .btn-run:disabled{opacity:.4;cursor:default}
     .run-hint{font-size:12px;color:var(--dim);font-family:'JetBrains Mono',monospace}
 
@@ -232,7 +232,7 @@
       background:var(--card);border:1px solid var(--border);border-radius:12px;
       padding:24px;position:relative;overflow:hidden;transition:border-color .25s;
     }
-    .live-card:hover{border-color:rgba(74,222,128,.28)}
+    .live-card:hover{border-color:rgba(30,255,140,.28)}
     .live-card::after{
       content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
       background:linear-gradient(to right,transparent,var(--lc-color,var(--green)),transparent);
@@ -246,7 +246,7 @@
     .freshness{
       display:flex;align-items:center;gap:8px;margin-top:32px;
       font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
-      background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.15);
+      background:rgba(30,255,140,.04);border:1px solid rgba(30,255,140,.15);
       border-radius:8px;padding:12px 18px;
     }
     .freshness-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulseDot 2s ease-in-out infinite;flex-shrink:0}
@@ -259,7 +259,7 @@
     @media(max-width:860px){.verify-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:520px){.verify-grid{grid-template-columns:1fr}}
     .vcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;transition:border-color .25s,transform .25s}
-    .vcard:hover{border-color:rgba(74,222,128,.25);transform:translateY(-3px)}
+    .vcard:hover{border-color:rgba(30,255,140,.25);transform:translateY(-3px)}
     .vcard-icon{font-size:28px;margin-bottom:14px}
     .vcard-title{font-size:15px;font-weight:700;margin-bottom:8px}
     .vcard-desc{font-size:13px;color:var(--muted);line-height:1.7}
@@ -267,7 +267,7 @@
     /* ═══════════════════════════════════════════════════════
        CTA
     ═══════════════════════════════════════════════════════ */
-    #cta{text-align:center;border-top:1px solid var(--border);background:radial-gradient(ellipse 60% 40% at 50% 110%,rgba(74,222,128,.06),transparent)}
+    #cta{text-align:center;border-top:1px solid var(--border);background:radial-gradient(ellipse 60% 40% at 50% 110%,rgba(30,255,140,.06),transparent)}
     .cta-h{font-size:clamp(1.8rem,4vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:16px}
     .cta-sub{font-size:15px;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.7}
     .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
@@ -370,7 +370,7 @@
       <!-- NASA EONET -->
       <div class="source-card" style="--sc-accent:var(--green)">
         <div class="sc-header">
-          <div class="sc-icon"><svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="18" width="12" height="12" rx="2" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.1)" transform="rotate(45 24 24)"/><rect x="4" y="22" width="12" height="4" rx="1" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.1)"/><rect x="32" y="22" width="12" height="4" rx="1" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.1)"/><path d="M9 40A27 27 0 0 1 40 9" stroke="#4ade80" stroke-width="1" stroke-linecap="round" opacity=".4" stroke-dasharray="3 3"/></svg></div>
+          <div class="sc-icon"><svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="18" width="12" height="12" rx="2" stroke="#1eff8c" stroke-width="1.5" fill="rgba(30,255,140,.1)" transform="rotate(45 24 24)"/><rect x="4" y="22" width="12" height="4" rx="1" stroke="#1eff8c" stroke-width="1.5" fill="rgba(30,255,140,.1)"/><rect x="32" y="22" width="12" height="4" rx="1" stroke="#1eff8c" stroke-width="1.5" fill="rgba(30,255,140,.1)"/><path d="M9 40A27 27 0 0 1 40 9" stroke="#1eff8c" stroke-width="1" stroke-linecap="round" opacity=".4" stroke-dasharray="3 3"/></svg></div>
           <div class="sc-live">LIVE FEED</div>
         </div>
         <div class="sc-name">NASA EONET</div>
@@ -660,7 +660,7 @@
         <p class="vcard-desc">NASA and NOAA are independent government agencies with no commercial stake in the numbers. Mauna Loa CO₂ data has been maintained by Scripps Institution of Oceanography and NOAA continuously since 1958 — before climate was politically contentious.</p>
       </div>
       <div class="vcard">
-        <div class="vcard-icon"><svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="18" width="14" height="12" rx="3" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.08)"/><rect x="30" y="18" width="14" height="12" rx="3" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.08)"/><line x1="18" y1="24" x2="30" y2="24" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="2 2"/><circle cx="24" cy="24" r="2.5" fill="#4ade80" opacity=".8"/></svg></div>
+        <div class="vcard-icon"><svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="18" width="14" height="12" rx="3" stroke="#1eff8c" stroke-width="1.5" fill="rgba(30,255,140,.08)"/><rect x="30" y="18" width="14" height="12" rx="3" stroke="#1eff8c" stroke-width="1.5" fill="rgba(30,255,140,.08)"/><line x1="18" y1="24" x2="30" y2="24" stroke="#1eff8c" stroke-width="1.5" stroke-dasharray="2 2"/><circle cx="24" cy="24" r="2.5" fill="#1eff8c" opacity=".8"/></svg></div>
         <h3 class="vcard-title">Direct API — No Intermediaries</h3>
         <p class="vcard-desc">GAIA fetches from the authoritative source endpoint directly. There is no third-party data broker, no aggregator, no repackaged feed between NASA's servers and this platform. The URL in our code is the same URL you can open in your browser right now.</p>
       </div>
@@ -670,7 +670,7 @@
         <p class="vcard-desc">Every data cycle writes an ISO 8601 UTC timestamp. The Mission Log on the platform is append-only — past entries cannot be edited. You can see exactly when each reading was recorded and compare it to the NOAA source to verify it yourself.</p>
       </div>
       <div class="vcard">
-        <div class="vcard-icon"><svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="15" width="28" height="20" rx="3" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.07)"/><rect x="17" y="22" width="5" height="5" rx="1" fill="rgba(74,222,128,.8)"/><rect x="26" y="22" width="5" height="5" rx="1" fill="rgba(74,222,128,.8)"/><path d="M17 32Q24 36 31 32" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="24" y1="10" x2="24" y2="15" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><circle cx="24" cy="8" r="2.5" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.15)"/><line x1="10" y1="22" x2="6" y2="22" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><line x1="38" y1="22" x2="42" y2="22" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="vcard-icon"><svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="15" width="28" height="20" rx="3" stroke="#1eff8c" stroke-width="1.5" fill="rgba(30,255,140,.07)"/><rect x="17" y="22" width="5" height="5" rx="1" fill="rgba(30,255,140,.8)"/><rect x="26" y="22" width="5" height="5" rx="1" fill="rgba(30,255,140,.8)"/><path d="M17 32Q24 36 31 32" stroke="#1eff8c" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="24" y1="10" x2="24" y2="15" stroke="#1eff8c" stroke-width="1.5" stroke-linecap="round"/><circle cx="24" cy="8" r="2.5" stroke="#1eff8c" stroke-width="1.5" fill="rgba(30,255,140,.15)"/><line x1="10" y1="22" x2="6" y2="22" stroke="#1eff8c" stroke-width="1.5" stroke-linecap="round"/><line x1="38" y1="22" x2="42" y2="22" stroke="#1eff8c" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <h3 class="vcard-title">AI Synthesis, Not AI Invention</h3>
         <p class="vcard-desc">Claude synthesises the data into language — it does not generate the numbers. The CO₂ reading is not a model output, not a prediction, not an AI estimate. It is a sensor reading. Claude's role is to explain it, not to produce it.</p>
       </div>
@@ -869,7 +869,7 @@ function initStepActivation() {
         step.classList.add('active');
         const num = step.querySelector('.step-num');
         gsap.to(num, { borderColor: 'var(--green)', color: 'var(--green)', duration: .4, ease: 'power2.out' });
-        gsap.to(num, { boxShadow: '0 0 20px rgba(74,222,128,.25)', duration: .4 });
+        gsap.to(num, { boxShadow: '0 0 20px rgba(30,255,140,.25)', duration: .4 });
       }
     });
   });

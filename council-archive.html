@@ -8,7 +8,7 @@
   <meta property="og:title" content="Council Archive — Mother Earth Kenya"/>
   <meta property="og:description" content="Every Council deliberation, public and permalinked. Five advisors, one Chairman, no black boxes."/>
   <meta property="og:image" content="https://motherearth.systems/og.svg"/>
-  <meta name="theme-color" content="#020606"/>
+  <meta name="theme-color" content="#02101e"/>
   <link rel="icon" type="image/png" href="/logo-favicon.png"/>
   <link rel="apple-touch-icon" href="/logo-official-256.png"/>
   <link rel="canonical" href="https://motherearth.systems/council-archive"/>
@@ -23,11 +23,11 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
 
     :root {
-      --bg:#020606; --bg2:#050d0a;
-      --green:#4ade80; --gold:#D4AF37; --terra:#D4763A;
-      --amber:#f59e0b; --blue:#60a5fa; --indigo:#818cf8; --red:#ef4444;
-      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
-      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03);
+      --bg:#02101e; --bg2:#04182a;
+      --green:#1eff8c; --gold:#d4a200; --terra:#ff6a20;
+      --amber:#ff9520; --blue:#4db8ff; --indigo:#8b6bff; --red:#ff4a4a;
+      --text:#d4eeff; --muted:rgba(77,184,255,0.42); --dim:rgba(77,184,255,0.22);
+      --border:rgba(77,184,255,0.14); --card:rgba(77,184,255,0.04);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
@@ -36,7 +36,7 @@
     img{display:block;max-width:100%}
 
     #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
-    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(30,255,140,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
     body.ch #cd{width:10px;height:10px;background:var(--gold)}
     body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
     @media(hover:none){#cd,#cr{display:none}}
@@ -45,14 +45,14 @@
       background-size:220px 220px;animation:grainShift .45s steps(2) infinite}
     @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
 
-    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,16,30,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
     .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
     .nav-logo img{width:48px;height:48px;object-fit:contain}
     .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
     .nav-mid a{color:var(--muted);transition:color .2s}
     .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
     .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
-    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(30,255,140,.04)}
     @media(max-width:1050px){.nav-mid{display:none}}
 
     main{padding-top:72px}
@@ -100,7 +100,7 @@
     .empty-icon{font-size:42px;margin-bottom:16px;opacity:.5}
     .empty-h{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:10px;color:var(--gold)}
     .empty-body{font-size:14px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7}
-    .empty-body code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);background:rgba(74,222,128,.06);padding:1px 6px;border-radius:4px}
+    .empty-body code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);background:rgba(30,255,140,.06);padding:1px 6px;border-radius:4px}
 
     /* LOADING */
     .loading{text-align:center;padding:60px 24px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em}
@@ -112,10 +112,10 @@
     .single-back{
       display:inline-flex;align-items:center;gap:8px;
       font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--green);
-      padding:8px 14px;border-radius:6px;border:1px solid rgba(74,222,128,.25);
+      padding:8px 14px;border-radius:6px;border:1px solid rgba(30,255,140,.25);
       transition:background .2s;margin-bottom:32px;
     }
-    .single-back:hover{background:rgba(74,222,128,.06)}
+    .single-back:hover{background:rgba(30,255,140,.06)}
     .single-q-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;color:var(--gold);opacity:.7;margin-bottom:12px}
     .single-q{
       font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:400;font-style:italic;
@@ -166,11 +166,11 @@
       color:var(--muted);transition:border-color .2s,color .2s,background .2s;
       background:none;cursor:pointer;font-weight:700;
     }
-    .share-btn:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    .share-btn:hover{border-color:var(--green);color:var(--green);background:rgba(30,255,140,.04)}
 
     /* TOAST */
     #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-      background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);
+      background:rgba(30,255,140,.15);border:1px solid rgba(30,255,140,.4);
       color:var(--green);padding:10px 20px;border-radius:8px;
       font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;
       opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9500}

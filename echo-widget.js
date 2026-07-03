@@ -316,15 +316,32 @@
     addMsg('bot', "Hi, I'm ECHO — Mother Earth's communications agent. You're on " + pageContext() + ". Ask me anything about our 33 AI agents, environmental data, global chapters, or governance.");
   }
 
+  // Strip markdown symbols so they don't appear in chat or get read aloud
+  function stripMarkdown(text) {
+    return text
+      .replace(/\*\*\*(.+?)\*\*\*/gs, '$1') // ***bold italic***
+      .replace(/\*\*(.+?)\*\*/gs, '$1')      // **bold**
+      .replace(/\*(.+?)\*/gs, '$1')           // *italic*
+      .replace(/__(.+?)__/gs, '$1')           // __bold__
+      .replace(/_(.+?)_/gs, '$1')             // _italic_
+      .replace(/`([^`]+)`/g, '$1')            // `code`
+      .replace(/^#{1,6}\s+/gm, '')            // # headings
+      .replace(/^\s*[-+]\s+/gm, '• ')         // - bullet → • (not * to avoid clash)
+      .replace(/\*{1,3}/g, '')                // catch-all: any remaining asterisks
+      .replace(/`/g, '')                      // catch-all: any remaining backticks
+      .trim();
+  }
+
   function addMsg(role, text) {
+    const clean = role === 'bot' ? stripMarkdown(text) : text;
     const m = $('me-echo-messages');
     const d = document.createElement('div');
     d.className = 'me-echo-msg ' + role;
-    d.textContent = text;
+    d.textContent = clean;
     m.appendChild(d);
     m.scrollTop = m.scrollHeight;
     // Speak bot replies if voice mode is on
-    if (role === 'bot' && voicePrefs.enabled) speak(text);
+    if (role === 'bot' && voicePrefs.enabled) speak(clean);
   }
 
   function showTyping() {

@@ -9,19 +9,19 @@
   <link rel="canonical" href="https://motherearth.systems/tipping-points">
   <style>
     :root {
-      --bg:        #050f09;
-      --surface:   #0d1f14;
-      --border:    #1a3a22;
-      --green:     #1a7a3a;
-      --green-hi:  #22c55e;
-      --gold:      #c4a000;
-      --text:      #e8f5ec;
-      --muted:     #6b8f72;
-      --red:       #ef4444;
-      --orange:    #f97316;
-      --yellow:    #eab308;
-      --blue:      #3b82f6;
-      --mono:      'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      --bg:       #02101e;
+      --surface:  #04182a;
+      --border:   rgba(77,184,255,0.14);
+      --green:    #0a4f28;
+      --green-hi: #1eff8c;
+      --gold:     #d4a200;
+      --text:     #d4eeff;
+      --muted:    rgba(77,184,255,0.42);
+      --red:      #ff4a4a;
+      --orange:   #ff6a20;
+      --yellow:   #ff9520;
+      --blue:     #4db8ff;
+      --mono:     'JetBrains Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -413,7 +413,7 @@
 <script>
 // ── Colour helpers ──────────────────────────────────────────────────────────
 function stressColour(s) {
-  if (s < 30) return '#22c55e';
+  if (s < 30) return '#1eff8c';
   if (s < 55) return '#84cc16';
   if (s < 70) return '#eab308';
   if (s < 85) return '#f97316';

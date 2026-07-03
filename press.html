@@ -8,7 +8,7 @@
   <meta property="og:title" content="Press &amp; Updates — Mother Earth Kenya"/>
   <meta property="og:description" content="Everything journalists, investors, and partners need in one page. Boilerplate, founder bio, brand assets, recent shipping."/>
   <meta property="og:image" content="https://motherearth.systems/og.svg"/>
-  <meta name="theme-color" content="#020606"/>
+  <meta name="theme-color" content="#02101e"/>
   <link rel="icon" type="image/png" href="/logo-favicon.png"/>
   <link rel="apple-touch-icon" href="/logo-official-256.png"/>
   <link rel="canonical" href="https://motherearth.systems/press"/>
@@ -23,18 +23,18 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
 
     :root {
-      --bg:     #020606;
-      --bg2:    #050d0a;
-      --green:  #4ade80;
-      --gold:   #D4AF37;
-      --terra:  #D4763A;
-      --amber:  #f59e0b;
-      --blue:   #60a5fa;
-      --text:   #F2F0EB;
-      --muted:  rgba(242,240,235,.45);
-      --dim:    rgba(242,240,235,.25);
-      --border: rgba(255,255,255,.07);
-      --card:   rgba(255,255,255,.03);
+      --bg:     #02101e;
+      --bg2:    #04182a;
+      --green:  #1eff8c;
+      --gold:   #d4a200;
+      --terra:  #ff6a20;
+      --amber:  #ff9520;
+      --blue:   #4db8ff;
+      --text:   #d4eeff;
+      --muted:  rgba(77,184,255,0.42);
+      --dim:    rgba(77,184,255,0.22);
+      --border: rgba(77,184,255,0.14);
+      --card:   rgba(77,184,255,0.04);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -47,7 +47,7 @@
     img { display: block; max-width: 100%; }
 
     #cd { position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s; }
-    #cr { position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s; }
+    #cr { position:fixed;width:38px;height:38px;border:1.5px solid rgba(30,255,140,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s; }
     body.ch #cd { width:10px;height:10px;background:var(--gold); }
     body.ch #cr { width:56px;height:56px;border-color:rgba(212,175,55,.65); }
     @media(hover:none){#cd,#cr{display:none}}
@@ -61,7 +61,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       padding: 0 32px; height: 72px;
       display: flex; align-items: center; justify-content: space-between;
-      background: rgba(2,6,6,.86); backdrop-filter: blur(20px);
+      background: rgba(2,16,30,.86); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
     .nav-logo { display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px; }
@@ -74,7 +74,7 @@
       padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;
       transition:border-color .2s,background .2s;
     }
-    .nav-cta:hover { border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04); }
+    .nav-cta:hover { border-color:var(--green);color:var(--green);background:rgba(30,255,140,.04); }
     @media(max-width:1000px){ .nav-mid{display:none} }
 
     main { padding-top: 72px; }
@@ -82,7 +82,7 @@
     /* HERO */
     #hero {
       padding: 100px 32px 60px; text-align:center;
-      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(74,222,128,.05) 0%, transparent 70%);
+      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(30,255,140,.05) 0%, transparent 70%);
     }
     .hero-inner { max-width: 920px; margin: 0 auto; }
     .hero-tag {
@@ -143,7 +143,7 @@
       padding:24px 28px; margin-bottom:18px; position:relative;
       transition:border-color .25s;
     }
-    .copy-block:hover { border-color:rgba(74,222,128,.25); }
+    .copy-block:hover { border-color:rgba(30,255,140,.25); }
     .copy-block-h {
       font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.25em;
       color:var(--green); opacity:.7; margin-bottom:14px;
@@ -155,7 +155,7 @@
       padding:5px 11px; font-family:'JetBrains Mono',monospace; font-size:9px;
       color:var(--green); letter-spacing:.15em; transition:background .2s, border-color .2s;
     }
-    .copy-btn:hover { background:rgba(74,222,128,.08); border-color:var(--green); }
+    .copy-btn:hover { background:rgba(30,255,140,.08); border-color:var(--green); }
     .copy-body { font-size:15px; line-height:1.75; color:rgba(242,240,235,.85); }
     .copy-body p { margin-bottom:14px; }
     .copy-body p:last-child { margin-bottom:0; }
@@ -167,7 +167,7 @@
       background:var(--card); border:1px solid var(--border); border-radius:12px;
       padding:20px 24px; transition: border-color .25s, transform .25s;
     }
-    .ship-entry:hover { border-color:rgba(74,222,128,.25); transform:translateY(-2px); }
+    .ship-entry:hover { border-color:rgba(30,255,140,.25); transform:translateY(-2px); }
     @media(max-width:700px){ .ship-entry{grid-template-columns:1fr; gap:8px} }
     .ship-date {
       font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.15em;
@@ -177,9 +177,9 @@
       font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.18em; font-weight:700;
       padding:4px 9px; border-radius:5px; border:1px solid; align-self:flex-start; white-space:nowrap;
     }
-    .t-ship    { color:var(--green); border-color:rgba(74,222,128,.3);  background:rgba(74,222,128,.06); }
+    .t-ship    { color:var(--green); border-color:rgba(30,255,140,.3);  background:rgba(30,255,140,.06); }
     .t-launch  { color:var(--gold);  border-color:rgba(212,175,55,.3);  background:rgba(212,175,55,.06); }
-    .t-build   { color:var(--blue);  border-color:rgba(96,165,250,.3); background:rgba(96,165,250,.06); }
+    .t-build   { color:var(--blue);  border-color:rgba(77,184,255,.3); background:rgba(77,184,255,.06); }
     .t-compliance { color:var(--amber); border-color:rgba(245,158,11,.3); background:rgba(245,158,11,.06); }
     .ship-content h3 { font-size:17px; font-weight:700; letter-spacing:-.005em; margin-bottom:6px; line-height:1.35; }
     .ship-content p  { font-size:14px; color:var(--muted); line-height:1.65; }
@@ -201,7 +201,7 @@
     .founder-info h3 { font-family:'Cormorant Garamond', serif; font-size:22px; font-weight:600; margin-bottom:4px; }
     .founder-info .role { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em; color:var(--gold); opacity:.8; margin-bottom:8px; }
     .founder-info p { font-size:14px; color:var(--muted); line-height:1.65; }
-    .founder-info p a { color:var(--green); border-bottom:1px solid rgba(74,222,128,.3); }
+    .founder-info p a { color:var(--green); border-bottom:1px solid rgba(30,255,140,.3); }
     .founder-info p a:hover { border-bottom-color:var(--green); }
 
     /* BRAND ASSETS */
@@ -210,7 +210,7 @@
       background:var(--card); border:1px solid var(--border); border-radius:12px;
       padding:24px; text-align:center; transition:border-color .25s, transform .25s;
     }
-    .asset:hover { border-color:rgba(74,222,128,.3); transform:translateY(-3px); }
+    .asset:hover { border-color:rgba(30,255,140,.3); transform:translateY(-3px); }
     .asset-preview {
       width:100%; aspect-ratio:1/1; background:rgba(255,255,255,.02); border-radius:10px;
       margin-bottom:14px; display:flex; align-items:center; justify-content:center; overflow:hidden;
@@ -222,12 +222,12 @@
       color:var(--muted); margin-bottom:14px;
     }
     .asset-dl {
-      display:inline-block; padding:7px 16px; border:1px solid rgba(74,222,128,.3);
+      display:inline-block; padding:7px 16px; border:1px solid rgba(30,255,140,.3);
       color:var(--green); border-radius:6px; font-family:'JetBrains Mono',monospace;
       font-size:10px; letter-spacing:.18em; font-weight:700;
       transition:background .2s, border-color .2s;
     }
-    .asset-dl:hover { background:rgba(74,222,128,.08); border-color:var(--green); }
+    .asset-dl:hover { background:rgba(30,255,140,.08); border-color:var(--green); }
 
     .colors-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-top:18px; }
     .color-swatch {
@@ -239,7 +239,7 @@
 
     /* CONTACT */
     #contact {
-      background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(74,222,128,.05) 0%, transparent 70%);
+      background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(30,255,140,.05) 0%, transparent 70%);
       text-align:center; padding: 100px 32px;
     }
     .contact-inner { max-width:700px; margin:0 auto; }
@@ -251,7 +251,7 @@
       background:var(--card); border:1px solid var(--border); border-radius:12px;
       padding:24px; transition:border-color .25s, transform .25s, background .25s;
     }
-    .contact-card:hover { border-color:var(--green); transform:translateY(-3px); background:rgba(74,222,128,.04); }
+    .contact-card:hover { border-color:var(--green); transform:translateY(-3px); background:rgba(30,255,140,.04); }
     .contact-icon { font-size:24px; margin-bottom:12px; }
     .contact-name { font-size:14px; font-weight:700; margin-bottom:6px; }
     .contact-detail { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--green); letter-spacing:.05em; word-break:break-all; }
@@ -267,7 +267,7 @@
     /* Copy-success toast */
     #toast {
       position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-      background:rgba(74,222,128,.15); border:1px solid rgba(74,222,128,.4);
+      background:rgba(30,255,140,.15); border:1px solid rgba(30,255,140,.4);
       color:var(--green); padding:10px 20px; border-radius:8px;
       font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.15em;
       opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
@@ -370,7 +370,7 @@
         <div><span class="ship-tag t-compliance">REGULATORY</span></div>
         <div class="ship-content">
           <h3>COMPANY INCORPORATED</h3>
-          <p><strong>Mother Earth Kenya Environmental AI Ltd</strong> is now a registered Private Limited Company under the Companies Act, 2015. Company number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(74,222,128,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code>, registered 7 June 2026 by the Registrar of Companies, Kenya. 100,000 ordinary shares at KES 1 each. Stamp duty exempt (Section 106 SDA). All BRS filing documents received — CR1, CR2, CR8, CR12, BOF1.</p>
+          <p><strong>Mother Earth Kenya Environmental AI Ltd</strong> is now a registered Private Limited Company under the Companies Act, 2015. Company number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(30,255,140,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code>, registered 7 June 2026 by the Registrar of Companies, Kenya. 100,000 ordinary shares at KES 1 each. Stamp duty exempt (Section 106 SDA). All BRS filing documents received — CR1, CR2, CR8, CR12, BOF1.</p>
         </div>
       </div>
 
@@ -379,7 +379,7 @@
         <div><span class="ship-tag t-compliance">REGULATORY</span></div>
         <div class="ship-content">
           <h3>Company KRA PIN obtained</h3>
-          <p>Kenya Revenue Authority issued tax PIN <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(74,222,128,.06);padding:1px 5px;border-radius:3px">P052549132K</code>. Company is now registered for tax purposes.</p>
+          <p>Kenya Revenue Authority issued tax PIN <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(30,255,140,.06);padding:1px 5px;border-radius:3px">P052549132K</code>. Company is now registered for tax purposes.</p>
         </div>
       </div>
 
@@ -397,7 +397,7 @@
         <div><span class="ship-tag t-compliance">REGULATORY</span></div>
         <div class="ship-content">
           <h3>Mother Earth INCORPORATED · Company KRA PIN issued</h3>
-          <p>The Registrar of Companies, Kenya, issued the Certificate of Incorporation for <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong> on 7 June 2026 — company number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(74,222,128,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code>. Company KRA PIN <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(74,222,128,.06);padding:1px 5px;border-radius:3px">P052549132K</code> issued same day. 100,000 ordinary shares at KES 1 each. Stamp duty exempt (Section 106 SDA). Mother Earth is now a legal entity. Unlocks: corporate bank account, Stripe + M-Pesa, VASP licence application, Purpose Trust registration with Attorney General's office.</p>
+          <p>The Registrar of Companies, Kenya, issued the Certificate of Incorporation for <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong> on 7 June 2026 — company number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(30,255,140,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code>. Company KRA PIN <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(30,255,140,.06);padding:1px 5px;border-radius:3px">P052549132K</code> issued same day. 100,000 ordinary shares at KES 1 each. Stamp duty exempt (Section 106 SDA). Mother Earth is now a legal entity. Unlocks: corporate bank account, Stripe + M-Pesa, VASP licence application, Purpose Trust registration with Attorney General's office.</p>
         </div>
       </div>
 
@@ -406,7 +406,7 @@
         <div><span class="ship-tag t-compliance">REGULATORY</span></div>
         <div class="ship-content">
           <h3>BRS Name Reservation Certificate issued</h3>
-          <p>Registrar of Companies, Kenya, approved reservation of <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong> — certificate number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(74,222,128,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code>. The official corporate name is now locked. Incorporation filing window: 30 days (≤ 4 July 2026).</p>
+          <p>Registrar of Companies, Kenya, approved reservation of <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong> — certificate number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);background:rgba(30,255,140,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code>. The official corporate name is now locked. Incorporation filing window: 30 days (≤ 4 July 2026).</p>
         </div>
       </div>
 
@@ -610,7 +610,7 @@
         <strong>Regulatory framework:</strong> VASP Act 2025 (application pending), Trustees (Perpetual Succession) Act, Data Protection Act 2019</p>
 
         <p><strong>Governance structure:</strong> Operating company (Mother Earth Kenya Environmental AI Ltd) governed by a Purpose Trust (Mother Earth Environmental Purpose Trust) holding a single non-transferable Golden Share with absolute veto over any decision compromising the environmental mission.<br/>
-        <strong>Stage:</strong> Incorporated <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--green);background:rgba(74,222,128,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code> (7 Jun 2026); KRA PIN <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--green);background:rgba(74,222,128,.06);padding:1px 5px;border-radius:3px">P052549132K</code>; VASP licence application pending; Purpose Trust registration pending.<br/>
+        <strong>Stage:</strong> Incorporated <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--green);background:rgba(30,255,140,.06);padding:1px 5px;border-radius:3px">PVT-PQ1AZ3KV</code> (7 Jun 2026); KRA PIN <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--green);background:rgba(30,255,140,.06);padding:1px 5px;border-radius:3px">P052549132K</code>; VASP licence application pending; Purpose Trust registration pending.<br/>
         <strong>AI infrastructure:</strong> 33 autonomous agents · 7 branches (AMARA, NEXUS, GAIA, ATLAS, IRIS, SAGE, ECHO) · operating 24/7 under PM2 process management · powered by Anthropic Claude with prompt caching.<br/>
         <strong>Public dashboard:</strong> motherearth.systems/mission-control<br/>
         <strong>Data marketplace:</strong> motherearth.systems/iris (4 tiers — Research, Guardian, Sentinel, Planetary).<br/>
@@ -629,12 +629,12 @@
 
     <div class="contact-options">
       <a class="contact-card" href="mailto:hello@motherearth.systems?subject=Press%20enquiry">
-        <div class="contact-icon"><svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="12" width="36" height="26" rx="3" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.07)"/><polyline points="6,14 24,28 42,14" stroke="#4ade80" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+        <div class="contact-icon"><svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="12" width="36" height="26" rx="3" stroke="#4ade80" stroke-width="1.5" fill="rgba(30,255,140,.07)"/><polyline points="6,14 24,28 42,14" stroke="#4ade80" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
         <div class="contact-name">General Press</div>
         <div class="contact-detail">hello@motherearth.systems</div>
       </a>
       <a class="contact-card" href="mailto:andygodfrey@motherearth.systems?subject=Interview%20request">
-        <div class="contact-icon"><svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="4" width="12" height="22" rx="6" stroke="#4ade80" stroke-width="1.5" fill="rgba(74,222,128,.08)"/><path d="M10 24C10 33 16 38 24 38C32 38 38 33 38 24" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="24" y1="38" x2="24" y2="44" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="44" x2="30" y2="44" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="contact-icon"><svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="4" width="12" height="22" rx="6" stroke="#4ade80" stroke-width="1.5" fill="rgba(30,255,140,.08)"/><path d="M10 24C10 33 16 38 24 38C32 38 38 33 38 24" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="24" y1="38" x2="24" y2="44" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="44" x2="30" y2="44" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="contact-name">Interview Requests</div>
         <div class="contact-detail">andygodfrey@motherearth.systems</div>
       </a>

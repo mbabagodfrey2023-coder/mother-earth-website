@@ -8,7 +8,7 @@
   <meta property="og:title" content="Roadmap — Mother Earth Kenya"/>
   <meta property="og:description" content="The public roadmap. Quarterly milestones, regulatory progress, chapter expansion."/>
   <meta property="og:image" content="https://motherearth.systems/og.svg"/>
-  <meta name="theme-color" content="#020606"/>
+  <meta name="theme-color" content="#02101e"/>
   <link rel="icon" type="image/png" href="/logo-favicon.png"/>
   <link rel="apple-touch-icon" href="/logo-official-256.png"/>
   <link rel="canonical" href="https://motherearth.systems/roadmap"/>
@@ -23,12 +23,12 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
 
     :root {
-      --bg:#020606; --bg2:#050d0a;
-      --green:#4ade80; --green-d:#22c55e;
-      --gold:#D4AF37; --terra:#D4763A; --amber:#f59e0b;
-      --blue:#60a5fa; --indigo:#818cf8; --red:#ef4444;
-      --text:#F2F0EB; --muted:rgba(242,240,235,.45); --dim:rgba(242,240,235,.25);
-      --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.03);
+      --bg:#02101e; --bg2:#04182a;
+      --green:#1eff8c; --green-d:#0a4f28;
+      --gold:#d4a200; --terra:#ff6a20; --amber:#ff9520;
+      --blue:#4db8ff; --indigo:#8b6bff; --red:#ff4a4a;
+      --text:#d4eeff; --muted:rgba(77,184,255,0.42); --dim:rgba(77,184,255,0.22);
+      --border:rgba(77,184,255,0.14); --card:rgba(77,184,255,0.04);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
@@ -37,7 +37,7 @@
     img{display:block;max-width:100%}
 
     #cd{position:fixed;width:7px;height:7px;background:var(--green);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
-    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(74,222,128,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
+    #cr{position:fixed;width:38px;height:38px;border:1.5px solid rgba(30,255,140,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s,height .4s,border-color .3s}
     body.ch #cd{width:10px;height:10px;background:var(--gold)}
     body.ch #cr{width:56px;height:56px;border-color:rgba(212,175,55,.65)}
     @media(hover:none){#cd,#cr{display:none}}
@@ -48,14 +48,14 @@
     @keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(2px,-3px)}75%{transform:translate(3px,1px)}100%{transform:translate(-1px,2px)}}
 
     /* NAV */
-    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,6,6,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    nav.topnav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,16,30,.86);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
     .nav-logo{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.05em;font-size:14px}
     .nav-logo img{width:48px;height:48px;object-fit:contain}
     .nav-mid{display:flex;gap:22px;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
     .nav-mid a{color:var(--muted);transition:color .2s}
     .nav-mid a:hover,.nav-mid a.active{color:var(--green)}
     .nav-cta{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;transition:border-color .2s,background .2s}
-    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(74,222,128,.04)}
+    .nav-cta:hover{border-color:var(--green);color:var(--green);background:rgba(30,255,140,.04)}
     @media(max-width:1050px){.nav-mid{display:none}}
 
     main{padding-top:72px}
@@ -89,7 +89,7 @@
     .legend-dot{width:10px;height:10px;border-radius:50%}
     .legend-dot.done{background:var(--gold)}
     .legend-dot.now{background:var(--green);box-shadow:0 0 8px var(--green);animation:pulseDot 1.8s ease-in-out infinite}
-    .legend-dot.next{background:transparent;border:1.5px solid rgba(74,222,128,.4)}
+    .legend-dot.next{background:transparent;border:1.5px solid rgba(30,255,140,.4)}
     .legend-dot.horizon{background:transparent;border:1.5px solid rgba(255,255,255,.18)}
     @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
 
@@ -106,8 +106,8 @@
     .q-h em{color:var(--gold);font-style:italic}
     .q-h .q-status{display:inline-block;margin-left:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;padding:5px 14px;border-radius:20px;border:1px solid;font-weight:700;vertical-align:middle}
     .q-status.done{color:var(--gold);border-color:rgba(212,175,55,.45);background:rgba(212,175,55,.08)}
-    .q-status.now {color:var(--green);border-color:rgba(74,222,128,.45);background:rgba(74,222,128,.08)}
-    .q-status.next{color:var(--blue);border-color:rgba(96,165,250,.45);background:rgba(96,165,250,.08)}
+    .q-status.now {color:var(--green);border-color:rgba(30,255,140,.45);background:rgba(30,255,140,.08)}
+    .q-status.next{color:var(--blue);border-color:rgba(77,184,255,.45);background:rgba(77,184,255,.08)}
     .q-status.horizon{color:var(--muted);border-color:var(--border);background:rgba(255,255,255,.02)}
     .q-meta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--muted);display:flex;gap:18px}
     .q-meta span::before{content:'• ';color:var(--green)}
@@ -118,20 +118,20 @@
       background:var(--card);border:1px solid var(--border);border-radius:12px;
       padding:22px 24px;transition:border-color .25s,transform .25s;
     }
-    .milestone:hover{border-color:rgba(74,222,128,.3);transform:translateY(-2px)}
+    .milestone:hover{border-color:rgba(30,255,140,.3);transform:translateY(-2px)}
     @media(max-width:700px){.milestone{grid-template-columns:1fr;gap:10px}}
     .ms-dot{
       width:14px;height:14px;border-radius:50%;margin-top:5px;flex-shrink:0;
     }
     .ms-dot.done{background:var(--gold);box-shadow:0 0 10px rgba(212,175,55,.3)}
     .ms-dot.now {background:var(--green);box-shadow:0 0 12px var(--green);animation:pulseDot 1.8s ease-in-out infinite}
-    .ms-dot.next{background:transparent;border:2px solid rgba(74,222,128,.5)}
+    .ms-dot.next{background:transparent;border:2px solid rgba(30,255,140,.5)}
     .ms-dot.horizon{background:transparent;border:2px solid rgba(255,255,255,.18)}
     .ms-content h3{font-size:16px;font-weight:700;letter-spacing:-.005em;margin-bottom:4px;line-height:1.35}
     .ms-content p{font-size:13px;color:var(--muted);line-height:1.7}
     .ms-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-    .ms-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 8px;border-radius:4px;color:var(--green);background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.18)}
-    .ms-tag.t-legal{color:var(--blue);background:rgba(96,165,250,.06);border-color:rgba(96,165,250,.18)}
+    .ms-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 8px;border-radius:4px;color:var(--green);background:rgba(30,255,140,.06);border:1px solid rgba(30,255,140,.18)}
+    .ms-tag.t-legal{color:var(--blue);background:rgba(77,184,255,.06);border-color:rgba(77,184,255,.18)}
     .ms-tag.t-tech{color:var(--indigo);background:rgba(129,140,248,.06);border-color:rgba(129,140,248,.18)}
     .ms-tag.t-finance{color:var(--amber);background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.18)}
     .ms-tag.t-product{color:var(--terra);background:rgba(212,118,58,.06);border-color:rgba(212,118,58,.18)}
@@ -143,7 +143,7 @@
     .principle-h{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,32px);font-weight:400;font-style:italic;color:var(--gold);line-height:1.5;max-width:780px;margin:0 auto;letter-spacing:-.005em}
 
     /* CTA */
-    #cta{text-align:center;padding:90px 32px;background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(74,222,128,.05) 0%, transparent 70%)}
+    #cta{text-align:center;padding:90px 32px;background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(30,255,140,.05) 0%, transparent 70%)}
     .cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-weight:400;margin-bottom:18px}
     .cta-h em{color:var(--gold);font-style:italic}
     .cta-sub{font-size:15px;color:var(--muted);max-width:560px;margin:0 auto 30px;line-height:1.7}
@@ -315,7 +315,7 @@
 
         <div class="milestone"><div class="ms-dot done"></div>
           <div class="ms-content"><h3>BRS Name Reservation Certificate · ISSUED</h3>
-            <p>Registrar of Companies (Kenya) approved reservation of <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong>. Certificate <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(74,222,128,.08);padding:1px 6px;border-radius:4px">PVT-PQ1AZ3KV</code>. Official corporate name now locked.</p>
+            <p>Registrar of Companies (Kenya) approved reservation of <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong>. Certificate <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(30,255,140,.08);padding:1px 6px;border-radius:4px">PVT-PQ1AZ3KV</code>. Official corporate name now locked.</p>
             <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag t-governance">MILESTONE</span></div>
           </div><div class="ms-eta">4 JUN 2026</div>
         </div>
@@ -340,21 +340,21 @@
 
         <div class="milestone"><div class="ms-dot done"></div>
           <div class="ms-content"><h3>BRS Name Reservation · APPROVED</h3>
-            <p>Registrar of Companies approved reservation of <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong> on 4 June 2026. Reservation number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(74,222,128,.08);padding:1px 6px;border-radius:4px">PVT-PQ1AZ3KV</code>. Valid for 30 days — incorporation filing must complete by 4 July 2026.</p>
+            <p>Registrar of Companies approved reservation of <strong>MOTHER EARTH KENYA ENVIRONMENTAL AI LTD</strong> on 4 June 2026. Reservation number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(30,255,140,.08);padding:1px 6px;border-radius:4px">PVT-PQ1AZ3KV</code>. Valid for 30 days — incorporation filing must complete by 4 July 2026.</p>
             <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag">SHIPPED</span></div>
           </div><div class="ms-eta">4 JUN 2026</div>
         </div>
 
         <div class="milestone"><div class="ms-dot done"></div>
           <div class="ms-content"><h3>Company KRA PIN · OBTAINED</h3>
-            <p>Kenya Revenue Authority issued company tax PIN <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(74,222,128,.08);padding:1px 6px;border-radius:4px">P052549132K</code>. Mother Earth Kenya Environmental AI Ltd is now registered for tax purposes. Certificate sent to mbaba.godfrey2023@gmail.com.</p>
+            <p>Kenya Revenue Authority issued company tax PIN <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(30,255,140,.08);padding:1px 6px;border-radius:4px">P052549132K</code>. Mother Earth Kenya Environmental AI Ltd is now registered for tax purposes. Certificate sent to mbaba.godfrey2023@gmail.com.</p>
             <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag">SHIPPED</span></div>
           </div><div class="ms-eta">7 JUN 2026</div>
         </div>
 
         <div class="milestone"><div class="ms-dot done"></div>
           <div class="ms-content"><h3>Company Incorporation · REGISTERED</h3>
-            <p>Mother Earth Kenya Environmental AI Ltd registered as Private Limited Company. Company number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(74,222,128,.08);padding:1px 6px;border-radius:4px">PVT-PQ1AZ3KV</code>. 100,000 ordinary shares at KES 1 each. Stamp duty exempt. All BRS filing documents received. Unlocks bank account, Stripe + M-Pesa, VASP application, Trust registration.</p>
+            <p>Mother Earth Kenya Environmental AI Ltd registered as Private Limited Company. Company number <code style="font-family:'JetBrains Mono',monospace;color:var(--green);font-size:11px;background:rgba(30,255,140,.08);padding:1px 6px;border-radius:4px">PVT-PQ1AZ3KV</code>. 100,000 ordinary shares at KES 1 each. Stamp duty exempt. All BRS filing documents received. Unlocks bank account, Stripe + M-Pesa, VASP application, Trust registration.</p>
             <div class="ms-tags"><span class="ms-tag t-legal">LEGAL</span><span class="ms-tag">SHIPPED</span></div>
           </div><div class="ms-eta">7 JUN 2026</div>
         </div>

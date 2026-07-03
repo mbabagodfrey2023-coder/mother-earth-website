@@ -7,6 +7,9 @@
   <meta name="description" content="Scientifically verified real-time account of humanity's ecological debt — CO₂ mass, carbon removal cost, deforestation, ocean plastic, and species loss. Every metric sourced from peer-reviewed data.">
   <link rel="icon" href="/logo-favicon.png" type="image/png">
   <link rel="canonical" href="https://motherearth.systems/earth-debt-clock">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <meta property="og:title" content="Earth Debt Clock — Verified Planetary Data">
   <meta property="og:description" content="Real-time ecological debt: CO₂ removal cost, forest loss, ocean plastic. Every metric sourced from NOAA, NASA, IUCN, FAO.">
   <meta property="og:url" content="https://motherearth.systems/earth-debt-clock">
@@ -14,51 +17,75 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <style>
+    /* ── ORBITAL SPECTRUM — Earth Through the Viewport ───────────────────── */
     :root {
-      --bg:       #050f09;
-      --surface:  #0a1a0e;
-      --card:     #0d2014;
-      --border:   #1a3a22;
-      --green:    #1a7a3a;
-      --green-hi: #22c55e;
-      --gold:     #c4a000;
-      --red:      #ef4444;
-      --orange:   #f97316;
-      --amber:    #f59e0b;
-      --blue:     #38bdf8;
-      --purple:   #a78bfa;
-      --text:     #e8f5ec;
-      --muted:    #6b8f72;
-      --mono:     'SF Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+      /* Background layers: space void → deep ocean → glass instrument panel */
+      --bg:       #02101e;
+      --surface:  #04182a;
+      --card:     #0a2035;
+      --border:   rgba(77,184,255,0.14);
+
+      /* Biosphere — chlorophyll NDVI signature from 400 km altitude */
+      --green:    #0a4f28;
+      --green-hi: #1eff8c;
+
+      /* Atmospheric halo — the precise blue of Earth's limb in ISS imagery */
+      --sky:      #4db8ff;
+
+      /* Signal palette */
+      --gold:     #d4a200;
+      --red:      #ff4a4a;
+      --orange:   #ff6a20;
+      --amber:    #ff9520;
+      --blue:     #4db8ff;
+      --purple:   #8b6bff;
+
+      /* Typography */
+      --text:     #d4eeff;  /* frost white — atmosphere-scattered sunlight */
+      --muted:    rgba(77,184,255,0.42);
+      --mono:     'JetBrains Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
     }
+
+    ::selection { background: rgba(77,184,255,0.22); color: #d4eeff; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(77,184,255,0.18); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(77,184,255,0.36); }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--bg);
+      background-image: radial-gradient(ellipse 160% 55% at 50% 110%, rgba(6,36,64,0.85) 0%, transparent 60%);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
       line-height: 1.6;
     }
 
-    /* ── NAV ──────────────────────────────────────────────────────────────── */
+    /* ── NAV — frosted glass, sticky ─────────────────────────────────────── */
     nav {
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(77,184,255,0.12);
       padding: 14px 24px;
       display: flex;
       align-items: center;
       gap: 16px;
+      background: rgba(2,12,24,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
-    nav a:hover { color: var(--text); }
-    nav .logo { color: var(--green-hi); font-weight: 700; font-size: 15px; margin-right: auto; }
+    nav a:hover { color: var(--text); transition: color 0.2s; }
+    nav .logo { color: var(--green-hi); font-weight: 700; font-size: 15px; margin-right: auto; letter-spacing: .02em; }
     @media (max-width: 640px) { nav a:not(.logo) { display: none; } }
     .nav-live {
       display: flex; align-items: center; gap: 6px;
       font-family: var(--mono); font-size: 10px;
       color: var(--green-hi);
-      border: 1px solid var(--green);
+      border: 1px solid rgba(30,255,140,0.28);
       border-radius: 3px; padding: 3px 8px;
       letter-spacing: .08em; text-transform: uppercase;
     }
@@ -76,34 +103,36 @@
       padding: 2px 7px; border-radius: 3px;
       white-space: nowrap;
     }
-    .badge-live    { background: rgba(34,197,94,0.15); color: var(--green-hi); border: 1px solid rgba(34,197,94,0.4); }
-    .badge-annual  { background: rgba(245,158,11,0.12); color: var(--amber);    border: 1px solid rgba(245,158,11,0.35); }
-    .badge-model   { background: rgba(255,255,255,0.06); color: #9ca3af;        border: 1px solid rgba(255,255,255,0.15); }
+    .badge-live   { background: rgba(30,255,140,0.10); color: var(--green-hi); border: 1px solid rgba(30,255,140,0.30); }
+    .badge-annual { background: rgba(255,149,32,0.10); color: var(--amber);    border: 1px solid rgba(255,149,32,0.28); }
+    .badge-model  { background: rgba(255,255,255,0.04); color: rgba(180,210,235,0.5); border: 1px solid rgba(255,255,255,0.10); }
+    .badge-cached { background: rgba(77,184,255,0.08); color: var(--sky);      border: 1px solid rgba(77,184,255,0.24); }
     .badge .bdot { width: 5px; height: 5px; border-radius: 50%; }
-    .badge-live  .bdot { background: var(--green-hi); animation: pulse 2s ease-in-out infinite; }
+    .badge-live   .bdot { background: var(--green-hi); animation: pulse 2s ease-in-out infinite; }
     .badge-annual .bdot { background: var(--amber); }
-    .badge-model  .bdot { background: #6b7280; }
+    .badge-model  .bdot { background: rgba(180,210,235,0.35); }
+    .badge-cached .bdot { background: var(--sky); }
 
     /* ── HERO ─────────────────────────────────────────────────────────────── */
     .hero {
-      padding: 48px 24px 32px;
+      padding: 56px 24px 36px;
       max-width: 860px; margin: 0 auto; text-align: center;
     }
     .hero-tag {
       display: inline-block;
       font-family: var(--mono); font-size: 11px;
       letter-spacing: .12em; text-transform: uppercase;
-      color: var(--green-hi); border: 1px solid var(--green);
+      color: var(--green-hi); border: 1px solid rgba(30,255,140,0.28);
       border-radius: 3px; padding: 3px 10px; margin-bottom: 20px;
     }
     .hero h1 {
-      font-size: clamp(26px, 5vw, 46px); font-weight: 800;
-      letter-spacing: -0.02em; line-height: 1.15; color: #fff; margin-bottom: 14px;
+      font-size: clamp(26px, 5vw, 48px); font-weight: 800;
+      letter-spacing: -0.025em; line-height: 1.1; color: #f0f7ff; margin-bottom: 16px;
     }
     .hero h1 span { color: var(--green-hi); }
-    .hero p { font-size: 15px; color: var(--muted); max-width: 560px; margin: 0 auto 8px; }
+    .hero p { font-size: 15px; color: rgba(77,184,255,0.55); max-width: 560px; margin: 0 auto 8px; }
     .hero-standards {
-      font-family: var(--mono); font-size: 11px; color: var(--green);
+      font-family: var(--mono); font-size: 11px; color: rgba(77,184,255,0.36);
       margin-top: 12px; letter-spacing: .06em;
     }
 
@@ -112,13 +141,14 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
       gap: 1px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(77,184,255,0.14);
+      border-top: 1px solid rgba(180,220,255,0.10);
       border-radius: 10px;
       overflow: hidden;
-      margin: 32px 24px 0;
+      margin: 36px 24px 0;
       max-width: 1100px;
     }
-    @media (min-width: 900px) { .hero-counters { margin: 32px auto 0; } }
+    @media (min-width: 900px) { .hero-counters { margin: 36px auto 0; } }
 
     .hero-counter {
       padding: 36px 32px;
@@ -126,17 +156,24 @@
       position: relative;
     }
     .hero-counter.carbon {
-      background: linear-gradient(160deg, #0d1a10 0%, #050f09 100%);
-      border-right: 1px solid var(--border);
+      background:
+        linear-gradient(rgba(77,184,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,184,255,0.022) 1px, transparent 1px),
+        linear-gradient(160deg, #061e36 0%, #02101e 100%);
+      background-size: 28px 28px, 28px 28px, 100%;
+      border-right: 1px solid rgba(77,184,255,0.10);
     }
     .hero-counter.ecosystem {
-      background: linear-gradient(160deg, #1a0d00 0%, #0a0500 100%);
+      background:
+        linear-gradient(rgba(77,184,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,184,255,0.015) 1px, transparent 1px),
+        linear-gradient(160deg, #1a0d00 0%, #020a12 100%);
+      background-size: 28px 28px, 28px 28px, 100%;
     }
 
     .hc-label {
       font-family: var(--mono); font-size: 10px; font-weight: 700;
-      letter-spacing: .14em; text-transform: uppercase;
-      margin-bottom: 6px;
+      letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px;
     }
     .hc-label.carbon-lbl    { color: var(--green-hi); }
     .hc-label.ecosystem-lbl { color: var(--orange); }
@@ -146,16 +183,18 @@
     .hc-value {
       font-family: var(--mono); font-weight: 800;
       line-height: 1; margin-bottom: 8px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
     }
     .hc-value.carbon-val {
       font-size: clamp(22px, 4vw, 42px);
       color: var(--green-hi);
-      text-shadow: 0 0 32px rgba(34,197,94,0.3);
+      text-shadow: 0 0 48px rgba(30,255,140,0.20);
     }
     .hc-value.ecosystem-val {
       font-size: clamp(22px, 4vw, 42px);
       color: var(--orange);
-      text-shadow: 0 0 32px rgba(249,115,22,0.3);
+      text-shadow: 0 0 48px rgba(255,106,32,0.20);
     }
     .hc-range {
       font-family: var(--mono); font-size: 12px;
@@ -163,28 +202,23 @@
       word-break: break-word; overflow-wrap: break-word;
     }
     .hc-basis {
-      font-size: 11px; color: var(--muted); line-height: 1.5;
+      font-size: 11px; color: rgba(77,184,255,0.44); line-height: 1.5;
       word-break: break-word;
     }
     .hc-basis strong { color: var(--text); }
-    .hc-rate {
-      font-family: var(--mono); font-size: 12px;
-      margin-top: 10px;
-    }
+    .hc-rate { font-family: var(--mono); font-size: 12px; margin-top: 10px; }
 
-    /* data freshness bar */
     .freshness {
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px solid rgba(77,184,255,0.08);
       display: flex; align-items: center; justify-content: center; gap: 8px;
       font-size: 11px; color: var(--muted);
     }
     .freshness .src { color: var(--text); font-weight: 600; }
 
-    /* ── LEDGERS ──────────────────────────────────────────────────────────── */
+    /* ── LEDGERS — instrument glass panels ───────────────────────────────── */
     .ledger-section {
-      max-width: 1100px; margin: 48px auto 0; padding: 0 24px;
+      max-width: 1100px; margin: 52px auto 0; padding: 0 24px;
     }
     .ledger-section-title {
       font-family: var(--mono); font-size: 11px;
@@ -199,8 +233,19 @@
 
     .ledger {
       background: var(--card);
-      border: 1px solid var(--border);
+      background-image:
+        linear-gradient(rgba(77,184,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,184,255,0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      border: 1px solid rgba(77,184,255,0.14);
+      border-top: 1px solid rgba(180,220,255,0.09);
       border-radius: 8px; padding: 22px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .ledger:hover {
+      border-color: rgba(77,184,255,0.30);
+      border-top-color: rgba(180,220,255,0.18);
+      box-shadow: 0 0 32px rgba(77,184,255,0.07);
     }
     .ledger-head {
       display: flex; align-items: flex-start;
@@ -223,7 +268,6 @@
 
     .metric { margin-bottom: 14px; }
     .metric:last-child { margin-bottom: 0; }
-
     .metric-header {
       display: flex; align-items: center; justify-content: space-between;
       gap: 8px; margin-bottom: 3px; flex-wrap: wrap;
@@ -233,30 +277,25 @@
       text-transform: uppercase; letter-spacing: .08em;
       font-family: var(--mono);
     }
-
     .metric-value {
       font-family: var(--mono); font-size: 19px;
       font-weight: 700; line-height: 1.2;
+      font-variant-numeric: tabular-nums;
     }
     .v-green  { color: var(--green-hi); }
     .v-amber  { color: var(--amber); }
     .v-red    { color: var(--red); }
-    .v-blue   { color: var(--blue); }
+    .v-blue   { color: var(--sky); }
     .v-purple { color: var(--purple); }
-    .v-muted  { color: var(--muted); font-size: 15px; }
+    .v-muted  { color: rgba(77,184,255,0.45); font-size: 15px; }
 
     .metric-source {
-      font-size: 10px; color: #4a6b50;
+      font-size: 10px; color: rgba(77,184,255,0.32);
       margin-top: 3px; font-family: var(--mono);
     }
-    .metric-source a { color: #4a6b50; text-decoration: underline; }
+    .metric-source a { color: rgba(77,184,255,0.45); text-decoration: underline; }
+    .metric-divider { border: none; border-top: 1px solid rgba(77,184,255,0.07); margin: 14px 0; }
 
-    .metric-divider {
-      border: none; border-top: 1px solid rgba(26,58,34,0.6);
-      margin: 14px 0;
-    }
-
-    /* loading state */
     .loading {
       color: var(--muted); font-family: var(--mono);
       font-size: 14px; animation: blink 1.2s ease-in-out infinite;
@@ -264,39 +303,33 @@
     @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     /* ── RESTORATION ──────────────────────────────────────────────────────── */
-    .restoration {
-      max-width: 1100px; margin: 40px auto 0; padding: 0 24px;
-    }
-    .restoration-header {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
-    }
-    .restoration-header h2 {
-      font-size: 16px; font-weight: 700; color: var(--green-hi);
-    }
+    .restoration { max-width: 1100px; margin: 44px auto 0; padding: 0 24px; }
+    .restoration-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .restoration-header h2 { font-size: 16px; font-weight: 700; color: var(--green-hi); }
     .restoration-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 10px;
     }
     .resto-card {
-      background: #050f09; border: 1px solid var(--green);
+      background: var(--surface);
+      border: 1px solid rgba(30,255,140,0.18);
+      border-top: 1px solid rgba(30,255,140,0.10);
       border-radius: 8px; padding: 18px;
     }
     .resto-val {
       font-family: var(--mono); font-size: 22px;
       font-weight: 700; color: var(--green-hi); margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
     }
     .resto-label { font-size: 12px; color: var(--muted); }
-    .resto-source {
-      font-size: 10px; color: var(--green); margin-top: 6px;
-      font-family: var(--mono);
-    }
+    .resto-source { font-size: 10px; color: rgba(30,255,140,0.36); margin-top: 6px; font-family: var(--mono); }
     .resto-source a { color: var(--green-hi); text-decoration: none; }
 
     /* ── METHODOLOGY ──────────────────────────────────────────────────────── */
     .methodology {
       border-top: 1px solid var(--border);
-      max-width: 1000px; margin: 40px auto 0;
+      max-width: 1000px; margin: 44px auto 0;
       padding: 36px 24px 60px;
     }
     .methodology h3 {
@@ -304,46 +337,34 @@
       color: var(--muted); text-transform: uppercase;
       letter-spacing: .08em; margin-bottom: 8px;
     }
-    .method-intro {
-      font-size: 13px; color: var(--muted);
-      margin-bottom: 20px; line-height: 1.7;
-    }
-    .method-badges {
-      display: flex; gap: 16px; flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-    .method-badge-item {
-      display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted);
-    }
-    .methodology table {
-      width: 100%; border-collapse: collapse; font-size: 12px;
-    }
+    .method-intro { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.7; }
+    .method-badges { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+    .method-badge-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+    .methodology table { width: 100%; border-collapse: collapse; font-size: 12px; }
     .methodology th {
       text-align: left; padding: 8px 10px;
       color: var(--muted); border-bottom: 1px solid var(--border);
       font-family: var(--mono); font-weight: 600; letter-spacing: .06em;
     }
     .methodology td {
-      padding: 8px 10px; border-bottom: 1px solid rgba(26,58,34,0.4);
-      color: #a0b8a4; vertical-align: top; line-height: 1.5;
+      padding: 8px 10px; border-bottom: 1px solid rgba(77,184,255,0.07);
+      color: rgba(180,210,240,0.58); vertical-align: top; line-height: 1.5;
     }
     .methodology td:first-child { color: var(--text); font-family: var(--mono); font-size: 11px; }
-    .methodology td:last-child  { font-family: var(--mono); font-size: 10px; color: #4a6b50; }
+    .methodology td:last-child  { font-family: var(--mono); font-size: 10px; color: rgba(77,184,255,0.36); }
 
     .disclaimer {
       margin-top: 24px; padding: 14px 16px;
-      background: rgba(26,58,34,0.2);
-      border: 1px solid var(--border);
+      background: rgba(10,52,86,0.25);
+      border: 1px solid rgba(77,184,255,0.12);
+      border-top: 1px solid rgba(180,220,255,0.08);
       border-radius: 6px; font-size: 12px;
-      color: var(--muted); line-height: 1.7;
+      color: rgba(77,184,255,0.48); line-height: 1.7;
     }
     .disclaimer strong { color: var(--text); }
 
     /* ── FOOTER ───────────────────────────────────────────────────────────── */
-    .footer-cta {
-      border-top: 1px solid var(--border);
-      padding: 28px 24px; text-align: center;
-    }
+    .footer-cta { border-top: 1px solid var(--border); padding: 28px 24px; text-align: center; }
     .footer-cta p { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
     .cta-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
     .cta-link {
@@ -351,48 +372,39 @@
       border-radius: 6px; font-size: 13px; font-weight: 600;
       text-decoration: none;
     }
-    .cta-link.primary { background: var(--green); color: #fff; }
-    .cta-link.secondary { border: 1px solid var(--border); color: var(--muted); }
-    .cta-link:hover { opacity: 0.85; }
-
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .cta-link.primary { background: var(--green); color: var(--text); border: 1px solid rgba(30,255,140,0.2); }
+    .cta-link.secondary { border: 1px solid rgba(77,184,255,0.18); color: var(--muted); }
+    .cta-link:hover { opacity: 0.85; transition: opacity 0.2s; }
 
     /* ── AUDIT ADDITIONS ─────────────────────────────────────────────────── */
-    /* Cached fallback badge — amber, distinct from LIVE (green) and ANNUAL (amber pulse) */
-    .badge-cached { background: rgba(245,158,11,0.06); color: #c49000; border: 1px solid rgba(245,158,11,0.22); }
-    .badge-cached .bdot { background: #c49000; }
-
-    /* Uncertainty interval text under metric values */
     .uncertainty {
-      font-family: var(--mono); font-size: 10px; color: #4a6a50;
+      font-family: var(--mono); font-size: 10px; color: rgba(77,184,255,0.38);
       margin-top: 4px; line-height: 1.5;
     }
-
-    /* Rate-model label under ticking counters */
     .rate-label {
-      font-family: var(--mono); font-size: 10px; color: #3d5540;
+      font-family: var(--mono); font-size: 10px; color: rgba(77,184,255,0.25);
       margin-top: 3px; font-style: italic;
     }
-
-    /* Methodology download link */
     .method-dl-link {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 9px 18px; border: 1px solid var(--green);
-      border-radius: 5px; font-size: 12px; color: var(--green-hi);
+      padding: 9px 18px;
+      border: 1px solid rgba(77,184,255,0.25);
+      border-top: 1px solid rgba(180,220,255,0.12);
+      border-radius: 5px; font-size: 12px; color: var(--sky);
       text-decoration: none; margin-top: 16px; margin-bottom: 22px;
       font-family: var(--mono); letter-spacing: .04em;
     }
-    .method-dl-link:hover { background: rgba(34,197,94,0.06); }
-
-    /* Costanza controversy note */
+    .method-dl-link:hover { background: rgba(77,184,255,0.06); }
     .controversy-note {
       margin-top: 14px; padding: 12px 14px;
-      background: rgba(245,158,11,0.04);
-      border: 1px solid rgba(245,158,11,0.2);
+      background: rgba(255,149,32,0.04);
+      border: 1px solid rgba(255,149,32,0.20);
       border-radius: 5px; font-size: 12px;
-      color: #8a7a50; line-height: 1.65;
+      color: rgba(255,149,32,0.62); line-height: 1.65;
     }
     .controversy-note strong { color: var(--amber); }
+
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
   </style>
 </head>
 <body>
@@ -828,8 +840,8 @@
         <div class="resto-label">Solar capacity added globally in 2024</div>
         <div class="resto-source">IEA Renewables 2024 report — iea.org/reports/renewables-2024</div>
       </div>
-      <div class="resto-card" style="border-color:#2a4a2a; background:#030d05;">
-        <div class="resto-val" style="color:#4a7a4a; font-size:15px;">Contribute Data</div>
+      <div class="resto-card" style="border-color:rgba(30,255,140,0.12); background:var(--surface);">
+        <div class="resto-val" style="color:rgba(30,255,140,0.38); font-size:15px;">Contribute Data</div>
         <div class="resto-label">IRIS Research Access clients contribute verified restoration metrics to this counter</div>
         <div class="resto-source"><a href="/iris">Apply for research access →</a></div>
       </div>

@@ -9,11 +9,19 @@
   <link rel="canonical" href="https://motherearth.systems/fable5-roadmap">
   <style>
     :root {
-      --bg: #050f09; --surface: #0d1f14; --border: #1a3a22;
-      --green: #1a7a3a; --green-hi: #22c55e; --gold: #c4a000;
-      --text: #e8f5ec; --muted: #6b8f72; --red: #ef4444;
-      --orange: #f97316; --yellow: #eab308; --purple: #a855f7;
-      --mono: 'SF Mono','Fira Code','Cascadia Code',monospace;
+      --bg:       #02101e;
+      --surface:  #04182a;
+      --border:   rgba(77,184,255,0.14);
+      --green:    #0a4f28;
+      --green-hi: #1eff8c;
+      --gold:     #d4a200;
+      --text:     #d4eeff;
+      --muted:    rgba(77,184,255,0.42);
+      --red:      #ff4a4a;
+      --orange:   #ff6a20;
+      --yellow:   #ff9520;
+      --purple:   #8b6bff;
+      --mono:     'JetBrains Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
@@ -80,7 +88,7 @@
     /* What's live now */
     .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
     .live-card {
-      background: #0a1e0f; border: 1px solid #1a3a22; border-radius: 8px;
+      background: #04182a; border: 1px solid rgba(77,184,255,0.18); border-radius: 8px;
       padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px;
     }
     .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-hi); box-shadow: 0 0 6px var(--green-hi); margin-top: 4px; flex-shrink: 0; }
@@ -269,12 +277,12 @@
       <div class="card-why">Requires prospect identification, dynamic document generation, and jurisdictional customisation in a single coherent pass. Current models fail on the integration step.</div>
     </div>
 
-    <div class="card" style="border-color:rgba(74,222,128,.35);background:linear-gradient(135deg,#0d1f17 0%,#0a1510 100%)">
-      <span class="card-num" style="color:#4ade80">F5-011 · ECHO FLAGSHIP · NEW</span>
+    <div class="card" style="border-color:rgba(30,255,140,.35);background:linear-gradient(135deg,#0d1f17 0%,#0a1510 100%)">
+      <span class="card-num" style="color:#1eff8c">F5-011 · ECHO FLAGSHIP · NEW</span>
       <span class="card-icon">🎬</span>
       <h3>YouTube Avatar Content Generator</h3>
       <p>GAIA detects a natural calamity event — wildfire breakout, Arctic ice collapse, flood surge, coral bleaching alert. Fable 5 drafts a science-backed 3–5 minute script in Mother Earth's brand voice. Andy Godfrey's digital avatar (HeyGen API) renders the video. CEO reviews before upload. YouTube Data API v3 auto-publishes to the Mother Earth Kenya channel. ECHO posts a 60-second clip to X + LinkedIn the same day.</p>
-      <p style="margin-top:10px;font-size:12px;color:rgba(74,222,128,.7)">Content pillars: natural calamity breakdowns · monthly tipping point status · Earth status reports · "Built in Africa" storytelling</p>
+      <p style="margin-top:10px;font-size:12px;color:rgba(30,255,140,.7)">Content pillars: natural calamity breakdowns · monthly tipping point status · Earth status reports · "Built in Africa" storytelling</p>
       <div class="card-why">Requires real-time multi-modal reasoning: GAIA sensor data → narrative script → avatar video generation with consistent scientific accuracy and brand voice. CEO approval CC (<strong>andygodfrey@motherearth.systems</strong>) required on every video before upload. First 10 videos manually approved; ECHO autonomy unlocked after trust is established.</div>
     </div>
 

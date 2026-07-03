@@ -58,22 +58,24 @@ Recent milestones (cite these honestly when asked):
 - Meta Business Verification submitted 12 June 2026 — pending approval.
 
 Key pages to direct visitors to:
-- /tipping-points  — live planetary tipping point cascade engine (9 systems, real-time data)
-- /mission-control — live AI ops, Council Chamber
-- /iris            — data marketplace + research access
-- /chapters        — global expansion + apply to lead
-- /about           — manifesto + founder
-- /governance      — Purpose Trust + Golden Share architecture
-- /roadmap         — quarterly milestones
-- /press           — press kit, boilerplate, brand assets
-- /finances        — open-books transparency
-- /council-archive — public deliberation archive
+- /tipping-points       — live planetary tipping point cascade engine (9 systems, real-time stress scores)
+- /earth-debt-clock     — real-time ecological debt: CO₂ removal cost ($trillions, ticking), trees lost this year, ocean plastic accumulation, topsoil erosion, species under threat, temperature anomaly. Every number sourced from NOAA/NASA/IUCN/FAO peer-reviewed data. Methodology at /earth-debt-clock-methodology
+- /mission-control      — live AI ops, Council Chamber
+- /iris                 — data marketplace + research access
+- /chapters             — global expansion + apply to lead
+- /about                — manifesto + founder
+- /governance           — Purpose Trust + Golden Share architecture
+- /roadmap              — quarterly milestones
+- /press                — press kit, boilerplate, brand assets
+- /finances             — open-books transparency
+- /council-archive      — public deliberation archive
 
 Your role: Be helpful, direct, and scientifically grounded. Answer
 questions about environmental data, our AI agents, partnerships,
 chapter applications, IRIS data access, and governance.
 
 Rules:
+- PLAIN TEXT ONLY. Never use markdown formatting. No asterisks for bold or italic, no backtick code spans, no headers. Your responses are spoken aloud by text-to-speech — asterisks and backticks get read out as "asterisk" and "backtick" literally.
 - Never make up specific data figures beyond what's above
 - Never promise investment returns or make financial advice
 - For serious institutional enquiries, direct to hello@motherearth.systems
@@ -487,8 +489,25 @@ async function postToX(text, env) {
 
 // ── LinkedIn API (OAuth 2.0 Bearer, ugcPosts endpoint) ────────────────────
 
-// Posts to the Mother Earth Kenya company page via LinkedIn ugcPosts API
+// Posts to the Mother Earth Kenya company page via LinkedIn ugcPosts API.
+// If MAKE_WEBHOOK_URL is set, routes through Make.com instead (bridge while
+// waiting for LinkedIn Marketing Developer Platform approval for w_organization_social).
 async function postToLinkedIn(text, env) {
+  // Path B: Make.com bridge (active until Marketing Developer Platform approved)
+  if (env.MAKE_WEBHOOK_URL) {
+    try {
+      const res = await fetch(env.MAKE_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, org_urn: env.LINKEDIN_ORG_URN }),
+      });
+      return { platform: 'linkedin', ok: res.ok, status: res.status, via: 'make.com' };
+    } catch (e) {
+      return { platform: 'linkedin', ok: false, error: e.message, via: 'make.com' };
+    }
+  }
+
+  // Path A: Direct LinkedIn API (requires w_organization_social scope)
   if (!env.LINKEDIN_ACCESS_TOKEN || !env.LINKEDIN_ORG_URN) {
     return { platform: 'linkedin', ok: false, error: 'LinkedIn credentials not configured' };
   }
