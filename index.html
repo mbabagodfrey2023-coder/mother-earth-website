@@ -247,6 +247,12 @@
       border-radius: 2px; transition: all .25s; text-decoration: none;
     }
     .nav-cta:hover { background: var(--green); color: #000; }
+    .nav-whatsapp {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; background: #25d166; border-radius: 50%;
+      text-decoration: none; transition: transform .2s, box-shadow .2s; flex-shrink: 0;
+    }
+    .nav-whatsapp:hover { transform: scale(1.12); box-shadow: 0 4px 16px rgba(37,211,102,.55); }
 
     /* ─── HUD ────────────────────────────────────────────────────── */
     .hud {
@@ -1213,6 +1219,9 @@ setTimeout(function() {
     <span id="status-text">33 AGENTS ONLINE</span>
   </span>
   <a class="nav-cta" href="/contact.html">Get in Touch</a>
+  <a class="nav-whatsapp" href="https://wa.me/254141910586?text=Hi%20AMARA%2C%20I%20have%20a%20legal%20question" target="_blank" rel="noopener" title="AMARA — Free Legal Help">
+    <svg width="18" height="18" viewBox="0 0 32 32" fill="#000" xmlns="http://www.w3.org/2000/svg"><path d="M16 3C9 3 3 9 3 16c0 2.3.6 4.5 1.7 6.4L3 29l6.8-1.7c1.8 1 3.9 1.6 6.2 1.6 7 0 13-6 13-13S23 3 16 3zm6.2 18.2c-.3.8-1.5 1.5-2.1 1.6-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-5-4.3-5.1-4.5-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5.2.5.8 1.9.9 2s.1.3 0 .5c-.1.2-.2.3-.3.4-.1.1-.3.3-.4.4-.1.1-.3.3-.1.5.2.3.8 1.2 1.7 2 1.1 1 2.1 1.3 2.4 1.4.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1l2.2 1c.3.1.5.2.6.3.1.2.1.8-.2 1.6z"/></svg>
+  </a>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation">
     <span></span><span></span><span></span>
   </button>
@@ -1277,6 +1286,8 @@ setTimeout(function() {
     <div style="display:flex;align-items:center;gap:8px;padding:6px 20px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.32);"><span style="color:var(--green);">✓</span> NOAA · NASA · IPCC · VERIFIED</div>
     <div style="width:1px;height:16px;background:var(--border);flex-shrink:0;"></div>
     <div style="display:flex;align-items:center;gap:8px;padding:6px 20px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.32);"><span style="color:var(--green);">✓</span> REG. NO. PVT-PQ1AZ3KV</div>
+    <div style="width:1px;height:16px;background:var(--border);flex-shrink:0;"></div>
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 20px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.32);"><span style="color:var(--green);">✓</span> ODPC REG. INST-185194D7C88</div>
   </div>
 </div>
 
@@ -1529,6 +1540,17 @@ setTimeout(function() {
         <div id="live-agents" style="font-size:2.2rem;font-weight:800;color:var(--green);line-height:1;">—</div>
         <div style="font-size:11px;color:var(--muted);margin-top:6px;">autonomous agents · 7 branches</div>
         <div style="font-size:11px;color:var(--green);margin-top:8px;font-family:'JetBrains Mono',monospace;">● ALL SYSTEMS OPERATIONAL</div>
+      </div>
+    </div>
+
+    <!-- GAIA Weather — Kenya 7-day forecast strip -->
+    <div style="margin-bottom:40px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--blue);">// KENYA WEATHER · GAIA FORECAST ENGINE · 7-DAY OUTLOOK</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.28);font-family:'JetBrains Mono',monospace;">SOURCE: ECMWF + GFS MODELS</div>
+      </div>
+      <div id="weather-strip" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);padding:20px;">LOADING FORECAST...</div>
       </div>
     </div>
 
@@ -2701,6 +2723,43 @@ setTimeout(function() {
     } catch(e) { console.warn('Dashboard fetch failed:', e); }
   }
 
+  /* ── GAIA WEATHER STRIP — /api/weather (7-day Kenya forecast) ──── */
+  async function loadWeatherStrip() {
+    const strip = document.getElementById('weather-strip');
+    if (!strip) return;
+    try {
+      const res = await fetch('/api/weather');
+      const d = await res.json();
+      if (!d.stations || !d.stations.length) throw new Error('no stations');
+
+      strip.innerHTML = d.stations.map(function(s) {
+        const today = s.daily && s.daily[0];
+        const tomorrow = s.daily && s.daily[1];
+        // Pick the highest rain-probability day of the next 7 as the "watch" signal
+        let watch = null;
+        (s.daily || []).forEach(function(day) {
+          if (!watch || day.rain_prob > watch.rain_prob) watch = day;
+        });
+        const watchTxt = watch && watch.rain_prob >= 60
+          ? '☔ ' + new Date(watch.date + 'T12:00').toLocaleDateString('en-KE', { weekday: 'short' }) + ' rain ' + watch.rain_prob + '%'
+          : '✓ No heavy rain expected';
+
+        return '<div style="background:rgba(77,184,255,0.05);border:1px solid rgba(77,184,255,0.16);border-radius:10px;padding:18px 16px;">' +
+          '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;letter-spacing:2px;color:var(--blue);margin-bottom:10px;">' + s.name.toUpperCase() + '</div>' +
+          '<div style="display:flex;align-items:baseline;gap:8px;">' +
+            '<span style="font-size:1.9rem;font-weight:800;color:var(--text);line-height:1;">' + (s.current ? Math.round(s.current.temp) + '°' : '—') + '</span>' +
+            '<span style="font-size:11px;color:var(--muted);">' + (s.current ? s.current.condition : '') + '</span>' +
+          '</div>' +
+          (today ? '<div style="font-size:11px;color:var(--muted);margin-top:8px;">Today ' + Math.round(today.temp_min) + '–' + Math.round(today.temp_max) + '° · rain ' + today.rain_prob + '%</div>' : '') +
+          (tomorrow ? '<div style="font-size:11px;color:var(--muted);margin-top:3px;">Tomorrow ' + Math.round(tomorrow.temp_min) + '–' + Math.round(tomorrow.temp_max) + '° · rain ' + tomorrow.rain_prob + '%</div>' : '') +
+          '<div style="font-size:10.5px;color:' + (watch && watch.rain_prob >= 60 ? '#f59e0b' : 'var(--green)') + ';margin-top:9px;font-family:\'JetBrains Mono\',monospace;">' + watchTxt + '</div>' +
+        '</div>';
+      }).join('');
+    } catch(e) {
+      strip.innerHTML = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--muted);padding:20px;">FORECAST TEMPORARILY UNAVAILABLE</div>';
+    }
+  }
+
   /* ── MISSION LOG — public audit trail ──────────────────────────── */
   function loadMissionLog() {
     const log = document.getElementById('mission-log');
@@ -2725,9 +2784,11 @@ setTimeout(function() {
   }
 
   loadLiveDashboard();
+  loadWeatherStrip();
   loadMissionLog();
   fetchLiveData(); // hoisted async fn — fires before globe code, survives any globe crash
   setInterval(loadLiveDashboard, 15 * 60 * 1000);
+  setInterval(loadWeatherStrip,  60 * 60 * 1000); // hourly is plenty — API caches 3h
   setInterval(fetchLiveData,     5 * 60 * 1000);
 
   if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
@@ -2845,6 +2906,8 @@ setTimeout(function() {
 
   // ── Drag-to-rotate controls + hotspot state (outer scope for animate closure) ──
   let controls, hotspotMeshes = [], arcPulses = [], pulseT = 0, hoveredHotspot = null, starBright = null;
+  let earthShaderRef = null, sunLightRef = null, moonMesh = null, skyMesh = null; // real-astronomy refs
+  let heroBodyEl = null, scrollCueEl = null; // zoom-fade targets — lazily cached inside animate()
 
   const globeTooltip = document.createElement('div');
   globeTooltip.style.cssText = [
@@ -2857,15 +2920,37 @@ setTimeout(function() {
   ].join(';');
   document.body.appendChild(globeTooltip);
 
+  // Imagery credit — NASA maps are public domain but deserve the line
+  const imgCredit = document.createElement('div');
+  imgCredit.style.cssText = 'position:absolute;bottom:10px;right:14px;z-index:3;font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:1px;color:rgba(255,255,255,.22);pointer-events:none;';
+  imgCredit.textContent = 'IMAGERY: NASA BLUE MARBLE · BLACK MARBLE · LRO · MILKY WAY PANORAMA';
+  document.getElementById('globe-wrap')?.appendChild(imgCredit);
+
+  // Region data card — filled when the user clicks anywhere on Earth
+  const regionCard = document.createElement('div');
+  regionCard.style.cssText = [
+    'position:fixed', 'z-index:9999', 'display:none', 'min-width:230px', 'max-width:280px',
+    'background:rgba(4,10,8,.94)', 'border:1px solid rgba(212,175,55,.55)', 'border-radius:8px',
+    'padding:12px 14px', 'font-family:"JetBrains Mono",monospace', 'font-size:10.5px',
+    'letter-spacing:.8px', 'line-height:1.6', 'color:#D4AF37', 'pointer-events:none',
+    'box-shadow:0 8px 40px rgba(0,0,0,.6), 0 0 24px rgba(212,175,55,.10)'
+  ].join(';');
+  document.body.appendChild(regionCard);
+
   // Drag controls desktop only — guarded in case OrbitControls CDN fails
   if (!isMobile && typeof THREE.OrbitControls !== 'undefined') {
     try {
       controls = new THREE.OrbitControls(camera, renderer.domElement);
       controls.enableDamping  = true;
       controls.dampingFactor  = 0.06;
-      controls.enableZoom     = false;
+      controls.enableZoom     = true;            // zoom in on any country
+      controls.minDistance    = 2.55;            // deep zoom — surface fills the frame
+      controls.maxDistance    = 16;              // far enough to see Earth + Moon together
+      controls.zoomSpeed      = 0.6;
       controls.enablePan      = false;
       controls.rotateSpeed    = 0.38;
+      controls.autoRotate     = true;            // the CAMERA orbits the fixed Earth
+      controls.autoRotateSpeed = 0.35;           // gentle cinematic drift
       controls.minPolarAngle  = Math.PI * 0.12;
       controls.maxPolarAngle  = Math.PI * 0.88;
       renderer.domElement.style.cursor = 'grab';
@@ -2873,16 +2958,80 @@ setTimeout(function() {
   }
 
   const earthGroup = new THREE.Group();
-  earthGroup.rotation.z = 23.5 * Math.PI / 180;
+  // No decorative tilt: the Earth is geographically fixed (north = up) and the
+  // REAL seasonal sun declination provides the terminator slant. Camera orbits.
   scene.add(earthGroup);
 
+  // Self-hosted NASA-derived maps (textures/): 8K on desktop, 2K on mobile 4G.
+  // day = Blue Marble, night = Black Marble city lights. Bump/clouds/specular
+  // stay on the CDN (small helper maps, no 8K equivalents needed).
   const TEX = {
-    day:      'https://unpkg.com/three-globe@2.24.13/example/img/earth-blue-marble.jpg',
-    night:    'https://unpkg.com/three-globe@2.24.13/example/img/earth-night.jpg',
+    day:      isMobile ? '/textures/earth_day_2k.jpg'   : '/textures/earth_day_8k.jpg',
+    night:    isMobile ? '/textures/earth_night_2k.jpg' : '/textures/earth_night_8k.jpg',
     bump:     'https://unpkg.com/three-globe@2.24.13/example/img/earth-topology.png',
     clouds:   'https://unpkg.com/three-globe@2.24.13/example/img/earth-clouds.png',
     specular: 'https://unpkg.com/three-globe@2.24.13/example/img/earth-water.png'
   };
+  const TEX_SKY  = isMobile ? '/textures/starmap_2k.jpg' : '/textures/starmap_8k.jpg'; // real Milky Way panorama
+  const TEX_MOON = isMobile ? '/textures/moon_1k.jpg'    : '/textures/moon_4k.jpg';    // NASA LRO colour mosaic
+
+  // ── REAL ASTRONOMY — Earth-fixed frame ──────────────────────────────────────
+  // The Earth mesh never rotates; the CAMERA orbits it. Sun and moon are placed
+  // at their true geographic (sub-solar / sub-lunar) points for the current UTC
+  // time, so the terminator crosses the correct countries and the moon shows
+  // today's true phase. One light source = terminator and phase can't disagree.
+
+  // lat/lon → unit vector, matching the globe texture mapping exactly
+  function geoToVec(lat, lon) {
+    const phi = (90 - lat) * Math.PI / 180, theta = (lon + 180) * Math.PI / 180;
+    return new THREE.Vector3(
+      -Math.sin(phi) * Math.cos(theta),
+       Math.cos(phi),
+       Math.sin(phi) * Math.sin(theta)
+    );
+  }
+  // inverse: clicked point on the sphere → lat/lon
+  function vecToGeo(v) {
+    const n = v.clone().normalize();
+    const lat = 90 - Math.acos(Math.max(-1, Math.min(1, n.y))) * 180 / Math.PI;
+    let lon = Math.atan2(n.z, -n.x) * 180 / Math.PI - 180;
+    if (lon < -180) lon += 360;
+    return { lat, lon };
+  }
+
+  // Sub-solar point for the current instant (~1° accuracy)
+  function sunDirWorld(date = new Date()) {
+    const rad = Math.PI / 180;
+    const start = Date.UTC(date.getUTCFullYear(), 0, 0);
+    const doy   = (date.getTime() - start) / 864e5;                    // day of year
+    const decl  = -23.44 * Math.cos(rad * (360 / 365) * (doy + 10));   // seasonal declination
+    const utcH  = date.getUTCHours() + date.getUTCMinutes() / 60 + date.getUTCSeconds() / 3600;
+    const subsolarLon = (12 - utcH) * 15;                              // °E where it's solar noon
+    return geoToVec(decl, subsolarLon);
+  }
+
+  // Sub-lunar point: sun point shifted east by the true elongation (Meeus,
+  // truncated) + ecliptic latitude — phase exact, position ~1-2°
+  function moonDirWorld(date = new Date()) {
+    const rad = Math.PI / 180;
+    const T  = (date.getTime() / 864e5 - 10957.5) / 36525;             // Julian centuries since J2000
+    const Ls = (280.466 + 36000.770 * T) % 360;                        // sun mean longitude
+    const Lm = (218.316 + 481267.881 * T) % 360;                       // moon mean longitude
+    const Mm = (134.963 + 477198.868 * T) % 360;                       // moon mean anomaly
+    const F  = (93.272  + 483202.018 * T) % 360;                       // argument of latitude
+    const lonMoon = Lm + 6.289 * Math.sin(Mm * rad);
+    const elong   = ((lonMoon - Ls) % 360 + 360) % 360;                // 0=new, 180=full
+    const latEcl  = 5.128 * Math.sin(F * rad);                         // ±5° off the ecliptic
+    // reuse the sun's geographic frame and slide east by elongation
+    const start = Date.UTC(date.getUTCFullYear(), 0, 0);
+    const doy   = (date.getTime() - start) / 864e5;
+    const decl  = -23.44 * Math.cos(rad * (360 / 365) * (doy + 10));
+    const utcH  = date.getUTCHours() + date.getUTCMinutes() / 60;
+    const subsolarLon = (12 - utcH) * 15;
+    let moonLon = subsolarLon + elong; // east of the sun by the elongation
+    moonLon = ((moonLon + 180) % 360 + 360) % 360 - 180;
+    return geoToVec(latEcl + decl * 0.35, moonLon); // small declination coupling, visual
+  }
 
   const tl = new THREE.TextureLoader();
   tl.setCrossOrigin('anonymous');
@@ -2890,7 +3039,13 @@ setTimeout(function() {
 
   function loadTex(url) {
     return new Promise(resolve => {
-      tl.load(url, t => { t.encoding = THREE.sRGBEncoding; resolve(t); }, undefined, () => resolve(null));
+      tl.load(url, t => {
+        t.encoding = THREE.sRGBEncoding;
+        // Max anisotropic filtering — keeps the 8K surface crisp at deep zoom
+        // and at grazing angles near the globe's edge
+        if (renderer) t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        resolve(t);
+      }, undefined, () => resolve(null));
     });
   }
 
@@ -2921,7 +3076,9 @@ setTimeout(function() {
       mat.emissiveMap = night; mat.emissive = new THREE.Color(0xffffff);
       mat.emissiveIntensity = 0.45;
       mat.onBeforeCompile = shader => {
-        shader.uniforms.sunDir = { value: new THREE.Vector3(1, 0.1, 0.5).normalize() };
+        // Live terminator: the day/night line sits where the sun actually is right now
+        shader.uniforms.sunDir = { value: sunDirWorld() };
+        earthShaderRef = shader; // kept so the 5-min refresh can update the uniform
         shader.fragmentShader = shader.fragmentShader
           .replace('#include <common>', '#include <common>\nuniform vec3 sunDir;')
           .replace('#include <emissivemap_fragment>',
@@ -2977,9 +3134,57 @@ setTimeout(function() {
     starBright      = makeStars(isMobile ? 60   : 300,   40, 70, 0.22, 0.90);
     scene.add(starField); scene.add(starBright);
 
+    // ── REAL MILKY WAY SKY — NASA-grade panorama on an inverted sphere ───────
+    // Loads after first paint; procedural stars keep the sky alive until then,
+    // then dim to become subtle foreground twinkle over the real starfield.
+    loadTex(TEX_SKY).then(sky => {
+      if (!sky) return; // offline/CDN failure → procedural stars remain
+      skyMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(92, isMobile ? 24 : 48, isMobile ? 24 : 48),
+        new THREE.MeshBasicMaterial({ map: sky, side: THREE.BackSide, depthWrite: false })
+      );
+      skyMesh.rotation.y = Math.PI * 0.6; // aesthetic: galactic band behind the globe
+      scene.add(skyMesh);
+      starField.material.opacity = 0.22;  // real sky takes over; dots become accents
+    });
+
+    // ── THE MOON — real texture, real phase, lit by the same sun ─────────────
+    // Distance/size are stage-scaled (true scale would be a 1px dot 120 units
+    // away) but the PHASE and sun-relative position are astronomically live.
+    loadTex(TEX_MOON).then(moonTex => {
+      if (!moonTex) return;
+      moonMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.38, isMobile ? 24 : 48, isMobile ? 24 : 48),
+        new THREE.MeshPhongMaterial({ map: moonTex, shininess: 2 })
+      );
+      positionMoon();
+      scene.add(moonMesh);
+    });
+
+    // Place the moon over its true sub-lunar point — phase comes free from the
+    // shared sun light, position matches where the moon really is over Earth.
+    function positionMoon() {
+      if (!moonMesh) return;
+      moonMesh.position.copy(moonDirWorld().multiplyScalar(14));
+      moonMesh.lookAt(0, 0, 0); // near side faces Earth, like the real moon
+    }
+
+    // ── ASTRONOMY REFRESH — every 5 min the sun + moon drift like the sky ────
+    setInterval(() => {
+      const sd = sunDirWorld();
+      if (sunLightRef)   sunLightRef.position.copy(sd.clone().multiplyScalar(10));
+      if (earthShaderRef) earthShaderRef.uniforms.sunDir.value.copy(sd);
+      positionMoon();
+    }, 5 * 60 * 1000);
+
     // ── LIGHTS — sun + blue rim + green brand rim ─────────────────────────────
     scene.add(new THREE.AmbientLight(0xffffff, isMobile ? 0.55 : 0.22)); // brighter ambient on mobile (no night shader)
-    const sun      = new THREE.DirectionalLight(0xffffff, 1.25); sun.position.set(5, 3, 5); scene.add(sun);
+    // Sun light sits at the REAL solar direction — this one light draws both the
+    // terminator on Earth and the moon's phase, so they can never disagree.
+    const sun = new THREE.DirectionalLight(0xffffff, 1.25);
+    sun.position.copy(sunDirWorld().multiplyScalar(10));
+    scene.add(sun);
+    sunLightRef = sun;
     const bluRim   = new THREE.DirectionalLight(0x99d8ff, 0.22); bluRim.position.set(-5, -2, -5); scene.add(bluRim);
     const greenRim = new THREE.DirectionalLight(0x52B788,  0.20); greenRim.position.set(0, -5, -3); scene.add(greenRim);
 
@@ -3097,10 +3302,77 @@ setTimeout(function() {
         }
       });
 
-      renderer.domElement.addEventListener('click', () => {
-        if (!hoveredHotspot) return;
-        if (hoveredHotspot.modal) openModal(hoveredHotspot.modal);
-        else document.getElementById('live-dashboard')?.scrollIntoView({ behavior: 'smooth' });
+      // Distinguish a click from an orbit-drag: only fire if the pointer barely moved
+      let downX = 0, downY = 0;
+      renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; });
+
+      renderer.domElement.addEventListener('click', async (e) => {
+        if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return; // was a drag
+
+        // 1) Hotspot clicks keep their original behaviour
+        if (hoveredHotspot) {
+          if (hoveredHotspot.modal) openModal(hoveredHotspot.modal);
+          else document.getElementById('live-dashboard')?.scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+
+        // 2) Click ANYWHERE on Earth → live data for that exact spot
+        const rc = renderer.domElement.getBoundingClientRect();
+        mouse2.x =  ((e.clientX - rc.left) / rc.width)  * 2 - 1;
+        mouse2.y = -((e.clientY - rc.top)  / rc.height) * 2 + 1;
+        raycaster.setFromCamera(mouse2, camera);
+        const hit = raycaster.intersectObject(earthMesh)[0];
+        if (!hit) { regionCard.style.display = 'none'; return; }
+
+        const local = earthGroup.worldToLocal(hit.point.clone());
+        const { lat, lon } = vecToGeo(local);
+
+        // Show the card immediately with coordinates, then stream in the data
+        regionCard.style.display = 'block';
+        regionCard.style.left = Math.min(e.clientX + 14, innerWidth - 290) + 'px';
+        regionCard.style.top  = Math.max(e.clientY - 10, 70) + 'px';
+        regionCard.innerHTML =
+          `<div style="display:flex;justify-content:space-between;gap:14px;align-items:center;">
+             <b style="color:#D4AF37;">ACQUIRING REGION…</b>
+             <span id="rc-close" style="cursor:pointer;color:#888;pointer-events:auto;">✕</span>
+           </div>
+           <div style="color:#8aa;margin-top:6px;">${lat.toFixed(2)}°, ${lon.toFixed(2)}°</div>`;
+        document.getElementById('rc-close').onclick = () => regionCard.style.display = 'none';
+
+        try {
+          // Free, keyless, CORS-open: reverse geocode + live weather + air quality
+          const [geoR, wxR, aqR] = await Promise.all([
+            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`).then(r => r.json()).catch(() => ({})),
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=2&timezone=auto`).then(r => r.json()).catch(() => ({})),
+            fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=pm2_5,european_aqi`).then(r => r.json()).catch(() => ({})),
+          ]);
+
+          const place = [geoR.city || geoR.locality, geoR.principalSubdivision, geoR.countryName]
+            .filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(', ')
+            || (geoR.countryName || 'Open ocean');
+          const cur = wxR.current || {};
+          const day = wxR.daily || {};
+          const aq  = aqR.current || {};
+
+          regionCard.innerHTML =
+            `<div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;">
+               <b style="color:#D4AF37;letter-spacing:1px;">${place.toUpperCase()}</b>
+               <span id="rc-close" style="cursor:pointer;color:#888;pointer-events:auto;">✕</span>
+             </div>
+             <div style="color:#8aa;margin:4px 0 8px;">${lat.toFixed(2)}°, ${lon.toFixed(2)}°</div>
+             <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;color:#cde;">
+               <span>TEMP</span><span style="color:#fff;">${cur.temperature_2m ?? '—'}°C</span>
+               <span>HUMIDITY</span><span style="color:#fff;">${cur.relative_humidity_2m ?? '—'}%</span>
+               <span>WIND</span><span style="color:#fff;">${cur.wind_speed_10m ?? '—'} km/h</span>
+               <span>PM2.5</span><span style="color:#fff;">${aq.pm2_5 ?? '—'} µg/m³</span>
+               <span>TOMORROW</span><span style="color:#fff;">${day.temperature_2m_min?.[1] != null ? Math.round(day.temperature_2m_min[1]) + '–' + Math.round(day.temperature_2m_max[1]) + '°C' : '—'}</span>
+               <span>RAIN PROB</span><span style="color:#fff;">${day.precipitation_probability_max?.[1] ?? '—'}%</span>
+             </div>
+             <a href="/api-docs" style="pointer-events:auto;display:block;margin-top:10px;color:#1eff8c;text-decoration:none;border-top:1px solid rgba(255,255,255,.12);padding-top:8px;">→ GET THIS DATA VIA THE MEKE API</a>`;
+          document.getElementById('rc-close').onclick = () => regionCard.style.display = 'none';
+        } catch (err) {
+          console.warn('Region fetch failed:', err);
+        }
       });
 
       renderer.domElement.addEventListener('mousedown', () => {
@@ -3120,12 +3392,39 @@ setTimeout(function() {
     if (!renderer) return;
     requestAnimationFrame(animate);
 
-    // Auto-rotate only when user isn't dragging
-    if (!controls || !controls.active) {
-      if (earthMesh)  earthMesh.rotation.y  += 0.0008;
-      if (cloudsMesh) cloudsMesh.rotation.y += 0.0012;
-      earthGroup.rotation.y += 0.0003;
+    // ── ZOOM-AWARE HERO — dive toward Earth and the copy dissolves; ──────────
+    //    pull back out and it returns. Clicks pass through while faded.
+    //    try/catch: cosmetic UI must NEVER be able to kill the render loop.
+    try {
+      if (!isMobile) {
+        if (!heroBodyEl)  heroBodyEl  = document.querySelector('.hero-body');
+        if (!scrollCueEl) scrollCueEl = document.querySelector('.scroll-cue');
+        const dist = camera.position.length();
+        const fade = Math.min(1, Math.max(0, (dist - 3.4) / 1.6)); // 1 at ≥5.0, 0 at ≤3.4
+        if (heroBodyEl) {
+          heroBodyEl.style.opacity = fade;
+          heroBodyEl.style.pointerEvents = fade < 0.15 ? 'none' : '';
+        }
+        if (scrollCueEl) scrollCueEl.style.opacity = fade;
+        if (controls) {
+          // Finer, slower motion the deeper you go — precise control near the surface
+          controls.autoRotateSpeed = 0.05 + 0.30 * Math.min(1, Math.max(0, (dist - 2.55) / 5));
+          controls.rotateSpeed     = 0.06 + 0.32 * Math.min(1, Math.max(0, (dist - 2.45) / 5));
+        }
+      }
+    } catch (_) { /* fade is cosmetic — never break rendering */ }
+
+    // Earth is FIXED (geography + terminator stay true) — the camera orbits it.
+    // Desktop: OrbitControls autoRotate handles the drift. Mobile (no controls):
+    // orbit the camera manually at the same gentle rate.
+    if (isMobile && renderer) {
+      const t = Date.now() * 0.00005;
+      const rCam = 7;
+      camera.position.set(Math.sin(t) * rCam, 1.1, Math.cos(t) * rCam);
+      camera.lookAt(0, 0, 0);
     }
+    // Clouds drift slowly relative to the ground — like real weather
+    if (cloudsMesh) cloudsMesh.rotation.y += 0.00022;
 
     pulseT += 0.030;
 
@@ -3565,7 +3864,8 @@ setTimeout(function() {
     el.classList.add('open');
     _modalScrollY = window.scrollY;
     // Destroy Lenis completely — no scroll engine running at all
-    destroyLenis();
+    // (defensive lookup: the helper lives in another script block's scope)
+    if (typeof window.destroyLenis === 'function') window.destroyLenis();
     // Freeze page in place
     document.body.classList.add('modal-active');
     document.body.style.top = '-' + _modalScrollY + 'px';
@@ -3583,8 +3883,8 @@ setTimeout(function() {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
       window.scrollTo(0, _modalScrollY);
-      // Recreate Lenis fresh
-      initLenis();
+      // Recreate Lenis fresh (defensive — helper lives in another scope)
+      if (typeof window.initLenis === 'function') window.initLenis();
     }
   }
   // Close on overlay click (clicking the dark backdrop)
@@ -3819,6 +4119,11 @@ setTimeout(function() {
     if (_lenisRaf && typeof gsap !== 'undefined') { gsap.ticker.remove(_lenisRaf); _lenisRaf = null; }
     if (_lenis) { try { _lenis.destroy(); } catch(e){} _lenis = null; }
   }
+  // Expose to other script blocks — openModal/closeModal live in a different
+  // scope and were crashing with ReferenceError, which left Lenis alive and
+  // the page scrolling BEHIND open modals.
+  window.initLenis = initLenis;
+  window.destroyLenis = destroyLenis;
 
   /* ── 3. CUSTOM CURSOR ───────────────────────────────────────────────────── */
   function initCursor() {
@@ -4028,5 +4333,6 @@ setTimeout(function() {
 
 })();
 </script>
+
 </body>
 </html>

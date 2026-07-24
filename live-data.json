@@ -1,15 +1,15 @@
 {
-  "updated": "2026-06-18T09:45:04.916Z",
-  "note": "Updated every 15 min by WEB agent. Served by Cloudflare Pages at /live-data.json",
+  "updated": "2026-07-19T09:20:00.000Z",
+  "note": "Updated by WEB agent (GitHub Action refresh-live-data.yml, every 30 min). Served by Cloudflare at /live-data.json",
   "environmental": {
-    "co2_ppm": 432.15,
-    "co2_date": "2026-06-07",
-    "co2_weekly_change": 0.12,
-    "temp_anomaly_c": 1.2,
-    "active_nasa_events": 31,
-    "wildfires": 21,
-    "severe_storms": 0,
-    "sea_ice_events": 10
+    "co2_ppm": 428.1,
+    "co2_date": "2026-07-19",
+    "co2_weekly_change": 0.1,
+    "temp_anomaly_c": 1.18,
+    "active_nasa_events": 81,
+    "wildfires": 68,
+    "severe_storms": 1,
+    "sea_ice_events": 12
   },
   "platform": {
     "agents_online": 33,

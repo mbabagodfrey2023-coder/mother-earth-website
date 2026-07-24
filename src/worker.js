@@ -127,9 +127,37 @@ export default {
       return json(result);
     }
 
+    // Handle /api/social/enqueue — the render server (Hetzner) pushes new posts
+    // here over HTTPS instead of needing wrangler/site-repo on the VM.
+    // Added 16 Jul 2026: fixes X/LinkedIn posts stranding on the server after
+    // the cloud migration (autoDeployPostQueue has no site dir on the VM).
+    if (url.pathname === '/api/social/enqueue' && request.method === 'POST') {
+      return handleSocialEnqueue(request, env);
+    }
+
+    // Handle /api/social/queue — ops visibility: how many posts are pending
+    if (url.pathname === '/api/social/queue' && request.method === 'GET') {
+      const secret = request.headers.get('x-admin-secret');
+      if (!env.SOCIAL_ENQUEUE_SECRET || secret !== env.SOCIAL_ENQUEUE_SECRET) {
+        return json({ error: 'Unauthorized' }, 401);
+      }
+      const kvQueue = JSON.parse(await env.POSTS_KV.get('social_queue') || '[]');
+      const sent    = new Set(JSON.parse(await env.POSTS_KV.get('posted') || '[]'));
+      return json({
+        kv_total: kvQueue.length,
+        kv_pending: kvQueue.filter(p => p.status === 'approved' && !sent.has(p.id)).length,
+        posted_total: sent.size,
+      });
+    }
+
     // Tipping Point Cascade Engine — live planetary threshold monitor
     if (url.pathname === '/api/tipping-points' && request.method === 'GET') {
       return handleTippingPoints(request, env);
+    }
+
+    // GAIA Weather — 7-day forecast for Kenya's 5 major centres (Open-Meteo)
+    if (url.pathname === '/api/weather' && request.method === 'GET') {
+      return handleWeather(request, env);
     }
 
     // Contact / lead capture — stores in KV + returns JSON (replaces mailto:)
@@ -178,6 +206,13 @@ async function handleChat(request, env) {
       return json({ error: 'Conversation limit reached. Email hello@motherearth.systems to continue.' }, 429);
     }
 
+    // ── MAINTENANCE MODE (added 20 Jul 2026) — honest reply instead of a broken
+    // error while the AI backend is offline. Avoids pointless failing API calls.
+    // Flip AI_MAINTENANCE=false (Worker var) to restore when the account is back.
+    if (env.AI_MAINTENANCE !== 'false') {
+      return json({ reply: "Our AI assistant is temporarily offline for improvements — thanks for your patience. In the meantime, explore the live planetary data on this site, or reach us at andygodfrey@motherearth.systems." });
+    }
+
     if (!env.ANTHROPIC_API_KEY) {
       return json({ error: 'Service temporarily unavailable' }, 503);
     }
@@ -190,20 +225,49 @@ async function handleChat(request, env) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5',
+        // Fable 5 — the site chat is most visitors' first conversation with
+        // MEKE AI, so it gets the best narrative model (fallback below).
+        model: 'claude-fable-5',
         max_tokens: 400,
         system: ECHO_SYSTEM_PROMPT,
         messages: messages.map(m => ({ role: m.role, content: m.content })),
       }),
     });
 
-    if (!res.ok) {
-      console.error('Anthropic error:', await res.text());
-      return json({ error: 'AI service error. Try again.' }, 502);
+    // Fable 5 sometimes returns HTTP 200 with EMPTY content (known behavior —
+    // same guard as the video pipeline). Fall back to Haiku on HTTP failure
+    // OR an empty reply, so the widget never goes mute.
+    let reply = '';
+    if (res.ok) {
+      const data = await res.json();
+      reply = (data.content?.[0]?.text || '').trim();
     }
 
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || 'No response generated.';
+    if (!reply) {
+      console.error('Fable 5 chat empty/failed (status ' + res.status + ') — falling back to Haiku');
+      const retryRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 400,
+          system: ECHO_SYSTEM_PROMPT,
+          messages: messages.map(m => ({ role: m.role, content: m.content })),
+        }),
+      });
+      if (retryRes.ok) {
+        const retryData = await retryRes.json();
+        reply = (retryData.content?.[0]?.text || '').trim();
+      }
+    }
+
+    if (!reply) {
+      return json({ error: 'AI service error. Try again.' }, 502);
+    }
     return json({ reply });
 
   } catch (err) {
@@ -263,6 +327,11 @@ const ONE_HOUR_MS = 60 * 60 * 1000;
 
 async function handleCouncilPost(request, env) {
   try {
+    // Maintenance mode (20 Jul 2026) — AI backend offline; honest reply, no failing API call
+    if (env.AI_MAINTENANCE !== 'false') {
+      return json({ error: 'The Council chamber is temporarily offline for improvements. Please check back soon.' }, 503);
+    }
+
     const ip = request.headers.get('CF-Connecting-IP')
             || request.headers.get('X-Forwarded-For')
             || 'anon';
@@ -288,7 +357,7 @@ async function handleCouncilPost(request, env) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model:      'claude-sonnet-4-5',
+        model:      'claude-fable-5', // richest multi-perspective deliberation — matches core/council.js
         max_tokens: 1200,
         system: [{
           type: 'text',
@@ -542,29 +611,58 @@ async function postToLinkedIn(text, env) {
 
 // ── Core posting cycle (called by cron + manual trigger) ──────────────────
 
+// Render server pushes freshly queued posts here (KV) — no site repo needed on the VM
+async function handleSocialEnqueue(request, env) {
+  const secret = request.headers.get('x-admin-secret');
+  if (!env.SOCIAL_ENQUEUE_SECRET || secret !== env.SOCIAL_ENQUEUE_SECRET) {
+    return json({ error: 'Unauthorized' }, 401);
+  }
+  if (!env.POSTS_KV) return json({ error: 'KV not bound' }, 503);
+
+  let post;
+  try { post = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
+  if (!post.id || !Array.isArray(post.platforms)) {
+    return json({ error: 'Post needs id + platforms[]' }, 400);
+  }
+
+  const queue = JSON.parse(await env.POSTS_KV.get('social_queue') || '[]');
+  if (queue.some(p => p.id === post.id)) return json({ ok: true, deduped: true });
+
+  queue.push({ ...post, status: post.status || 'approved', enqueued_at: new Date().toISOString() });
+  while (queue.length > 200) queue.shift(); // cap KV growth — oldest fall off
+  await env.POSTS_KV.put('social_queue', JSON.stringify(queue));
+  console.log(`Social: enqueued ${post.id} via API (queue: ${queue.length})`);
+  return json({ ok: true, queued: queue.length });
+}
+
 async function runSocialCycle(env) {
   if (!env.POSTS_KV) {
     console.warn('Social: POSTS_KV not bound — skipping');
     return { skipped: true, reason: 'POSTS_KV not bound. Run: npx wrangler kv namespace create POSTS_KV' };
   }
 
-  // Read post queue from static asset (not publicly exposed — blocked in fetch handler)
-  let posts;
+  // Source 1: static posts.json (legacy — deployed with the site)
+  let posts = [];
   try {
     const res = await env.ASSETS.fetch('https://motherearth.systems/social/posts.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    ({ posts } = await res.json());
+    if (res.ok) ({ posts } = await res.json());
   } catch (e) {
-    console.error('Social: failed to load posts.json:', e.message);
-    return { skipped: true, reason: `posts.json read failed: ${e.message}` };
+    console.error('Social: posts.json read failed (continuing with KV):', e.message);
   }
+
+  // Source 2: KV queue (posts pushed by the render server via /api/social/enqueue)
+  const kvQueue = JSON.parse(await env.POSTS_KV.get('social_queue') || '[]');
+
+  // Merge (KV first — newest content posts sooner), dedupe by id
+  const seen = new Set();
+  const merged = [...kvQueue, ...posts].filter(p => p && p.id && !seen.has(p.id) && seen.add(p.id));
 
   // Load set of already-sent post IDs
   const sentRaw = await env.POSTS_KV.get('posted') || '[]';
   const sent    = new Set(JSON.parse(sentRaw));
 
   // Find next approved post that hasn't been sent yet
-  const pending = posts.filter(p => p.status === 'approved' && !sent.has(p.id));
+  const pending = merged.filter(p => p.status === 'approved' && !sent.has(p.id));
   if (pending.length === 0) {
     console.log('Social: queue empty — all approved posts have been sent');
     return { posted: null, remaining: 0 };
@@ -887,3 +985,99 @@ async function fetchArcticIce() {
 
 // Clamp to 0–100 integer
 function clampStress(n) { return Math.min(100, Math.max(0, Math.round(n))); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GAIA WEATHER — 7-day forecast for Kenya's 5 major centres
+
+   Source: Open-Meteo (free, no key, Africa CDN <100ms)
+   Cache:  KV 'weather_cache' — 3-hour TTL (forecasts update ~hourly upstream)
+   Endpoint: GET /api/weather
+   Returns: { stations: [{ id, name, lat, lon, daily: [...7 days] }], fetched_at }
+══════════════════════════════════════════════════════════════════════════ */
+
+const WEATHER_STATIONS = [
+  { id: 'nairobi', name: 'Nairobi',  lat: -1.286, lon: 36.817 },
+  { id: 'mombasa', name: 'Mombasa',  lat: -4.043, lon: 39.668 },
+  { id: 'kisumu',  name: 'Kisumu',   lat: -0.091, lon: 34.768 },
+  { id: 'nakuru',  name: 'Nakuru',   lat: -0.303, lon: 36.080 },
+  { id: 'eldoret', name: 'Eldoret',  lat:  0.514, lon: 35.270 },
+];
+
+// WMO weather codes → human-readable (subset that occurs in Kenya)
+const WMO_CODES = {
+  0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+  45: 'Fog', 48: 'Fog', 51: 'Light drizzle', 53: 'Drizzle', 55: 'Heavy drizzle',
+  61: 'Light rain', 63: 'Rain', 65: 'Heavy rain', 66: 'Freezing rain', 67: 'Freezing rain',
+  80: 'Rain showers', 81: 'Rain showers', 82: 'Violent rain showers',
+  95: 'Thunderstorm', 96: 'Thunderstorm + hail', 99: 'Thunderstorm + hail',
+};
+
+async function fetchStationForecast(station) {
+  const url = `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${station.lat}&longitude=${station.lon}` +
+    `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max` +
+    `&current=temperature_2m,relative_humidity_2m,weather_code` +
+    `&timezone=Africa%2FNairobi&forecast_days=7`;
+
+  const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+  if (!res.ok) throw new Error(`Open-Meteo ${res.status}`);
+  const d = await res.json();
+
+  const days = (d.daily?.time || []).map((date, i) => ({
+    date,
+    code:        d.daily.weather_code[i],
+    condition:   WMO_CODES[d.daily.weather_code[i]] || 'Unknown',
+    temp_max:    d.daily.temperature_2m_max[i],
+    temp_min:    d.daily.temperature_2m_min[i],
+    rain_mm:     d.daily.precipitation_sum[i],
+    rain_prob:   d.daily.precipitation_probability_max[i],
+    wind_max:    d.daily.wind_speed_10m_max[i],
+  }));
+
+  return {
+    ...station,
+    current: d.current ? {
+      temp:      d.current.temperature_2m,
+      humidity:  d.current.relative_humidity_2m,
+      condition: WMO_CODES[d.current.weather_code] || 'Unknown',
+    } : null,
+    daily: days,
+  };
+}
+
+async function handleWeather(request, env) {
+  const CACHE_KEY = 'weather_cache';
+  const CACHE_TTL = 3 * 60 * 60 * 1000; // 3 hours
+
+  if (env.POSTS_KV) {
+    try {
+      const cached = await env.POSTS_KV.get(CACHE_KEY, 'json');
+      if (cached && (Date.now() - cached.fetched_at) < CACHE_TTL) {
+        return json({ ...cached, cache: 'HIT' });
+      }
+    } catch (_) { /* cache miss — fetch fresh */ }
+  }
+
+  const results = await Promise.allSettled(WEATHER_STATIONS.map(fetchStationForecast));
+  const stations = results
+    .filter(r => r.status === 'fulfilled')
+    .map(r => r.value);
+
+  if (stations.length === 0) {
+    return json({ error: 'All weather sources unreachable — retry shortly' }, 503);
+  }
+
+  const result = {
+    fetched_at: Date.now(),
+    timestamp:  new Date().toISOString(),
+    source:     'Open-Meteo (ECMWF + GFS models)',
+    timezone:   'Africa/Nairobi',
+    stations,
+  };
+
+  if (env.POSTS_KV) {
+    try { await env.POSTS_KV.put(CACHE_KEY, JSON.stringify(result)); } catch (_) {}
+  }
+
+  return json({ ...result, cache: 'MISS' });
+}

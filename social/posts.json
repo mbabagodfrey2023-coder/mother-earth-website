@@ -81,7 +81,9 @@
       "x_text": "Most companies use AI as a feature.\n\nWe built it as the organisation — 33 agents, domain-specific, governed under Kenya SEZ law.\n\nAMARA: legal. NEXUS: infrastructure. GAIA: biodiversity.\n\nAI-native from day one.\n\nmotherearth.systems",
       "linkedin_text": "What does 'AI-native' actually mean for an organisation?\n\nIt doesn't mean using AI tools. It means structuring the company around autonomous agents from day one — before headcount, before offices, before most of the conventional corporate machinery.\n\nMother Earth Kenya runs 33 AI agents across 7 specialist branches:\n• AMARA: legal & compliance (VASP Act 2025, Kenya law)\n• NEXUS: blockchain & infrastructure\n• GAIA: environmental intelligence\n• ATLAS: treasury & finance\n• IRIS: data marketplace\n• SAGE: governance\n• ECHO: communications\n\nEach branch lead is a bounded autonomous agent with domain authority. The human layer governs strategy and signs off on decisions with irreversible consequences. Everything else runs continuously.\n\nWe published the full architecture at motherearth.systems/governance — worth reading if you're thinking about what post-conventional org design looks like.",
       "linkedin_sent": true,
-      "linkedin_sent_at": "2026-06-26T06:14:19.361Z"
+      "linkedin_sent_at": "2026-06-26T06:14:19.361Z",
+      "x_sent": true,
+      "x_sent_at": "2026-07-03T06:00:46.154Z"
     },
     {
       "id": "post-006",
@@ -94,7 +96,9 @@
         "stack"
       ],
       "x_text": "The stack behind Mother Earth Kenya:\n\n→ NASA EONET + GISTEMP — live earth observation\n→ NOAA — ocean + atmosphere feeds\n→ Anthropic Claude — analysis layer\n→ Cloudflare — global edge delivery\n→ Kenya SEZ — legal framework\n\nmotherearth.systems/partners",
-      "linkedin_text": null
+      "linkedin_text": null,
+      "x_sent": true,
+      "x_sent_at": "2026-07-06T06:30:56.044Z"
     },
     {
       "id": "post-007",
@@ -184,7 +188,9 @@
         "research"
       ],
       "x_text": "Research access to our environmental intelligence platform: free for 6 months.\n\nNASA + NOAA + Scripps data. Claude Sonnet analysis. Edge-served globally.\n\nFor accredited institutions, universities, and independent researchers.\n\nmotherearth.systems/iris",
-      "linkedin_text": "We're offering 6 months of free research access to the IRIS environmental intelligence platform.\n\nWho qualifies:\n• Accredited universities and research institutions\n• Independent researchers with a verifiable project\n• Government environmental agencies\n• NGOs working on climate or ecological issues\n\nWhat's included:\n• Full API access to NASA GISTEMP, NOAA, Scripps, and NASA FIRMS data — pre-processed and normalised\n• Live tipping point cascade scores across 9 Earth systems\n• Queryable data going back to the earliest available satellite records\n• Claude Sonnet analysis layer on every query\n\nWe believe environmental intelligence should be infrastructure, not a product only well-funded institutions can afford.\n\nResearch access: motherearth.systems/iris"
+      "linkedin_text": "We're offering 6 months of free research access to the IRIS environmental intelligence platform.\n\nWho qualifies:\n• Accredited universities and research institutions\n• Independent researchers with a verifiable project\n• Government environmental agencies\n• NGOs working on climate or ecological issues\n\nWhat's included:\n• Full API access to NASA GISTEMP, NOAA, Scripps, and NASA FIRMS data — pre-processed and normalised\n• Live tipping point cascade scores across 9 Earth systems\n• Queryable data going back to the earliest available satellite records\n• Claude Sonnet analysis layer on every query\n\nWe believe environmental intelligence should be infrastructure, not a product only well-funded institutions can afford.\n\nResearch access: motherearth.systems/iris",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-03T06:00:36.060Z"
     },
     {
       "id": "post-013",
@@ -213,7 +219,173 @@
         "science"
       ],
       "x_text": "Global temperature anomaly: +1.12°C above the 1951–1980 baseline.\n\nParis Agreement target: limit warming to 1.5°C above pre-industrial.\n\nWe read NASA GISTEMP every 6 hours. The number keeps moving.\n\nmotherearth.systems/tipping-points",
-      "linkedin_text": "The number that defines our era: +1.12°C.\n\nThat's the current global surface temperature anomaly above the 1951–1980 baseline, according to NASA GISTEMP data read by our GAIA branch this morning.\n\nThe Paris Agreement target is to limit warming to 1.5°C above pre-industrial levels — which translates to roughly +1.0°C on the GISTEMP scale. We are already past it.\n\nWhat this means for Mother Earth Kenya's tipping point model:\n• Temperature stress score: 75/100\n• Coral bleaching risk: 86/100 (SST-coupled)\n• Permafrost thaw risk: 75/100\n• Overall cascade risk: CRITICAL\n\nThe numbers aren't predictions. They're readings.\n\nAll data public: motherearth.systems/tipping-points"
+      "linkedin_text": "The number that defines our era: +1.12°C.\n\nThat's the current global surface temperature anomaly above the 1951–1980 baseline, according to NASA GISTEMP data read by our GAIA branch this morning.\n\nThe Paris Agreement target is to limit warming to 1.5°C above pre-industrial levels — which translates to roughly +1.0°C on the GISTEMP scale. We are already past it.\n\nWhat this means for Mother Earth Kenya's tipping point model:\n• Temperature stress score: 75/100\n• Coral bleaching risk: 86/100 (SST-coupled)\n• Permafrost thaw risk: 75/100\n• Overall cascade risk: CRITICAL\n\nThe numbers aren't predictions. They're readings.\n\nAll data public: motherearth.systems/tipping-points",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-06T06:30:56.078Z"
+    },
+    {
+      "id": "video-1783229606103",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "430 PPM. Highest CO₂ in human history — and Africa is making climate decisions on borrowed data from other continents. Not anymore. 🌍 MEKE AI is Africa's own planetary intelligence, built in Nairobi. Watch: https://youtube.com/watch?v=rgXCIiQ_6a8 #ClimateAfrica #430PPM #ClimateJustice",
+      "linkedin_text": "Carbon dioxide just crossed 430 parts per million — the highest concentration in human history.\n\nAfrica is warming faster than any other continent. Yet when policymakers, researchers, and businesses here make critical climate decisions, they're largely flying blind — relying on atmospheric data modelled for Europe and North America, from a weather station network one-eighth as dense as WMO recommendations.\n\nThat gap isn't a data problem. It's a justice problem.\n\nMEKE AI was built to close it. From Nairobi, we're running Africa's own planetary intelligence system — streaming live atmospheric CO₂ from Scripps Observatory, real-time temperature anomalies, and ecosystem stress signals across the continent.\n\nBecause the communities hit hardest by the climate crisis deserve to see it coming with their own eyes.\n\nWatch our latest signal report and explore live data at motherearth.systems.\n\nhttps://youtube.com/watch?v=rgXCIiQ_6a8\n\n#ClimateAfrica #430PPM #AfricaInnovation #PlanetaryIntelligence #ClimateJustice",
+      "youtube_url": "https://youtube.com/watch?v=rgXCIiQ_6a8",
+      "created_at": "2026-07-05T05:33:26.103Z",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-08T06:01:15.788Z"
+    },
+    {
+      "id": "video-1783230321888",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "Africa has 4% of emissions but fewer weather stations than Germany. 1.4B people flying blind through the worst climate impacts on Earth. MEKE AI is changing that — built in Nairobi. 🌍 https://youtube.com/watch?v=dgejf7sLFBg #AfricaClimate #ClimateIntelligence #MEKEAI",
+      "linkedin_text": "Africa contributes less than 4% of global emissions — yet has fewer weather stations than Germany alone.\n\n1.4 billion people are navigating the worst climate impacts on Earth with almost no local data to guide them.\n\nCO₂ is now at 430 ppm — the highest in 3 million years. Temperatures are already 1.2°C above pre-industrial levels. And the continent bearing the least responsibility is receiving the least intelligence to respond.\n\nWe built MEKE AI in Nairobi to change that.\n\nOur planetary intelligence system streams live atmospheric data and real-time temperature anomalies — so Africa can make its own climate decisions, on its own terms.\n\nThis isn't aid. This isn't borrowed data from the Global North.\n\nThis is our data. Our decisions. Our future — measured by us.\n\nWatch the full story and explore our live dashboard at motherearth.systems\n\n▶️ https://youtube.com/watch?v=dgejf7sLFBg\n\n#AfricaClimate #ClimateIntelligence #MEKEAI #NairobiTech #ClimateData",
+      "youtube_url": "https://youtube.com/watch?v=dgejf7sLFBg",
+      "created_at": "2026-07-05T05:45:21.888Z",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-10T06:40:54.613Z"
+    },
+    {
+      "id": "video-1783230783445",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "Africa faces 430ppm CO₂ — the highest in 3 million years — yet produces the least climate data on Earth. We're fixing that. 🌍 #ClimateAction #AfricaInnovation #MEKEAI https://youtube.com/watch?v=Pda1zJueBMs",
+      "linkedin_text": "430 parts per million. The highest atmospheric CO₂ in three million years.\n\nAfrica will bear the harshest consequences of this crisis — yet the continent produces the least climate data on Earth. The sensors, satellites, and models tracking this emergency were built for Europe and North America. Africa has been forecasting its own future with someone else's numbers.\n\nThat has to change.\n\nMEKE AI is building Africa's own planetary intelligence system — streaming live atmospheric readings, temperature anomalies, and ecosystem signals from verified scientific sources directly to the farmers, engineers, and policymakers who need them most.\n\nThis isn't a research project. It's operational. The data is live at motherearth.systems right now.\n\nWatch the full story and see what Africa's climate intelligence looks like when it's built by Africans, for Africans.\n\n🎥 https://youtube.com/watch?v=Pda1zJueBMs\n\n#ClimateAction #AfricaInnovation #MEKEAI #MotherEarthKenya #Environment",
+      "youtube_url": "https://youtube.com/watch?v=Pda1zJueBMs",
+      "created_at": "2026-07-05T05:53:03.445Z",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-13T06:44:19.598Z"
+    },
+    {
+      "id": "video-1783315298784",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "430 PPM. Africa was flying blind on climate data. Not anymore. 33 AI agents built in Nairobi now track Earth's vital signs 24/7 — live CO₂, temperature anomalies, wildfires & storms. Africa has a seat at the table. 🌍 https://youtube.com/watch?v=qxwsXDg_g7s #ClimateAction #AfricaInnovation #MEKEAI",
+      "linkedin_text": "Carbon dioxide just hit 430 parts per million — levels Earth hasn't seen in millions of years.\n\nFor too long, Africa has been making climate decisions with yesterday's data. Reactive. Delayed. Incomplete.\n\nThat changes now.\n\nFrom Nairobi, Mother Earth Kenya has deployed 33 AI agents through our GAIA system — monitoring live CO₂ readings from the Scripps Observatory, temperature anomalies, wildfires, and ocean conditions around the clock.\n\nNot data imported from elsewhere. Not filtered through foreign institutions.\n\nAfrican-built intelligence, tracking this continent's environment in real time.\n\nAt 1.2°C above preindustrial levels, the planet is running a fever. Africa feels it first and hardest. We built the tools to measure it — and to act.\n\nThis is what it looks like when the continent stops waiting and starts leading.\n\n▶️ Watch the full story: https://youtube.com/watch?v=qxwsXDg_g7s\nExplore the live platform: motherearth.systems\n\n#ClimateAction #AfricaInnovation #MEKEAI #MotherEarthKenya #Environment",
+      "youtube_url": "https://youtube.com/watch?v=qxwsXDg_g7s",
+      "created_at": "2026-07-06T05:21:38.784Z",
+      "x_sent": true,
+      "x_sent_at": "2026-07-06T09:56:05.193Z",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-15T06:05:02.315Z"
+    },
+    {
+      "id": "video-1783417697795",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "Kenya's crops could lose 50% at 2°C of warming. We're already at 1.2°C. GAIA is watching in real time. 🌍 https://youtube.com/watch?v=cvZpoe2lm0g #Kenya #FoodSecurity #ClimateAction",
+      "linkedin_text": "The numbers are stark: Kenya's maize harvests could fall by 50% at just 2°C of global warming — and we're already at 1.2°C.\n\nCO₂ now sits at 430 parts per million, the highest concentration in millions of years. Lake Turkana communities and Rift Valley farmers are on the frontline. Longer droughts. Failing crops. Water shortages for millions of families.\n\nThe crisis isn't coming — it's arriving in slow motion.\n\nThat's exactly why MEKE AI built GAIA: a real-time system tracking carbon, temperature, wildfires, and storms across Africa. Not historical averages. Not projections from distant data centres. Live intelligence, built for the continent.\n\nBecause Africa deserves to act before the alarm sounds — not after.\n\nWatch the full breakdown and see the live climate clock for yourself 👇\nhttps://youtube.com/watch?v=cvZpoe2lm0g\n\n#Kenya #FoodSecurity #ClimateAction #AfricaData #MEKEAI",
+      "youtube_url": "https://youtube.com/watch?v=cvZpoe2lm0g",
+      "created_at": "2026-07-07T09:48:17.795Z",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-17T06:13:54.123Z"
+    },
+    {
+      "id": "video-1783576872680",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "Africa's first AI climate system is live. 33 agents in Nairobi tracking Earth in real time. CO₂ at 430 ppm — the highest in 3 million years. Africa is not a data desert anymore. 🌍 Watch: https://youtube.com/watch?v=vrnMqGMtbIM #ClimateAfrica #GAIA #MEKEAI 💬 Free legal help → wa.me/254141910586",
+      "linkedin_text": "Africa has never had a system like this — until now.\n\nCarbon dioxide has reached 430 parts per million, the highest concentration in three million years. Yet climate models keep missing Africa. Why? Sparse sensors. Thin funding. A continent of 1.4 billion people treated as a data gap.\n\nMother Earth Kenya built GAIA to change that.\n\n33 AI agents run continuously from Nairobi, pulling live atmospheric readings every hour. Temperature anomalies are already sitting 1.2°C above the pre-industrial baseline — and we are watching in real time.\n\nAfrica is not a data desert anymore.\n\nThis is what it looks like when a Nairobi-based team decides not to wait for the world to pay attention — and builds the infrastructure itself.\n\nWatch the full story 👇\nhttps://youtube.com/watch?v=vrnMqGMtbIM\n\nExplore live data: motherearth.systems\n\n#ClimateAfrica #GAIA #MEKEAI #NairobiTech #ClimateAction\n\n💬 Got a legal question? AMARA answers free on WhatsApp → wa.me/254141910586",
+      "fb_text": "Africa's first AI climate system is live — built right here in Nairobi. 🌍\n\n33 AI agents tracking Earth in real time. CO₂ at 430 ppm. Temperature rising. Africa is no longer a data gap.\n\nWhat would you want an AI climate system to watch for in your region? Drop it in the comments 👇\n\nWatch: https://youtube.com/watch?v=vrnMqGMtbIM\n\n#ClimateAfrica #GAIA #MEKEAI\n\n💬 Free legal help on WhatsApp → wa.me/254141910586",
+      "youtube_url": "https://youtube.com/watch?v=vrnMqGMtbIM",
+      "created_at": "2026-07-09T06:01:12.680Z",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-20T06:04:10.673Z"
+    },
+    {
+      "id": "video-1783835190147",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "475 trees vanish every second. 15 BILLION every year — and most of us never see it happen. We built the Earth Debt Clock to count them live, from Africa, for Africa. Watch: https://youtube.com/watch?v=faFpP-MNMPI #Deforestation #ClimateAction #MEKEAI 💬 Free legal help → wa.me/254141910586",
+      "linkedin_text": "By the time you finish reading this sentence, roughly 2,000 trees will have disappeared from our planet.\n\nThat's the reality we set out to make visible. The world loses 15 billion trees every year — 475 every single second — yet this destruction happens largely out of sight, buried in annual reports published long after the damage is done.\n\nAt Mother Earth Kenya, we believe you cannot fix what you cannot see. That's why our GAIA system and the Earth Debt Clock now track deforestation, atmospheric CO₂, and climate destruction in real time — infrastructure built specifically for Africa, where climate data gaps are widest and the stakes are highest.\n\nOur new video shows exactly how we're counting every vanishing tree, live.\n\nThis is what African climate innovation looks like: not waiting for someone else's data, but building our own.\n\nWatch the full video and see the Earth Debt Clock ticking at motherearth.systems.\n\nhttps://youtube.com/watch?v=faFpP-MNMPI\n\n#ClimateAction #Deforestation #AfricaInnovation #ClimateData #MEKEAI\n\n💬 Got a legal question? AMARA answers free on WhatsApp → wa.me/254141910586",
+      "fb_text": "Every second, 475 trees vanish from our planet. That's 15 billion trees gone every year — and most of us never see it happen. So we built the Earth Debt Clock to count them LIVE, right here from Kenya. 🌍 Ukikata mti mmoja, panda miwili — lakini kwanza lazima tujue ni miti mingapi tunapoteza. How many trees do you think Kenya loses in a day? Drop your guess below 👇 Watch: https://youtube.com/watch?v=faFpP-MNMPI #MotherEarthKenya #ClimateAction #TreesForLife 💬 Msaada wa kisheria bila malipo — Free legal help on WhatsApp → wa.me/254141910586",
+      "youtube_url": "https://youtube.com/watch?v=faFpP-MNMPI",
+      "created_at": "2026-07-12T05:46:30.147Z",
+      "linkedin_sent": true,
+      "linkedin_sent_at": "2026-07-22T06:21:49.537Z"
+    },
+    {
+      "id": "video-1784017450624",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "Africa = 4% of emissions. Warming faster than almost anywhere. Fewest weather stations on Earth. We're measuring what global reports miss — live from Nairobi. 🌍📡 https://youtube.com/watch?v=Qk_aMIo20A4 #AfricaClimate #ClimateJustice #430ppm 💬 Free legal help → wa.me/254141910586",
+      "linkedin_text": "Africa contributes less than 4% of global emissions — yet it is warming faster than almost anywhere else on Earth.\n\nAt 430 ppm CO₂ and 1.2°C above preindustrial levels, African heat waves, droughts, and shifting seasons remain largely invisible in the reports that drive global climate policy. The reason is blunt: the continent has the fewest weather stations per square kilometre on Earth.\n\nData silence is a justice issue.\n\nAt Mother Earth Kenya, we are building a live atmospheric sensor network — tracking CO₂, temperature anomalies, and climate stress in real time from Nairobi outward. Not waiting for a satellite pass or a five-year IPCC cycle. Measuring now, publishing now.\n\nBecause the communities bearing the heaviest climate burden deserve the same quality of data as those who caused it.\n\nWatch our latest video to see what we are measuring — and why it matters for Africa's climate future.\n\n👉 https://youtube.com/watch?v=Qk_aMIo20A4\n\n#AfricaClimate #ClimateJustice #ClimateData #MEKEAI #AfricaInnovation\n\n💬 Got a legal question? AMARA answers free on WhatsApp → wa.me/254141910586",
+      "fb_text": "Africa causes less than 4% of global emissions — but we're warming faster than almost anywhere on Earth, and the world's climate reports barely mention us. Why? We have the fewest weather stations per square kilometre on the planet. Hii si sawa — and we're doing something about it. 🌍📡 What climate change are YOU seeing in your community right now? #AfricaClimate #ClimateJustice #MEKEAI 👉 https://youtube.com/watch?v=Qk_aMIo20A4 💬 Msaada wa kisheria bila malipo — Free legal help on WhatsApp → wa.me/254141910586",
+      "youtube_url": "https://youtube.com/watch?v=Qk_aMIo20A4",
+      "created_at": "2026-07-14T08:24:10.624Z"
+    },
+    {
+      "id": "video-1784204616935",
+      "status": "approved",
+      "platforms": [
+        "x",
+        "linkedin"
+      ],
+      "tags": [
+        "video",
+        "daily"
+      ],
+      "x_text": "430 PPM. Earth is 1.2°C hotter than before industry existed.\n\nNairobi just built 33 AI agents watching every wildfire, storm & carbon spike on the planet — every hour.\n\nAfrica isn't waiting anymore. 🌍\n\nhttps://youtube.com/watch?v=9LPwVl_MDBI\n\n#ClimateAction #AfricaInnovation #MEKEAI\n\n💬 Free legal help → wa.me/254141910586",
+      "linkedin_text": "Carbon dioxide just crossed 430 parts per million.\n\nFor decades, the data telling us how sick our planet is has come from laboratories in Europe and America. Africa watched from the outside.\n\nNot anymore.\n\nFrom Nairobi, Mother Earth Kenya has built 33 AI agents that monitor Earth's vital signs — live carbon readings, temperature anomalies, wildfires, and storms — across the entire planet, every single hour.\n\nWhen a farmer in Turkana can see a drought forming three weeks out, she plants differently. When a city planner in Mombasa sees sea-level pressure shifting, he builds higher. When a policy leader sees CO₂ spike in real time, she acts before the disaster brief lands on her desk.\n\nThis is what African-built climate intelligence looks like.\n\nWatch the full story here 👇\nhttps://youtube.com/watch?v=9LPwVl_MDBI\n\n#ClimateAction #AfricaInnovation #MEKEAI #ClimateData #EarthVitalSigns\n\n💬 Got a legal question? AMARA answers free on WhatsApp → wa.me/254141910586",
+      "fb_text": "430 PPM. Dunia inawaka — and Nairobi is watching every signal in real time. 🌍\n\nMother Earth Kenya built 33 AI agents tracking wildfires, carbon spikes, and storms across the whole planet — every single hour, from right here in Africa.\n\nWhat would YOU do differently if you could see a drought coming 3 weeks early?\n\nWatch the full story: https://youtube.com/watch?v=9LPwVl_MDBI\n\n#ClimateAction #AfricaInnovation #MEKEAI\n\n💬 Msaada wa kisheria bila malipo — Free legal help on WhatsApp → wa.me/254141910586",
+      "youtube_url": "https://youtube.com/watch?v=9LPwVl_MDBI",
+      "created_at": "2026-07-16T12:23:36.936Z"
     }
   ]
 }

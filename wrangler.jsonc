@@ -9,7 +9,11 @@
   },
   "assets": {
     "directory": ".",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    // Worker runs BEFORE static-asset serving for /social/* so the fetch handler's
+    // 404 block on /social/posts.json actually fires. Without this, Cloudflare
+    // serves the file directly from the edge and the block never runs (fixed 19 Jul 2026).
+    "run_worker_first": ["/social/*"]
   },
   "compatibility_flags": [
     "nodejs_compat"
@@ -25,8 +29,14 @@
       "id": "ef683fe0a8294704a0fc91faadcaab4d"
     }
   ],
-  // Social auto-poster cron: Mon/Wed/Fri at 09:00 UTC (12:00 Nairobi time)
+  // Social auto-poster cron: 3×/day, spaced — 06:00, 09:00, 15:00 UTC
+  // = 09:00, 12:00, 18:00 Nairobi. Changed from Mon/Wed/Fri 2026-07-11:
+  // a video is produced daily, so 3×/week drained slower than it filled and
+  // the queue backed up (19 posts). runSocialCycle posts 1 per fire, so this
+  // clears ~2/day net until the backlog is gone, then self-regulates to the
+  // 1 new post/day. Always-on Cloudflare cron (never sleeps) — the reliable
+  // trigger the laptop-based node-cron could not be.
   "triggers": {
-    "crons": ["0 9 * * 1,3,5"]
+    "crons": ["0 6 * * *", "0 9 * * *", "0 15 * * *"]
   }
 }
