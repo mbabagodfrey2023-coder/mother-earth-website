@@ -10,10 +10,9 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    // Worker runs BEFORE static-asset serving for /social/* so the fetch handler's
-    // 404 block on /social/posts.json actually fires. Without this, Cloudflare
-    // serves the file directly from the edge and the block never runs (fixed 19 Jul 2026).
-    "run_worker_first": ["/social/*"]
+    // Foundation-mode access controls must run before every static asset.
+    // Otherwise exact asset matches bypass the Worker entirely.
+    "run_worker_first": true
   },
   "compatibility_flags": [
     "nodejs_compat"
