@@ -37,6 +37,8 @@ blocks.forEach((src, i) => {
 
 const workerPath = path.join(__dirname, '..', 'src', 'worker.js');
 const statusPath = path.join(__dirname, '..', 'foundation-status.html');
+const wranglerPath = path.join(__dirname, '..', 'wrangler.jsonc');
+const assetsIgnorePath = path.join(__dirname, '..', '.assetsignore');
 
 try {
   execFileSync(process.execPath, ['--check', workerPath], { stdio: 'pipe' });
@@ -52,6 +54,8 @@ const requiredFoundationControls = [
   'const EXTERNAL_PUBLISH_ENABLED = false;',
   "url.pathname.startsWith('/api/')",
   "const FOUNDATION_STATUS_ASSET = '/foundation-status.html';",
+  'isInternalAssetPath(url.pathname)',
+  "'/social/posts.json',",
   "headers.set('X-MEKE-Public-Mode', 'foundation');",
 ];
 
@@ -76,6 +80,48 @@ if (!fs.existsSync(statusPath)) {
   for (const statement of requiredStatements) {
     if (!status.includes(statement)) {
       console.error(`\n✗ FOUNDATION STATUS STATEMENT MISSING: ${statement}`);
+      errors++;
+    }
+  }
+}
+
+const wrangler = fs.readFileSync(wranglerPath, 'utf8');
+if (!wrangler.includes('"run_worker_first": true')) {
+  console.error('\n✗ DEPLOYMENT CONTROL MISSING: assets.run_worker_first must be true');
+  errors++;
+}
+
+if (!fs.existsSync(assetsIgnorePath)) {
+  console.error('\n✗ .assetsignore is missing');
+  errors++;
+} else {
+  const ignoredAssets = new Set(
+    fs.readFileSync(assetsIgnorePath, 'utf8')
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('#'))
+  );
+  const requiredIgnoredAssets = [
+    '.git',
+    '.git/**',
+    '.github/',
+    '.claude/',
+    '.assetsignore',
+    'node_modules/',
+    'src/',
+    'scripts/',
+    'config/',
+    'package.json',
+    'package-lock.json',
+    'wrangler.jsonc',
+    '.env*',
+    '.dev.vars*',
+    'social/posts.json',
+  ];
+
+  for (const pattern of requiredIgnoredAssets) {
+    if (!ignoredAssets.has(pattern)) {
+      console.error(`\n✗ ASSET EXCLUSION MISSING: ${pattern}`);
       errors++;
     }
   }

@@ -1,5 +1,26 @@
-node_modules/
-.git/
+# Version-control and local tooling metadata
+.git
+.git/**
+.gitignore
 .github/
+.claude/
 .wrangler/
+.wranglerignore
+.assetsignore
+
+# Build, source and validation internals
+node_modules/
+src/
+scripts/
+config/
+package.json
+package-lock.json
+wrangler.jsonc
+*.md
+*.patch
 *.log
+
+# Secrets and restricted operational data
+.env*
+.dev.vars*
+social/posts.json

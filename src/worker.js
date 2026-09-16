@@ -8,6 +8,56 @@
 const FOUNDATION_MODE = true;
 const EXTERNAL_PUBLISH_ENABLED = false;
 const FOUNDATION_STATUS_ASSET = '/foundation-status.html';
+const INTERNAL_ASSET_PREFIXES = [
+  '/.git',
+  '/.github',
+  '/.claude',
+  '/.wrangler',
+  '/node_modules',
+  '/src',
+  '/scripts',
+  '/config',
+];
+const INTERNAL_ASSET_PATHS = new Set([
+  '/.assetsignore',
+  '/.gitignore',
+  '/.wranglerignore',
+  '/package.json',
+  '/package-lock.json',
+  '/wrangler.jsonc',
+  '/social/posts.json',
+]);
+
+function isInternalAssetPath(pathname) {
+  let decoded = pathname;
+
+  try {
+    // Decode twice so double-encoded dot segments cannot bypass the guard.
+    for (let i = 0; i < 2; i++) {
+      const next = decodeURIComponent(decoded);
+      if (next === decoded) break;
+      decoded = next;
+    }
+  } catch {
+    return true;
+  }
+
+  const segments = [];
+  for (const segment of decoded.replace(/\\/g, '/').split('/')) {
+    if (!segment || segment === '.') continue;
+    if (segment === '..') {
+      segments.pop();
+      continue;
+    }
+    segments.push(segment);
+  }
+
+  const normalized = `/${segments.join('/')}`.toLowerCase();
+  return INTERNAL_ASSET_PATHS.has(normalized) ||
+    INTERNAL_ASSET_PREFIXES.some(prefix =>
+      normalized === prefix || normalized.startsWith(`${prefix}/`)
+    );
+}
 
 const ECHO_SYSTEM_PROMPT = `You are ECHO, the Communications & Intelligence agent for Mother Earth.
 
@@ -109,6 +159,18 @@ export default {
 
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    // Fail closed even if a future asset manifest accidentally includes local
+    // source, VCS metadata, deployment configuration, or the social queue.
+    if (isInternalAssetPath(url.pathname)) {
+      return new Response(request.method === 'HEAD' ? null : 'Not found', {
+        status: 404,
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
+          'X-Content-Type-Options': 'nosniff',
+        },
+      });
+    }
 
     // Disable every public API before parsing input, reading KV, calling an AI
     // provider, or performing any other network or persistence side effect.
