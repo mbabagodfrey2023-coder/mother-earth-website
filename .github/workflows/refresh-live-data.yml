@@ -1,19 +1,27 @@
-name: Refresh Live Data
+name: Manual Foundation Data Refresh
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'   # every 30 min — cloud-side, Mac-independent
-  push:
-    branches: [main]          # deploy immediately on every push — no 30-min wait
-    paths-ignore:
-      - '**.md'
-      - 'live-data.json'
-      - '.github/**'
+  # Foundation mode must never deploy on a schedule or ordinary push. This
+  # workflow remains available only for an explicitly confirmed operator run.
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type DEPLOY_FOUNDATION_REFRESH to permit one production refresh'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-foundation-data-refresh
+  cancel-in-progress: false
 
 jobs:
   refresh:
+    if: ${{ inputs.confirmation == 'DEPLOY_FOUNDATION_REFRESH' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,7 +30,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'           # caches ~/.npm between runs — wrangler won't re-download every 30 min
+          cache: 'npm'
 
       - name: Fetch CO2 from NOAA Mauna Loa
         id: co2
@@ -62,7 +70,7 @@ jobs:
           from datetime import datetime, timezone
           payload = {
             'updated': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
-            'note': 'Updated every 30 min by GitHub Actions. Served by Cloudflare at /live-data.json',
+            'note': 'Generated only by a manually approved foundation refresh. Public services remain paused.',
             'environmental': {
               'co2_ppm': float('${{ steps.co2.outputs.co2 }}'),
               'co2_date': '${{ steps.co2.outputs.co2_date }}',
@@ -72,11 +80,6 @@ jobs:
               'wildfires': int('${{ steps.nasa.outputs.wildfires }}'),
               'severe_storms': int('${{ steps.nasa.outputs.storms }}'),
               'sea_ice_events': int('${{ steps.nasa.outputs.sea_ice }}')
-            },
-            'platform': {
-              'agents_online': 33,
-              'branches_active': 7,
-              'site_up': True
             }
           }
           print(json.dumps(payload, indent=2))
