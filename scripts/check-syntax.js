@@ -52,11 +52,16 @@ const worker = fs.readFileSync(workerPath, 'utf8');
 const requiredFoundationControls = [
   'const FOUNDATION_MODE = true;',
   'const EXTERNAL_PUBLISH_ENABLED = false;',
+  "const FOUNDATION_HEALTH_CRON = '0 6 * * *';",
   "url.pathname.startsWith('/api/')",
   "const FOUNDATION_STATUS_ASSET = '/foundation-status.html';",
   'isInternalAssetPath(url.pathname)',
   "'/social/posts.json',",
   "headers.set('X-MEKE-Public-Mode', 'foundation');",
+  'event.cron === FOUNDATION_HEALTH_CRON',
+  'await runFoundationContractCheck(env, ctx);',
+  'fetch: handleFetch,',
+  'Foundation health: PASS homepage=200 api=503 internal=404 mode=foundation',
 ];
 
 for (const control of requiredFoundationControls) {
@@ -88,6 +93,16 @@ if (!fs.existsSync(statusPath)) {
 const wrangler = fs.readFileSync(wranglerPath, 'utf8');
 if (!wrangler.includes('"run_worker_first": true')) {
   console.error('\n✗ DEPLOYMENT CONTROL MISSING: assets.run_worker_first must be true');
+  errors++;
+}
+
+if (!wrangler.includes('"0 6 * * *"')) {
+  console.error('\n✗ MONITORING CONTROL MISSING: 06:00 UTC foundation health cron');
+  errors++;
+}
+
+if (!wrangler.includes('"observability": {') || !wrangler.includes('"enabled": true')) {
+  console.error('\n✗ MONITORING CONTROL MISSING: Workers Logs observability must be enabled');
   errors++;
 }
 
