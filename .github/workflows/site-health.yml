@@ -1,8 +1,6 @@
-name: Foundation Mode Health Check
+name: Foundation Containment Source Check
 
 on:
-  schedule:
-    - cron: '17 6 * * *'   # 09:17 EAT daily — cloud-side, Mac-independent
   push:
     branches: [main]
     paths:
@@ -16,82 +14,22 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 concurrency:
-  group: foundation-mode-health
+  group: foundation-containment-source
   cancel-in-progress: true
 
 jobs:
-  health:
+  validate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Local foundation containment contract
+      - name: Validate foundation containment source contract
         run: node scripts/check-syntax.js
 
-      - name: Live homepage — foundation mode
+      - name: Monitoring boundary
         run: |
-          set -euo pipefail
-          headers=$(mktemp)
-          body=$(mktemp)
-          trap 'rm -f "$headers" "$body"' EXIT
-          status=$(curl --silent --show-error --location --max-time 20 \
-            --dump-header "$headers" --output "$body" --write-out '%{http_code}' \
-            https://motherearth.systems/)
-          test "$status" = "200"
-          tr -d '\r' < "$headers" | grep -qi '^x-meke-public-mode: foundation$'
-          grep -q 'Public autonomous services are paused' "$body"
-          echo "✓ Homepage is in supervised foundation mode"
-
-      - name: Live APIs — fail closed
-        run: |
-          set -euo pipefail
-          headers=$(mktemp)
-          body=$(mktemp)
-          trap 'rm -f "$headers" "$body"' EXIT
-          status=$(curl --silent --show-error --max-time 20 \
-            --dump-header "$headers" --output "$body" --write-out '%{http_code}' \
-            https://motherearth.systems/api/chat)
-          test "$status" = "503"
-          tr -d '\r' < "$headers" | grep -qi '^x-meke-public-mode: foundation$'
-          grep -q 'Public services are paused' "$body"
-          echo "✓ Public APIs fail closed with HTTP 503"
-
-      - name: Internal paths — inaccessible
-        run: |
-          set -euo pipefail
-          status=$(curl --silent --show-error --max-time 20 \
-            --output /dev/null --write-out '%{http_code}' \
-            https://motherearth.systems/.git/config)
-          test "$status" = "404"
-          echo "✓ Internal paths return HTTP 404"
-
-      - name: Open a foundation-mode incident on failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `Foundation-mode containment failure — ${new Date().toISOString().slice(0,10)}`,
-              body: [
-                '## Foundation Mode Health Check Failed',
-                '',
-                `**Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-                '',
-                '**Expected public contract:**',
-                '- Homepage: HTTP 200 with `X-MEKE-Public-Mode: foundation`',
-                '- Public APIs: HTTP 503',
-                '- Internal paths: HTTP 404',
-                '',
-                '**Action required:** Review the failed step. Do not deploy or reopen public services',
-                'without a separately reviewed and approved release gate.',
-                '',
-                '_Opened automatically by the foundation-mode health monitor._'
-              ].join('\n'),
-              labels: ['bug', 'automated']
-            });
+          echo 'GitHub validates source only.'
+          echo 'The deployed foundation contract is checked by the existing 06:00 UTC Cloudflare Cron Trigger.'
