@@ -28,8 +28,10 @@
       "id": "ef683fe0a8294704a0fc91faadcaab4d"
     }
   ],
-  // Social auto-poster cron: 3×/day, spaced — 06:00, 09:00, 15:00 UTC
-  // = 09:00, 12:00, 18:00 Nairobi. Changed from Mon/Wed/Fri 2026-07-11:
+  // Cloudflare-native foundation health check: 06:00 UTC = 09:00 Nairobi.
+  // The same three triggers remain reserved for the social auto-poster at
+  // 06:00, 09:00 and 15:00 UTC once a separate release gate re-enables it.
+  // Changed from Mon/Wed/Fri 2026-07-11:
   // a video is produced daily, so 3×/week drained slower than it filled and
   // the queue backed up (19 posts). runSocialCycle posts 1 per fire, so this
   // clears ~2/day net until the backlog is gone, then self-regulates to the

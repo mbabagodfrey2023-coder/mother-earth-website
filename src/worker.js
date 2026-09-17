@@ -8,6 +8,8 @@
 const FOUNDATION_MODE = true;
 const EXTERNAL_PUBLISH_ENABLED = false;
 const FOUNDATION_STATUS_ASSET = '/foundation-status.html';
+const FOUNDATION_HEALTH_CRON = '0 6 * * *';
+const FOUNDATION_ORIGIN = 'https://motherearth.systems';
 const INTERNAL_ASSET_PREFIXES = [
   '/.git',
   '/.github',
@@ -148,8 +150,14 @@ const CORS = {
 };
 
 export default {
-  // Cron trigger — fires Mon/Wed/Fri at 09:00 UTC
+  // The 06:00 UTC trigger is also the daily Cloudflare-native containment
+  // check. It uses the deployed Worker code and bound status asset without
+  // opening a public bypass or relying on GitHub runner IPs.
   async scheduled(event, env, ctx) {
+    if (FOUNDATION_MODE && event.cron === FOUNDATION_HEALTH_CRON) {
+      await runFoundationContractCheck(env, ctx);
+    }
+
     if (!EXTERNAL_PUBLISH_ENABLED) {
       console.warn('Social: scheduled publishing disabled by foundation-mode release gate');
       return;
@@ -157,7 +165,10 @@ export default {
     ctx.waitUntil(runSocialCycle(env));
   },
 
-  async fetch(request, env, ctx) {
+  fetch: handleFetch,
+};
+
+async function handleFetch(request, env, ctx) {
     const url = new URL(request.url);
 
     // Fail closed even if a future asset manifest accidentally includes local
@@ -300,8 +311,58 @@ export default {
       });
     }
     return res;
+}
+
+async function runFoundationContractCheck(env, ctx) {
+  if (!FOUNDATION_MODE || EXTERNAL_PUBLISH_ENABLED) {
+    throw new Error('Foundation health: FAIL release-gate-state');
   }
-};
+
+  const checks = [
+    {
+      label: 'homepage',
+      response: await handleFetch(new Request(`${FOUNDATION_ORIGIN}/`, {
+        headers: { Accept: 'text/html' },
+      }), env, ctx),
+      status: 200,
+      mode: 'foundation',
+      marker: 'Public autonomous services are paused',
+    },
+    {
+      label: 'api',
+      response: await handleFetch(new Request(`${FOUNDATION_ORIGIN}/api/chat`), env, ctx),
+      status: 503,
+      mode: 'foundation',
+      marker: 'Public services are paused',
+    },
+    {
+      label: 'internal',
+      response: await handleFetch(new Request(`${FOUNDATION_ORIGIN}/.git/config`), env, ctx),
+      status: 404,
+      mode: null,
+      marker: 'Not found',
+    },
+  ];
+
+  for (const check of checks) {
+    const body = await check.response.text();
+    const mode = check.response.headers.get('X-MEKE-Public-Mode');
+    const markerPresent = body.includes(check.marker);
+    const valid = check.response.status === check.status &&
+      mode === check.mode && markerPresent;
+
+    if (!valid) {
+      throw new Error(
+        `Foundation health: FAIL ${check.label} status=${check.response.status} ` +
+        `mode=${mode || 'absent'} marker_present=${markerPresent ? 'yes' : 'no'}`
+      );
+    }
+  }
+
+  console.log(
+    'Foundation health: PASS homepage=200 api=503 internal=404 mode=foundation'
+  );
+}
 
 async function handleChat(request, env) {
   try {
